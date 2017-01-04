@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Second on Hugo Blog Template for GitHub Pages</title>
-    <link>http://spencerlyon2.github.io/hugo_gh_blog/categories/second/index.xml</link>
-    <description>Recent content in Second on Hugo Blog Template for GitHub Pages</description>
+    <title>Second on Darrell Tunnell&#39;s Blog&#39;</title>
+    <link>http://darrelltunnell.net/categories/second/index.xml</link>
+    <description>Recent content in Second on Darrell Tunnell&#39;s Blog&#39;</description>
     <generator>Hugo -- gohugo.io</generator>
-    <atom:link href="http://spencerlyon2.github.io/hugo_gh_blog/categories/second/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://darrelltunnell.net/categories/second/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Second Post</title>
-      <link>http://spencerlyon2.github.io/hugo_gh_blog/posts/middle/</link>
+      <link>http://darrelltunnell.net/posts/middle/</link>
       <pubDate>Fri, 28 Mar 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://spencerlyon2.github.io/hugo_gh_blog/posts/middle/</guid>
+      <guid>http://darrelltunnell.net/posts/middle/</guid>
       <description>
 
 &lt;h2 id=&#34;sample-post-1&#34;&gt;Sample Post 1&lt;/h2&gt;
