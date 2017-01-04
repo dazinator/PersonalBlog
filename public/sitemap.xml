@@ -2,75 +2,75 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://spencerlyon2.github.io/hugo_gh_blog/posts/newest/</loc>
+    <loc>http://darrelltunnell.net/posts/newest/</loc>
     <lastmod>2014-03-29T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://spencerlyon2.github.io/hugo_gh_blog/posts/middle/</loc>
+    <loc>http://darrelltunnell.net/posts/middle/</loc>
     <lastmod>2014-03-28T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://spencerlyon2.github.io/hugo_gh_blog/posts/oldest/</loc>
+    <loc>http://darrelltunnell.net/posts/oldest/</loc>
     <lastmod>2014-03-27T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://spencerlyon2.github.io/hugo_gh_blog/categories/blah/</loc>
+    <loc>http://darrelltunnell.net/categories/blah/</loc>
     <lastmod>2014-03-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://spencerlyon2.github.io/hugo_gh_blog/categories/boring/</loc>
+    <loc>http://darrelltunnell.net/categories/boring/</loc>
     <lastmod>2014-03-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://spencerlyon2.github.io/hugo_gh_blog/categories/</loc>
+    <loc>http://darrelltunnell.net/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://spencerlyon2.github.io/hugo_gh_blog/categories/fun/</loc>
+    <loc>http://darrelltunnell.net/</loc>
     <lastmod>2014-03-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://spencerlyon2.github.io/hugo_gh_blog/categories/hugo/</loc>
+    <loc>http://darrelltunnell.net/categories/fun/</loc>
     <lastmod>2014-03-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://spencerlyon2.github.io/hugo_gh_blog/</loc>
+    <loc>http://darrelltunnell.net/categories/hugo/</loc>
     <lastmod>2014-03-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://spencerlyon2.github.io/hugo_gh_blog/posts/</loc>
+    <loc>http://darrelltunnell.net/posts/</loc>
     <lastmod>2014-03-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://spencerlyon2.github.io/hugo_gh_blog/categories/second/</loc>
+    <loc>http://darrelltunnell.net/categories/second/</loc>
     <lastmod>2014-03-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://spencerlyon2.github.io/hugo_gh_blog/categories/template/</loc>
+    <loc>http://darrelltunnell.net/categories/template/</loc>
     <lastmod>2014-03-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://spencerlyon2.github.io/hugo_gh_blog/categories/test/</loc>
+    <loc>http://darrelltunnell.net/categories/test/</loc>
     <lastmod>2014-03-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
