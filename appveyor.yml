@@ -1,0 +1,6 @@
+version: 1.0.{build}
+branches:
+  only:
+  - master
+build_script:
+- cmd: git subtree push --prefix=public https://github.com/dazinator/PersonalBlog.git gh-pages
