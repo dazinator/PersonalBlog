@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2" />
+<meta property="og:description" content="This post is part two of a series. For part one see here
+Part 2 - Replacing Bower with JSPM In part 1 of this series we created a shiny new ASP.NET 5 project, and I introduced some fundamentals.
+For reasons discussed in part 1, let&rsquo;s now go ahead with our first task, which is to ditch Bower in favour of JSPM as our javascript package manager. Uninstall Bower You will notice that your ASP." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://darrelltunnell.net/blog/1/01/01/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2">
+<meta itemprop="description" content="This post is part two of a series. For part one see here
+Part 2 - Replacing Bower with JSPM In part 1 of this series we created a shiny new ASP.NET 5 project, and I introduced some fundamentals.
+For reasons discussed in part 1, let&rsquo;s now go ahead with our first task, which is to ditch Bower in favour of JSPM as our javascript package manager. Uninstall Bower You will notice that your ASP.">
+
+
+
+<meta itemprop="wordCount" content="2167">
+
+
+
+<meta itemprop="keywords" content=",asp.net,asp.net-aurelia-gulp,asp.netaureliagulpbowerjspm,asp.netnuget,asp.netnugetasp.netnuget,asp.netspa,aspnetcore-aspnet-mvc-taghelper,dotnetnukednnpackager,dotnetnukednnpackagerdnn,dotnetnukeoctopusdeployment,dynamics-crm,dynamics-crmunit-testing,general,nuget,xamarinandroidteamcitytestsautomatecibuild," />
+
+
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2"/>
+<meta name="twitter:description" content="This post is part two of a series. For part one see here
+Part 2 - Replacing Bower with JSPM In part 1 of this series we created a shiny new ASP.NET 5 project, and I introduced some fundamentals.
+For reasons discussed in part 1, let&rsquo;s now go ahead with our first task, which is to ditch Bower in favour of JSPM as our javascript package manager. Uninstall Bower You will notice that your ASP."/>
+
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.18.1" />
+
+
+    <link rel="canonical" href="http://darrelltunnell.net/blog/1/01/01/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/">
+
+    <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2 | Darrell Tunnell&#39;s Blog</title>
+
+    <!-- combined, minified CSS -->
+    <link href="http://darrelltunnell.netcss/style.css" rel="stylesheet">
+
+    
+
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://darrelltunnell.net">Home</a>
+          
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="http://darrelltunnell.net" rel="home">Darrell Tunnell's Blog</a></h1>
+        
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/1/01/01/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/">ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</a></h2>
+    <p class="blog-post-meta"><time datetime="0001-01-01T00:00:00Z">Mon Jan 1, 0001</time> by  in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;</p>
+  </header>
+  
+
+<p><strong>This post is part two of a series. For part one see <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/">here</a></strong></p>
+
+<h2 id="part-2-replacing-bower-with-jspm">Part 2 - Replacing Bower with JSPM</h2>
+
+<p>In <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc">part 1 of this series</a> we created a shiny new ASP.NET 5 project, and I introduced some fundamentals.</p>
+
+<p>For reasons discussed in <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc">part 1</a>, let&rsquo;s now go ahead with our first task, which is to ditch Bower in favour of JSPM as our javascript package manager.
+<!-- more --></p>
+
+<h3 id="uninstall-bower">Uninstall Bower</h3>
+
+<p>You will notice that your ASP.NET 5 application has a number of bower packages included by default:</p>
+
+<p><img src="{{site.baseurl}}/assets/posts/bowerpackages.PNG" alt="bowerpackages.PNG" /></p>
+
+<p>First, let&rsquo;s uninstall Bower. In your project is a <code>Bower.json</code> file. Delete it! (If you can&rsquo;t see it in Solution Explorer, you might need to &lsquo;show all files&rsquo;</p>
+
+<p><img src="{{site.baseurl}}/assets/posts/bowerjson.PNG" alt="bowerjson.PNG" /></p>
+
+<p>When you install <code>Bower</code> packages, they are installed under the &ldquo;lib&rdquo; folder within your <code>wwwroot</code> directory. So, let&rsquo;s now delete this lib folder which will delete all of these packages.</p>
+
+<p><img src="{{site.baseurl}}/assets/posts/wwwrootlibfolder.PNG" alt="wwwrootlibfolder.PNG" /></p>
+
+<p>After those changes, your project should look something like this:</p>
+
+<p><img src="{{site.baseurl}}/assets/posts/projectremovedbower.PNG" alt="projectremovedbower.PNG" /></p>
+
+<p>With Bower gone and those javascript / css packages deleted, what happens if we run the application now? Let&rsquo;s run it and find out..</p>
+
+<p><img src="{{site.baseurl}}/assets/posts/runappbowerremoved.PNG" alt="runappbowerremoved.PNG" /></p>
+
+<p>As you can see, there are now errors displayed in the browser, and our site looks awful. This makes sense - our application is referencing javascript and css files that used to live in the lib folder, and now they are no longer found because we deleted them.</p>
+
+<p>To fix this situation we&rsquo;ll need to add these packages back to our application, using <code>JSPM</code>, and then fix up the way our application is <code>loading</code> these dependencies (javascript, css files) at runtime.</p>
+
+<h3 id="install-jspm">Install JSPM</h3>
+
+<p>JSPM can be installed as a local <code>NPM</code> package.</p>
+
+<ol>
+<li>Open <code>Package.json</code></li>
+<li>Add <code>JSPM</code> and whatever the latest version is:</li>
+</ol>
+
+<p><img src="{{site.baseurl}}/assets/posts/addjspmnodejspackage.PNG" alt="addjspmnodejspackage.PNG" /></p>
+
+<ol>
+<li>Save the file.</li>
+</ol>
+
+<p>The <code>NPM</code> package for <code>JSPM</code> should now be downloaded and installed into your project. You will see that the package is installed into the &ldquo;node_modules&rdquo; folder within your project.</p>
+
+<p><img src="{{site.baseurl}}/assets/posts/nodemodulesfolderjspm.PNG" alt="nodemodulesfolderjspm.PNG" /></p>
+
+<h3 id="configure-jspm">Configure JSPM</h3>
+
+<p>Now that the <code>JSPM</code> package has been installed, we need to configure <code>JSPM</code>.
+The way to do this, is a little bit fiddely, as you have to drop to the command line - there is no fancy support for <code>JSPM</code> in Visual Studio at the moment like there is for <code>Bower</code>.</p>
+
+<ol>
+<li>Open a <code>command prompt</code> window, and <code>CD</code> to your project directory</li>
+<li>Type <code>jspm init</code> and hit enter.</li>
+</ol>
+
+<p><img src="{{site.baseurl}}/assets/posts/commandlinejspminit.PNG" alt="commandlinejspminit.PNG" /></p>
+
+<p>You will now be asked a series of questions. At the end of answering these questions, the relevent <code>config</code> will be produced within the project.</p>
+
+<p>Here are the answers. Some of them you can just hit enter without typing anything, and the default value will be used.</p>
+
+<p><img src="{{site.baseurl}}/assets/posts/jspminit.PNG" alt="jspminit.PNG" /></p>
+
+<p>I&rsquo;ll quickly run through each option briefly.. But you should defer to the <code>JSPM</code> documentation site for further clarifications.</p>
+
+<ol>
+<li><p>&ldquo;<strong>Would you like jspm to prefix the jspm package.json properties under jspm?</strong>&ldquo;
+We answer yes to this (the default) and this just means that JSPM will store its project configuration within a &ldquo;jspm&rdquo; section in our existing <code>package.json</code> file.</p></li>
+
+<li><p>&ldquo;<strong>Enter server baseURL (public folder path)</strong>&ldquo;
+The word URL is a bit confusing here. This is the relative path to your &ldquo;public&rdquo; folder within the project. By public folder, we mean the folder that will serve up static files and is therefore accessible to a browser. We need to set this to the path to our <code>wwwroot</code> directory. So the value we set for this question is <code>./wwwroot</code> as the value is relative to the current (project) directory.</p></li>
+
+<li><p>&ldquo;<strong>Enter jspm packages folder [wwwroot\jspm_packages]</strong>&ldquo;
+We accept the default value for this question. Previously, our Bower packages were installed under <code>wwwroot\lib</code> folder, so if you want to keep this consistent you could change this value to <code>wwwroot\lib</code>. I however am happy to keep the default.</p></li>
+
+<li><p>&ldquo;<strong>Enter config file path [wwwroot\config.js]</strong>&ldquo;
+This is the path to where you would like the config javascript file to be placed. Remember, <code>JSPM</code> is not just a package manager in a the sense of allowing you to adopt packages at <code>design time</code>. It also has features that are used your application when it runs. This means it has a <code>config</code> file (a javascript file) that your application will actually need to reference at runtime. This config file must therefore be placed in a directory that can be served up. We accept the default value (wwwroot\config.js)</p></li>
+
+<li><p>&ldquo;<strong>Configuration file wwwroot\config.js doesn&rsquo;t exist, create it? [yes]</strong>&rdquo;
+We accept the default which is <code>yes</code> as we want it to create this config file for us.</p></li>
+
+<li><p>&ldquo;<strong>Enter client baseURL (public folder URL) [/]</strong>&ldquo;
+This is the URL or path that the browser uses to browse to the public folder (wwwroot). We accept the default value, because our public folder (wwwroot) is served up as the root path (&ldquo;/&rdquo;).</p></li>
+
+<li><p>&ldquo;<strong>Do you wish to use a transpiler? [yes]</strong>&ldquo;
+We accept the default answer of &ldquo;yes&rdquo; because transpilers are awesome. They allow us to write javascript using the latest language specifications, and then they &ldquo;transpile&rdquo; that javascript so that it can run in browsers that don&rsquo;t support the latest language specifications yet.</p></li>
+
+<li><p>&ldquo;<strong>Which ES6 transpiler would you like to use, Babel, Typescript, or Traceur? [babel]</strong>&ldquo;
+For the purposes of this blog, I am accepting the default of &ldquo;Babel&rdquo;.</p></li>
+</ol>
+
+<p>The transpiler will just allow us to write javascript using ES6 language features, and this will be transpiled to run in browsers that don&rsquo;t support ES6 yet.</p>
+
+<h3 id="installing-jspm-packages">Installing JSPM Packages</h3>
+
+<p>Now that we have <code>JSPM</code> configured, it&rsquo;s time to install those packages that we previously had installed via <code>Bower</code>.</p>
+
+<p>Back in the <code>command prompt</code> run the following commands:</p>
+
+<ol>
+<li><code>jspm install jquery</code></li>
+<li><code>jspm install jquery-validation</code></li>
+<li><code>jspm install github:aspnet/jquery-validation-unobtrusive</code></li>
+<li><code>jspm install bootstrap</code></li>
+</ol>
+
+<p>Once that is done, those packages will now be installed under your <code>wwwroot\jspm_packages</code> folder:</p>
+
+<p><img src="{{site.baseurl}}/assets/posts/jspmpackages.PNG" alt="jspmpackages.PNG" /></p>
+
+<p>The next step is to fix up our MVC application so that it loads our javascript and css using the <code>module loader</code>.</p>
+
+<h3 id="transitioning-to-modules">Transitioning to Modules.</h3>
+
+<p>The changes we have been making up until now, have been about managing our packages in our project at design time. This next step is about making changes to our application so that rather than including javascript and css files directly into particular pages, we instead, write &ldquo;modular&rdquo; javascript, that declares any dependencies it has, and then allow a <code>module loader</code> (<code>SystemJS</code>) to satisfy those dependencies for us at runtime by loading any needed javascript / css dependencies that our module requires.</p>
+
+<p>If this sounds overwhelming, don&rsquo;t worry, it&rsquo;s simple once you get your head around the basic concept. Hopefully things will become more clear as we continue.</p>
+
+<p>First, we need to include the module loader itself, and it&rsquo;s configuration file, into our application.</p>
+
+<p>If you open <code>_Layout.cshtml</code> you will see a section like this:</p>
+
+<pre><code class="language-xml"> &lt;environment names=&quot;Development&quot;&gt;
+            &lt;script src=&quot;~/lib/jquery/dist/jquery.js&quot;&gt;&lt;/script&gt;
+            &lt;script src=&quot;~/lib/bootstrap/dist/js/bootstrap.js&quot;&gt;&lt;/script&gt;
+            &lt;script src=&quot;~/js/site.js&quot; asp-append-version=&quot;true&quot;&gt;&lt;/script&gt;
+        &lt;/environment&gt;
+        &lt;environment names=&quot;Staging,Production&quot;&gt;
+            &lt;script src=&quot;https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js&quot;
+                    asp-fallback-src=&quot;~/lib/jquery/dist/jquery.min.js&quot;
+                    asp-fallback-test=&quot;window.jQuery&quot;&gt;
+            &lt;/script&gt;
+            &lt;script src=&quot;https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js&quot;
+                    asp-fallback-src=&quot;~/lib/bootstrap/dist/js/bootstrap.min.js&quot;
+                    asp-fallback-test=&quot;window.jQuery &amp;&amp; window.jQuery.fn &amp;&amp; window.jQuery.fn.modal&quot;&gt;
+            &lt;/script&gt;
+            &lt;script src=&quot;~/js/site.min.js&quot; asp-append-version=&quot;true&quot;&gt;&lt;/script&gt;
+        &lt;/environment&gt;
+</code></pre>
+
+<p>Let&rsquo;s comment out that whole section and replace it with this:</p>
+
+<pre><code class="language-xml">
+&lt;script src=&quot;~/jspm_packages/system.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;~/config.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;System.import(&quot;js/site&quot;);&lt;/script&gt;
+
+</code></pre>
+
+<p>At this point, let&rsquo;s run the application!</p>
+
+<p>You should now be able to see that we no longer get any errors about failing to load  javascript files <code>jquery.js</code> and <code>bootstrap.js</code>. In fact, <strong>those javascript files are not being loaded anymore.</strong></p>
+
+<p><img src="{{site.baseurl}}/assets/posts/jspmmissingcss.PNG" alt="jspmmissingcss.PNG" /></p>
+
+<h4 id="why-aren-t-we-loading-jquery-and-bootstrap-anymore">Why aren&rsquo;t we loading JQuery and Bootstrap anymore?</h4>
+
+<p>We are no longer directly including the <code>bootstrap</code> and <code>jquery</code> scripts into our <code>_Layout.cshtml</code> file, so they aren&rsquo;t being loaded! So we aren&rsquo;t seeing any 404&rsquo;s anymore within the browser console window - which is good, but don&rsquo;t we need those files for our site to function?</p>
+
+<p>This is the nature of <code>modular</code> javascript. What we are in the process of transitioning to now, is a Modular concept, where <code>bootstrap</code> and <code>jquery</code> are modules that will only be loaded, if some other module that we are loading via the module loader, requires them as dependencies.</p>
+
+<p>With that in mind, let&rsquo;s look at the module we are currently loading via the module loader. It&rsquo;s one called <code>js/site</code></p>
+
+<pre><code class="language-xml">&lt;script&gt;System.import(&quot;js/site&quot;);&lt;/script&gt;
+</code></pre>
+
+<p>This resolves (thanks to the <code>config.js</code> file) to the <code>js/site.js</code> file in our <code>wwwroot</code> directory. This file is currently empty, meaning it also has no dependencies declared in it for any other modules. This is why the module loader no longer bothers to load <code>JQuery</code> or <code>Bootstrap</code> anymore.</p>
+
+<p>This is good, because we are not including any javascript or css by default anymore, until its actually required by something (with the exception of the module loader, and config.js file iteself).</p>
+
+<p>Therefore, as our <code>js/site</code> module is being loaded in our <code>_Layout.cshtml</code> file - which means it&rsquo;s going to be loaded on <strong>every page</strong>, we can &ldquo;force&rdquo; JQuery and Bootstrap to be loaded on every page, by decalring them as depencies for our module. This could be viewed as a bit of a cheat as really we don&rsquo;t want to load dependencies just for the sake of it, we only want to load them if they are actually used.</p>
+
+<p>So, let&rsquo;s now assume that we are willing to load <code>JQuery</code>, and <code>Bootstrap</code> as a dependency for every page:</p>
+
+<ol>
+<li>Open <code>site.js</code> and insert the following code, then save it an re-run the application:</li>
+</ol>
+
+<pre><code class="language-javascript">import $ from 'jquery';
+import bootstrap from 'bootstrap';
+</code></pre>
+
+<p>This is <code>ES6</code> syntax for declaring a module dependency.</p>
+
+<p>You should now see that <code>JQuery</code> and <code>Bootstrap</code> are loaded on every page:</p>
+
+<p><img src="{{site.baseurl}}/assets/posts/jspmjqueryandbootstrapdependency.PNG" alt="jspmjqueryandbootstrapdependency.PNG" /></p>
+
+<h3 id="what-about-css">What about CSS</h3>
+
+<p>Now that we have got our javascript files loading again, we are still left with 404&rsquo;s for the bootstrap.css file.</p>
+
+<p>Well we can use JSPM for CSS too, but we need to install the <code>CSS</code> plugin.</p>
+
+<h4 id="installing-the-css-plugin-for-jspm">Installing the CSS plugin for JSPM</h4>
+
+<p>Back in the <code>command prompt</code> in your project directory, run the following</p>
+
+<pre><code>jspm install css
+</code></pre>
+
+<p>Now go back to your <code>site.js</code> file, and add an import for the bootstrap.css. It should now look like this:</p>
+
+<pre><code>import $ from 'jquery';
+import bootstrap from 'bootstrap';
+import 'bootstrap/css/bootstrap.css!'
+</code></pre>
+
+<p>Lastly, in <code>_Layout.cshtml</code>, comment out the link to the old - non existent, bootstrap.css file:</p>
+
+<pre><code class="language-xml">
+ &lt;environment names=&quot;Development&quot;&gt;
+        @*&lt;link rel=&quot;stylesheet&quot; href=&quot;~/lib/bootstrap/dist/css/bootstrap.css&quot; /&gt;*@
+        &lt;link rel=&quot;stylesheet&quot; href=&quot;~/css/site.css&quot; /&gt;
+    &lt;/environment&gt;
+    &lt;environment names=&quot;Staging,Production&quot;&gt;
+        @*&lt;link rel=&quot;stylesheet&quot; href=&quot;https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css&quot;
+            asp-fallback-href=&quot;~/lib/bootstrap/dist/css/bootstrap.min.css&quot;*@
+        asp-fallback-test-class=&quot;sr-only&quot; asp-fallback-test-property=&quot;position&quot; asp-fallback-test-value=&quot;absolute&quot; /&gt;
+        &lt;link rel=&quot;stylesheet&quot; href=&quot;~/css/site.min.css&quot; asp-append-version=&quot;true&quot; /&gt;
+    &lt;/environment&gt;
+
+</code></pre>
+
+<p>Now run your application!</p>
+
+<p><img src="{{site.baseurl}}/assets/posts/jspmnoerrors.PNG" alt="jspmnoerrors.PNG" /></p>
+
+<p>Wahoo! We now have no errors in the console window, our javascript and css is being loaded - and our application looks ok again.</p>
+
+<h4 id="flash-of-unstyled-content">Flash of unstyled content</h4>
+
+<p>You may notice that using the CSS plugin, your page is displayed in an unstyled form for a brief moment, whilst the CSS file is loaded asynchronosuly. This is known as a <a href="http://www.techrepublic.com/blog/web-designer/how-to-prevent-flash-of-unstyled-content-on-your-websites/">Flash of Unstyled Content</a> and is a problem with using the CSS plugin at present - <a href="https://github.com/systemjs/plugin-css/issues/57">see here</a>. Hopefully this will be addressed in the future, but in the meantime, feel free not to use the CSS Plugin if this is an issue, you can instead just directly reference the <code>Bootstrap.css</code> file in the <code>_Layout.cshtml</code> file as before, but from its new location under the <code>jspm_packages</code> directory.</p>
+
+<h3 id="finishing-touches-validationscripspartial-cshtml">Finishing Touches - <code>_ValidationScripsPartial.cshtml</code></h3>
+
+<p>Our application is running again, but you may notice a few of the pages have errors.</p>
+
+<p>If you click on &ldquo;Register&rdquo; link for example you will see these errors in the browser console window:</p>
+
+<p><img src="{{site.baseurl}}/assets/posts/jspmregisterpageproblems.PNG" alt="jspmregisterpageproblems.PNG" /></p>
+
+<p>This is because many of the views within our MVC application are rendering a partial called <code>_ValidationScriptsPartial.cshtml</code></p>
+
+<p>For example, if you look at the bottom of <code>Register.cshtml</code>, you will see the following:</p>
+
+<pre><code class="language-csharp">
+@section Scripts {
+    @{ await Html.RenderPartialAsync(&quot;_ValidationScriptsPartial&quot;); }
+}
+
+</code></pre>
+
+<p>If you look at the contents of <code>_ValidationScriptsPartial</code> we can see that it is actually including additional scripts onto the page:</p>
+
+<pre><code>&lt;environment names=&quot;Development&quot;&gt;
+    &lt;script src=&quot;~/lib/jquery-validation/dist/jquery.validate.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js&quot;&gt;&lt;/script&gt;
+&lt;/environment&gt;
+&lt;environment names=&quot;Staging,Production&quot;&gt;
+    &lt;script src=&quot;https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js&quot;
+            asp-fallback-src=&quot;~/lib/jquery-validation/dist/jquery.validate.min.js&quot;
+            asp-fallback-test=&quot;window.jQuery &amp;&amp; window.jQuery.validator&quot;&gt;
+    &lt;/script&gt;
+    &lt;script src=&quot;https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js&quot;
+            asp-fallback-src=&quot;~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js&quot;
+            asp-fallback-test=&quot;window.jQuery &amp;&amp; window.jQuery.validator &amp;&amp; window.jQuery.validator.unobtrusive&quot;&gt;
+    &lt;/script&gt;
+&lt;/environment&gt;
+
+</code></pre>
+
+<p>As you can see, depending upon the environment that ASP.NET determines your application is running on, this renders some script includes to particular js files, used for forms validation. These were previoulsy located within <code>Bower</code> packages, that we have deleted.</p>
+
+<p>To correct this, we&rsquo;ll just need to instruct the module loader to load the <code>jquery.validate.unobtrusive</code> module instead. Notice that you don&rsquo;t need to also instruct the module loader to load the <code>jquery.validate</code> module, because <code>jquery.validate</code> is a dependency of <code>jquery.validate.unobtrusive</code> so the module loader will resolve it automatically.</p>
+
+<p>So change the contents of <code>_ValidationScriptsPartial.cshtml</code> to this:</p>
+
+<pre><code>&lt;script&gt;System.import(&quot;aspnet/jquery-validation-unobtrusive&quot;);&lt;/script&gt;
+</code></pre>
+
+<p>And now - everything is working!</p>
+
+<p><img src="{{site.baseurl}}/assets/posts/jspmallworking.PNG" alt="jspmallworking.PNG" /></p>
+
+<h2 id="recap">Recap</h2>
+
+<p>In this blog post, we took an out of the box ASP.NET 5 MVC application that we created in <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/">part 1</a>, and replaced <code>Bower</code> with <code>JSPM</code>. We changed the way our application resolves it&rsquo;s javascript and css files, to use a <code>module loader</code> instead.</p>
+
+<p>We also saw that using the module loader to load CSS currently results in a &ldquo;flash of unstyled content&rdquo; issue, and so if that&rsquo;s an issue for your application then it&rsquo;s probably best to stick to directly linking to your css files as before, for the time being. That&rsquo;s a decision for you to make!</p>
+
+<p>In the next blog post/s in this series, I will attempt to cover:</p>
+
+<ol>
+<li>Creating a basic Aurelia application on the Home page.</li>
+<li>Introducing Linting, Bundling, and Minification into the build process, using Gulp.</li>
+<li>Implementing &ldquo;Automatic Browser Refresh&rdquo; so our page refreshes as we make changes to javascript and css files.</li>
+</ol>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fdarrelltunnell.net%2fblog%2f1%2f01%2f01%2fasp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2%2f" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f1%2f01%2f01%2fasp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2%2f" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f1%2f01%2f01%2fasp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2%2f" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=http%3a%2f%2fdarrelltunnell.net%2fblog%2f1%2f01%2f01%2fasp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2%2f" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+   
+</article> 
+
+ 
+  
+  <div class="container content">
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'darrelltunnellsblog';
+    var disqus_identifier = 'http:\/\/darrelltunnell.net\/blog\/1\/01\/01\/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2\/';
+    var disqus_title = 'ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2';
+    var disqus_url = 'http:\/\/darrelltunnell.net\/blog\/1\/01\/01\/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+  
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+
+  
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="http://darrelltunnell.net/blog/2015/11/05/automating-android-unit-test-apps-xamarin-like-a-pro/">Automating Android Unit Test Apps (Xamarin) Like A Pro</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2014/12/14/unit-testing-dynamics-crm-plugins/">Unit Testing Dynamics CRM Plugins</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2014/11/16/a-proclamation/">A Proclamation</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/1/01/01/"></a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/1/01/01/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/">ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</a></li>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      Blog template created by <a href="https://twitter.com/mdo">@mdo</a>, ported to Hugo by <a href='https://twitter.com/mralanorth'>@mralanorth</a>.
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

@@ -2,13 +2,90 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://darrelltunnell.net/blog/2015/11/05/automating-android-unit-test-apps-xamarin-like-a-pro/</loc>
+    <lastmod>2015-11-05T19:52:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2014/12/14/unit-testing-dynamics-crm-plugins/</loc>
+    <lastmod>2014-12-14T17:50:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://darrelltunnell.net/blog/2014/11/16/a-proclamation/</loc>
     <lastmod>2014-11-16T16:20:59+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/blog/2014/03/29/just-another-sample-post/</loc>
-    <lastmod>2014-03-29T00:00:00+00:00</lastmod>
+    <loc>http://darrelltunnell.net/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/1/01/01/</loc>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/1/01/01/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/</loc>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/1/01/01/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia/</loc>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/1/01/01/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</loc>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/1/01/01/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</loc>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/1/01/01/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/</loc>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/asp/index.net/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/asp/index.net-aurelia-gulp/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/asp/index.netaureliagulpbowerjspm/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/asp/index.netnuget/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/asp.netnugetasp/index.netnuget/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/asp/index.netspa/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/aspnetcore-aspnet-mvc-taghelper/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/1/01/01/automating-dotnetnuke-deployments-with-octopus-deploy/</loc>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/1/01/01/crm-/-plugin-generated-values---and-reducing-roundtrips/</loc>
   </url>
   
   <url>
@@ -18,13 +95,49 @@
   
   <url>
     <loc>http://darrelltunnell.net/</loc>
-    <lastmod>2014-11-16T16:20:59+00:00</lastmod>
+    <lastmod>2015-11-05T19:52:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/fun/</loc>
-    <lastmod>2014-03-29T00:00:00+00:00</lastmod>
+    <loc>http://darrelltunnell.net/blog/1/01/01/dnn-extensions---sources-packages/</loc>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/1/01/01/dnnpackager---getting-started/</loc>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/1/01/01/dnnpackager---v2.0.6/</loc>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/1/01/01/dotnetnuke---streamlining-module-development-workflow/</loc>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/dotnetnukednnpackager/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/dotnetnukednnpackagerdnn/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/dotnetnukeoctopusdeployment/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/dynamics-crm/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/dynamics-crmunit-testing/</loc>
+    <lastmod>2014-12-14T17:50:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -35,20 +148,31 @@
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/hugo/</loc>
-    <lastmod>2014-03-29T00:00:00+00:00</lastmod>
+    <loc>http://darrelltunnell.net/blog/1/01/01/how-far-does-the-xrm-sdks-executemultiplerequest-get-you/</loc>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/1/01/01/imagining-a-dotnetnuke-project-type-for-visual-studio/</loc>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/nuget/</loc>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://darrelltunnell.net/post/</loc>
-    <lastmod>2014-11-16T16:20:59+00:00</lastmod>
+    <lastmod>2015-11-05T19:52:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/test/</loc>
-    <lastmod>2014-03-29T00:00:00+00:00</lastmod>
+    <loc>http://darrelltunnell.net/blog/1/01/01/understanding-an-asp.net-spa-project/</loc>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/xamarinandroidteamcitytestsautomatecibuild/</loc>
+    <lastmod>2015-11-05T19:52:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

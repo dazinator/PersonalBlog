@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="Unit Testing Dynamics CRM Plugins" />
+<meta property="og:description" content="There is no Spoon CRM The purpose of this post will be to look at the code for a fairly typical looking crm plugin, and examine how to implement a unit test with the least possible effort. Reduced Effort == Reduced Person Hours == Reduced Cost.
+Remember, this is Unit Testing, not Integration testing - so at test time - there is no CRM!
+A plugin - and it&rsquo;s requirements Firstly, let&rsquo;s look at a plugin that we will call the ReclaimCreditPlugin." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://darrelltunnell.net/blog/2014/12/14/unit-testing-dynamics-crm-plugins/" />
+
+
+<meta property="og:updated_time" content="2014-12-14T17:50:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Unit Testing Dynamics CRM Plugins">
+<meta itemprop="description" content="There is no Spoon CRM The purpose of this post will be to look at the code for a fairly typical looking crm plugin, and examine how to implement a unit test with the least possible effort. Reduced Effort == Reduced Person Hours == Reduced Cost.
+Remember, this is Unit Testing, not Integration testing - so at test time - there is no CRM!
+A plugin - and it&rsquo;s requirements Firstly, let&rsquo;s look at a plugin that we will call the ReclaimCreditPlugin.">
+
+
+<meta itemprop="dateModified" content="2014-12-14T17:50:00&#43;00:00" />
+<meta itemprop="wordCount" content="1916">
+
+
+
+<meta itemprop="keywords" content=",asp.net,asp.net-aurelia-gulp,asp.netaureliagulpbowerjspm,asp.netnuget,asp.netnugetasp.netnuget,asp.netspa,aspnetcore-aspnet-mvc-taghelper,dotnetnukednnpackager,dotnetnukednnpackagerdnn,dotnetnukeoctopusdeployment,dynamics-crm,dynamics-crmunit-testing,general,nuget,xamarinandroidteamcitytestsautomatecibuild," />
+
+
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Unit Testing Dynamics CRM Plugins"/>
+<meta name="twitter:description" content="There is no Spoon CRM The purpose of this post will be to look at the code for a fairly typical looking crm plugin, and examine how to implement a unit test with the least possible effort. Reduced Effort == Reduced Person Hours == Reduced Cost.
+Remember, this is Unit Testing, not Integration testing - so at test time - there is no CRM!
+A plugin - and it&rsquo;s requirements Firstly, let&rsquo;s look at a plugin that we will call the ReclaimCreditPlugin."/>
+
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.18.1" />
+
+
+    <link rel="canonical" href="http://darrelltunnell.net/blog/2014/12/14/unit-testing-dynamics-crm-plugins/">
+
+    <title>Unit Testing Dynamics CRM Plugins | Darrell Tunnell&#39;s Blog</title>
+
+    <!-- combined, minified CSS -->
+    <link href="http://darrelltunnell.netcss/style.css" rel="stylesheet">
+
+    
+
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://darrelltunnell.net">Home</a>
+          
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="http://darrelltunnell.net" rel="home">Darrell Tunnell's Blog</a></h1>
+        
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/2014/12/14/unit-testing-dynamics-crm-plugins/">Unit Testing Dynamics CRM Plugins</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-12-14T17:50:00Z">Sun Dec 14, 2014</time> by  in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;</p>
+  </header>
+  
+
+<h2 id="there-is-no-spoon-crm">There is no <del>Spoon</del> CRM</h2>
+
+<p>The purpose of this post will be to look at the code for a fairly typical looking crm plugin, and examine how to implement a unit test with the least possible effort. Reduced Effort == Reduced Person Hours == Reduced Cost.</p>
+
+<p>Remember, this is Unit Testing, not Integration testing - so at test time - there is no CRM!</p>
+
+<!-- more -->
+
+<h2 id="a-plugin-and-it-s-requirements">A plugin - and it&rsquo;s requirements</h2>
+
+<p>Firstly, let&rsquo;s look at a plugin that we will call the <code>ReclaimCreditPlugin</code>. Here are the requirements:</p>
+
+<blockquote>
+<ol>
+<li>It must run only within a transaction with the database.</li>
+<li>When a Contact entity is Updated, if the contact has a parent account, and that parent account is &ldquo;on hold&rdquo; then set the &ldquo;taketheirshoes&rdquo; flag on the contact record to true.</li>
+</ol>
+</blockquote>
+
+<h2 id="developer-jon-doe">Developer Jon Doe</h2>
+
+<p>Jon Doe immediately gets to work on writing the plugin for those requirements. He produces the following plugin:</p>
+
+<pre><code class="language-csharp">  public class ReclaimCreditPlugin : IPlugin
+    {
+
+        public void Execute(IServiceProvider serviceProvider)
+        {
+
+            var executionContext = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+
+            // 1. We must run only within a transaction
+            if (!executionContext.IsInTransaction)
+            {
+                throw new InvalidPluginExecutionException(&quot;The plugin detected that it was not running within a database transaction. The plugin requires a database transaction.&quot;);
+            }
+
+            // 2. Get the contact, check its parent account.
+            if (executionContext.InputParameters.Contains(&quot;Target&quot;) &amp;&amp; executionContext.InputParameters[&quot;Target&quot;] is Entity)
+            {
+                // Obtain the target entity from the input parameters.
+                var contactEntity = (Entity)executionContext.InputParameters[&quot;Target&quot;];
+                // Get the parent account id.
+                var parentAccountId = (EntityReference)contactEntity[&quot;parentaccountid&quot;];
+
+                // Get the parent account entity.
+                var orgServiceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
+                var orgService = orgServiceFactory.CreateOrganizationService(executionContext.UserId);
+                var parentAccountEntity = orgService.Retrieve(&quot;account&quot;, parentAccountId.Id, new ColumnSet(&quot;creditonhold&quot;));
+
+                var accountOnHold = (bool)parentAccountEntity[&quot;creditonhold&quot;];
+
+                if (accountOnHold)
+                {
+                    contactEntity[&quot;taketheirshoes&quot;] = true;
+                    var tracingService = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+                    tracingService.Trace(&quot;Have indicated that we should take the shoes from contact: {0}&quot;, contactEntity.Id.ToString());
+                }
+
+            }
+
+        }
+
+    }
+</code></pre>
+
+<h3 id="good-job">Good Job?</h3>
+
+<p>Take a moment to peer review the above code. Would you vindicate Jon Doe&rsquo;s effort? It seems it has all the required logic in all the required places. It appears he has covered the list of requirements. Although Jon doesn&rsquo;t check to make sure the current entity being updated is definately a contact entity.. But within the confines of this blog post we will assume that there is no possible danger that the plugin could ever be registered against the wrong entity.</p>
+
+<p>So.. does it actually work?</p>
+
+<h2 id="does-it-work">Does it work?</h2>
+
+<p>Assuming you want to start haemorrhaging people&rsquo;s time accross the organisation, one way to find out if this code works is to immediately go through the process of deploying it to a QA environment, getting someone to test it manually, and then repeating that cycle of Dev &ndash;&gt; Deployment &ndash;&gt; QA as often as necessary, until the tester gives the thumbs up.</p>
+
+<p>If you want to go that route, feel free to skip the rest of this article. Otherwise read on, where sanity awaits!</p>
+
+<h2 id="show-me-a-unit-test-already">Show me a Unit Test Already!</h2>
+
+<p>Bad news for you. I could.. but I won&rsquo;t.</p>
+
+<h2 id="why-won-t-you-show-me-a-unit-test">Why won&rsquo;t you show me a unit test?</h2>
+
+<p>In short, because I value my time. Just look at that code again for crying out loud! It&rsquo;s littered with dependencies on things that are only provided at runtime by Dynamics CRM - things like:</p>
+
+<ol>
+<li>IServiceProvider</li>
+<li>IPluginExecutionContext</li>
+<li>IOrganizationServiceFactory</li>
+<li>IOrganizationService</li>
+<li>ITracingService</li>
+</ol>
+
+<p><strong>WHAT THE HELL ARE ANY OF THESE THINGS TO DO WITH THE ACTUAL REQUIREMENTS THAT I <em>NEED</em> TO TEST???</strong></p>
+
+<p>Listen.. I read those requirements for this plugin. I read them atleast one thousand times. And I wrote them in fact. Here they are again:</p>
+
+<blockquote>
+<ol>
+<li>It must run only within a transaction with the database.</li>
+<li>When a Contact entity is Updated, if the contact has a parent account, and that parent account is &ldquo;on hold&rdquo; then set the &ldquo;taketheirshoes&rdquo; flag on the contact record to true.</li>
+</ol>
+</blockquote>
+
+<p>So with that in mind, can you please show me the requirement dictating: <code>When a contact is updated, it is of upmost importance to us as a business that it looks at the</code>IPluginExecutionContext<code>and grabs the</code>IOrganizationServiceFactory.`</p>
+
+<p>Or please show me where the requirements state: <code>When a contact is updated, the plugin absolutely must interact with the</code>IServiceProvider` because otherwise you know.. Our business just won&rsquo;t function anymore.</p>
+
+<p>No my friends. The requirements do not say <em>any of that</em>. I am in the business of testing against the requirements.</p>
+
+<h3 id="why-is-that-a-problem">Why is that a problem?</h3>
+
+<p>The problem is not obvious at first glance. It is definately technically possible to mock / fake all of those services at unit test time. You can use something like RhinoMocks or another Mocking library to mock out <code>IServiceProvider</code> for the purposes of your test. You would then have to mock out all the calls to <code>IServiceProvider</code> that are made, so that it returns your other &lsquo;mocked&rsquo; services like a mock &lsquo;IPluginExecutionContext&rsquo; etc etc - and down the rabbit hole you go.</p>
+
+<p>The problem, is about <em>effort</em>. This approach, although technically possible, requires significant <em>effort</em>. You would have to mock a tonne of runtime services and interactions. We have to ask ourselves, is all that effort really necessary? Sometimes it may be, but most of the time, it isn&rsquo;t. In this instance it definately isn&rsquo;t and I will explain why.</p>
+
+<h2 id="let-s-use-the-requirements-to-write-the-plugin-in-pseudo-code">Let&rsquo;s use the requirements to write the plugin, in pseudo code.</h2>
+
+<p>With those requirements - forget everything you know about Dynamics Crm and write your ideal pseudo code that would implement those requirements. This is the actual logic we care about testing.</p>
+
+<p>PSEUDO CODE:</p>
+
+<pre><code>if (!IsRunningInTransaction)
+{
+    Throw &quot;Plugin requires a transaction.&quot;
+}
+
+If (IsUpdateOf(&quot;contact&quot;))
+{
+
+var contact = GetTargetEntity();
+var account = GetAccountForContact(contact);
+
+var isOnHold = (bool)account[&quot;creditonhold&quot;];
+if(isOnHold)
+{
+    contact[&quot;taketheirshoes&quot;] = true;
+}
+</code></pre>
+
+<h2 id="look-at-that-pseudo-code-do-you-see-any-runtime-services">Look at that Pseudo Code -  Do you see <em>any</em> runtime services?</h2>
+
+<p>Notice how it contains only the logic we really care about testing - the logic as described by the requirements. It doesn&rsquo;t contain needless fluff. No <code>IServiceProvider</code>, No <code>IPluginExecutionContext</code>. It looks very simple, very basic. If we could actually write a CRM plugin like this, it would be about 1.5 million times easier to test. Well we can.</p>
+
+<h2 id="isolating-out-dependencies-is-the-key-to-unit-testing">Isolating out dependencies is the key to unit testing.</h2>
+
+<p>Yes it&rsquo;s true folks you heard it here first. The less dependencies you utilise directly in your methods, the easier they are to unit test.</p>
+
+<p>With this principle in mind, let&rsquo;s revisit our plugin and refactor it to remove some dependencies.</p>
+
+<h2 id="new-and-improved-plugin">New and Improved Plugin</h2>
+
+<pre><code class="language-csharp"> public class ReclaimCreditPlugin2 : IPlugin
+    {
+
+        private IServiceProvider _ServiceProvider;
+
+        public void Execute(IServiceProvider serviceProvider)
+        {
+            _ServiceProvider = serviceProvider;
+            Execute();
+        }
+
+        /// &lt;summary&gt;
+        /// This is the method containing the business logic that we want to be able to assert at unit test time.
+        /// &lt;/summary&gt;
+        public void Execute()
+        {
+            // 1. We must run only within a transaction
+            if (IsInTransaction())
+            {
+                throw new InvalidPluginExecutionException(&quot;The plugin detected that it was not running within a database transaction. The plugin requires a database transaction.&quot;);
+            }
+
+            // 2. Get the contact
+            var contact = GetTargetEntity();
+
+            // 3. Get the Parent Account for the contact.
+            var parentAccount = GetAccountEntity(contact);
+            if (parentAccount == null)
+            {
+                return;
+            }
+
+            // 4. If credit on hold, set taketheirshoes.
+            var accountOnHold = (bool)parentAccount[&quot;creditonhold&quot;];
+            if (accountOnHold)
+            {
+                contact[&quot;taketheirshoes&quot;] = true;
+            }
+
+        }
+
+        /// &lt;summary&gt;
+        /// Returns the parent account entity for the contact.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;contact&quot;&gt;&lt;/param&gt;
+        /// &lt;returns&gt;&lt;/returns&gt;
+        protected virtual Entity GetAccountEntity(Entity contact)
+        {
+            // Get the p[arent account id.
+            var parentAccountId = (EntityReference)contact[&quot;parentaccountid&quot;];
+
+            // Get an instance of the IOrganisationService.
+            var orgServiceFactory = (IOrganizationServiceFactory)_ServiceProvider.GetService(typeof(IOrganizationServiceFactory));
+            var executionContext = (IPluginExecutionContext)_ServiceProvider.GetService(typeof(IPluginExecutionContext));
+            var orgService = orgServiceFactory.CreateOrganizationService(executionContext.UserId);
+            
+            // Get the account entity, with only the column / attribute that we need.
+            var parentAccountEntity = orgService.Retrieve(&quot;account&quot;, parentAccountId.Id, new ColumnSet(&quot;creditonhold&quot;));
+            return parentAccountEntity;
+        }
+
+        /// &lt;summary&gt;
+        /// Returns the current &quot;Target&quot; entity that the plugin is executing against.
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;&lt;/returns&gt;
+        protected virtual Entity GetTargetEntity()
+        {
+            var context = (IPluginExecutionContext)_ServiceProvider.GetService(typeof(IPluginExecutionContext));
+            if (context.InputParameters.Contains(&quot;Target&quot;) &amp;&amp; context.InputParameters[&quot;Target&quot;] is Entity)
+            {
+                var contactEntity = (Entity)context.InputParameters[&quot;Target&quot;];
+                return contactEntity;
+            }
+
+            return null;
+        }
+
+        /// &lt;summary&gt;
+        /// Returns whether the plugin is currently enrolled within a database transaction.
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;&lt;/returns&gt;
+        protected virtual bool IsInTransaction()
+        {
+            var context = (IPluginExecutionContext)_ServiceProvider.GetService(typeof(IPluginExecutionContext));
+            return context.IsInTransaction;
+        }
+
+    }
+</code></pre>
+
+<h2 id="what-just-happened">What just happened?</h2>
+
+<p>I applied a technique called the <a href="http://taswar.zeytinsoft.com/2009/03/08/extract-and-override-refactoring-technique/">Extract and Override</a> technique, to remove the concrete references to all of those CRM runtime only services from within the Execute method, and instead they are now referenced within virtual methods which can be overriden at unit test time.</p>
+
+<p>For example rather than having the following code directly within the execute method:</p>
+
+<pre><code class="language-csharp">  var executionContext = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+
+            // 1. We must run only within a transaction
+            if (!executionContext.IsInTransaction)
+            {
+</code></pre>
+
+<p>It has been replaced by a call to virtual method:</p>
+
+<pre><code class="language-csharp">            if (IsInTransaction())
+            {
+            
+            }
+</code></pre>
+
+<p>Because the interactions with the various CRM runtime Services now occur within Virtual methods, we no longer need to mock them up at unit test time. Say goodbye to having to mockup <code>IPluginExecutionContext</code>, <code>IServiceProvider</code> or <em>any</em> of the Crm runtime services. All we need to do now is just override the various virtual methods that our Execute() method calls, and return appropriate values at test time.</p>
+
+<h2 id="ok-so-now-will-you-show-me-a-unit-test">Ok so - Now will you show me a Unit Test??</h2>
+
+<p>Certainly Sir / Madame. Now that I can write one within a few minutes as opposed to a few hours, your wish is my command:-</p>
+
+<p>For the purpose of our unit tests all we do, is create a class that derives from our original plugin class, but overrides the various virtual methods to provide different values at test time.</p>
+
+<pre><code class="language-csharp"> public class UnitTestableReclaimCreditPlugin : ReclaimCreditPlugin2
+    {
+
+        public UnitTestableReclaimCreditPlugin()
+        {
+            AccountIsOnHold = false;
+            IsRunningInTransaction = false;
+            ContactEntity = new Entity(&quot;contact&quot;);
+        }
+
+        protected override Entity GetTargetEntity()
+        {
+            ContactEntity[&quot;parentaccountid&quot;] = new EntityReference(&quot;account&quot;, Guid.NewGuid());
+            return ContactEntity;
+        }
+
+        protected override Entity GetAccountEntity(Entity contact)
+        {
+            var accountEntity = new Entity(&quot;account&quot;);
+            accountEntity[&quot;creditonhold&quot;] = AccountIsOnHold;
+            return accountEntity;
+        }
+
+        protected override bool IsInTransaction()
+        {
+            return IsRunningInTransaction;
+        }
+
+        public bool AccountIsOnHold { get; set; }
+
+        public bool IsRunningInTransaction { get; set; }
+
+        public Entity ContactEntity { get; set; }
+
+    }
+</code></pre>
+
+<h2 id="and-here-are-the-unit-tests">And here are the Unit Tests</h2>
+
+<pre><code class="language-csharp">
+ [TestFixture]
+    public class ReclaimCreditPluginUnitTests
+    {
+        public ReclaimCreditPluginUnitTests()
+        {
+
+        }
+
+        [ExpectedException(typeof(InvalidPluginExecutionException),
+            ExpectedMessage = &quot;The plugin detected that it was not running within a database transaction&quot;,
+            MatchType = MessageMatch.Contains)]
+        public void Should_Only_Run_Within_Transaction()
+        {
+            // arrange
+            var sut = new UnitTestableReclaimCreditPlugin();
+            sut.IsRunningInTransaction = false;
+
+            // act 
+            sut.Execute();
+
+        }
+
+
+        public void Should_Take_Shoes_When_Credit_On_Hold()
+        {
+            // arrange
+            var sut = new UnitTestableReclaimCreditPlugin();
+            sut.IsRunningInTransaction = true;
+            sut.AccountIsOnHold = true;
+
+            // act 
+            sut.Execute();
+
+            //assert
+            Assert.That(sut.ContactEntity[&quot;taketheirshoes&quot;], Is.EqualTo(true));
+
+        }
+
+        public void Should_Not_Take_Shoes_When_Credit_Not_On_Hold()
+        {
+            // arrange
+            var sut = new UnitTestableReclaimCreditPlugin();
+            sut.IsRunningInTransaction = true;
+            sut.AccountIsOnHold = false;
+
+            // act 
+            sut.Execute();
+
+            //assert
+            Assert.That(sut.ContactEntity[&quot;taketheirshoes&quot;], Is.Not.EqualTo(true));
+
+        }
+    }
+</code></pre>
+
+<h2 id="wrapping-up">Wrapping Up</h2>
+
+<p>I hope I have demonstrated a simple plugin, with a simple set of unit tests. More importantly, I hope I have demonstrated that although it may be technically possible to write a unit test for an exising plugin,  by mocking up every CRM runtime service and interaction that the plugin makes,just because such a thing is possible, doesn&rsquo;t mean you should just do it. First the work has to be justified. To justify just what is necessary, examine the requirements, examine the plugin code, and be absolutely clear on what it is you want to cover in your unit tests. With that in mind, refactor the plugin code to eliminate fluff (extraneoues concrete references to dependencies that are surplus to the requirements that you want to test). Use techniques like the <code>Extract and Override</code> technique to allow you to substitute these dependencies easily at test time. When you do this, you may be surprised at how much simpler it becomes to write unit tests. I would aslo reccommend reading a book on unit testing, I found <a href="http://artofunittesting.com/">The Art of Unit Testing</a> very educational on this topic.</p>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2014%2f12%2f14%2funit-testing-dynamics-crm-plugins%2f" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2014%2f12%2f14%2funit-testing-dynamics-crm-plugins%2f" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2014%2f12%2f14%2funit-testing-dynamics-crm-plugins%2f" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2014%2f12%2f14%2funit-testing-dynamics-crm-plugins%2f" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+   
+</article> 
+
+ 
+  
+  <div class="container content">
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'darrelltunnellsblog';
+    var disqus_identifier = 'http:\/\/darrelltunnell.net\/blog\/2014\/12\/14\/unit-testing-dynamics-crm-plugins\/';
+    var disqus_title = 'Unit Testing Dynamics CRM Plugins';
+    var disqus_url = 'http:\/\/darrelltunnell.net\/blog\/2014\/12\/14\/unit-testing-dynamics-crm-plugins\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+  
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+
+  
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="http://darrelltunnell.net/blog/2015/11/05/automating-android-unit-test-apps-xamarin-like-a-pro/">Automating Android Unit Test Apps (Xamarin) Like A Pro</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2014/12/14/unit-testing-dynamics-crm-plugins/">Unit Testing Dynamics CRM Plugins</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2014/11/16/a-proclamation/">A Proclamation</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/1/01/01/"></a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/1/01/01/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/">ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</a></li>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      Blog template created by <a href="https://twitter.com/mdo">@mdo</a>, ported to Hugo by <a href='https://twitter.com/mralanorth'>@mralanorth</a>.
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>
