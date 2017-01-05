@@ -2,8 +2,83 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://darrelltunnell.net/blog/2015/11/05/automating-android-unit-test-apps-xamarin-like-a-pro/</loc>
-    <lastmod>2015-11-05T19:52:00+00:00</lastmod>
+    <loc>http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/</loc>
+    <lastmod>2016-07-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2016/03/19/dnn-extensions---sources-packages/</loc>
+    <lastmod>2016-03-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2016/03/19/dnnpackager---v2.0.6/</loc>
+    <lastmod>2016-03-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2016/01/24/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</loc>
+    <lastmod>2016-01-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio/</loc>
+    <lastmod>2016-01-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2015/12/01/dnnpackager---getting-started/</loc>
+    <lastmod>2015-12-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2015/11/21/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</loc>
+    <lastmod>2015-11-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2015/11/04/automating-android-unit-test-apps-xamarin-like-a-pro/</loc>
+    <lastmod>2015-11-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2015/08/29/</loc>
+    <lastmod>2015-08-29T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2015/08/16/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia/</loc>
+    <lastmod>2015-08-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2015/06/13/dotnetnuke---streamlining-module-development-workflow/</loc>
+    <lastmod>2015-06-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2015/04/29/automating-dotnetnuke-deployments-with-octopus-deploy/</loc>
+    <lastmod>2015-04-29T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2015/04/19/understanding-an-asp.net-spa-project/</loc>
+    <lastmod>2015-04-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdks-executemultiplerequest-get-you/</loc>
+    <lastmod>2015-02-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2015/01/18/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/</loc>
+    <lastmod>2015-01-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/blog/2014/12/22/crm-/-plugin-generated-values---and-reducing-roundtrips/</loc>
+    <lastmod>2014-12-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -18,74 +93,68 @@
   
   <url>
     <loc>http://darrelltunnell.net/categories/</loc>
+    <lastmod>2015-11-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/blog/1/01/01/</loc>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/blog/1/01/01/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/</loc>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/blog/1/01/01/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia/</loc>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/blog/1/01/01/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</loc>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/blog/1/01/01/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</loc>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/blog/1/01/01/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/</loc>
+    <loc>http://darrelltunnell.net/categories/android/</loc>
+    <lastmod>2015-11-04T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
     <loc>http://darrelltunnell.net/categories/asp/index.net/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/asp/index.net-aurelia-gulp/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/asp/index.netaureliagulpbowerjspm/</loc>
+    <lastmod>2016-01-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://darrelltunnell.net/categories/asp/index.netnuget/</loc>
+    <lastmod>2015-01-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://darrelltunnell.net/categories/asp.netnugetasp/index.netnuget/</loc>
+    <lastmod>2015-01-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/asp/index.netspa/</loc>
+    <loc>http://darrelltunnell.net/categories/aspnet-mvc/</loc>
+    <lastmod>2016-07-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/aspnetcore-aspnet-mvc-taghelper/</loc>
+    <loc>http://darrelltunnell.net/categories/aspnetcore/</loc>
+    <lastmod>2016-07-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/blog/1/01/01/automating-dotnetnuke-deployments-with-octopus-deploy/</loc>
+    <loc>http://darrelltunnell.net/categories/aurelia/</loc>
+    <lastmod>2016-01-24T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/blog/1/01/01/crm-/-plugin-generated-values---and-reducing-roundtrips/</loc>
+    <loc>http://darrelltunnell.net/categories/automate/</loc>
+    <lastmod>2015-11-04T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/bower/</loc>
+    <lastmod>2016-01-24T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/build/</loc>
+    <lastmod>2015-11-04T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -94,44 +163,44 @@
   </url>
   
   <url>
+    <loc>http://darrelltunnell.net/categories/ci/</loc>
+    <lastmod>2015-11-04T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://darrelltunnell.net/</loc>
-    <lastmod>2015-11-05T19:52:00+00:00</lastmod>
+    <lastmod>2016-07-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/blog/1/01/01/dnn-extensions---sources-packages/</loc>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/blog/1/01/01/dnnpackager---getting-started/</loc>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/blog/1/01/01/dnnpackager---v2.0.6/</loc>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/blog/1/01/01/dotnetnuke---streamlining-module-development-workflow/</loc>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/dotnetnukednnpackager/</loc>
+    <loc>http://darrelltunnell.net/categories/deployment/</loc>
+    <lastmod>2015-04-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/dotnetnukednnpackagerdnn/</loc>
+    <loc>http://darrelltunnell.net/categories/dnn/</loc>
+    <lastmod>2016-01-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/dotnetnukeoctopusdeployment/</loc>
+    <loc>http://darrelltunnell.net/categories/dnnpackager/</loc>
+    <lastmod>2016-03-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/dotnetnuke/</loc>
+    <lastmod>2016-03-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://darrelltunnell.net/categories/dynamics-crm/</loc>
+    <lastmod>2015-02-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -148,31 +217,62 @@
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/blog/1/01/01/how-far-does-the-xrm-sdks-executemultiplerequest-get-you/</loc>
+    <loc>http://darrelltunnell.net/categories/gulp/</loc>
+    <lastmod>2016-01-24T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/blog/1/01/01/imagining-a-dotnetnuke-project-type-for-visual-studio/</loc>
+    <loc>http://darrelltunnell.net/categories/jspm/</loc>
+    <lastmod>2016-01-24T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
     <loc>http://darrelltunnell.net/categories/nuget/</loc>
+    <lastmod>2015-01-18T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/octopus/</loc>
+    <lastmod>2015-04-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://darrelltunnell.net/post/</loc>
-    <lastmod>2015-11-05T19:52:00+00:00</lastmod>
+    <lastmod>2016-07-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/blog/1/01/01/understanding-an-asp.net-spa-project/</loc>
+    <loc>http://darrelltunnell.net/categories/spa/</loc>
+    <lastmod>2015-04-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/xamarinandroidteamcitytestsautomatecibuild/</loc>
-    <lastmod>2015-11-05T19:52:00+00:00</lastmod>
+    <loc>http://darrelltunnell.net/categories/taghelper/</loc>
+    <lastmod>2016-07-25T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/teamcity/</loc>
+    <lastmod>2015-11-04T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/tests/</loc>
+    <lastmod>2015-11-04T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/categories/xamarin/</loc>
+    <lastmod>2015-11-04T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

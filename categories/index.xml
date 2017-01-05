@@ -9,25 +9,11 @@
     <atom:link href="http://darrelltunnell.net/categories/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title></title>
-      <link>http://darrelltunnell.net/blog/1/01/01/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://darrelltunnell.net/blog/1/01/01/</guid>
-      <description>
-
-&lt;h2 id=&#34;getting-ssh-set-up-on-windows&#34;&gt;Getting SSH set up on Windows&lt;/h2&gt;
-
-&lt;p&gt;Follow this: &lt;a href=&#34;http://blog.muhammada.li/setting-up-ssh-access-to-bitbucket-on-windows#comment-53292&#34;&gt;http://blog.muhammada.li/setting-up-ssh-access-to-bitbucket-on-windows#comment-53292&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
       <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</title>
-      <link>http://darrelltunnell.net/blog/1/01/01/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <link>http://darrelltunnell.net/blog/2015/11/21/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</link>
+      <pubDate>Sat, 21 Nov 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/1/01/01/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</guid>
+      <guid>http://darrelltunnell.net/blog/2015/11/21/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</guid>
       <description>
 
 &lt;h3 id=&#34;aurelia&#34;&gt;Aurelia&lt;/h3&gt;
@@ -65,6 +51,20 @@ We are now going to set up a gulp task so that whenever we build our application
 &lt;p&gt;Well with Browser-Sync that is a thing of the past.&lt;/p&gt;
 
 &lt;p&gt;TODO: Explain how to set up browser-sync, gulp task etc, and sepcify port number in gulp task options, and proxy.. Then change project website settings to launch default url of the proxy when we start the project. Then all we have to do is serve which starts browser sync, and gets gulp watching for changes, then with gulp serve running we can run the website and debug in VS as normal whever we need to.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://darrelltunnell.net/blog/2015/08/29/</link>
+      <pubDate>Sat, 29 Aug 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2015/08/29/</guid>
+      <description>
+
+&lt;h2 id=&#34;getting-ssh-set-up-on-windows&#34;&gt;Getting SSH set up on Windows&lt;/h2&gt;
+
+&lt;p&gt;Follow this: &lt;a href=&#34;http://blog.muhammada.li/setting-up-ssh-access-to-bitbucket-on-windows#comment-53292&#34;&gt;http://blog.muhammada.li/setting-up-ssh-access-to-bitbucket-on-windows#comment-53292&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

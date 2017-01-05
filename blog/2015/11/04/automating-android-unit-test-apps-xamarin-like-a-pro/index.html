@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="Automating Android Unit Test Apps (Xamarin) Like A Pro" />
+<meta property="og:description" content="First Off.. This article is for those of you out there who use Xamarin to write Android applications and want to automate the process of running your tests on an Android device. I&rsquo;ll show you how you can set this up with relative ease.
+Here is the process we want:
+ CI Build Begins Produces the APK file containing my tests. Starts up an Emulator and boots an AVD Installs the tests APK onto the Android Device (Emulated) Kicks of the tests Reports back the test results." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://darrelltunnell.net/blog/2015/11/04/automating-android-unit-test-apps-xamarin-like-a-pro/" />
+
+
+<meta property="og:updated_time" content="2015-11-04T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Automating Android Unit Test Apps (Xamarin) Like A Pro">
+<meta itemprop="description" content="First Off.. This article is for those of you out there who use Xamarin to write Android applications and want to automate the process of running your tests on an Android device. I&rsquo;ll show you how you can set this up with relative ease.
+Here is the process we want:
+ CI Build Begins Produces the APK file containing my tests. Starts up an Emulator and boots an AVD Installs the tests APK onto the Android Device (Emulated) Kicks of the tests Reports back the test results.">
+
+
+<meta itemprop="dateModified" content="2015-11-04T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1259">
+
+
+
+<meta itemprop="keywords" content=",android,asp.net,asp.netnuget,asp.netnugetasp.netnuget,aspnet-mvc,aspnetcore,aurelia,automate,bower,build,ci,deployment,dnn,dnnpackager,dotnetnuke,dynamics-crm,dynamics-crmunit-testing,general,gulp,jspm,nuget,octopus,spa,taghelper,teamcity,tests,xamarin," />
+
+
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="Automating Android Unit Test Apps (Xamarin) Like A Pro"/>
+<meta name="twitter:description" content="First Off.. This article is for those of you out there who use Xamarin to write Android applications and want to automate the process of running your tests on an Android device. I&rsquo;ll show you how you can set this up with relative ease.
+Here is the process we want:
+ CI Build Begins Produces the APK file containing my tests. Starts up an Emulator and boots an AVD Installs the tests APK onto the Android Device (Emulated) Kicks of the tests Reports back the test results."/>
+
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.18.1" />
+
+
+    <link rel="canonical" href="http://darrelltunnell.net/blog/2015/11/04/automating-android-unit-test-apps-xamarin-like-a-pro/">
+
+    <title>Automating Android Unit Test Apps (Xamarin) Like A Pro | Darrell Tunnell&#39;s Blog</title>
+
+    <!-- combined, minified CSS -->
+    <link href="http://darrelltunnell.netcss/style.css" rel="stylesheet">
+
+    
+
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://darrelltunnell.net">Home</a>
+          
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="http://darrelltunnell.net" rel="home">Darrell Tunnell's Blog</a></h1>
+        
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/2015/11/04/automating-android-unit-test-apps-xamarin-like-a-pro/">Automating Android Unit Test Apps (Xamarin) Like A Pro</a></h2>
+    <p class="blog-post-meta"><time datetime="2015-11-04T00:00:00Z">Wed Nov 4, 2015</time> by  in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="http://darrelltunnell.net/categories/xamarin" rel="category tag">Xamarin</a>, <a href="http://darrelltunnell.net/categories/android" rel="category tag">Android</a>, <a href="http://darrelltunnell.net/categories/teamcity" rel="category tag">TeamCity</a>, <a href="http://darrelltunnell.net/categories/tests" rel="category tag">Tests</a>, <a href="http://darrelltunnell.net/categories/automate" rel="category tag">Automate</a>, <a href="http://darrelltunnell.net/categories/ci" rel="category tag">CI</a>, <a href="http://darrelltunnell.net/categories/build" rel="category tag">Build</a>
+
+
+</p>
+  </header>
+  
+
+<h2 id="first-off">First Off..</h2>
+
+<p>This article is for those of you out there who use Xamarin to write Android applications and want to automate the process of running your tests on an Android device. I&rsquo;ll show you how you can set this up with relative ease.</p>
+
+<p>Here is the process we want:</p>
+
+<!-- more -->
+
+<ol>
+<li>CI Build Begins</li>
+<li>Produces the APK file containing my tests.</li>
+<li>Starts up an Emulator and boots an AVD</li>
+<li>Installs the tests APK onto the Android Device (Emulated)</li>
+<li>Kicks of the tests</li>
+<li>Reports back the test results.</li>
+<li>If using Team City the test all appear nicely in the UI - otherwise the results are in STDOUT.</li>
+</ol>
+
+<h2 id="unit-test-app-android-and-it-s-shortcomings">Unit Test App (Android) - and it&rsquo;s shortcomings.</h2>
+
+<p>It all begins with adding the unit tests project itself.
+Xamarin have provided a project type in Visual Studio called a &ldquo;Unit Test App&rdquo;. Add one of those projects to your Solution and define some tests.</p>
+
+<p><img src="{{site.baseurl}}/assets/posts/New Android Unit Test Project.PNG" alt="New Android Unit Test Project.PNG" /></p>
+
+<p>Here are some tests:</p>
+
+<pre><code class="language-csharp">  [TestFixture]
+    public class TestsSample
+    {
+
+        [SetUp]
+        public void Setup() { }
+
+
+        [TearDown]
+        public void Tear() { }
+
+        [Test]
+        public void Pass()
+        {
+            Console.WriteLine(&quot;test1&quot;);
+            Assert.True(true);
+        }
+
+        [Test]
+        public void Fail()
+        {
+            Assert.False(true);
+        }
+
+        [Test]
+        [Ignore(&quot;another time&quot;)]
+        public void Ignore()
+        {
+            Assert.True(false);
+        }
+
+        [Test]
+        public void Inconclusive()
+        {
+            Assert.Inconclusive(&quot;Inconclusive&quot;);
+        }
+    }
+
+</code></pre>
+
+<h2 id="shortcomings-of-running-these-tests">Shortcomings of Running these tests</h2>
+
+<p>Naturally, you may be thinking how do you now run these tests? Well by default you have to manually run them. This is an app. Starting the tests project in VSis like starting any other Android application - it should deploy the APK to your Android device, and launch the app, which then shows a UI, and you must click various buttons on said UI to run the various tests that you want to run MANUALLY.</p>
+
+<h2 id="an-enormous-pain-in-the-ass">An enormous pain in the ass..</h2>
+
+<p>This ofcourse, is a rediculous way forward and we need to get these automated ASAP!</p>
+
+<h2 id="the-short-answer">The short answer</h2>
+
+<p>The short answer, is that we need to take a few steps to get these tests automated.. Read on..</p>
+
+<h2 id="step-1-the-nuget-package">Step 1 - The NuGet Package</h2>
+
+<p>I created a NuGet package called <a href="https://www.nuget.org/packages/Xamarin.TestyDroid/">TestyDroid</a>.</p>
+
+<p>In order to write this tool, it&rsquo;s fair to say it has taken a fair bit of research and testing!</p>
+
+<p>So - <a href="https://www.nuget.org/packages/Xamarin.TestyDroid/">Install the NuGet package to your tests project</a></p>
+
+<p>It contains two things. Firstly, it contains a command line executable in it&rsquo;s tools folder, called TestyDroid.exe. This little command line will handle spinning up an emulator, installing your tests apk, and running all of your tests and reporting the results, and lastly terminating the emulator once done.</p>
+
+<p>Secondly, it contains an Android library that is added to your Android tests project as a reference. This library includes an improved base class that you will derive form instead of the default Xamrin one. We will cover this in the next step.</p>
+
+<h2 id="step-2">Step 2</h2>
+
+<p>After that is installed, we need to address how these tests get &ldquo;launched&rdquo; in the first place.</p>
+
+<p>Android has the concept of &ldquo;Instrumentation&rdquo;</p>
+
+<p><code>Instrumentation</code> are basically special types, that can be launched via an intent, and can run tests.</p>
+
+<p>So, in order to &ldquo;start&rdquo; the tests running on the Android device (after the APK) has been installed, we need to create this &ldquo;Instrumentation&rdquo; class in our tests project.</p>
+
+<p>Add the following class to your Tests project:</p>
+
+<pre><code class="language-csharp">namespace Xamarin.TestyDroid.TestTests
+{
+    [Instrumentation(Name = &quot;xamarin.testydroid.testtests.TestInstrumentation&quot;)]
+    public class TestInstrumentation : TestyDroid.Android.TestyDroidTestSuiteInstrumentation
+    {   
+
+        public TestInstrumentation(IntPtr handle, JniHandleOwnership transfer) : base(handle, transfer)
+        {
+        }
+
+        protected override void AddTests()
+        {
+            AddTest(Assembly.GetExecutingAssembly());
+        }
+    }
+
+}
+
+</code></pre>
+
+<p>Imortant to note (adjust the Namespace appropriately) - the Instrumentation Attribute above the class has a &ldquo;Name&rdquo; property. THIS IS VERY IMPORTANT. Make sure it matches yoru namespace + class name, but with the namespace in lower case.</p>
+
+<p>So if you changed the namespace of this class to MyCoolApp.Tests
+And you changed the Class Name of this class to MyCoolTestInstrumentation
+Then the Attribute above the MyCoolTestInstrumentation class should look like this:</p>
+
+<pre><code class="language-csharp"> [Instrumentation(Name = &quot;mycoolapp.tests.MyCoolTestInstrumentation&quot;)]
+    public class MyCoolTestInstrumentation : TestyDroid.Android.TestyDroidTestSuiteInstrumentation
+    {   
+</code></pre>
+
+<h2 id="step-3-jot-things-down">Step 3 - Jot things down</h2>
+
+<p>We now need to make a note of a few variables that we will need in order to call <code>TestyDroid.exe</code> to run our tests.</p>
+
+<p>The first thing we need is the &ldquo;class path&rdquo; of your tests Instrumentation. This is &ldquo;Name&rdquo; value of the [Instrumentation] attribute in the previous step. For example:</p>
+
+<p><code>xamarin.testydroid.testtests.TestInstrumentation</code></p>
+
+<p>The next thing we need is the Package name of your tests package. This you can grab from the <code>AndroidManifest.xml</code> file.</p>
+
+<p>Here is mine:</p>
+
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot; package=&quot;Xamarin.TestyDroid.TestTests&quot; android:versionCode=&quot;1&quot; android:versionName=&quot;1.0&quot;&gt;
+    &lt;uses-sdk /&gt;
+    &lt;application android:label=&quot;Xamarin.TestyDroid.TestTests&quot; android:icon=&quot;@drawable/Icon&quot;&gt;&lt;/application&gt;
+&lt;/manifest&gt;
+</code></pre>
+
+<p>So the package name for my tests app is <code>Xamarin.TestyDroid.TestTests</code></p>
+
+<p>You will also need to know some more general paramaters about where things are on our environment:</p>
+
+<ol>
+<li>The path to <code>Adb.exe</code> (this is in your android-sdk\platform-tools directory)</li>
+<li>The path to <code>Emulator.exe</code> (this is in your android-sdk\tools directory)</li>
+<li>The path to your Tests APK file (I will give you a clue - it will probably be in your bin/release/ folder of your tests project!)</li>
+<li>The name of the AVD that you would like to be launched in the emulator and used to run the tests on.</li>
+</ol>
+
+<p>Once you have these things, you are ready to give TestyDroid.exe a whirl!</p>
+
+<h2 id="step-4-running-things-locally">Step 4 - Running things locally.</h2>
+
+<p>Armed with the information in the previous step:</p>
+
+<ol>
+<li>Open up a command prompt.</li>
+<li>CD to the tools directory of the Xamarin.TestyDroid nuget package you added to your  earlier. It should be something like &ldquo;..path to you solution/packages/Xamarin.TestyDroid.x.x.x/tools/&rdquo;</li>
+<li>Run <code>Xamarin.TestyDroid.exe</code> with the arguments it needs! Look here for a breakdown of all the arguments: <a href="https://github.com/dazinator/Xamarin.TestyDroid">https://github.com/dazinator/Xamarin.TestyDroid</a> - or just execute it with the <code>--help</code> argument to see the help screen.</li>
+</ol>
+
+<p>Here is an example:</p>
+
+<pre><code>Xamarin.TestyDroid.exe -e &quot;C:\Program Files (x86)\Android\android-sdk\tools\emulator.exe&quot; -d &quot;C:\Program Files (x86)\Android\android-sdk\platform-tools\adb.exe&quot; -f &quot;src\MyTests\bin\Release\MyTests.apk-Signed.apk&quot; -i &quot;AVD_GalaxyNexus_ToolsForApacheCordova&quot; -n &quot;MyTests&quot; -c &quot;mytests.TestInstrumentation&quot; -w 120
+</code></pre>
+
+<p>Substitute the argument values accordingly.</p>
+
+<p>You should see output similar to the following:</p>
+
+<pre><code>Starting emulator: D:\android-sdk\tools\emulator.exe -avd Xamarin_Android_API_15 -port 5554 -no-boot-anim -prop emu.uuid=013b8394-db8d-4224-a36f-889ce164f74e
+
+Waiting until: 04/11/2015 19:21:29 for device to complete boot up..
+
+INSTRUMENTATION_RESULT: passed=1
+
+INSTRUMENTATION_RESULT: skipped=1
+
+INSTRUMENTATION_RESULT: inconclusive=1
+
+INSTRUMENTATION_RESULT: failed=1
+
+INSTRUMENTATION_CODE: 0
+
+Killing device: emulator-5554
+Sending kill command.
+OK: killing emulator, bye bye
+
+Emulator killed.
+
+</code></pre>
+
+<h2 id="step-5-running-on-team-city">Step 5 - Running On Team City</h2>
+
+<p>Once you have verified you can automate the tests locally, the next step is to set up your build system to run them during your build!</p>
+
+<p>TestyDroid additionally supports reporting Test results in a TeamCity format so that they show up as test results in the TeamCity ui - if that&rsquo;s your build system.</p>
+
+<p>To configure TeamCity it&rsquo;s a case of:</p>
+
+<ol>
+<li>An MSBUILD step to build your Tests project (csproj file) such that it outputs the APK (remember to use the target <code>SignAndroidPackage</code> to have the APK produced)</li>
+<li>A command line step that calls out to Xamarin.TestyDroid.exe with the necessary arguments.</li>
+</ol>
+
+<p>The first step is easy, but the important thing to remember is to set the target to SignAndroidPackage</p>
+
+<p><img src="{{site.baseurl}}/assets/posts/tc commandlineparams testydroid.PNG" alt="tc commandlineparams testydroid.PNG" /></p>
+
+<p>That will now take care of producing the APK in the output directory for your project during your team city build.</p>
+
+<p>The second step to create is the one that actually runs the tests using TestyDroid!
+The follwing screenshot shows setting up a Command line step to do this:
+<img src="{{site.baseurl}}/assets/posts/tc testydroid commandlinestep.PNG" alt="tc testydroid commandlinestep.PNG" /></p>
+
+<h2 id="step-6-admire-your-tests-in-team-city">Step 6 - Admire your tests in Team City.</h2>
+
+<p>Now you can run a build - and if all is well - you should see your tests results added to a tests tab in Team City.</p>
+
+<p><img src="{{site.baseurl}}/assets/posts/tc Tests Tab.PNG" alt="tc Tests Tab.PNG" /></p>
+
+<h2 id="any-questions">Any Questions?</h2>
+
+<p>I have been someone limited by time so this was fairly rushed together! If there is anything you would like me to elaborate on, please leave a comment below.</p>
+
+<p>Also you can read more information about TestyDroid on Github: <a href="https://github.com/dazinator/Xamarin.TestyDroid/wiki/Getting-Started">https://github.com/dazinator/Xamarin.TestyDroid/wiki/Getting-Started</a></p>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f11%2f04%2fautomating-android-unit-test-apps-xamarin-like-a-pro%2f" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f11%2f04%2fautomating-android-unit-test-apps-xamarin-like-a-pro%2f" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f11%2f04%2fautomating-android-unit-test-apps-xamarin-like-a-pro%2f" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f11%2f04%2fautomating-android-unit-test-apps-xamarin-like-a-pro%2f" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+   
+</article> 
+
+ 
+  
+  <div class="container content">
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'darrelltunnellsblog';
+    var disqus_identifier = 'http:\/\/darrelltunnell.net\/blog\/2015\/11\/04\/automating-android-unit-test-apps-xamarin-like-a-pro\/';
+    var disqus_title = 'Automating Android Unit Test Apps (Xamarin) Like A Pro';
+    var disqus_url = 'http:\/\/darrelltunnell.net\/blog\/2015\/11\/04\/automating-android-unit-test-apps-xamarin-like-a-pro\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+  
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+
+  
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/">ASPNET Core TagHelper&rsquo;s - A Better @addTagHelper type resolver</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2016/03/19/dnn-extensions---sources-packages/">Dnn Extensions - Sources Packages?</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2016/03/19/dnnpackager---v2.0.6/">DnnPackager - v2.0.6</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2016/01/24/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/">ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio/">Imagining a DotNetNuke Project Type for Visual Studio</a></li>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      Blog template created by <a href="https://twitter.com/mdo">@mdo</a>, ported to Hugo by <a href='https://twitter.com/mralanorth'>@mralanorth</a>.
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>
