@@ -41,9 +41,11 @@
   <br /> {{ partial "categories.html" . }}
   <br/>
   <!--Disqus-->
+  {{if .Params.comments}}
   <div class="container content">
     {{ template "_internal/disqus.html" . }}
   </div>
+  {{end}}
 
   <!-- Include footer (ends <body class="theme-base-08"> and <html>) -->
   {{ partial "footer.html" }}

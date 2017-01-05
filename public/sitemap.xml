@@ -2,40 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://darrelltunnell.net/posts/2014-11-16-test/</loc>
-    <lastmod>2014-11-16T23:46:25+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/posts/2014-11-16-a-proclamation/</loc>
+    <loc>http://darrelltunnell.net/blog/2014/11/16/a-proclamation/</loc>
     <lastmod>2014-11-16T16:20:59+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/posts/newest/</loc>
+    <loc>http://darrelltunnell.net/blog/2014/03/29/just-another-sample-post/</loc>
     <lastmod>2014-03-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/posts/middle/</loc>
-    <lastmod>2014-03-28T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/posts/oldest/</loc>
-    <lastmod>2014-03-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/blah/</loc>
-    <lastmod>2014-03-27T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/boring/</loc>
-    <lastmod>2014-03-28T00:00:00+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
@@ -45,7 +18,7 @@
   
   <url>
     <loc>http://darrelltunnell.net/</loc>
-    <lastmod>2014-11-16T23:46:25+00:00</lastmod>
+    <lastmod>2014-11-16T16:20:59+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -56,26 +29,20 @@
   </url>
   
   <url>
+    <loc>http://darrelltunnell.net/categories/general/</loc>
+    <lastmod>2014-11-16T16:20:59+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://darrelltunnell.net/categories/hugo/</loc>
     <lastmod>2014-03-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/posts/</loc>
-    <lastmod>2014-11-16T23:46:25+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/second/</loc>
-    <lastmod>2014-03-28T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/template/</loc>
-    <lastmod>2014-03-28T00:00:00+00:00</lastmod>
+    <loc>http://darrelltunnell.net/post/</loc>
+    <lastmod>2014-11-16T16:20:59+00:00</lastmod>
     <priority>0</priority>
   </url>
   
