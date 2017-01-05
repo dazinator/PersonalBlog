@@ -1,0 +1,109 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <base href="http://darrelltunnell.net">
+    <title> Asp.Netspa </title>
+    <link rel="canonical" href="http://darrelltunnell.net/categories/asp/index.netspa/">
+    
+
+<link rel="stylesheet" href="http://darrelltunnell.net/css/poole.css">
+<link rel="stylesheet" href="http://darrelltunnell.net/css/syntax.css">
+<link rel="stylesheet" href="http://darrelltunnell.net/css/lanyon.css">
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+</head>
+
+
+<body class="theme-base-08">
+  
+
+
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+
+<div class="sidebar" id="sidebar">
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="http://darrelltunnell.net/">Home</a>
+
+    <a class="sidebar-nav-item" href="http://darrelltunnell.net/posts">Blog</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2014 Spencer Lyon. Powered by <a href="http://hugo.spf13.com">Hugo</a>. Design adapted from <a href="http://lanyon.getpoole.com">Lanyon</a>.
+    </p>
+  </div>
+</div>
+
+
+  
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="http://darrelltunnell.net/posts" title="Blog">Blog Posts</a>
+        </h3>
+      </div>
+    </div>
+
+  
+    <div class="container content">
+      <h1 class="post-title">Recent Posts</h1>
+        <section id="main">
+          <div>
+            <h5><a href="http://darrelltunnell.net/categories">Full Category Index</a></h5>
+            <h2>Posts in &ldquo;Asp.Netspa&rdquo;</h2>
+            
+            
+
+<article class="post">
+    <header>
+      <h2><a href='http://darrelltunnell.net/posts/2015-04-19-understanding-an-asp-net-spa-project/'> Understanding an ASP.NET SPA Project</a> </h2>
+      <div class="meta">Mon, Jan 1, 0001</div>
+    </header>
+
+    Understanding an ASP.NET Single Page Application project Like me, you may have noticed that when creating a new ASP.NET project in Visual Studio - there is the option to create a single page application.
+Let&rsquo;s see what that&rsquo;s about!
+Creating a project  Within the New Project dialog, select ASP.NET Web Application  Select &ldquo;single page application&rdquo;   3 Creating a project
+    <footer>
+        <a href='http://darrelltunnell.net/posts/2015-04-19-understanding-an-asp-net-spa-project/'><nobr>Read more →</nobr></a>
+    </footer>
+</article>
+
+            
+          </div>
+        </section>
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  
+  
+
+<div class="container content">
+<footer>
+  <div>
+    <p class="right credit">
+    Fancy footer here. Link to <a href="http://darrelltunnell.net/">Home Page</a>
+    </p>
+  </div>
+</footer>
+</div>
+
+
+
+</body>
+</html>
+
+
+
+

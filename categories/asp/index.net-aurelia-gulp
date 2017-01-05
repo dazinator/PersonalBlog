@@ -1,0 +1,108 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <base href="http://darrelltunnell.net">
+    <title> Asp.Net Aurelia Gulp </title>
+    <link rel="canonical" href="http://darrelltunnell.net/categories/asp/index.net-aurelia-gulp/">
+    
+
+<link rel="stylesheet" href="http://darrelltunnell.net/css/poole.css">
+<link rel="stylesheet" href="http://darrelltunnell.net/css/syntax.css">
+<link rel="stylesheet" href="http://darrelltunnell.net/css/lanyon.css">
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+
+</head>
+
+
+<body class="theme-base-08">
+  
+
+
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+
+<div class="sidebar" id="sidebar">
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="http://darrelltunnell.net/">Home</a>
+
+    <a class="sidebar-nav-item" href="http://darrelltunnell.net/posts">Blog</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2014 Spencer Lyon. Powered by <a href="http://hugo.spf13.com">Hugo</a>. Design adapted from <a href="http://lanyon.getpoole.com">Lanyon</a>.
+    </p>
+  </div>
+</div>
+
+
+  
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="http://darrelltunnell.net/posts" title="Blog">Blog Posts</a>
+        </h3>
+      </div>
+    </div>
+
+  
+    <div class="container content">
+      <h1 class="post-title">Recent Posts</h1>
+        <section id="main">
+          <div>
+            <h5><a href="http://darrelltunnell.net/categories">Full Category Index</a></h5>
+            <h2>Posts in &ldquo;Asp.Net Aurelia Gulp&rdquo;</h2>
+            
+            
+
+<article class="post">
+    <header>
+      <h2><a href='http://darrelltunnell.net/posts/2015-08-16-aurelia-and-asp-net-5-mvc/'> ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia</a> </h2>
+      <div class="meta">Mon, Jan 1, 0001</div>
+    </header>
+
+    This post is part 1 of a series. Part 2 is here
+ASP (A Sea of Packages).NET 5 When you create a new ASP.NET 5 project, you will see all sorts of new-ness. I am going to guide you, the uninitiated ASP.NET 5 web developer, through creating your first ASP.NET 5 MVC application, but we won&rsquo;t stop there. In the next post of this series, we will then enhance the project with a number of features:
+    <footer>
+        <a href='http://darrelltunnell.net/posts/2015-08-16-aurelia-and-asp-net-5-mvc/'><nobr>Read more →</nobr></a>
+    </footer>
+</article>
+
+            
+          </div>
+        </section>
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  
+  
+
+<div class="container content">
+<footer>
+  <div>
+    <p class="right credit">
+    Fancy footer here. Link to <a href="http://darrelltunnell.net/">Home Page</a>
+    </p>
+  </div>
+</footer>
+</div>
+
+
+
+</body>
+</html>
+
+
+
+
