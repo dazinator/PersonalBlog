@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="ASPNET Core TagHelper&#39;s - A Better @addTagHelper type resolver" />
+<meta property="og:description" content="What&rsquo;s this about? This is about TagHelper&rsquo;s in ASP.NET Core, and how to get more flexible @addTagHelper directives.
+Suppose your application loads some assemblies dynamically - for example, from a plugins folder, and those assemblies contain TagHelper&rsquo;s.
+In startup.cs you would have something like this to register your assemblies with the MVC parts system:
+var assy = Assembly.LoadFile(&quot;C:\\SomePath\Plugin.Authentication.dll&quot;); mvcBuilder.AddApplicationPart(assy); var assy = Assembly.LoadFile(&quot;C:\\SomePath\Plugin.Markdown.dll&quot;); mvcBuilder.AddApplicationPart(assy);  Now suppose you have a Razor View with some markup that can be targeted by those tag helpers:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://darrelltunnell.net/blog/1/01/01/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="ASPNET Core TagHelper&#39;s - A Better @addTagHelper type resolver">
+<meta itemprop="description" content="What&rsquo;s this about? This is about TagHelper&rsquo;s in ASP.NET Core, and how to get more flexible @addTagHelper directives.
+Suppose your application loads some assemblies dynamically - for example, from a plugins folder, and those assemblies contain TagHelper&rsquo;s.
+In startup.cs you would have something like this to register your assemblies with the MVC parts system:
+var assy = Assembly.LoadFile(&quot;C:\\SomePath\Plugin.Authentication.dll&quot;); mvcBuilder.AddApplicationPart(assy); var assy = Assembly.LoadFile(&quot;C:\\SomePath\Plugin.Markdown.dll&quot;); mvcBuilder.AddApplicationPart(assy);  Now suppose you have a Razor View with some markup that can be targeted by those tag helpers:">
+
+
+
+<meta itemprop="wordCount" content="872">
+
+
+
+<meta itemprop="keywords" content=",asp.net,asp.net-aurelia-gulp,asp.netaureliagulpbowerjspm,asp.netnuget,asp.netnugetasp.netnuget,asp.netspa,aspnetcore-aspnet-mvc-taghelper,dotnetnukednnpackager,dotnetnukednnpackagerdnn,dotnetnukeoctopusdeployment,dynamics-crm,dynamics-crmunit-testing,general,nuget,xamarinandroidteamcitytestsautomatecibuild," />
+
+
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="ASPNET Core TagHelper&#39;s - A Better @addTagHelper type resolver"/>
+<meta name="twitter:description" content="What&rsquo;s this about? This is about TagHelper&rsquo;s in ASP.NET Core, and how to get more flexible @addTagHelper directives.
+Suppose your application loads some assemblies dynamically - for example, from a plugins folder, and those assemblies contain TagHelper&rsquo;s.
+In startup.cs you would have something like this to register your assemblies with the MVC parts system:
+var assy = Assembly.LoadFile(&quot;C:\\SomePath\Plugin.Authentication.dll&quot;); mvcBuilder.AddApplicationPart(assy); var assy = Assembly.LoadFile(&quot;C:\\SomePath\Plugin.Markdown.dll&quot;); mvcBuilder.AddApplicationPart(assy);  Now suppose you have a Razor View with some markup that can be targeted by those tag helpers:"/>
+
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.18.1" />
+
+
+    <link rel="canonical" href="http://darrelltunnell.net/blog/1/01/01/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/">
+
+    <title>ASPNET Core TagHelper&rsquo;s - A Better @addTagHelper type resolver | Darrell Tunnell&#39;s Blog</title>
+
+    <!-- combined, minified CSS -->
+    <link href="http://darrelltunnell.netcss/style.css" rel="stylesheet">
+
+    
+
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://darrelltunnell.net">Home</a>
+          
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="http://darrelltunnell.net" rel="home">Darrell Tunnell's Blog</a></h1>
+        
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/1/01/01/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/">ASPNET Core TagHelper&rsquo;s - A Better @addTagHelper type resolver</a></h2>
+    <p class="blog-post-meta"><time datetime="0001-01-01T00:00:00Z">Mon Jan 1, 0001</time> by  in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;</p>
+  </header>
+  
+
+<h2 id="what-s-this-about">What&rsquo;s this about?</h2>
+
+<p>This is about TagHelper&rsquo;s in ASP.NET Core, and how to get more flexible <code>@addTagHelper</code> directives.</p>
+
+<p>Suppose your application loads some assemblies dynamically - for example, from a plugins folder, and those assemblies contain <code>TagHelper</code>&rsquo;s.</p>
+
+<p>In startup.cs you would have something like this to register your assemblies with the MVC parts system:</p>
+
+<pre><code class="language-csharp">
+var assy = Assembly.LoadFile(&quot;C:\\SomePath\Plugin.Authentication.dll&quot;);
+mvcBuilder.AddApplicationPart(assy);
+
+var assy = Assembly.LoadFile(&quot;C:\\SomePath\Plugin.Markdown.dll&quot;);
+mvcBuilder.AddApplicationPart(assy);
+
+
+</code></pre>
+
+<p>Now suppose you have a Razor View with some markup that can be targeted by those tag helpers:</p>
+
+<pre><code>
+ &lt;plugin-authentication /&gt;
+ &lt;plugin-markdown visible=&quot;true&quot;/&gt;
+
+</code></pre>
+
+<p>If you run your application, those TagHelper&rsquo;s won&rsquo;t work.
+This is because you don&rsquo;t have any <code>@addTagHelper</code> directive yet in your razor view, and so razor doesn&rsquo;t know it should be using them. This is where things get a bit interesting!</p>
+
+<!-- more -->
+
+<h2 id="let-s-add-an-addtaghelper-directive">Let&rsquo;s add an <code>addTagHelper</code> directive</h2>
+
+<p>So we add the directive to our __ViewImports.cshtml file:</p>
+
+<pre><code>@addTagHelper &quot;*, Plugin.Markdown&quot;
+</code></pre>
+
+<p>Now when we start our application, BOOM:</p>
+
+<pre><code>
+An error occurred during the compilation of a resource required to process this request. Please review the following specific error details and modify your source code appropriately.
+
+/Views/_ViewImports.cshtml
+
+Cannot resolve TagHelper containing assembly 'Plugin.Markdown'. Error: Could not load file or assembly 'Plugin.Markdown' or one of its dependencies. The system cannot find the file specified.
+@addTagHelper &quot;*, Plugin.Markdown&quot;
+
+
+</code></pre>
+
+<p>This is because by defualt MVC does not resolve <code>TagHelper</code> assemblies registered with the parts system (atleast this is true as of RTM 1.0.0) so it complains when it processes that directive, saying it can&rsquo;t find such an assembly - because it can only see assemblies that are in the bin folder by default. So it can&rsquo;t see your plugin assembly.</p>
+
+<h2 id="how-do-we-solve">How do we solve?</h2>
+
+<p>Well if you add this line:</p>
+
+<pre><code class="language-csharp">
+mvcBuilder.AddTagHelpersAsServices();
+
+</code></pre>
+
+<p>That will register some replacement services that will check the application parts system when trying to resolve the tag helper assemblies based on the name provided by the addTagHelper directive.</p>
+
+<p>However - this now works but it&rsquo;s still not ideal because we still have to add a directive for each <code>plugin</code> before it will work on our page/s. So when someone develops a new plugin, it won&rsquo;t work until we modify our <code>_ViewImports.cshtml</code> file and add another line:</p>
+
+<pre><code>@addTagHelper &quot;*, Plugin.Markdown&quot;
+@addTagHelper &quot;*, Plugin.Another&quot;
+@addTagHelper &quot;*, Plugin.YetAnother&quot;
+</code></pre>
+
+<p>This can be incredibly frustrating because if you are wanting an extensibile system where plugins can be installed on the fly, then they should just work without constant modifications to source code.</p>
+
+<h1 id="so-can-we-do-better">So Can We Do Better?</h1>
+
+<p>Yup. So here is my solution to this issue, and that is to allow <code>globbing</code> to be supported in the <code>addTagHelper</code> directive for the assembly name, just like it is for the TypeName portion.</p>
+
+<p>So this is how you do that.</p>
+
+<h1 id="itaghelpertyperesolver">ITagHelperTypeResolver</h1>
+
+<p>We need to create an <code>ITagHelperTypeResolver</code> and implement it&rsquo;s <code>Resolve</code> method. This method takes the string provided by in the <code>addTagHelper</code> directive and returns all <code>TagHelper</code> type&rsquo;s that are matches to that string. We will make our implementation support globbing on the assembly name so it can match <code>TagHelper</code> types accross multiple assemblies registered with the <code>Application Parts</code> system, instead of just from a single one.</p>
+
+<p>Here is my quick and dirty implementation, where I took a lot of the code from the microsoft implementation, and just added a few tweaks for globbing:</p>
+
+<pre><code class="language-csharp">
+public class AssemblyNameGlobbingTagHelperTypeResolver : ITagHelperTypeResolver
+    {
+       
+        private static readonly System.Reflection.TypeInfo ITagHelperTypeInfo = typeof(ITagHelper).GetTypeInfo();
+
+        protected TagHelperFeature Feature { get; }
+
+        public AssemblyNameGlobbingTagHelperTypeResolver(ApplicationPartManager manager)
+        {
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+
+            Feature = new TagHelperFeature();
+            manager.PopulateFeature(Feature);
+
+            // _manager = manager;
+
+        }
+
+        /// &lt;inheritdoc /&gt;
+        public IEnumerable&lt;Type&gt; Resolve(
+            string name,
+            SourceLocation documentLocation,
+            ErrorSink errorSink)
+        {
+            if (errorSink == null)
+            {
+                throw new ArgumentNullException(nameof(errorSink));
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+                var errorLength = name == null ? 1 : Math.Max(name.Length, 1);
+                errorSink.OnError(
+                    documentLocation,
+                    &quot;Tag Helper Assembly Name Cannot Be Empty Or Null&quot;,
+                    errorLength);
+
+                return Type.EmptyTypes;
+            }
+
+
+            IEnumerable&lt;TypeInfo&gt; libraryTypes;
+            try
+            {
+                libraryTypes = GetExportedTypes(name);
+            }
+            catch (Exception ex)
+            {
+                errorSink.OnError(
+                    documentLocation,
+                    $&quot;Cannot Resolve Tag Helper Assembly: {name}, {ex.Message}&quot;,
+                    name.Length);
+
+                return Type.EmptyTypes;
+            }
+
+            return libraryTypes;
+
+        }
+
+
+        /// &lt;inheritdoc /&gt;
+        protected IEnumerable&lt;System.Reflection.TypeInfo&gt; GetExportedTypes(string assemblyNamePattern)
+        {
+            if (assemblyNamePattern == null)
+            {
+                throw new ArgumentNullException(nameof(assemblyNamePattern));
+            }
+
+            var results = new List&lt;System.Reflection.TypeInfo&gt;();
+
+            for (var i = 0; i &lt; Feature.TagHelpers.Count; i++)
+            {
+                var tagHelperAssemblyName = Feature.TagHelpers[i].Assembly.GetName();
+
+                if (assemblyNamePattern.Contains(&quot;*&quot;)) // is it actually a pattern?
+                {
+                    if (tagHelperAssemblyName.Name.Like(assemblyNamePattern))
+                    {
+                        results.Add(Feature.TagHelpers[i]);
+                        continue;
+                    }
+                }
+
+                // not a pattern so treat as normal assembly name.
+                var assyName = new AssemblyName(assemblyNamePattern);
+                if (AssemblyNameComparer.OrdinalIgnoreCase.Equals(tagHelperAssemblyName, assyName))
+                {
+                    results.Add(Feature.TagHelpers[i]);
+                    continue;
+                }
+            }
+
+            return results;
+        }
+
+        private class AssemblyNameComparer : IEqualityComparer&lt;AssemblyName&gt;
+        {
+            public static readonly IEqualityComparer&lt;AssemblyName&gt; OrdinalIgnoreCase = new AssemblyNameComparer();
+
+            private AssemblyNameComparer()
+            {
+            }
+
+            public bool Equals(AssemblyName x, AssemblyName y)
+            {
+                // Ignore case because that's what Assembly.Load does.
+                return string.Equals(x.Name, y.Name, StringComparison.OrdinalIgnoreCase) &amp;&amp;
+                       string.Equals(x.CultureName ?? string.Empty, y.CultureName ?? string.Empty, StringComparison.Ordinal);
+            }
+
+            public int GetHashCode(AssemblyName obj)
+            {
+                var hashCode = 0;
+                if (obj.Name != null)
+                {
+                    hashCode ^= obj.Name.GetHashCode();
+                }
+
+                hashCode ^= (obj.CultureName ?? string.Empty).GetHashCode();
+                return hashCode;
+            }
+        }
+
+
+    }
+
+
+</code></pre>
+
+<p>Now we just register this on startup, after we have registered <code>MVC</code>:</p>
+
+<pre><code>
+  services.AddSingleton&lt;ITagHelperTypeResolver, AssemblyNameGlobbingTagHelperTypeResolver&gt;();
+
+</code></pre>
+
+<p>Now we can just add one directive to our __ViewImports.cshtml file, like this:</p>
+
+<pre><code>@addTagHelper &quot;*, Plugin.*&quot;
+
+</code></pre>
+
+<p>Now that will include all TagHelpers that live in assemblies matching that glob. We can drop new plugins in and their tag helpers will light up automatically.</p>
+
+<p>You are welcome.</p>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fdarrelltunnell.net%2fblog%2f1%2f01%2f01%2faspnet-core-taghelpers---a-better-addtaghelper-type-resolver%2f" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f1%2f01%2f01%2faspnet-core-taghelpers---a-better-addtaghelper-type-resolver%2f" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f1%2f01%2f01%2faspnet-core-taghelpers---a-better-addtaghelper-type-resolver%2f" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=http%3a%2f%2fdarrelltunnell.net%2fblog%2f1%2f01%2f01%2faspnet-core-taghelpers---a-better-addtaghelper-type-resolver%2f" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+   
+</article> 
+
+ 
+  
+  <div class="container content">
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'darrelltunnellsblog';
+    var disqus_identifier = 'http:\/\/darrelltunnell.net\/blog\/1\/01\/01\/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver\/';
+    var disqus_title = 'ASPNET Core TagHelper\x27s - A Better @addTagHelper type resolver';
+    var disqus_url = 'http:\/\/darrelltunnell.net\/blog\/1\/01\/01\/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+  
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+
+  
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="http://darrelltunnell.net/blog/2015/11/05/automating-android-unit-test-apps-xamarin-like-a-pro/">Automating Android Unit Test Apps (Xamarin) Like A Pro</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2014/12/14/unit-testing-dynamics-crm-plugins/">Unit Testing Dynamics CRM Plugins</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2014/11/16/a-proclamation/">A Proclamation</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/1/01/01/"></a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/1/01/01/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/">ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</a></li>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      Blog template created by <a href="https://twitter.com/mdo">@mdo</a>, ported to Hugo by <a href='https://twitter.com/mralanorth'>@mralanorth</a>.
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>
