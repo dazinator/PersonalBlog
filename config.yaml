@@ -8,4 +8,8 @@ baseurl: "http://darrelltunnell.net"
 title: "Darrell Tunnell's Blog'"
 canonifyurls: true
 theme: "Lanyon"
+permalinks:
+    post: /blog/:year/:month/:day/:title/
+metadataformat: "yaml"
+disqusShortname: "darrelltunnellsblog"
 ...

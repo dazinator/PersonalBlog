@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Aspnetcore Aspnet Mvc Taghelper on Darrell Tunnell&#39;s Blog&#39;</title>
+    <link>http://darrelltunnell.net/categories/aspnetcore-aspnet-mvc-taghelper/index.xml</link>
+    <description>Recent content in Aspnetcore Aspnet Mvc Taghelper on Darrell Tunnell&#39;s Blog&#39;</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://darrelltunnell.net/categories/aspnetcore-aspnet-mvc-taghelper/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>ASPNET Core TagHelper&#39;s - A Better @addTagHelper type resolver</title>
+      <link>http://darrelltunnell.net/posts/2016-07-25-aspnet-core-taghelper-s-a-better-addtaghelper-type-resolver/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/posts/2016-07-25-aspnet-core-taghelper-s-a-better-addtaghelper-type-resolver/</guid>
+      <description>
+
+&lt;h2 id=&#34;what-s-this-about&#34;&gt;What&amp;rsquo;s this about?&lt;/h2&gt;
+
+&lt;p&gt;This is about TagHelper&amp;rsquo;s in ASP.NET Core, and how to get more flexible &lt;code&gt;@addTagHelper&lt;/code&gt; directives.&lt;/p&gt;
+
+&lt;p&gt;Suppose your application loads some assemblies dynamically - for example, from a plugins folder, and those assemblies contain &lt;code&gt;TagHelper&lt;/code&gt;&amp;rsquo;s.&lt;/p&gt;
+
+&lt;p&gt;In startup.cs you would have something like this to register your assemblies with the MVC parts system:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-csharp&#34;&gt;
+var assy = Assembly.LoadFile(&amp;quot;C:\\SomePath\Plugin.Authentication.dll&amp;quot;);
+mvcBuilder.AddApplicationPart(assy);
+
+var assy = Assembly.LoadFile(&amp;quot;C:\\SomePath\Plugin.Markdown.dll&amp;quot;);
+mvcBuilder.AddApplicationPart(assy);
+
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now suppose you have a Razor View with some markup that can be targeted by those tag helpers:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+ &amp;lt;plugin-authentication /&amp;gt;
+ &amp;lt;plugin-markdown visible=&amp;quot;true&amp;quot;/&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you run your application, those TagHelper&amp;rsquo;s won&amp;rsquo;t work.
+This is because you don&amp;rsquo;t have any &lt;code&gt;@addTagHelper&lt;/code&gt; directive yet in your razor view, and so razor doesn&amp;rsquo;t know it should be using them. This is where things get a bit interesting!&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+&lt;h2 id=&#34;let-s-add-an-addtaghelper-directive&#34;&gt;Let&amp;rsquo;s add an &lt;code&gt;addTagHelper&lt;/code&gt; directive&lt;/h2&gt;
+
+&lt;p&gt;So we add the directive to our __ViewImports.cshtml file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@addTagHelper &amp;quot;*, Plugin.Markdown&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now when we start our application, BOOM:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+An error occurred during the compilation of a resource required to process this request. Please review the following specific error details and modify your source code appropriately.
+
+/Views/_ViewImports.cshtml
+
+Cannot resolve TagHelper containing assembly &#39;Plugin.Markdown&#39;. Error: Could not load file or assembly &#39;Plugin.Markdown&#39; or one of its dependencies. The system cannot find the file specified.
+@addTagHelper &amp;quot;*, Plugin.Markdown&amp;quot;
+
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is because by defualt MVC does not resolve &lt;code&gt;TagHelper&lt;/code&gt; assemblies registered with the parts system (atleast this is true as of RTM 1.0.0) so it complains when it processes that directive, saying it can&amp;rsquo;t find such an assembly - because it can only see assemblies that are in the bin folder by default. So it can&amp;rsquo;t see your plugin assembly.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-do-we-solve&#34;&gt;How do we solve?&lt;/h2&gt;
+
+&lt;p&gt;Well if you add this line:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-csharp&#34;&gt;
+mvcBuilder.AddTagHelpersAsServices();
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That will register some replacement services that will check the application parts system when trying to resolve the tag helper assemblies based on the name provided by the addTagHelper directive.&lt;/p&gt;
+
+&lt;p&gt;However - this now works but it&amp;rsquo;s still not ideal because we still have to add a directive for each &lt;code&gt;plugin&lt;/code&gt; before it will work on our page/s. So when someone develops a new plugin, it won&amp;rsquo;t work until we modify our &lt;code&gt;_ViewImports.cshtml&lt;/code&gt; file and add another line:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@addTagHelper &amp;quot;*, Plugin.Markdown&amp;quot;
+@addTagHelper &amp;quot;*, Plugin.Another&amp;quot;
+@addTagHelper &amp;quot;*, Plugin.YetAnother&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This can be incredibly frustrating because if you are wanting an extensibile system where plugins can be installed on the fly, then they should just work without constant modifications to source code.&lt;/p&gt;
+
+&lt;h1 id=&#34;so-can-we-do-better&#34;&gt;So Can We Do Better?&lt;/h1&gt;
+
+&lt;p&gt;Yup. So here is my solution to this issue, and that is to allow &lt;code&gt;globbing&lt;/code&gt; to be supported in the &lt;code&gt;addTagHelper&lt;/code&gt; directive for the assembly name, just like it is for the TypeName portion.&lt;/p&gt;
+
+&lt;p&gt;So this is how you do that.&lt;/p&gt;
+
+&lt;h1 id=&#34;itaghelpertyperesolver&#34;&gt;ITagHelperTypeResolver&lt;/h1&gt;
+
+&lt;p&gt;We need to create an &lt;code&gt;ITagHelperTypeResolver&lt;/code&gt; and implement it&amp;rsquo;s &lt;code&gt;Resolve&lt;/code&gt; method. This method takes the string provided by in the &lt;code&gt;addTagHelper&lt;/code&gt; directive and returns all &lt;code&gt;TagHelper&lt;/code&gt; type&amp;rsquo;s that are matches to that string. We will make our implementation support globbing on the assembly name so it can match &lt;code&gt;TagHelper&lt;/code&gt; types accross multiple assemblies registered with the &lt;code&gt;Application Parts&lt;/code&gt; system, instead of just from a single one.&lt;/p&gt;
+
+&lt;p&gt;Here is my quick and dirty implementation, where I took a lot of the code from the microsoft implementation, and just added a few tweaks for globbing:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-csharp&#34;&gt;
+public class AssemblyNameGlobbingTagHelperTypeResolver : ITagHelperTypeResolver
+    {
+       
+        private static readonly System.Reflection.TypeInfo ITagHelperTypeInfo = typeof(ITagHelper).GetTypeInfo();
+
+        protected TagHelperFeature Feature { get; }
+
+        public AssemblyNameGlobbingTagHelperTypeResolver(ApplicationPartManager manager)
+        {
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+
+            Feature = new TagHelperFeature();
+            manager.PopulateFeature(Feature);
+
+            // _manager = manager;
+
+        }
+
+        /// &amp;lt;inheritdoc /&amp;gt;
+        public IEnumerable&amp;lt;Type&amp;gt; Resolve(
+            string name,
+            SourceLocation documentLocation,
+            ErrorSink errorSink)
+        {
+            if (errorSink == null)
+            {
+                throw new ArgumentNullException(nameof(errorSink));
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+                var errorLength = name == null ? 1 : Math.Max(name.Length, 1);
+                errorSink.OnError(
+                    documentLocation,
+                    &amp;quot;Tag Helper Assembly Name Cannot Be Empty Or Null&amp;quot;,
+                    errorLength);
+
+                return Type.EmptyTypes;
+            }
+
+
+            IEnumerable&amp;lt;TypeInfo&amp;gt; libraryTypes;
+            try
+            {
+                libraryTypes = GetExportedTypes(name);
+            }
+            catch (Exception ex)
+            {
+                errorSink.OnError(
+                    documentLocation,
+                    $&amp;quot;Cannot Resolve Tag Helper Assembly: {name}, {ex.Message}&amp;quot;,
+                    name.Length);
+
+                return Type.EmptyTypes;
+            }
+
+            return libraryTypes;
+
+        }
+
+
+        /// &amp;lt;inheritdoc /&amp;gt;
+        protected IEnumerable&amp;lt;System.Reflection.TypeInfo&amp;gt; GetExportedTypes(string assemblyNamePattern)
+        {
+            if (assemblyNamePattern == null)
+            {
+                throw new ArgumentNullException(nameof(assemblyNamePattern));
+            }
+
+            var results = new List&amp;lt;System.Reflection.TypeInfo&amp;gt;();
+
+            for (var i = 0; i &amp;lt; Feature.TagHelpers.Count; i++)
+            {
+                var tagHelperAssemblyName = Feature.TagHelpers[i].Assembly.GetName();
+
+                if (assemblyNamePattern.Contains(&amp;quot;*&amp;quot;)) // is it actually a pattern?
+                {
+                    if (tagHelperAssemblyName.Name.Like(assemblyNamePattern))
+                    {
+                        results.Add(Feature.TagHelpers[i]);
+                        continue;
+                    }
+                }
+
+                // not a pattern so treat as normal assembly name.
+                var assyName = new AssemblyName(assemblyNamePattern);
+                if (AssemblyNameComparer.OrdinalIgnoreCase.Equals(tagHelperAssemblyName, assyName))
+                {
+                    results.Add(Feature.TagHelpers[i]);
+                    continue;
+                }
+            }
+
+            return results;
+        }
+
+        private class AssemblyNameComparer : IEqualityComparer&amp;lt;AssemblyName&amp;gt;
+        {
+            public static readonly IEqualityComparer&amp;lt;AssemblyName&amp;gt; OrdinalIgnoreCase = new AssemblyNameComparer();
+
+            private AssemblyNameComparer()
+            {
+            }
+
+            public bool Equals(AssemblyName x, AssemblyName y)
+            {
+                // Ignore case because that&#39;s what Assembly.Load does.
+                return string.Equals(x.Name, y.Name, StringComparison.OrdinalIgnoreCase) &amp;amp;&amp;amp;
+                       string.Equals(x.CultureName ?? string.Empty, y.CultureName ?? string.Empty, StringComparison.Ordinal);
+            }
+
+            public int GetHashCode(AssemblyName obj)
+            {
+                var hashCode = 0;
+                if (obj.Name != null)
+                {
+                    hashCode ^= obj.Name.GetHashCode();
+                }
+
+                hashCode ^= (obj.CultureName ?? string.Empty).GetHashCode();
+                return hashCode;
+            }
+        }
+
+
+    }
+
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we just register this on startup, after we have registered &lt;code&gt;MVC&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+  services.AddSingleton&amp;lt;ITagHelperTypeResolver, AssemblyNameGlobbingTagHelperTypeResolver&amp;gt;();
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we can just add one directive to our __ViewImports.cshtml file, like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@addTagHelper &amp;quot;*, Plugin.*&amp;quot;
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now that will include all TagHelpers that live in assemblies matching that glob. We can drop new plugins in and their tag helpers will light up automatically.&lt;/p&gt;
+
+&lt;p&gt;You are welcome.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

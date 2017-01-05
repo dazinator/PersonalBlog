@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Asp.Net Aurelia Gulp on Darrell Tunnell&#39;s Blog&#39;</title>
+    <link>http://darrelltunnell.net/categories/asp.net-aurelia-gulp/index.xml</link>
+    <description>Recent content in Asp.Net Aurelia Gulp on Darrell Tunnell&#39;s Blog&#39;</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://darrelltunnell.net/categories/asp.net-aurelia-gulp/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia</title>
+      <link>http://darrelltunnell.net/posts/2015-08-16-aurelia-and-asp-net-5-mvc/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/posts/2015-08-16-aurelia-and-asp-net-5-mvc/</guid>
+      <description>
+
+&lt;p&gt;&lt;strong&gt;This post is part 1 of a series. Part 2 is &lt;a href=&#34;http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/&#34;&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;asp-a-sea-of-packages-net-5&#34;&gt;ASP (A Sea of Packages).NET 5&lt;/h2&gt;
+
+&lt;p&gt;When you create a new ASP.NET 5 project, you will see all sorts of new-ness. I am going to guide you, the uninitiated ASP.NET 5 web developer, through creating your first ASP.NET 5 MVC application, but we won&amp;rsquo;t stop there. In the next post of this series, we will then enhance the project with a number of features:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Bundling and Minification.&lt;/li&gt;
+&lt;li&gt;Auto browser refresh (as you make changes to files during development)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;In addition, I will touch upon important tooling that you need to be aware of:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;NPM&lt;/li&gt;
+&lt;li&gt;Bower and why we are going to replace it with Jspm&lt;/li&gt;
+&lt;li&gt;Gulp - and why is it useful&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;To be able to do all of this, we will be creating an ASP.NET MVC 5 project, and then we will be using &lt;a href=&#34;http://aurelia.io/&#34;&gt;Aurelia&lt;/a&gt; to run an Aurelia application on Home page (Index.cshtml)
+&lt;!-- more --&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;new-project&#34;&gt;New Project&lt;/h2&gt;
+
+&lt;p&gt;The first step on our quest is simply to create a new ASP.NET application. I am sure you know the drill:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;In VS 2015, File &amp;ndash;&amp;gt; New Project&lt;/li&gt;
+&lt;li&gt;&amp;ldquo;ASP.NET Web Application&amp;rdquo;
+&lt;img src=&#34;{{site.baseurl}}/assets/posts/new aspnet project.PNG&#34; alt=&#34;new aspnet project.PNG&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;&amp;ldquo;Web Application&amp;rdquo;
+&lt;img src=&#34;{{site.baseurl}}/assets/posts/new aspnet project 2.PNG&#34; alt=&#34;new aspnet project 2.PNG&#34; /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;project-structure&#34;&gt;Project Structure&lt;/h2&gt;
+
+&lt;p&gt;At this point, with the project created, let&amp;rsquo;s stop and appreciate some noteworthy files in our new project.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/asp net project sol explorer.PNG&#34; alt=&#34;asp net project sol explorer.PNG&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;project.json&lt;/code&gt; - this is the new form of the project file. It replaces for example the older &lt;code&gt;.csproj&lt;/code&gt; and &lt;code&gt;.vbproj&lt;/code&gt; files.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;package.json&lt;/code&gt; - this file is managed by &lt;a href=&#34;https://docs.npmjs.com/&#34;&gt;NPM&lt;/a&gt;. It records the dependencies that your application has on NPM packages. More on NPM later.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;bower.json&lt;/code&gt; - this file is managed by &lt;a href=&#34;http://bower.io/&#34;&gt;Bower&lt;/a&gt;. It records the dependencies that your application has on Bower packages. More on Bower later.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;gulpfile.js&lt;/code&gt; - this file contains &lt;code&gt;tasks&lt;/code&gt; that can be executed by &lt;a href=&#34;http://gulpjs.com/&#34;&gt;Gulp&lt;/a&gt; as part of your development workflow, for example, whenever the project is built, cleaned etc. More on this later.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Startup.cs&lt;/code&gt; this is the entry point for your application. For the purposes of this article, the default code is fine and we won&amp;rsquo;t be amending anything in this file. It contains bootstrapping code such as setting up and registering services such as authentication.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;npm-it-s-an-important-citizen&#34;&gt;NPM - it&amp;rsquo;s an important citizen&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://docs.npmjs.com/&#34;&gt;NPM&lt;/a&gt; is now a first class citizen of an ASP.NET 5 project. This is why you have a &lt;code&gt;package.json&lt;/code&gt; file in your project.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/packages json file.PNG&#34; alt=&#34;packages json file.PNG&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;NPM is a package manager - the Node Package Manager to be precise. Think &lt;code&gt;NuGet&lt;/code&gt; but for NodeJs packages. You could be forgiven for thinking it stands for &amp;ldquo;Not another Package Manager&amp;rdquo; - it doesn&amp;rsquo;t, I checked.&lt;/p&gt;
+
+&lt;p&gt;If you aren&amp;rsquo;t yet familiar with NPM, stop here and do yourself a favour - go &lt;a href=&#34;https://docs.npmjs.com/&#34;&gt;get familiar&lt;/a&gt;, you will be seeing a lot of it in your ASP.NET 5 projects in the days to come!&lt;/p&gt;
+
+&lt;h3 id=&#34;hold-on-another-package-manager-but-we-allready-have-nuget&#34;&gt;Hold on, another Package Manager? But we allready have NuGet?&lt;/h3&gt;
+
+&lt;p&gt;NuGet is for .NET libraries like log4net silly. Npm has a vast array of packages not available through NuGet. Why wouldn&amp;rsquo;t you want to tap into those also?&lt;/p&gt;
+
+&lt;h3 id=&#34;bower&#34;&gt;Bower&lt;/h3&gt;
+
+&lt;p&gt;Here is where things get a tiny bit confusing. Bower is a package, that is also another package manager. I am tempted to move on.. but I&amp;rsquo;ll explain.&lt;/p&gt;
+
+&lt;p&gt;Bower is a NodeJs program, and is therefore distributed as a NodeJs package, via &lt;code&gt;NPM&lt;/code&gt;. However it&amp;rsquo;s purpose in life is to be a package manager, but specifically for client (website) dependencies such as javascript or css. Think Jquery. If you want to add Jquery, or Bootstrap, or any other client side library to your project, then Bower would be the package manager to use to achieve that. Not NPM (&lt;a href=&#34;https://www.npmjs.com/package/jquery&#34;&gt;although you could&lt;/a&gt;), and not NuGet (&lt;a href=&#34;https://www.nuget.org/packages/jQuery/&#34;&gt;although you could&lt;/a&gt;). The ASP.NET team thinks &lt;code&gt;Bower&lt;/code&gt; is the package manager to use as Bower specialises for client dependencies - so the ASP.NET 5 project is set up by default to use Bower and you may allready see some Bower packages downloaded into your &lt;code&gt;bower_components&lt;/code&gt; folder within your project. The &lt;code&gt;bower.json&lt;/code&gt; file keeps track of your bower dependencies.&lt;/p&gt;
+
+&lt;p&gt;However, in this walkthrough, we shall be scrapping &lt;code&gt;Bower&lt;/code&gt; and using a different package manager for our JQueries and our Bootstraps. One called &lt;a href=&#34;http://jspm.io/&#34;&gt;Jspm&lt;/a&gt;. Jspm is recomended for it&amp;rsquo;s additional capabilities, mainly that it provides not just package management features (at dev time) but package loading features, that your application uses at runtime.&lt;/p&gt;
+
+&lt;h3 id=&#34;gulp&#34;&gt;Gulp&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://gulpjs.com/&#34;&gt;Gulp&lt;/a&gt; is what all the cool kids are using to automate their development workflows.&lt;/p&gt;
+
+&lt;p&gt;Gulp basically lets you define &lt;code&gt;tasks&lt;/code&gt; in a javascript file (gulpfile.js) that can then be run at an appropirate point. VS 2015 has a &lt;code&gt;Task Runner Explorer&lt;/code&gt; window in which you can pick which Gulp tasks (the ones defined in your gulpfile.js) that you would like to run and when. For example, you can have your gulp task executed whenever the project is built, or cleaned etc. You can also execute your gulp task via the command line (see the Gulp docs)&lt;/p&gt;
+
+&lt;p&gt;We are going to write some Gulp tasks in gulpfile.js, and have them executed as part of the our project&amp;rsquo;s build process. These tasks are going to automatically handle bundling and minification of our javascript files for us.&lt;/p&gt;
+
+&lt;p&gt;Our web application is going to reference the &amp;ldquo;bundle&amp;rdquo; of javascript that gulp outputs, rather than the individual javascript files that we download using jspm. Which means our application is going to be nice and optimised as the browser will have to do less roundtrips with the server (network requests) to load the required javascript.&lt;/p&gt;
+
+&lt;h3 id=&#34;but-won-t-bundling-and-minification-lead-to-a-poor-debugging-experience&#34;&gt;But won&amp;rsquo;t bundling and minification lead to a poor debugging experience?&lt;/h3&gt;
+
+&lt;p&gt;Not if sourcemaps are enabled. I will show you how to enable this. This will mean the browser will be requesting and running the optimised bundle of javascript - but you the developer, will be stepping through and reading the original source code in your browser&amp;rsquo;s dev tools, thanks to the magical power of source maps.&lt;/p&gt;
+
+&lt;p&gt;However, I will also show you what to do if you just don&amp;rsquo;t want to bundle / minify your javascript during development (not all browsers will support source maps yet). If bundling and minification is something you only want to do at the time of a release build - which is pretty sensible - then I&amp;rsquo;ll cover that too.&lt;/p&gt;
+
+&lt;h2 id=&#34;stay-tuned&#34;&gt;Stay tuned&lt;/h2&gt;
+
+&lt;p&gt;In the next post/s, we will begin modifying our ASP.NET 5 project to do the things I have discussed:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/&#34;&gt;Replace Bower with JSPM&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Bring in Aurelia&lt;/li&gt;
+&lt;li&gt;Get an Aurelia application working on the Index.cshtml page&lt;/li&gt;
+&lt;li&gt;Enable bundling and minification via a Gulp task&lt;/li&gt;
+&lt;li&gt;Enable automatic browser refresh&lt;/li&gt;
+&lt;li&gt;Disable bundling when our application is running in development (to maintain an easy debugging experience should your browser not support source maps)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;If there is anything else you would like me to cover in this series, drop me a comment below!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

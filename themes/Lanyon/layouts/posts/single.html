@@ -30,22 +30,20 @@
     -->
     <div class="container content">
       <h1 class="post-title">{{ .Title }}</h1>
-        <section id="main">
-          <h5 id="date"> {{ .Date.Format "Mon Jan 2, 2006" }} </h5>
-          {{ .Content }}
-        </section>
+      <section id="main">
+        <h5 id="date"> {{ .Date.Format "Mon Jan 2, 2006" }} </h5>
+        {{ .Content }}
+      </section>
     </div>
   </div>
 
-  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
-
-  {{ partial "prev_next.html" . }}
-  <br />
-  {{ partial "categories.html" . }}
-
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label> {{ partial "prev_next.html" . }}
+  <br /> {{ partial "categories.html" . }}
+  <br/>
+  <!--Disqus-->
+  <div class="container content">
+    {{ template "_internal/disqus.html" . }}
+  </div>
 
   <!-- Include footer (ends <body class="theme-base-08"> and <html>) -->
   {{ partial "footer.html" }}
-
-
-
