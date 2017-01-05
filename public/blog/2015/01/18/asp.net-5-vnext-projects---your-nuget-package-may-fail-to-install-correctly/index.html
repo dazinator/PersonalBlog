@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly" />
+<meta property="og:description" content="Don&rsquo;t assume NuGet Packages that you have authored will continue to work with ASP.NET 5 (vNext) projects. Over the past year or so, I have authored a number of NuGet packages - because, well&hellip; I am just an all around great guy.
+Recently, I was contacted by someone who was trying to use one of my NuGet packages with an ASP.NET vNext project (Preview release). Not something I have tried before - and this is where things get a little interesting." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://darrelltunnell.net/blog/2015/01/18/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/" />
+
+
+<meta property="og:updated_time" content="2015-01-18T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly">
+<meta itemprop="description" content="Don&rsquo;t assume NuGet Packages that you have authored will continue to work with ASP.NET 5 (vNext) projects. Over the past year or so, I have authored a number of NuGet packages - because, well&hellip; I am just an all around great guy.
+Recently, I was contacted by someone who was trying to use one of my NuGet packages with an ASP.NET vNext project (Preview release). Not something I have tried before - and this is where things get a little interesting.">
+
+
+<meta itemprop="dateModified" content="2015-01-18T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="569">
+
+
+
+<meta itemprop="keywords" content=",android,asp.net,asp.netnuget,asp.netnugetasp.netnuget,aspnet-mvc,aspnetcore,aurelia,automate,bower,build,ci,deployment,dnn,dnnpackager,dotnetnuke,dynamics-crm,dynamics-crmunit-testing,general,gulp,jspm,nuget,octopus,spa,taghelper,teamcity,tests,xamarin," />
+
+
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly"/>
+<meta name="twitter:description" content="Don&rsquo;t assume NuGet Packages that you have authored will continue to work with ASP.NET 5 (vNext) projects. Over the past year or so, I have authored a number of NuGet packages - because, well&hellip; I am just an all around great guy.
+Recently, I was contacted by someone who was trying to use one of my NuGet packages with an ASP.NET vNext project (Preview release). Not something I have tried before - and this is where things get a little interesting."/>
+
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.18.1" />
+
+
+    <link rel="canonical" href="http://darrelltunnell.net/blog/2015/01/18/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/">
+
+    <title>ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly | Darrell Tunnell&#39;s Blog</title>
+
+    <!-- combined, minified CSS -->
+    <link href="http://darrelltunnell.netcss/style.css" rel="stylesheet">
+
+    
+
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://darrelltunnell.net">Home</a>
+          
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="http://darrelltunnell.net" rel="home">Darrell Tunnell's Blog</a></h1>
+        
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/2015/01/18/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/">ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</a></h2>
+    <p class="blog-post-meta"><time datetime="2015-01-18T00:00:00Z">Sun Jan 18, 2015</time> by  in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="http://darrelltunnell.net/categories/asp.net" rel="category tag">ASP.NET</a>, <a href="http://darrelltunnell.net/categories/nuget" rel="category tag">NuGet</a>, <a href="http://darrelltunnell.net/categories/asp.netnuget" rel="category tag">ASP.NET,NuGet</a>, <a href="http://darrelltunnell.net/categories/asp.netnugetasp.netnuget" rel="category tag">ASP.NET,NuGet,ASP.NET,NuGet</a>
+
+
+</p>
+  </header>
+  
+
+<h3 id="don-t-assume-nuget-packages-that-you-have-authored-will-continue-to-work-with-asp-net-5-vnext-projects">Don&rsquo;t assume NuGet Packages that you have authored will continue to work with ASP.NET 5 (vNext) projects.</h3>
+
+<p>Over the past year or so, I have authored <a href="https://www.nuget.org/packages?q=darrell.tunnell">a number of NuGet packages</a> - because, well&hellip; I am just an all around great guy.</p>
+
+<p>Recently, <a href="http://stackoverflow.com/questions/27762659/error-while-adding-nuget-package-to-asp-net-vnext-project#comment44383264_27762659">I was contacted by someone</a> who was trying to use one of my NuGet packages with an ASP.NET vNext project (Preview release). Not something I have tried before - and this is where things get a little interesting.
+<!-- more --></p>
+
+<h3 id="when-nuget-packages-are-installed-into-an-asp-net-vnext-project-powershell-scripts-included-in-the-package-are-not-run">When NuGet packages are installed into an ASP.NET vNext project - powershell scripts included in the package, are not run.</h3>
+
+<p>As most NuGet package authors will already know, it&rsquo;s a <a href="http://docs.nuget.org/docs/creating-packages/creating-and-publishing-a-package#Automatically_Running_PowerShell_Scripts_During_Package_Installation_and_Removal">standard feature of NuGet</a> that you can include powershell scripts within your NuGet package, that will then be executed when your package is installed (or uninstalled) into a visual studio project / solution.</p>
+
+<p>Many NuGet packages out there currently rely on this feature - else they will not work.</p>
+
+<p>Well, the issue with my NuGet package failing to install into an ASP.NET vNext project  was eventually posted on the asp.net forums, and <a href="http://forums.asp.net/members/davidfowl.aspx">David Fowler</a> (who&rsquo;s on the ASP.NET team) - kindly responded with some insight into the matter. He seems to suggest that <a href="http://forums.asp.net/t/2027698.aspx?Error+while+adding+NuGet+package+to+ASP+NET+vNext+project">ASP.NET v5 does not support running the packages powershell scripts when you install a NuGet package into an ASP.NET v5 project.</a></p>
+
+<p>I wanted to confirm that with him a second time - because <strong>that&rsquo;s a huge problem for some of my NuGet packages</strong>, but as you will see from that thread, I am still awaiting a secondary confirmation of this - although his first answer seems pretty clear cut.</p>
+
+<h3 id="surely-this-is-documented-somewhere-or-perhaps-asp-net-5-offers-an-alternative-mechanism-for-running-tasks-on-installation-uninstallation-of-a-nuget-package">Surely this is documented somewhere - or perhaps ASP.NET 5 offers an alternative mechanism for running tasks on installation / uninstallation of a NuGet package?</h3>
+
+<p>I have tried to look for more information. At the moment all I have to go on is David Fowlers response. Perhaps this is because there is still work in progress in this area, who knows. All I can suggest is that if your NuGet package currently requires custom tasks to be performed and you are using an <code>init</code>, <code>install</code> or <code>uninstall</code> ps1 script - then be prepared for the fact that it may not work with ASP.NET 5 projects - and also be prepared for the fact that there may not be any workaround either. I seriously hope this is false speculation on my part - but if this does turn out the be true after ASP.NET 5 is released, I&rsquo;ll be left with a slightly bitter taste in my mouth.</p>
+
+<h3 id="so-where-from-here">So where from here?</h3>
+
+<p>I am generally really excited about ASP.NET 5. I love what the team are doing. However I beleive that the ASP.NET team really should put some guidance out there to the NuGet community, so that NuGet package authors can gain an understanding of how their packages might have to change to work in the context of ASP.NET 5 projects.</p>
+
+<p>At a minimum, if ASP.NET 5 will indeed no longer support the running of these powershell scripts, then it should atleast warn you that the package contains such scripts and that they will not be executed - which means the package may not beahve as desired.</p>
+
+<p>My hope is that David Fowler or someone from the ASP.NET team will offer a clarification, insight, or workaround for this issue that makes it a non issue. Fingers crossed.</p>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f01%2f18%2fasp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly%2f" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f01%2f18%2fasp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly%2f" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f01%2f18%2fasp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly%2f" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f01%2f18%2fasp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly%2f" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+   
+</article> 
+
+ 
+  
+  <div class="container content">
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'darrelltunnellsblog';
+    var disqus_identifier = 'http:\/\/darrelltunnell.net\/blog\/2015\/01\/18\/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly\/';
+    var disqus_title = 'ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly';
+    var disqus_url = 'http:\/\/darrelltunnell.net\/blog\/2015\/01\/18\/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+  
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+
+  
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/">ASPNET Core TagHelper&rsquo;s - A Better @addTagHelper type resolver</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2016/03/19/dnn-extensions---sources-packages/">Dnn Extensions - Sources Packages?</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2016/03/19/dnnpackager---v2.0.6/">DnnPackager - v2.0.6</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2016/01/24/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/">ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio/">Imagining a DotNetNuke Project Type for Visual Studio</a></li>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      Blog template created by <a href="https://twitter.com/mdo">@mdo</a>, ported to Hugo by <a href='https://twitter.com/mralanorth'>@mralanorth</a>.
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

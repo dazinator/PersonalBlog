@@ -2,6 +2,7 @@
 layout: post
 published: true
 title: "CRM / Plugin Generated Values - and Reducing Roundtrips!"
+date: 2014-12-22
 comments: true
 categories: Dynamics CRM
 ---

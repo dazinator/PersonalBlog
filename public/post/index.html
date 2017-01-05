@@ -13,7 +13,7 @@
 <meta property="og:url" content="http://darrelltunnell.net/post/" />
 
 
-<meta property="og:updated_time" content="2015-11-05T19:52:00&#43;00:00"/>
+<meta property="og:updated_time" content="2016-07-25T00:00:00&#43;00:00"/>
 
 
 
@@ -91,47 +91,18 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/2015/11/05/automating-android-unit-test-apps-xamarin-like-a-pro/">Automating Android Unit Test Apps (Xamarin) Like A Pro</a></h2>
-    <p class="blog-post-meta"><time datetime="2015-11-05T19:52:00Z">Thu Nov 5, 2015</time> by  in 
-<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;</p>
-  </header>
-  First Off.. This article is for those of you out there who use Xamarin to write Android applications and want to automate the process of running your tests on an Android device. I&rsquo;ll show you how you can set this up with relative ease.
-Here is the process we want:
- CI Build Begins Produces the APK file containing my tests. Starts up an Emulator and boots an AVD Installs the tests APK onto the Android Device (Emulated) Kicks of the tests Reports back the test results.
-  <a href='http://darrelltunnell.net/blog/2015/11/05/automating-android-unit-test-apps-xamarin-like-a-pro/'>Read more →</a>
-</article> 
-
-
-
-
-<article class="blog-post">
-  <header>
-    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/2014/12/14/unit-testing-dynamics-crm-plugins/">Unit Testing Dynamics CRM Plugins</a></h2>
-    <p class="blog-post-meta"><time datetime="2014-12-14T17:50:00Z">Sun Dec 14, 2014</time> by  in 
-<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;</p>
-  </header>
-  There is no Spoon CRM The purpose of this post will be to look at the code for a fairly typical looking crm plugin, and examine how to implement a unit test with the least possible effort. Reduced Effort == Reduced Person Hours == Reduced Cost.
-Remember, this is Unit Testing, not Integration testing - so at test time - there is no CRM!
-A plugin - and it&rsquo;s requirements Firstly, let&rsquo;s look at a plugin that we will call the ReclaimCreditPlugin.
-  <a href='http://darrelltunnell.net/blog/2014/12/14/unit-testing-dynamics-crm-plugins/'>Read more →</a>
-</article> 
-
-
-
-
-<article class="blog-post">
-  <header>
-    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/2014/11/16/a-proclamation/">A Proclamation</a></h2>
-    <p class="blog-post-meta"><time datetime="2014-11-16T16:20:59Z">Sun Nov 16, 2014</time> by  in 
-<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="http://darrelltunnell.net/categories/general" rel="category tag">General</a>
+    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/">ASPNET Core TagHelper&rsquo;s - A Better @addTagHelper type resolver</a></h2>
+    <p class="blog-post-meta"><time datetime="2016-07-25T00:00:00Z">Mon Jul 25, 2016</time> by  in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="http://darrelltunnell.net/categories/aspnetcore" rel="category tag">ASPNETCORE</a>, <a href="http://darrelltunnell.net/categories/aspnet-mvc" rel="category tag">ASPNET MVC</a>, <a href="http://darrelltunnell.net/categories/taghelper" rel="category tag">TagHelper</a>
 
 
 </p>
   </header>
-  <p>On this day the 16th November 2014, let it be known that Darrell&rsquo;s blog was rendered forth unto the internet.</p>
-
-<p></p>
-  <a href='http://darrelltunnell.net/blog/2014/11/16/a-proclamation/'>Read more →</a>
+  What&rsquo;s this about? This is about TagHelper&rsquo;s in ASP.NET Core, and how to get more flexible @addTagHelper directives.
+Suppose your application loads some assemblies dynamically - for example, from a plugins folder, and those assemblies contain TagHelper&rsquo;s.
+In startup.cs you would have something like this to register your assemblies with the MVC parts system:
+var assy = Assembly.LoadFile(&quot;C:\\SomePath\Plugin.Authentication.dll&quot;); mvcBuilder.AddApplicationPart(assy); var assy = Assembly.LoadFile(&quot;C:\\SomePath\Plugin.Markdown.dll&quot;); mvcBuilder.AddApplicationPart(assy);  Now suppose you have a Razor View with some markup that can be targeted by those tag helpers:
+  <a href='http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/'>Read more →</a>
 </article> 
 
 
@@ -139,28 +110,70 @@ A plugin - and it&rsquo;s requirements Firstly, let&rsquo;s look at a plugin tha
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/1/01/01/"></a></h2>
-    <p class="blog-post-meta"><time datetime="0001-01-01T00:00:00Z">Mon Jan 1, 0001</time> by </p>
-  </header>
-  Getting SSH set up on Windows Follow this: http://blog.muhammada.li/setting-up-ssh-access-to-bitbucket-on-windows#comment-53292
-  <a href='http://darrelltunnell.net/blog/1/01/01/'>Read more →</a>
-</article> 
-
-
-
-
-<article class="blog-post">
-  <header>
-    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/1/01/01/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/">ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</a></h2>
-    <p class="blog-post-meta"><time datetime="0001-01-01T00:00:00Z">Mon Jan 1, 0001</time> by  in 
-<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="http://darrelltunnell.net/categories/asp.net" rel="category tag">ASP.NET</a>, <a href="http://darrelltunnell.net/categories/nuget" rel="category tag">NuGet</a>, <a href="http://darrelltunnell.net/categories/asp.netnuget" rel="category tag">ASP.NET,NuGet</a>, <a href="http://darrelltunnell.net/categories/asp.netnugetasp.netnuget" rel="category tag">ASP.NET,NuGet,ASP.NET,NuGet</a>
+    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/2016/03/19/dnn-extensions---sources-packages/">Dnn Extensions - Sources Packages?</a></h2>
+    <p class="blog-post-meta"><time datetime="2016-03-19T00:00:00Z">Sat Mar 19, 2016</time> by  in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="http://darrelltunnell.net/categories/dotnetnuke" rel="category tag">DotNetNuke</a>, <a href="http://darrelltunnell.net/categories/dnnpackager" rel="category tag">DnnPackager</a>
 
 
 </p>
   </header>
-  Don&rsquo;t assume NuGet Packages that you have authored will continue to work with ASP.NET 5 (vNext) projects. Over the past year or so, I have authored a number of NuGet packages - because, well&hellip; I am just an all around great guy.
-Recently, I was contacted by someone who was trying to use one of my NuGet packages with an ASP.NET vNext project (Preview release). Not something I have tried before - and this is where things get a little interesting.
-  <a href='http://darrelltunnell.net/blog/1/01/01/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/'>Read more →</a>
+  Sources Packages I have been doing some work on DnnPackager recently, and I&rsquo;ve come accross the concept of &ldquo;Source&rdquo; packages. I have to admit I am not entirely new to these, but I&rsquo;ve never personally used them for my projects in the past.
+Source packages are basically identical to the ordinary install zip&rsquo;s for your dnn module / extension, i.e you &ldquo;install&rdquo; them into your Dnn site like any other install package, except that they also include &ldquo;source code&rdquo; files within them, like .
+  <a href='http://darrelltunnell.net/blog/2016/03/19/dnn-extensions---sources-packages/'>Read more →</a>
+</article> 
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/2016/03/19/dnnpackager---v2.0.6/">DnnPackager - v2.0.6</a></h2>
+    <p class="blog-post-meta"><time datetime="2016-03-19T00:00:00Z">Sat Mar 19, 2016</time> by  in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="http://darrelltunnell.net/categories/dotnetnuke" rel="category tag">DotNetNuke</a>, <a href="http://darrelltunnell.net/categories/dnnpackager" rel="category tag">DnnPackager</a>
+
+
+</p>
+  </header>
+  DnnPackager Release -v2.0.6 A short post to announce that a new minor release of DnnPackager is out. You can find the release notes here explaining what&rsquo;s new: https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2
+For an introduction to DnnPackager in general see here
+Special thanks to @nvisionative for requesting this feature.
+  <a href='http://darrelltunnell.net/blog/2016/03/19/dnnpackager---v2.0.6/'>Read more →</a>
+</article> 
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/2016/01/24/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/">ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</a></h2>
+    <p class="blog-post-meta"><time datetime="2016-01-24T00:00:00Z">Sun Jan 24, 2016</time> by  in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="http://darrelltunnell.net/categories/asp.net" rel="category tag">ASP.NET</a>, <a href="http://darrelltunnell.net/categories/aurelia" rel="category tag">Aurelia</a>, <a href="http://darrelltunnell.net/categories/gulp" rel="category tag">Gulp</a>, <a href="http://darrelltunnell.net/categories/bower" rel="category tag">Bower</a>, <a href="http://darrelltunnell.net/categories/jspm" rel="category tag">JSPM</a>
+
+
+</p>
+  </header>
+  This post is part two of a series. For part one see here
+Part 2 - Replacing Bower with JSPM In part 1 of this series we created a shiny new ASP.NET 5 project, and I introduced some fundamentals.
+For reasons discussed in part 1, let&rsquo;s now go ahead with our first task, which is to ditch Bower in favour of JSPM as our javascript package manager. Uninstall Bower You will notice that your ASP.
+  <a href='http://darrelltunnell.net/blog/2016/01/24/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/'>Read more →</a>
+</article> 
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio/">Imagining a DotNetNuke Project Type for Visual Studio</a></h2>
+    <p class="blog-post-meta"><time datetime="2016-01-17T00:00:00Z">Sun Jan 17, 2016</time> by  in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="http://darrelltunnell.net/categories/dotnetnuke" rel="category tag">DotNetNuke</a>, <a href="http://darrelltunnell.net/categories/dnnpackager" rel="category tag">DnnPackager</a>, <a href="http://darrelltunnell.net/categories/dnn" rel="category tag">Dnn</a>
+
+
+</p>
+  </header>
+  Introduction When developing DotNetNuke extensions, we typically use one of the existing Visual Studio Project Type&rsquo;s, for example - an ASP.NET Web Application project.
+Even when using a Project Template such as Christoc&rsquo;s, the project template is still based upon one of the standard Visual Studio project types - usually an ASP.NET Web Application project.
+However these Project Types do not &ldquo;gel&rdquo; well with DotNetNuke development in a number of areas, the main ones being:
+  <a href='http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio/'>Read more →</a>
 </article> 
 
 
@@ -190,15 +203,15 @@ Recently, I was contacted by someone who was trying to use one of my NuGet packa
     <h4>Recent Posts</h4>
     <ol class="list-unstyled">
       
-      <li><a href="http://darrelltunnell.net/blog/2015/11/05/automating-android-unit-test-apps-xamarin-like-a-pro/">Automating Android Unit Test Apps (Xamarin) Like A Pro</a></li>
+      <li><a href="http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/">ASPNET Core TagHelper&rsquo;s - A Better @addTagHelper type resolver</a></li>
       
-      <li><a href="http://darrelltunnell.net/blog/2014/12/14/unit-testing-dynamics-crm-plugins/">Unit Testing Dynamics CRM Plugins</a></li>
+      <li><a href="http://darrelltunnell.net/blog/2016/03/19/dnn-extensions---sources-packages/">Dnn Extensions - Sources Packages?</a></li>
       
-      <li><a href="http://darrelltunnell.net/blog/2014/11/16/a-proclamation/">A Proclamation</a></li>
+      <li><a href="http://darrelltunnell.net/blog/2016/03/19/dnnpackager---v2.0.6/">DnnPackager - v2.0.6</a></li>
       
-      <li><a href="http://darrelltunnell.net/blog/1/01/01/"></a></li>
+      <li><a href="http://darrelltunnell.net/blog/2016/01/24/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/">ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</a></li>
       
-      <li><a href="http://darrelltunnell.net/blog/1/01/01/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/">ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</a></li>
+      <li><a href="http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio/">Imagining a DotNetNuke Project Type for Visual Studio</a></li>
       
     </ol>
   </section>

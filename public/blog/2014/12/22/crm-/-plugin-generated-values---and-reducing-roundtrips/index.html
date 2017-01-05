@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="CRM / Plugin Generated Values - and Reducing Roundtrips!" />
+<meta property="og:description" content="Setting the Scene Imagine we have an application that uses the CRM SDK. It needs to:
+ Create a new account entity in crm. Get some value that was just generated as a result of a synchronous plugin that fires on the create. For example, suppose there is a plugin that generates an account reference number.  The &ldquo;I don&rsquo;t care about network latency method!&rdquo; The &lsquo;I don&rsquo;t care about network latency&rsquo; way of dealing with this is to just do 2 seperate Requests (roundtrips) with the CRM server." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://darrelltunnell.net/blog/2014/12/22/crm-/-plugin-generated-values---and-reducing-roundtrips/" />
+
+
+<meta property="og:updated_time" content="2014-12-22T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="CRM / Plugin Generated Values - and Reducing Roundtrips!">
+<meta itemprop="description" content="Setting the Scene Imagine we have an application that uses the CRM SDK. It needs to:
+ Create a new account entity in crm. Get some value that was just generated as a result of a synchronous plugin that fires on the create. For example, suppose there is a plugin that generates an account reference number.  The &ldquo;I don&rsquo;t care about network latency method!&rdquo; The &lsquo;I don&rsquo;t care about network latency&rsquo; way of dealing with this is to just do 2 seperate Requests (roundtrips) with the CRM server.">
+
+
+<meta itemprop="dateModified" content="2014-12-22T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="600">
+
+
+
+<meta itemprop="keywords" content=",android,asp.net,asp.netnuget,asp.netnugetasp.netnuget,aspnet-mvc,aspnetcore,aurelia,automate,bower,build,ci,deployment,dnn,dnnpackager,dotnetnuke,dynamics-crm,dynamics-crmunit-testing,general,gulp,jspm,nuget,octopus,spa,taghelper,teamcity,tests,xamarin," />
+
+
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="CRM / Plugin Generated Values - and Reducing Roundtrips!"/>
+<meta name="twitter:description" content="Setting the Scene Imagine we have an application that uses the CRM SDK. It needs to:
+ Create a new account entity in crm. Get some value that was just generated as a result of a synchronous plugin that fires on the create. For example, suppose there is a plugin that generates an account reference number.  The &ldquo;I don&rsquo;t care about network latency method!&rdquo; The &lsquo;I don&rsquo;t care about network latency&rsquo; way of dealing with this is to just do 2 seperate Requests (roundtrips) with the CRM server."/>
+
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.18.1" />
+
+
+    <link rel="canonical" href="http://darrelltunnell.net/blog/2014/12/22/crm-/-plugin-generated-values---and-reducing-roundtrips/">
+
+    <title>CRM / Plugin Generated Values - and Reducing Roundtrips! | Darrell Tunnell&#39;s Blog</title>
+
+    <!-- combined, minified CSS -->
+    <link href="http://darrelltunnell.netcss/style.css" rel="stylesheet">
+
+    
+
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://darrelltunnell.net">Home</a>
+          
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="http://darrelltunnell.net" rel="home">Darrell Tunnell's Blog</a></h1>
+        
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="http://darrelltunnell.net/blog/2014/12/22/crm-/-plugin-generated-values---and-reducing-roundtrips/">CRM / Plugin Generated Values - and Reducing Roundtrips!</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-12-22T00:00:00Z">Mon Dec 22, 2014</time> by  in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;</p>
+  </header>
+  
+
+<h2 id="setting-the-scene">Setting the Scene</h2>
+
+<p>Imagine we have an application that uses the CRM SDK. It needs to:</p>
+
+<ol>
+<li>Create a new <code>account</code> entity in crm.</li>
+<li>Get some value that was just generated as a result of a synchronous plugin that fires on the create. For example, suppose there is a plugin that generates an account reference number.</li>
+</ol>
+
+<h2 id="the-i-don-t-care-about-network-latency-method">The &ldquo;I don&rsquo;t care about network latency method!&rdquo;</h2>
+
+<p>The &lsquo;I don&rsquo;t care about network latency&rsquo; way of dealing with this is to just do 2 seperate Requests (roundtrips) with the CRM server.</p>
+
+<ol>
+<li>Create the new <code>account</code> which returns you the ID.</li>
+<li>Retrieve the <code>account</code> using that ID, along with the values that you need.</li>
+</ol>
+
+<p>This approach is sub optimal where network latency is a concern, as it incurs the penalty of making two roundtrips accross the network with the server, where 1 is possible.</p>
+
+<p>Let&rsquo;s now have a look at the &ldquo;I&rsquo;m running on a 56k modem method&rdquo; of doing the same thing!
+<!-- more --></p>
+
+<h2 id="the-i-m-running-on-a-56k-modem-method-this-weeks-pro-tip">The &ldquo;I&rsquo;m running on a 56k modem method&rdquo; - this weeks pro tip!</h2>
+
+<p>For quite some time now - as of <code>CRM 2011 Update Rollup 12 - (SDK 5.0.13)</code> you can utilise the <a href="http://msdn.microsoft.com/en-gb/library/jj863604.aspx">Execute Multiple</a> request to do this kind of thing in one roundtrip with the CRM server.</p>
+
+<p>Here is an example of creating an account, and retrieiving it in a single round trip:</p>
+
+<pre><code class="language-csharp">                 // Create an ExecuteMultipleRequest object.
+                var multipleRequests = new ExecuteMultipleRequest()
+                {
+                    // Assign settings that define execution behavior: continue on error, return responses. 
+                    Settings = new ExecuteMultipleSettings()
+                    {
+                        ContinueOnError = false,
+                        ReturnResponses = true
+                    },
+                    // Create an empty organization request collection.
+                    Requests = new OrganizationRequestCollection()
+                };
+
+                var entity = new Entity(&quot;account&quot;);
+                entity.Id = Guid.NewGuid();
+                entity[&quot;name&quot;] = &quot;experimental test&quot;;
+
+                CreateRequest createRequest = new CreateRequest
+                {
+                    Target = entity
+                };
+
+                RetrieveRequest retrieveRequest = new RetrieveRequest
+                {
+                    Target = new EntityReference(entity.LogicalName, entity.Id),
+                    ColumnSet = new ColumnSet(&quot;createdon&quot;) // list the fields that you want here
+                };
+
+                multipleRequests.Requests.Add(createRequest);
+                multipleRequests.Requests.Add(retrieveRequest);
+
+                // Execute all the requests in the request collection using a single web method call.
+                ExecuteMultipleResponse responseWithResults = (ExecuteMultipleResponse)orgService.Execute(multipleRequests);
+                             
+                var createResponseItem = responseWithResults.Responses[0];
+                CreateResponse createResponse = null;
+                if (createResponseItem.Response != null)
+                {
+                    createResponse = (CreateResponse)createResponseItem.Response;
+                }
+
+                var retrieveResponseItem = responseWithResults.Responses[1];
+
+                RetrieveResponse retrieveResponse = null;
+                if (retrieveResponseItem.Response != null)
+                {
+                    retrieveResponse = (RetrieveResponse)retrieveResponseItem.Response;
+                }
+
+                Console.Write(retrieveResponse.Entity[&quot;createdon&quot;]); // yup - we got the value we needed!
+
+</code></pre>
+
+<h2 id="what-happened">What happened?</h2>
+
+<p>Both the CreateRequest, and the RetrieveRequest (for the created entity) are batched up into a single Request and shipped off to the CRM server for processing.</p>
+
+<p>CRM processed them in that order, collated the responses together, and returned them in a single batch.</p>
+
+<h2 id="caveats">Caveats</h2>
+
+<p>One caveat of this approach is that, if you intend to grab the generated values for an entity that is being created, then you need to know in advance what the ID will be.</p>
+
+<p>This means you have to specify the ID of the entity when you create it yourself - you can&rsquo;t let CRM auto create the new ID.</p>
+
+<p>For updates / deletes this is a non issue, as the ID is allready known.</p>
+
+<h2 id="last-thoughts-sql-optimisation">Last thoughts - SQL Optimisation</h2>
+
+<p>I speculate that specifying your own ID&rsquo;s <em>might be a bad thing</em> if you don&rsquo;t use Sequential Guid&rsquo;s.</p>
+
+<p>When CRM generates Id&rsquo;s for you, it generates them sequentially, and I beleive there may be SQL performance benefits to this in terms of index optimisation etc. So if using Guid.NewGuid() to create your new Id&rsquo;s you may want to check with a SQL guru first to understand any impact of using random Guid&rsquo;s as Id&rsquo;s on performance of the CRM tables! That said - Microsoft do support this, so it can&rsquo;t be too bad..</p>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2014%2f12%2f22%2fcrm-%2f-plugin-generated-values---and-reducing-roundtrips%2f" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2014%2f12%2f22%2fcrm-%2f-plugin-generated-values---and-reducing-roundtrips%2f" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2014%2f12%2f22%2fcrm-%2f-plugin-generated-values---and-reducing-roundtrips%2f" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2014%2f12%2f22%2fcrm-%2f-plugin-generated-values---and-reducing-roundtrips%2f" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+   
+</article> 
+
+ 
+  
+  <div class="container content">
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'darrelltunnellsblog';
+    var disqus_identifier = 'http:\/\/darrelltunnell.net\/blog\/2014\/12\/22\/crm-\/-plugin-generated-values---and-reducing-roundtrips\/';
+    var disqus_title = 'CRM \/ Plugin Generated Values - and Reducing Roundtrips!';
+    var disqus_url = 'http:\/\/darrelltunnell.net\/blog\/2014\/12\/22\/crm-\/-plugin-generated-values---and-reducing-roundtrips\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+  
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+
+  
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/">ASPNET Core TagHelper&rsquo;s - A Better @addTagHelper type resolver</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2016/03/19/dnn-extensions---sources-packages/">Dnn Extensions - Sources Packages?</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2016/03/19/dnnpackager---v2.0.6/">DnnPackager - v2.0.6</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2016/01/24/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/">ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</a></li>
+      
+      <li><a href="http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio/">Imagining a DotNetNuke Project Type for Visual Studio</a></li>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      Blog template created by <a href="https://twitter.com/mdo">@mdo</a>, ported to Hugo by <a href='https://twitter.com/mralanorth'>@mralanorth</a>.
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

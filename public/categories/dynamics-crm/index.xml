@@ -9,123 +9,11 @@
     <atom:link href="http://darrelltunnell.net/categories/dynamics-crm/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>CRM / Plugin Generated Values - and Reducing Roundtrips!</title>
-      <link>http://darrelltunnell.net/blog/1/01/01/crm-/-plugin-generated-values---and-reducing-roundtrips/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://darrelltunnell.net/blog/1/01/01/crm-/-plugin-generated-values---and-reducing-roundtrips/</guid>
-      <description>
-
-&lt;h2 id=&#34;setting-the-scene&#34;&gt;Setting the Scene&lt;/h2&gt;
-
-&lt;p&gt;Imagine we have an application that uses the CRM SDK. It needs to:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Create a new &lt;code&gt;account&lt;/code&gt; entity in crm.&lt;/li&gt;
-&lt;li&gt;Get some value that was just generated as a result of a synchronous plugin that fires on the create. For example, suppose there is a plugin that generates an account reference number.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&#34;the-i-don-t-care-about-network-latency-method&#34;&gt;The &amp;ldquo;I don&amp;rsquo;t care about network latency method!&amp;rdquo;&lt;/h2&gt;
-
-&lt;p&gt;The &amp;lsquo;I don&amp;rsquo;t care about network latency&amp;rsquo; way of dealing with this is to just do 2 seperate Requests (roundtrips) with the CRM server.&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Create the new &lt;code&gt;account&lt;/code&gt; which returns you the ID.&lt;/li&gt;
-&lt;li&gt;Retrieve the &lt;code&gt;account&lt;/code&gt; using that ID, along with the values that you need.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;This approach is sub optimal where network latency is a concern, as it incurs the penalty of making two roundtrips accross the network with the server, where 1 is possible.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s now have a look at the &amp;ldquo;I&amp;rsquo;m running on a 56k modem method&amp;rdquo; of doing the same thing!
-&lt;!-- more --&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;the-i-m-running-on-a-56k-modem-method-this-weeks-pro-tip&#34;&gt;The &amp;ldquo;I&amp;rsquo;m running on a 56k modem method&amp;rdquo; - this weeks pro tip!&lt;/h2&gt;
-
-&lt;p&gt;For quite some time now - as of &lt;code&gt;CRM 2011 Update Rollup 12 - (SDK 5.0.13)&lt;/code&gt; you can utilise the &lt;a href=&#34;http://msdn.microsoft.com/en-gb/library/jj863604.aspx&#34;&gt;Execute Multiple&lt;/a&gt; request to do this kind of thing in one roundtrip with the CRM server.&lt;/p&gt;
-
-&lt;p&gt;Here is an example of creating an account, and retrieiving it in a single round trip:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-csharp&#34;&gt;                 // Create an ExecuteMultipleRequest object.
-                var multipleRequests = new ExecuteMultipleRequest()
-                {
-                    // Assign settings that define execution behavior: continue on error, return responses. 
-                    Settings = new ExecuteMultipleSettings()
-                    {
-                        ContinueOnError = false,
-                        ReturnResponses = true
-                    },
-                    // Create an empty organization request collection.
-                    Requests = new OrganizationRequestCollection()
-                };
-
-                var entity = new Entity(&amp;quot;account&amp;quot;);
-                entity.Id = Guid.NewGuid();
-                entity[&amp;quot;name&amp;quot;] = &amp;quot;experimental test&amp;quot;;
-
-                CreateRequest createRequest = new CreateRequest
-                {
-                    Target = entity
-                };
-
-                RetrieveRequest retrieveRequest = new RetrieveRequest
-                {
-                    Target = new EntityReference(entity.LogicalName, entity.Id),
-                    ColumnSet = new ColumnSet(&amp;quot;createdon&amp;quot;) // list the fields that you want here
-                };
-
-                multipleRequests.Requests.Add(createRequest);
-                multipleRequests.Requests.Add(retrieveRequest);
-
-                // Execute all the requests in the request collection using a single web method call.
-                ExecuteMultipleResponse responseWithResults = (ExecuteMultipleResponse)orgService.Execute(multipleRequests);
-                             
-                var createResponseItem = responseWithResults.Responses[0];
-                CreateResponse createResponse = null;
-                if (createResponseItem.Response != null)
-                {
-                    createResponse = (CreateResponse)createResponseItem.Response;
-                }
-
-                var retrieveResponseItem = responseWithResults.Responses[1];
-
-                RetrieveResponse retrieveResponse = null;
-                if (retrieveResponseItem.Response != null)
-                {
-                    retrieveResponse = (RetrieveResponse)retrieveResponseItem.Response;
-                }
-
-                Console.Write(retrieveResponse.Entity[&amp;quot;createdon&amp;quot;]); // yup - we got the value we needed!
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;what-happened&#34;&gt;What happened?&lt;/h2&gt;
-
-&lt;p&gt;Both the CreateRequest, and the RetrieveRequest (for the created entity) are batched up into a single Request and shipped off to the CRM server for processing.&lt;/p&gt;
-
-&lt;p&gt;CRM processed them in that order, collated the responses together, and returned them in a single batch.&lt;/p&gt;
-
-&lt;h2 id=&#34;caveats&#34;&gt;Caveats&lt;/h2&gt;
-
-&lt;p&gt;One caveat of this approach is that, if you intend to grab the generated values for an entity that is being created, then you need to know in advance what the ID will be.&lt;/p&gt;
-
-&lt;p&gt;This means you have to specify the ID of the entity when you create it yourself - you can&amp;rsquo;t let CRM auto create the new ID.&lt;/p&gt;
-
-&lt;p&gt;For updates / deletes this is a non issue, as the ID is allready known.&lt;/p&gt;
-
-&lt;h2 id=&#34;last-thoughts-sql-optimisation&#34;&gt;Last thoughts - SQL Optimisation&lt;/h2&gt;
-
-&lt;p&gt;I speculate that specifying your own ID&amp;rsquo;s &lt;em&gt;might be a bad thing&lt;/em&gt; if you don&amp;rsquo;t use Sequential Guid&amp;rsquo;s.&lt;/p&gt;
-
-&lt;p&gt;When CRM generates Id&amp;rsquo;s for you, it generates them sequentially, and I beleive there may be SQL performance benefits to this in terms of index optimisation etc. So if using Guid.NewGuid() to create your new Id&amp;rsquo;s you may want to check with a SQL guru first to understand any impact of using random Guid&amp;rsquo;s as Id&amp;rsquo;s on performance of the CRM tables! That said - Microsoft do support this, so it can&amp;rsquo;t be too bad..&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
       <title>How far does the XRM SDK&#39;s ExecuteMultipleRequest get you?</title>
-      <link>http://darrelltunnell.net/blog/1/01/01/how-far-does-the-xrm-sdks-executemultiplerequest-get-you/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <link>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdks-executemultiplerequest-get-you/</link>
+      <pubDate>Thu, 26 Feb 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/1/01/01/how-far-does-the-xrm-sdks-executemultiplerequest-get-you/</guid>
+      <guid>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdks-executemultiplerequest-get-you/</guid>
       <description>
 
 &lt;h2 id=&#34;executemultiplerequest-let-s-take-it-to-the-max&#34;&gt;ExecuteMultipleRequest - Let&amp;rsquo;s take it to the max&lt;/h2&gt;
@@ -335,6 +223,118 @@ Well in that scenario, because the first batch actually contains 2 operations, t
 &lt;p&gt;If you would like to send a batch of commands to the CRM server in one go, the good news is you can. The bad news is, it&amp;rsquo;s not perfect, there are limitations, and hopefully I have shown you just about how far you can stretch things.&lt;/p&gt;
 
 &lt;p&gt;If you need to send multiple batches of commands to the CRM server in one go, the good news is you can if each batch contains only a single request message (i.e Create, Retreive, Delete, Update etc) - the bad news is, if thats not the case, then you will need to send each batch as an individual ExecuteMultipleRequest, and implement your own &amp;ldquo;ContinueOnError&amp;rdquo; behaviour clientside such that should one ExecuteMultipleRequest fail to be processed it doesn&amp;rsquo;t halt subsequent batches (ExecuteMultipleRequests) from being processed.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>CRM / Plugin Generated Values - and Reducing Roundtrips!</title>
+      <link>http://darrelltunnell.net/blog/2014/12/22/crm-/-plugin-generated-values---and-reducing-roundtrips/</link>
+      <pubDate>Mon, 22 Dec 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2014/12/22/crm-/-plugin-generated-values---and-reducing-roundtrips/</guid>
+      <description>
+
+&lt;h2 id=&#34;setting-the-scene&#34;&gt;Setting the Scene&lt;/h2&gt;
+
+&lt;p&gt;Imagine we have an application that uses the CRM SDK. It needs to:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Create a new &lt;code&gt;account&lt;/code&gt; entity in crm.&lt;/li&gt;
+&lt;li&gt;Get some value that was just generated as a result of a synchronous plugin that fires on the create. For example, suppose there is a plugin that generates an account reference number.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;the-i-don-t-care-about-network-latency-method&#34;&gt;The &amp;ldquo;I don&amp;rsquo;t care about network latency method!&amp;rdquo;&lt;/h2&gt;
+
+&lt;p&gt;The &amp;lsquo;I don&amp;rsquo;t care about network latency&amp;rsquo; way of dealing with this is to just do 2 seperate Requests (roundtrips) with the CRM server.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Create the new &lt;code&gt;account&lt;/code&gt; which returns you the ID.&lt;/li&gt;
+&lt;li&gt;Retrieve the &lt;code&gt;account&lt;/code&gt; using that ID, along with the values that you need.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;This approach is sub optimal where network latency is a concern, as it incurs the penalty of making two roundtrips accross the network with the server, where 1 is possible.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s now have a look at the &amp;ldquo;I&amp;rsquo;m running on a 56k modem method&amp;rdquo; of doing the same thing!
+&lt;!-- more --&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-i-m-running-on-a-56k-modem-method-this-weeks-pro-tip&#34;&gt;The &amp;ldquo;I&amp;rsquo;m running on a 56k modem method&amp;rdquo; - this weeks pro tip!&lt;/h2&gt;
+
+&lt;p&gt;For quite some time now - as of &lt;code&gt;CRM 2011 Update Rollup 12 - (SDK 5.0.13)&lt;/code&gt; you can utilise the &lt;a href=&#34;http://msdn.microsoft.com/en-gb/library/jj863604.aspx&#34;&gt;Execute Multiple&lt;/a&gt; request to do this kind of thing in one roundtrip with the CRM server.&lt;/p&gt;
+
+&lt;p&gt;Here is an example of creating an account, and retrieiving it in a single round trip:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-csharp&#34;&gt;                 // Create an ExecuteMultipleRequest object.
+                var multipleRequests = new ExecuteMultipleRequest()
+                {
+                    // Assign settings that define execution behavior: continue on error, return responses. 
+                    Settings = new ExecuteMultipleSettings()
+                    {
+                        ContinueOnError = false,
+                        ReturnResponses = true
+                    },
+                    // Create an empty organization request collection.
+                    Requests = new OrganizationRequestCollection()
+                };
+
+                var entity = new Entity(&amp;quot;account&amp;quot;);
+                entity.Id = Guid.NewGuid();
+                entity[&amp;quot;name&amp;quot;] = &amp;quot;experimental test&amp;quot;;
+
+                CreateRequest createRequest = new CreateRequest
+                {
+                    Target = entity
+                };
+
+                RetrieveRequest retrieveRequest = new RetrieveRequest
+                {
+                    Target = new EntityReference(entity.LogicalName, entity.Id),
+                    ColumnSet = new ColumnSet(&amp;quot;createdon&amp;quot;) // list the fields that you want here
+                };
+
+                multipleRequests.Requests.Add(createRequest);
+                multipleRequests.Requests.Add(retrieveRequest);
+
+                // Execute all the requests in the request collection using a single web method call.
+                ExecuteMultipleResponse responseWithResults = (ExecuteMultipleResponse)orgService.Execute(multipleRequests);
+                             
+                var createResponseItem = responseWithResults.Responses[0];
+                CreateResponse createResponse = null;
+                if (createResponseItem.Response != null)
+                {
+                    createResponse = (CreateResponse)createResponseItem.Response;
+                }
+
+                var retrieveResponseItem = responseWithResults.Responses[1];
+
+                RetrieveResponse retrieveResponse = null;
+                if (retrieveResponseItem.Response != null)
+                {
+                    retrieveResponse = (RetrieveResponse)retrieveResponseItem.Response;
+                }
+
+                Console.Write(retrieveResponse.Entity[&amp;quot;createdon&amp;quot;]); // yup - we got the value we needed!
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;what-happened&#34;&gt;What happened?&lt;/h2&gt;
+
+&lt;p&gt;Both the CreateRequest, and the RetrieveRequest (for the created entity) are batched up into a single Request and shipped off to the CRM server for processing.&lt;/p&gt;
+
+&lt;p&gt;CRM processed them in that order, collated the responses together, and returned them in a single batch.&lt;/p&gt;
+
+&lt;h2 id=&#34;caveats&#34;&gt;Caveats&lt;/h2&gt;
+
+&lt;p&gt;One caveat of this approach is that, if you intend to grab the generated values for an entity that is being created, then you need to know in advance what the ID will be.&lt;/p&gt;
+
+&lt;p&gt;This means you have to specify the ID of the entity when you create it yourself - you can&amp;rsquo;t let CRM auto create the new ID.&lt;/p&gt;
+
+&lt;p&gt;For updates / deletes this is a non issue, as the ID is allready known.&lt;/p&gt;
+
+&lt;h2 id=&#34;last-thoughts-sql-optimisation&#34;&gt;Last thoughts - SQL Optimisation&lt;/h2&gt;
+
+&lt;p&gt;I speculate that specifying your own ID&amp;rsquo;s &lt;em&gt;might be a bad thing&lt;/em&gt; if you don&amp;rsquo;t use Sequential Guid&amp;rsquo;s.&lt;/p&gt;
+
+&lt;p&gt;When CRM generates Id&amp;rsquo;s for you, it generates them sequentially, and I beleive there may be SQL performance benefits to this in terms of index optimisation etc. So if using Guid.NewGuid() to create your new Id&amp;rsquo;s you may want to check with a SQL guru first to understand any impact of using random Guid&amp;rsquo;s as Id&amp;rsquo;s on performance of the CRM tables! That said - Microsoft do support this, so it can&amp;rsquo;t be too bad..&lt;/p&gt;
 </description>
     </item>
     
