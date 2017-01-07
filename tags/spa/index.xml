@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spa on Darrell Tunnell</title>
+    <link>http://darrelltunnell.net/tags/spa/index.xml</link>
+    <description>Recent content in Spa on Darrell Tunnell</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
+    <atom:link href="http://darrelltunnell.net/tags/spa/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Understanding an ASP.NET SPA Project</title>
+      <link>http://darrelltunnell.net/blog/2015/04/19/understanding-an-asp.net-spa-project/</link>
+      <pubDate>Sun, 19 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2015/04/19/understanding-an-asp.net-spa-project/</guid>
+      <description>&lt;h3 id=&#34;understanding-an-asp-net-single-page-application-project&#34;&gt;Understanding an ASP.NET Single Page Application project&lt;/h3&gt;
+
+&lt;p&gt;Like me, you may have noticed that when creating a new ASP.NET project in Visual Studio - there is the option to create a single page application.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s see what that&amp;rsquo;s about!
+&lt;/p&gt;
+
+&lt;h2 id=&#34;creating-a-project&#34;&gt;Creating a project&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Within the New Project dialog, select ASP.NET Web Application
+&lt;img src=&#34;http://darrelltunnell.net/source/assets/posts/New ASP.NET Project.PNG&#34; alt=&#34;New ASP.NET Project.PNG&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Select &amp;ldquo;single page application&amp;rdquo;
+&lt;img src=&#34;http://darrelltunnell.net/source/assets/posts/Spa.PNG&#34; alt=&#34;Spa.PNG&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;3 Creating a project&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

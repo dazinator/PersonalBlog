@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Android on Darrell Tunnell</title>
+    <link>http://darrelltunnell.net/tags/android/index.xml</link>
+    <description>Recent content in Android on Darrell Tunnell</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
+    <atom:link href="http://darrelltunnell.net/tags/android/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Automating Android Unit Test Apps (Xamarin) Like A Pro</title>
+      <link>http://darrelltunnell.net/blog/2015/11/04/automating-android-unit-test-apps-xamarin-like-a-pro/</link>
+      <pubDate>Wed, 04 Nov 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2015/11/04/automating-android-unit-test-apps-xamarin-like-a-pro/</guid>
+      <description>&lt;h3 id=&#34;first-off&#34;&gt;First Off..&lt;/h3&gt;
+
+&lt;p&gt;This article is for those of you out there who use Xamarin to write Android applications and want to automate the process of running your tests on an Android device. I&amp;rsquo;ll show you how you can set this up with relative ease.&lt;/p&gt;
+
+&lt;p&gt;Here is the process we want:&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;CI Build Begins&lt;/li&gt;
+&lt;li&gt;Produces the APK file containing my tests.&lt;/li&gt;
+&lt;li&gt;Starts up an Emulator and boots an AVD&lt;/li&gt;
+&lt;li&gt;Installs the tests APK onto the Android Device (Emulated)&lt;/li&gt;
+&lt;li&gt;Kicks of the tests&lt;/li&gt;
+&lt;li&gt;Reports back the test results.&lt;/li&gt;
+&lt;li&gt;If using Team City the test all appear nicely in the UI - otherwise the results are in STDOUT.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;unit-test-app-android-and-it-s-shortcomings&#34;&gt;Unit Test App (Android) - and it&amp;rsquo;s shortcomings.&lt;/h3&gt;
+
+&lt;p&gt;It all begins with adding the unit tests project itself.
+Xamarin have provided a project type in Visual Studio called a &amp;ldquo;Unit Test App&amp;rdquo;. Add one of those projects to your Solution and define some tests.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/New Android Unit Test Project.PNG&#34; alt=&#34;New Android Unit Test Project.PNG&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Here are some tests:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-csharp&#34;&gt;  [TestFixture]
+    public class TestsSample
+    {
+
+        [SetUp]
+        public void Setup() { }
+
+
+        [TearDown]
+        public void Tear() { }
+
+        [Test]
+        public void Pass()
+        {
+            Console.WriteLine(&amp;quot;test1&amp;quot;);
+            Assert.True(true);
+        }
+
+        [Test]
+        public void Fail()
+        {
+            Assert.False(true);
+        }
+
+        [Test]
+        [Ignore(&amp;quot;another time&amp;quot;)]
+        public void Ignore()
+        {
+            Assert.True(false);
+        }
+
+        [Test]
+        public void Inconclusive()
+        {
+            Assert.Inconclusive(&amp;quot;Inconclusive&amp;quot;);
+        }
+    }
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;shortcomings-of-running-these-tests&#34;&gt;Shortcomings of Running these tests&lt;/h3&gt;
+
+&lt;p&gt;Naturally, you may be thinking how do you now run these tests? Well by default you have to manually run them. This is an app. Starting the tests project in VSis like starting any other Android application - it should deploy the APK to your Android device, and launch the app, which then shows a UI, and you must click various buttons on said UI to run the various tests that you want to run MANUALLY.&lt;/p&gt;
+
+&lt;h3 id=&#34;an-enormous-pain-in-the-ass&#34;&gt;An enormous pain in the ass..&lt;/h3&gt;
+
+&lt;p&gt;This ofcourse, is a rediculous way forward and we need to get these automated ASAP!&lt;/p&gt;
+
+&lt;h3 id=&#34;the-short-answer&#34;&gt;The short answer&lt;/h3&gt;
+
+&lt;p&gt;The short answer, is that we need to take a few steps to get these tests automated.. Read on..&lt;/p&gt;
+
+&lt;h3 id=&#34;step-1-the-nuget-package&#34;&gt;Step 1 - The NuGet Package&lt;/h3&gt;
+
+&lt;p&gt;I created a NuGet package called &lt;a href=&#34;https://www.nuget.org/packages/Xamarin.TestyDroid/&#34;&gt;TestyDroid&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In order to write this tool, it&amp;rsquo;s fair to say it has taken a fair bit of research and testing!&lt;/p&gt;
+
+&lt;p&gt;So - &lt;a href=&#34;https://www.nuget.org/packages/Xamarin.TestyDroid/&#34;&gt;Install the NuGet package to your tests project&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;It contains two things. Firstly, it contains a command line executable in it&amp;rsquo;s tools folder, called TestyDroid.exe. This little command line will handle spinning up an emulator, installing your tests apk, and running all of your tests and reporting the results, and lastly terminating the emulator once done.&lt;/p&gt;
+
+&lt;p&gt;Secondly, it contains an Android library that is added to your Android tests project as a reference. This library includes an improved base class that you will derive form instead of the default Xamrin one. We will cover this in the next step.&lt;/p&gt;
+
+&lt;h3 id=&#34;step-2&#34;&gt;Step 2&lt;/h3&gt;
+
+&lt;p&gt;After that is installed, we need to address how these tests get &amp;ldquo;launched&amp;rdquo; in the first place.&lt;/p&gt;
+
+&lt;p&gt;Android has the concept of &amp;ldquo;Instrumentation&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Instrumentation&lt;/code&gt; are basically special types, that can be launched via an intent, and can run tests.&lt;/p&gt;
+
+&lt;p&gt;So, in order to &amp;ldquo;start&amp;rdquo; the tests running on the Android device (after the APK) has been installed, we need to create this &amp;ldquo;Instrumentation&amp;rdquo; class in our tests project.&lt;/p&gt;
+
+&lt;p&gt;Add the following class to your Tests project:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-csharp&#34;&gt;namespace Xamarin.TestyDroid.TestTests
+{
+    [Instrumentation(Name = &amp;quot;xamarin.testydroid.testtests.TestInstrumentation&amp;quot;)]
+    public class TestInstrumentation : TestyDroid.Android.TestyDroidTestSuiteInstrumentation
+    {   
+
+        public TestInstrumentation(IntPtr handle, JniHandleOwnership transfer) : base(handle, transfer)
+        {
+        }
+
+        protected override void AddTests()
+        {
+            AddTest(Assembly.GetExecutingAssembly());
+        }
+    }
+
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Imortant to note (adjust the Namespace appropriately) - the Instrumentation Attribute above the class has a &amp;ldquo;Name&amp;rdquo; property. THIS IS VERY IMPORTANT. Make sure it matches yoru namespace + class name, but with the namespace in lower case.&lt;/p&gt;
+
+&lt;p&gt;So if you changed the namespace of this class to MyCoolApp.Tests
+And you changed the Class Name of this class to MyCoolTestInstrumentation
+Then the Attribute above the MyCoolTestInstrumentation class should look like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-csharp&#34;&gt; [Instrumentation(Name = &amp;quot;mycoolapp.tests.MyCoolTestInstrumentation&amp;quot;)]
+    public class MyCoolTestInstrumentation : TestyDroid.Android.TestyDroidTestSuiteInstrumentation
+    {   
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;step-3-jot-things-down&#34;&gt;Step 3 - Jot things down&lt;/h3&gt;
+
+&lt;p&gt;We now need to make a note of a few variables that we will need in order to call &lt;code&gt;TestyDroid.exe&lt;/code&gt; to run our tests.&lt;/p&gt;
+
+&lt;p&gt;The first thing we need is the &amp;ldquo;class path&amp;rdquo; of your tests Instrumentation. This is &amp;ldquo;Name&amp;rdquo; value of the [Instrumentation] attribute in the previous step. For example:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;xamarin.testydroid.testtests.TestInstrumentation&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The next thing we need is the Package name of your tests package. This you can grab from the &lt;code&gt;AndroidManifest.xml&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;p&gt;Here is mine:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
+&amp;lt;manifest xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot; package=&amp;quot;Xamarin.TestyDroid.TestTests&amp;quot; android:versionCode=&amp;quot;1&amp;quot; android:versionName=&amp;quot;1.0&amp;quot;&amp;gt;
+    &amp;lt;uses-sdk /&amp;gt;
+    &amp;lt;application android:label=&amp;quot;Xamarin.TestyDroid.TestTests&amp;quot; android:icon=&amp;quot;@drawable/Icon&amp;quot;&amp;gt;&amp;lt;/application&amp;gt;
+&amp;lt;/manifest&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So the package name for my tests app is &lt;code&gt;Xamarin.TestyDroid.TestTests&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;You will also need to know some more general paramaters about where things are on our environment:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;The path to &lt;code&gt;Adb.exe&lt;/code&gt; (this is in your android-sdk\platform-tools directory)&lt;/li&gt;
+&lt;li&gt;The path to &lt;code&gt;Emulator.exe&lt;/code&gt; (this is in your android-sdk\tools directory)&lt;/li&gt;
+&lt;li&gt;The path to your Tests APK file (I will give you a clue - it will probably be in your bin/release/ folder of your tests project!)&lt;/li&gt;
+&lt;li&gt;The name of the AVD that you would like to be launched in the emulator and used to run the tests on.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Once you have these things, you are ready to give TestyDroid.exe a whirl!&lt;/p&gt;
+
+&lt;h3 id=&#34;step-4-running-things-locally&#34;&gt;Step 4 - Running things locally.&lt;/h3&gt;
+
+&lt;p&gt;Armed with the information in the previous step:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Open up a command prompt.&lt;/li&gt;
+&lt;li&gt;CD to the tools directory of the Xamarin.TestyDroid nuget package you added to your  earlier. It should be something like &amp;ldquo;..path to you solution/packages/Xamarin.TestyDroid.x.x.x/tools/&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;Run &lt;code&gt;Xamarin.TestyDroid.exe&lt;/code&gt; with the arguments it needs! Look here for a breakdown of all the arguments: &lt;a href=&#34;https://github.com/dazinator/Xamarin.TestyDroid&#34;&gt;https://github.com/dazinator/Xamarin.TestyDroid&lt;/a&gt; - or just execute it with the &lt;code&gt;--help&lt;/code&gt; argument to see the help screen.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Here is an example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Xamarin.TestyDroid.exe -e &amp;quot;C:\Program Files (x86)\Android\android-sdk\tools\emulator.exe&amp;quot; -d &amp;quot;C:\Program Files (x86)\Android\android-sdk\platform-tools\adb.exe&amp;quot; -f &amp;quot;src\MyTests\bin\Release\MyTests.apk-Signed.apk&amp;quot; -i &amp;quot;AVD_GalaxyNexus_ToolsForApacheCordova&amp;quot; -n &amp;quot;MyTests&amp;quot; -c &amp;quot;mytests.TestInstrumentation&amp;quot; -w 120
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Substitute the argument values accordingly.&lt;/p&gt;
+
+&lt;p&gt;You should see output similar to the following:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Starting emulator: D:\android-sdk\tools\emulator.exe -avd Xamarin_Android_API_15 -port 5554 -no-boot-anim -prop emu.uuid=013b8394-db8d-4224-a36f-889ce164f74e
+
+Waiting until: 04/11/2015 19:21:29 for device to complete boot up..
+
+INSTRUMENTATION_RESULT: passed=1
+
+INSTRUMENTATION_RESULT: skipped=1
+
+INSTRUMENTATION_RESULT: inconclusive=1
+
+INSTRUMENTATION_RESULT: failed=1
+
+INSTRUMENTATION_CODE: 0
+
+Killing device: emulator-5554
+Sending kill command.
+OK: killing emulator, bye bye
+
+Emulator killed.
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;step-5-running-on-team-city&#34;&gt;Step 5 - Running On Team City&lt;/h3&gt;
+
+&lt;p&gt;Once you have verified you can automate the tests locally, the next step is to set up your build system to run them during your build!&lt;/p&gt;
+
+&lt;p&gt;TestyDroid additionally supports reporting Test results in a TeamCity format so that they show up as test results in the TeamCity ui - if that&amp;rsquo;s your build system.&lt;/p&gt;
+
+&lt;p&gt;To configure TeamCity it&amp;rsquo;s a case of:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;An MSBUILD step to build your Tests project (csproj file) such that it outputs the APK (remember to use the target &lt;code&gt;SignAndroidPackage&lt;/code&gt; to have the APK produced)&lt;/li&gt;
+&lt;li&gt;A command line step that calls out to Xamarin.TestyDroid.exe with the necessary arguments.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The first step is easy, but the important thing to remember is to set the target to SignAndroidPackage&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/tc commandlineparams testydroid.PNG&#34; alt=&#34;tc commandlineparams testydroid.PNG&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That will now take care of producing the APK in the output directory for your project during your team city build.&lt;/p&gt;
+
+&lt;p&gt;The second step to create is the one that actually runs the tests using TestyDroid!
+The follwing screenshot shows setting up a Command line step to do this:
+&lt;img src=&#34;{{site.baseurl}}/assets/posts/tc testydroid commandlinestep.PNG&#34; alt=&#34;tc testydroid commandlinestep.PNG&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;step-6-admire-your-tests-in-team-city&#34;&gt;Step 6 - Admire your tests in Team City.&lt;/h3&gt;
+
+&lt;p&gt;Now you can run a build - and if all is well - you should see your tests results added to a tests tab in Team City.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/tc Tests Tab.PNG&#34; alt=&#34;tc Tests Tab.PNG&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;any-questions&#34;&gt;Any Questions?&lt;/h3&gt;
+
+&lt;p&gt;I have been someone limited by time so this was fairly rushed together! If there is anything you would like me to elaborate on, please leave a comment below.&lt;/p&gt;
+
+&lt;p&gt;Also you can read more information about TestyDroid on Github: &lt;a href=&#34;https://github.com/dazinator/Xamarin.TestyDroid/wiki/Getting-Started&#34;&gt;https://github.com/dazinator/Xamarin.TestyDroid/wiki/Getting-Started&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
