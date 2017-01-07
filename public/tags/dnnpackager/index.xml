@@ -100,13 +100,15 @@ solution/projectB/projectB.csproj
       <guid>http://darrelltunnell.net/blog/2016/03/19/dnnpackager---v2.0.6/</guid>
       <description>&lt;h3 id=&#34;dnnpackager-release-v2-0-6&#34;&gt;DnnPackager Release -v2.0.6&lt;/h3&gt;
 
-&lt;p&gt;A short post to announce that a new minor release of DnnPackager is out.
+&lt;p&gt;A short post to announce that a new minor release of DnnPackager is out.&lt;/p&gt;
 
-You can find the release notes here explaining what&amp;rsquo;s new: &lt;a href=&#34;https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2&#34;&gt;https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;You can find the release notes here explaining what&amp;rsquo;s new: &lt;a href=&#34;https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2&#34;&gt;https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;For an introduction to DnnPackager in general &lt;a href=&#34;http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/&#34;&gt;see here&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;Special thanks to &lt;a href=&#34;https://github.com/nvisionative&#34;&gt;@nvisionative&lt;/a&gt; for requesting this feature.&lt;/p&gt;</description>
+&lt;p&gt;Special thanks to &lt;a href=&#34;https://github.com/nvisionative&#34;&gt;@nvisionative&lt;/a&gt; for requesting this feature.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
