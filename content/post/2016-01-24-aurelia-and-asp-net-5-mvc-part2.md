@@ -2,10 +2,10 @@
 layout: post
 comments: true
 categories: 
-    - "ASP.NET"
+    - "Development"
+tags: 
+    - "ASP.NET CORE"
     - "Aurelia"
-    - "Gulp"
-    - "Bower"
     - "JSPM"
 published: true
 title: "ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2"
@@ -14,12 +14,12 @@ date: 2016-01-24
 
 
 **This post is part two of a series. For part one see [here](http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/)**
-## Part 2 - Replacing Bower with JSPM
+### Part 2 - Replacing Bower with JSPM
 
 In [part 1 of this series](http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc) we created a shiny new ASP.NET 5 project, and I introduced some fundamentals.
 
 For reasons discussed in [part 1](http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc), let's now go ahead with our first task, which is to ditch Bower in favour of JSPM as our javascript package manager.
-<!-- more -->
+<!--more-->
 
 ### Uninstall Bower
 You will notice that your ASP.NET 5 application has a number of bower packages included by default:
@@ -304,7 +304,7 @@ And now - everything is working!
 
 ![jspmallworking.PNG]({{site.baseurl}}/assets/posts/jspmallworking.PNG)
 
-## Recap
+### Recap
 
 In this blog post, we took an out of the box ASP.NET 5 MVC application that we created in [part 1](http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/), and replaced `Bower` with `JSPM`. We changed the way our application resolves it's javascript and css files, to use a `module loader` instead.
 

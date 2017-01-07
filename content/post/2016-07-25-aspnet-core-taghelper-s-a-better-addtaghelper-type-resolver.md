@@ -5,45 +5,44 @@ published: true
 title: "ASPNET Core TagHelper's - A Better @addTagHelper type resolver"
 date: 2016-07-25
 categories:
-    - "ASPNETCORE"
-    - "ASPNET MVC"
-    - "TagHelper"
-
+    - "Development"      
+tags:
+    - "ASP.NET CORE"
 ---
-## What's this about?
+### What's this about?
 
 This is about TagHelper's in ASP.NET Core, and how to get more flexible `@addTagHelper` directives. 
+<!--more-->
 
 Suppose your application loads some assemblies dynamically - for example, from a plugins folder, and those assemblies contain `TagHelper`'s.
 
 In startup.cs you would have something like this to register your assemblies with the MVC parts system:
 
-```csharp
+{{< highlight csharp "linenos=true,style=default" >}}
 
-var assy = Assembly.LoadFile("C:\\SomePath\Plugin.Authentication.dll");
-mvcBuilder.AddApplicationPart(assy);
+ var assy = Assembly.LoadFile("C:\\SomePath\Plugin.Authentication.dll");
+ mvcBuilder.AddApplicationPart(assy);
 
-var assy = Assembly.LoadFile("C:\\SomePath\Plugin.Markdown.dll");
-mvcBuilder.AddApplicationPart(assy);
+ var assy = Assembly.LoadFile("C:\\SomePath\Plugin.Markdown.dll");
+ mvcBuilder.AddApplicationPart(assy);
 
-
-```
+{{< / highlight >}}
 
 Now suppose you have a Razor View with some markup that can be targeted by those tag helpers:
 
-```
+{{< highlight html "linenos=true,style=colorful" >}}
 
  <plugin-authentication />
  <plugin-markdown visible="true"/>
 
-```
+{{< / highlight >}}
 
 If you run your application, those TagHelper's won't work. 
 This is because you don't have any `@addTagHelper` directive yet in your razor view, and so razor doesn't know it should be using them. This is where things get a bit interesting!
 
 <!-- more -->
 
-## Let's add an `addTagHelper` directive
+### Let's add an `addTagHelper` directive
 
 So we add the directive to our __ViewImports.cshtml file:
 
@@ -67,7 +66,7 @@ Cannot resolve TagHelper containing assembly 'Plugin.Markdown'. Error: Could not
 
 This is because by defualt MVC does not resolve `TagHelper` assemblies registered with the parts system (atleast this is true as of RTM 1.0.0) so it complains when it processes that directive, saying it can't find such an assembly - because it can only see assemblies that are in the bin folder by default. So it can't see your plugin assembly.
 
-## How do we solve?
+### How do we solve?
 
 Well if you add this line:
 
@@ -90,13 +89,13 @@ However - this now works but it's still not ideal because we still have to add a
 This can be incredibly frustrating because if you are wanting an extensibile system where plugins can be installed on the fly, then they should just work without constant modifications to source code.
 
 
-# So Can We Do Better?
+### So Can We Do Better?
 
 Yup. So here is my solution to this issue, and that is to allow `globbing` to be supported in the `addTagHelper` directive for the assembly name, just like it is for the TypeName portion.
 
 So this is how you do that.
 
-# ITagHelperTypeResolver
+### ITagHelperTypeResolver
 
 
 We need to create an `ITagHelperTypeResolver` and implement it's `Resolve` method. This method takes the string provided by in the `addTagHelper` directive and returns all `TagHelper` type's that are matches to that string. We will make our implementation support globbing on the assembly name so it can match `TagHelper` types accross multiple assemblies registered with the `Application Parts` system, instead of just from a single one. 

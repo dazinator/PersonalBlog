@@ -6,10 +6,10 @@ comments: true
 date: 2015-01-18
 sharing: true
 categories: 
-  - ASP.NET
-  - NuGet
-  - "ASP.NET,NuGet"
-  - "ASP.NET,NuGet,ASP.NET,NuGet"
+    - "Development"
+tags: 
+    - "NuGet"
+    - "ASP.NET CORE"
 ---
 
 ### Don't assume NuGet Packages that you have authored will continue to work with ASP.NET 5 (vNext) projects.
@@ -17,7 +17,7 @@ categories:
 Over the past year or so, I have authored [a number of NuGet packages](https://www.nuget.org/packages?q=darrell.tunnell) - because, well... I am just an all around great guy.
 
 Recently, [I was contacted by someone](http://stackoverflow.com/questions/27762659/error-while-adding-nuget-package-to-asp-net-vnext-project#comment44383264_27762659) who was trying to use one of my NuGet packages with an ASP.NET vNext project (Preview release). Not something I have tried before - and this is where things get a little interesting.
-<!-- more -->
+<!--more-->
 
 ### When NuGet packages are installed into an ASP.NET vNext project - powershell scripts included in the package, are not run.
 

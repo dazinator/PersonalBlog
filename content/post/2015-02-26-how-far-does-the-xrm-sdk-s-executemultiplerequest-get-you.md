@@ -5,16 +5,18 @@ title: "How far does the XRM SDK's ExecuteMultipleRequest get you?"
 date: 2015-02-26
 comments: true
 categories: 
-  - "Dynamics CRM"
+    - "Development"
+tags: 
+    - "Dynamics CRM"
 ---
 
-## ExecuteMultipleRequest - Let's take it to the max
+### ExecuteMultipleRequest - Let's take it to the max
 
 In this post, I will explore what kinds of things can be achieved using the SDK's ExecuteMultipleRequest, by starting of with a simple SQL command, and implementing a semantically equivalent ExecuteMultipleRequest, and then slowly introducing some additional complexity - so that, we can see some areas where the SDK starts to fall short!
 
-<!-- more -->
+<!--more-->
 
-## Starting Simple
+### Starting Simple
 Consider this SQL:
 
 ```sql
@@ -33,7 +35,7 @@ Either:-
   
 I hope you are with me so far..
 
-## Take It Up A Notch
+### Take It Up A Notch
 
 Let's now imagine that when a contact is INSERTED, an `accountnumber` is generated on the server, and that we want to grab this value using a single roundtrip with the server.
 
@@ -56,7 +58,7 @@ The problem being, is that to do this in one roundtrip with the CRM server means
 
 However in order to construct the appropriate RetrieveRequestMessage we need to know the ID of what the inserted contact will be in advance. If you look at the SQL query - we are not specifying an ID in advance - therefore we cannot perform the equivalent to this query.
 
-## A bit further..
+### A bit further..
 
 With the previous example in mind, consider the following SQL
 
@@ -74,7 +76,7 @@ An ExecuteMultipleRequest (ContinueOnError = false) containing:-
   <li>A RetrieveRequestMessage - to retrieve the "accountnumber" of the created entity)</li>
 </ol>
 
-## Let's start to push the boat out a little.
+### Let's start to push the boat out a little.
 Here is a batch of T-SQL commands:
 
 ```sql
@@ -97,7 +99,7 @@ An ExecuteMultipleRequest (ContinueOnError = false) - containing the following m
 
 It seems like this is a good fit between the SQL and an ExecuteMultipleRequest.
 
-## The boat is now heading towards the open ocean
+### The boat is now heading towards the open ocean
 Let's add a bit of complexity to the previous T-SQL - consider this:
 
 ```sql
@@ -128,7 +130,7 @@ Containing:
 
 Ok good so far!
 
-## Should look at Boat Breakdown cover
+### Should look at Boat Breakdown cover
 Now consider this one:
 
 ```sql
@@ -166,7 +168,7 @@ So - unfortunately we have hit a CRM limitation here.
 
 But what you could do, is, on the client side, split that SQL statement on the `GO` keyword, to get each `batch` of T-SQL commands. Then for each batch, construct and send an appropriate ExecuteMultipleRequest for the statements in that batch.
 
-## What have we learned so far
+### What have we learned so far
 
 The ExecuteMultipleRequest provides the ability to send a single "batch" of commands to the server. Thinking from a SQL perspective, this is akin to sending all the statements upto a "GO" keyword (batch seperator). To get the same behaviour as SQL though, you should set `ContinueOnError` to false - so that processing halts if any request in the batch errors.
 
@@ -202,7 +204,7 @@ The first batch above, contains 2 operations. The second batch contains 1.
 Now imagine, that for the above - we constructed an ExecuteMultipleRequest, and set 'ContinueOnError' to true (to enable the server to process both batches regardless of whether the first batch fails.)
 Well in that scenario, because the first batch actually contains 2 operations, the 'ContinueOnError' = true would actually apply to each operation within that batch as well. So you could hit a scenario where the first Delete in that first batch errored, but then CRM continued on regardless to execute the second DELETE etc. This is not what the semantics of the above SQL query conveys - i.e the equivalent CRM beahviour for the above SQL query would be for it to stop processing a particular batch as soon as it hits an error. The only way this can be satisfied at present is if each batch only contains a single RequestMessage.
 
-## Conclusion
+### Conclusion
 If you would like to send a batch of commands to the CRM server in one go, the good news is you can. The bad news is, it's not perfect, there are limitations, and hopefully I have shown you just about how far you can stretch things.
 
 If you need to send multiple batches of commands to the CRM server in one go, the good news is you can if each batch contains only a single request message (i.e Create, Retreive, Delete, Update etc) - the bad news is, if thats not the case, then you will need to send each batch as an individual ExecuteMultipleRequest, and implement your own "ContinueOnError" behaviour clientside such that should one ExecuteMultipleRequest fail to be processed it doesn't halt subsequent batches (ExecuteMultipleRequests) from being processed.

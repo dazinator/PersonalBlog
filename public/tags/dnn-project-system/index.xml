@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dnn Project System on Darrell Tunnell</title>
+    <link>http://darrelltunnell.net/tags/dnn-project-system/index.xml</link>
+    <description>Recent content in Dnn Project System on Darrell Tunnell</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
+    <atom:link href="http://darrelltunnell.net/tags/dnn-project-system/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Imagining a DotNetNuke Project Type for Visual Studio</title>
+      <link>http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio/</link>
+      <pubDate>Sun, 17 Jan 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio/</guid>
+      <description>&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;When developing DotNetNuke extensions, we typically use one of the existing Visual Studio Project Type&amp;rsquo;s, for example - an ASP.NET Web Application project.&lt;/p&gt;
+
+&lt;p&gt;Even when using a Project Template such as Christoc&amp;rsquo;s, the project template is still based upon one of the standard Visual Studio project types - usually an ASP.NET Web Application project.&lt;/p&gt;
+
+&lt;p&gt;However these Project Types do not &amp;ldquo;gel&amp;rdquo; well with DotNetNuke development in a number of areas, the main ones being:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Running the project in VS (clicking play) - wants to run the extensions as a Web Application, but this makes no sense for a Dnn extension - which has to be hosted by the DotNetNuke website.&lt;/li&gt;
+&lt;li&gt;Deploying the extension - there is no support for that in the project system - you have to manually deploy your extensions to the Dnn instance.&lt;/li&gt;
+&lt;li&gt;Debugging the extension - you have to manually attach to process.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;So.. what if there was a new Project Type, one that was purpose built for DotNetNuke development? What would that look like?&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;introducing-the-dotnetnuke-project-type&#34;&gt;Introducing the &amp;ldquo;DotNetNuke&amp;rdquo; Project Type&lt;/h3&gt;
+
+&lt;p&gt;I am currently developing a new VS Project Type explicitly for DotNetNuke development. The rest of this blog post will describe my vision for how this will work.&lt;/p&gt;
+
+&lt;h4 id=&#34;installing-the-project-type&#34;&gt;Installing the Project Type&lt;/h4&gt;
+
+&lt;p&gt;You would start by installing the VSIX package from the VS gallery. This will install the DotNetNuke project type, and make this project type available to you when you create new projects in VS.&lt;/p&gt;
+
+&lt;h4 id=&#34;create-a-new-project&#34;&gt;Create a New Project&lt;/h4&gt;
+
+&lt;p&gt;You can now create a new &amp;ldquo;DotNetNuke&amp;rdquo; project using Visual Studio.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/new dnn project.PNG&#34; alt=&#34;new dnn project.PNG&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This creates your new project. It also imports the &amp;ldquo;DnnPackager&amp;rdquo; NuGet package automatically - &lt;a href=&#34;http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/&#34;&gt;something I have blogged about seperately.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/adding DnnPackager.PNG&#34; alt=&#34;adding DnnPackager.PNG&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Your new project, has it&amp;rsquo;s own &amp;ldquo;.dnnproj&amp;rdquo; file. This is a new project type and that&amp;rsquo;s why it has its own file extension &amp;ldquo;.dnnproj&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/SolutionExplorer1.PNG&#34; alt=&#34;SolutionExplorer1.PNG&#34; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;adding-content&#34;&gt;Adding Content&lt;/h4&gt;
+
+&lt;p&gt;You can now add items to your project. If you &amp;ldquo;Add new item&amp;rdquo; - you will be able select from a number of standard DotNetNuke item templates. For example a &amp;ldquo;Module View&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/AddModuleView.png&#34; alt=&#34;AddModuleView.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Initially, I will just show Dnn 7 compatible item templates, but eventually I&amp;rsquo;d also like to add a seperate group for Dnn 8 item templates, which would include item templates for the new MVC and SPA stuff.&lt;/p&gt;
+
+&lt;p&gt;When you add the new item, not only do the source code files get added to your project, but any required dependencies also get brought in by the magical power of NuGet:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/AddingDotNetNukeCoreNuget.PNG&#34; alt=&#34;AddingDotNetNukeCoreNuget.PNG&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;So for example, adding a Module View for Dnn 7, will automatically bring in the DotNetNuke.Core NuGet package for Dnn7 as depicted above.&lt;/p&gt;
+
+&lt;p&gt;In other words, you don&amp;rsquo;t need to worry about adding any Dnn assembly references for the most part, as they will be bought in for you as you add items to your project. Ofcourse, you are still free to add references to other dependencies you might have as normal.&lt;/p&gt;
+
+&lt;h4 id=&#34;running-and-debugging&#34;&gt;Running and Debugging&lt;/h4&gt;
+
+&lt;p&gt;When you want to run and debug your extension, for those of you that have read my previous blog about DnnPackager, you may recall that this could be accomplished via a command that you could enter in the Package Manager Console window and DnnPackager would handle the deployment and attaching the debugger.&lt;/p&gt;
+
+&lt;p&gt;Well that approach was only ever necessary because there was not any first class support within VS itself. Something I am going to rectify with the DotNetNuke project type.&lt;/p&gt;
+
+&lt;p&gt;In VS, I am going to extend the debugging toolbar (where the &amp;ldquo;play&amp;rdquo; button is)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/debug toolbar.PNG&#34; alt=&#34;debug toolbar.PNG&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can see in the screenshot there is an empty dropdown at present, but this will list your DotNetNuke websites that you have on your local IIS. The first one in that list will be selected by default.&lt;/p&gt;
+
+&lt;p&gt;You may also notice there a new Debugger selected in that screenshot called &amp;ldquo;Local Dnn Website&amp;rdquo;. That&amp;rsquo;s my own custom debugger that&amp;rsquo;s available only for this project type.&lt;/p&gt;
+
+&lt;p&gt;All you need to do is click &amp;ldquo;Play&amp;rdquo; and it will:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Build your project to output the deployment zip.&lt;/li&gt;
+&lt;li&gt;Deploy your install zip to the Dnn website selected in the dropdown.&lt;/li&gt;
+&lt;li&gt;Attach the debugger to Dnn website&amp;rsquo;s worker process that is selected in the dropwdown.&lt;/li&gt;
+&lt;li&gt;Launch a new browser window, navigated to that dnn websites home page.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Therefore, to use a different Dnn website as the host for running and debugging your module, you would just select that website in the drop down instead, before you click the &amp;ldquo;play&amp;rdquo; button.&lt;/p&gt;
+
+&lt;p&gt;This is going to wayyyy better than previous workflows for Dnn development.&lt;/p&gt;
+
+&lt;h3 id=&#34;what-now&#34;&gt;What Now?&lt;/h3&gt;
+
+&lt;p&gt;Well.. I am pretty far into the development of this at the moment, which is why I have been able to include some screenshots. However it is a steep learning curve, and I am continuosly hitting hurdles with &lt;a href=&#34;https://github.com/Microsoft/VSProjectSystem&#34;&gt;Microsoft&amp;rsquo;s new Project System (CPS)&lt;/a&gt;. This is my first attempt at developing a VS project type and I don&amp;rsquo;t have any in roads with microsoft or any support. So all of this means, I am &amp;ldquo;hoping&amp;rdquo; I can pull this off, and the signs are promising, but I&amp;rsquo;m not through the woods yet. The (very) dark, mystical woods, of VS project type development.&lt;/p&gt;
+
+&lt;p&gt;Still, I&amp;rsquo;d love to hear what others think of this - even though I appreciate it&amp;rsquo;s very premature. Would you use such a system? Any ideas for improvements? I&amp;rsquo;ll release a new blog post when things are looking a bit more finalised, and perhaps again when I have something for beta release.&lt;/p&gt;
+
+&lt;p&gt;Lastly, if there are any guru&amp;rsquo;s out there who have expertise with &lt;a href=&#34;https://github.com/Microsoft/VSProjectSystem&#34;&gt;CPS&lt;/a&gt; - I can always use a hand ;)&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

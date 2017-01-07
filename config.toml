@@ -1,0 +1,67 @@
+# Hugo variables
+#
+
+baseurl = "http://darrelltunnell.net"
+title = "Darrell Tunnell's Blog"
+languageCode = "en-us"
+theme = "hugo-geo"
+# number of posts to show on home/category/tag pages (Default: 10)
+paginate = 5
+#relativeURLs = false
+copyright = "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
+
+# optionally override the site's footer with custom copyright text
+# copyright = "© Darrell Tunnell and darrelltunnell.net, 2017. Unauthorized use and/or duplication of this material without express and written permission from this site’s author and/or owner is strictly prohibited. Excerpts and links may be used, provided that full and clear credit is given to Darrell Tunnell and darrelltunnell.net with appropriate and specific direction to the original content."
+
+disqusShortname = "darrelltunnellsblog"
+contentdir = "content"
+layoutdir = "layouts"
+publishdir = "public"
+metaDataFormat = "yaml"
+pygmentsCodeFencesGuessSyntax = true
+pygmentsStyle = "monokai"
+canonifyurls = true
+
+[taxonomies]
+	tag = "tags"
+	category = "categories"
+
+[permalinks]
+  post = "/blog/:year/:month/:day/:title/"
+
+#googleAnalytics = "UA-123-45"
+
+# custom navbar menu entry for hugo-geo theme.
+# See the custom_navbar parameter below for details.
+
+#[[menu.navbar]]
+#  name = "Link 1"
+#  url = "https://example.org"
+
+[params]
+	# Render the rotating globe in the sidebar
+	showglobe = false
+ 	
+	# Google Analytics
+	#analytics = "SHORT-CODE-HERE"
+
+	# Social buttons for sidebar
+	github = "https://github.com/dazinator"
+	twitter = "https://twitter.com/dazinate"
+	linkedin = "https://uk.linkedin.com/in/darrell-tunnell-33845331"
+	email = "darrell.tunnell@googlemail.com"
+	
+	# Header Title for the main page
+	header = "Radiating Awesomeness, One Blog Post at a Time."
+	
+	# Sidebar profile picture
+	profilepic = "img/profile.png"
+	
+	# Title/subtitle for the sidebar
+	title = "Darrell Tunnell"
+	subtitle = "Developer Extraordinaire"
+	
+	# Nav links below the profile picture	
+	[[params.navlinks]]
+	name = "Blog"
+	url = "post/"

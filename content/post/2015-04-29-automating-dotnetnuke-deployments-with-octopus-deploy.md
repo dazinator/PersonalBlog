@@ -5,18 +5,19 @@ title: Automating DotNetNuke deployments with Octopus Deploy
 date: 2015-04-29
 comments: true
 categories: 
-  - "DotNetNuke"
-  - "Octopus"
-  - "Deployment"
+    - "Development"
+tags: 
+    - "DotNetNuke"
+    - "Octopus"
 ---
 
-## Automating DotNetNuke Deployments using Octopus Deploy
+### Automating DotNetNuke Deployments using Octopus Deploy
 
 Because I am an awesome dude, i'll share with you how I automate dotnetnuke delivery / deployments. This works. It takes some effort to get this set up though, but it will be well worth it in the end.
 
 First i'll explain the process for automating the deployment of the DotNetNuke website itself. Then I'll explain how you can automate the deployment of modules / extensions on a continous basis.
-
-## Preparation work
+<!--more-->
+### Preparation work
 
 1. Set up a brand new DotNetNuke website, and go through the install wizard until you are greeted with an empty default dotnetnuke website.
 2. Stop the website. Create a NuGet package containing the website folder.
@@ -44,11 +45,11 @@ There are lot's of things to remember when deploying dotnetnuke. I won't go into
 
 ... and other things. The Dnn install process has been covered elsewhere so I won't go into any further detail here.
 
-## Congratulations (partly)
+### Congratulations (partly)
 
 You should now be in a postion where you can roll out a DotNetNuke website via Octopus.. BUT WHAT ABOUT THE MODULES I'M DEVELOPING!! - I hear you exclaim.
 
-## Automating Module Deployments
+### Automating Module Deployments
 
 1. When you build your module projects (via build server etc) you want them packaged as DotNetNuke install packages, inside a NuGet deployment package, which is then published to your NuGet feed. You can use [DnnPackager](https://github.com/dazinator/DnnPackager) for this (which is something I created).
 

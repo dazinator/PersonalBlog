@@ -2,35 +2,33 @@
 layout: post
 comments: true
 categories: 
-  - "DotNetNuke"
-  - "DnnPackager"
-  - "Dnn"
+    - "Development"
+tags: 
+    - "DotNetNuke"
+    - "DnnPackager"
 published: true
 title: "DnnPackager - Getting Started"
 date: 2015-12-01
 ---
 
-
-
-
-## Dnn Packager - Super Smooth Module Development
+### Dnn Packager - Super Smooth Module Development
 In this post, I am going to show you how to get up and running with DnnPackager for your DotNetNuke module / extension development.
 
-## Tools of the Trade
+### Tools of the Trade
 I am using VS2015 Community Edition, but this should work equally well with previous versions.
 
-<!-- more -->
-## Installing DotNetNuke Locally
+<!--more-->
+### Installing DotNetNuke Locally
 You will need a local instance of DotNetNuke website installed so that you have somewhere to deploy / run and debug your modules. There are plenty of tutorials out there that cover how to install a Dnn website so I am not going to cover this here. If you think this would be useful, leave a comment below and I might consider it! Once you have a working Dnn Website installed under your local IIS - please read on!
 
-## Create a Project
+### Create a Project
 Open Visual Studio, and Create a New "ASP.NET Empty Web Application" project. Make sure you select ".NET 4" from the drop down at the top.
 
 ![New Project]({{site.baseurl}}/assets/posts/NewAspNetProject.PNG)
 
 Note: Create your project wherever you like - where you put your source code - that's your business!
 
-## Tweak Web Project
+### Tweak Web Project
 
 The reason we choose to create a web project in the previous step, rather than say - a library project, is just so that we have appropriate context menu options in visual studio for doing things like adding javascript and ascx files etc. This is generally handy for Dnn module development. However our project can not actually run as a "standalone website" - as we are developing a Dnn module - which can only run within the context of the Dnn website that is hosting it. The approach described in this blog should work equally well if you prefer to create other types of projects - but then you might not have those familiar menu options available, so you may have to add things like javascript files to your project by hand.
 
@@ -40,7 +38,7 @@ Select the project in Solution Explorer window, then in the properties window, c
 
 This will help later as it will prevent Visual Studio from needlessly trying to host your module project as its own website whenever you try and debug your module - which will be running in your local Dnn website instead.
 
-## Add DnnPackager NuGet Package
+### Add DnnPackager NuGet Package
 
 Open the Package Manager Console (Tools --> NuGet Package Manager) and (With your project selected in the "Default Project" dropdown, type into it the following command and hit enter to install the DnnPackager NuGet package:
 
@@ -56,7 +54,7 @@ This will add some new items to your project, and to your solution. I will cover
 
 ![ProjectAfterAddingDnnPackager.PNG]({{site.baseurl}}/assets/posts/ProjectAfterAddingDnnPackager.PNG)
 
-## Dnn Sdk Assemblies
+### Dnn Sdk Assemblies
 In order to proceed with Dnn development, we will actually need to add references to the Dnn assemblies. Depending on the version of DotNetNuke you want your extension to be compatible with will often determine what version of the Dnn assemblies you will need to reference.
 
 For the sake of this blog post I am going to assume that you are going to target the latest version of Dnn (at the time of writing this is Dnn 7)
@@ -73,7 +71,7 @@ This should add a reference to the DotNetNuke assembly to your project's referen
 
 ![ReferencesAfterAddingDnnCore.PNG]({{site.baseurl}}/assets/posts/ReferencesAfterAddingDnnCore.PNG)
 
-## Let's Develop a Module!
+### Let's Develop a Module!
 Now we have got most of the setup out of the way, it's time to get cracking on our module!
 
 First add a new User Control to the project. This is going to be the default UI for our super cool DNN module.
@@ -118,7 +116,7 @@ namespace MySuperModule
 ```
 ** Don't forget to add the 'using' statement depicted above! **
 
-## Making an awesome module
+### Making an awesome module
 
 Further development of this super awesome module is beyond the scope of this post, so I am just going to make it display something really simple for the time being. There are [plenty of other resources](http://www.dnnsoftware.com/community-blog/cid/141749/dotnetnuke-module-development-101-5--hello-world-3-using-visual-studio-to-create-a-module) out there for learning about Dnn module development. For now let's  make it display some text.
 
@@ -132,7 +130,7 @@ Add the following h1 content to your markup for the user control:
 
 ```
 
-## Module Manifest
+### Module Manifest
 Now that we have this incredible... work of art, naturally we want to run it and test it out. In order to do this though, we first need to make sure our module is going to identify itself with DotNetNuke correctly. This means it should have a manifest.
 
 One of the files that was automatically added to your project when you added the DnnPackager NuGet package was: manifest.dnn
@@ -298,13 +296,13 @@ Note: I removed the entry for the "settings" for our module as we don't have a s
 
 Important: I also set the version number to 0.0.1. Version numbers are important in that Dnn will not let you install an older version of a module over the top of a newer version. The version number in the manifest would have to be equal to, or greater than the currently installed version for it to install over the top.
 
-## Ready to roll
+### Ready to roll
 
 Sense that tension in the air? The excitement is building.. The entire blog post has been leading to this one, perfect, moment.
 
 We are now going to deploy our module to our local Dnn website, and debug it.
 
-## Automating Deployment
+### Automating Deployment
 
 In VS, go to the "Package Manager Console" window, and make sure your project is selected from the projects dropdown.
 
@@ -321,7 +319,7 @@ After that completes, you can Login to your DotNetNuke website as host, and go t
 
 ![hostextensionsmodules.PNG]({{site.baseurl}}/assets/posts/hostextensionsmodules.PNG)
 
-## Setting up a Page to Host it
+### Setting up a Page to Host it
 
 Although our module has been installed onto our site, it won't display anywhere - because we need to tell DotNetNuke where it should be displayed!
 
@@ -337,7 +335,7 @@ You should see:
 
 ![AddedModule.PNG]({{site.baseurl}}/assets/posts/AddedModule.PNG)
 
-## Debugging it & Testing Changes
+### Debugging it & Testing Changes
 
 Let's make some changes. Add some more content:
 
@@ -368,7 +366,7 @@ Once that completes, refresh the page displaying your module:
 
 Simples!
 
-## But wait - my breakpoint wasn't hit!
+### But wait - my breakpoint wasn't hit!
 
 That's because your module is being executed within the process running your DotNetNuke website. So what you need to do is "attach" the debugger to that process.
 
@@ -401,14 +399,14 @@ However, if for some strange reason you'd prefer to attach to process in some ot
 
 ![attachtoprocess.PNG]({{site.baseurl}}/assets/posts/attachtoprocess.PNG)
 
-## What about if I just want my Zip file
+### What about if I just want my Zip file
 
 If you just want your installation zip for some reason, perhaps you want to upload it to the Dnn store etc, just build your project as normal and check in your projects output directory.
 
-## Issues?
+### Issues?
 
 DnnPackager is open source on GitHub. Feel free to [raise an issue](https://github.com/dazinator/DnnPackager)
 
-## In Summary
+### In Summary
 
 DnnPackager is an automation tool that I built to help streamline the Dnn module develop workflow. Feel free to drop me a comment - does this tool help? Or have I missed my mark? Where could it be better? I'd love to hear suggestions.

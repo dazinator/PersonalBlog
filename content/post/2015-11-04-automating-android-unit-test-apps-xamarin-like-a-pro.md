@@ -2,24 +2,23 @@
 layout: post
 comments: true
 categories: 
+    - "Development"
+tags: 
     - "Xamarin"
     - "Android"
     - "TeamCity"
-    - "Tests"
     - "Automate"
-    - "CI"
-    - "Build"
 published: true
 title: "Automating Android Unit Test Apps (Xamarin) Like A Pro"
 date: "2015-11-04"
 ---
 
-## First Off..
+### First Off..
 This article is for those of you out there who use Xamarin to write Android applications and want to automate the process of running your tests on an Android device. I'll show you how you can set this up with relative ease.
 
 Here is the process we want:
 
-<!-- more -->
+<!--more-->
 
 1. CI Build Begins
 2. Produces the APK file containing my tests.
@@ -30,7 +29,7 @@ Here is the process we want:
 7. If using Team City the test all appear nicely in the UI - otherwise the results are in STDOUT.
 
 
-## Unit Test App (Android) - and it's shortcomings.
+### Unit Test App (Android) - and it's shortcomings.
 It all begins with adding the unit tests project itself.
 Xamarin have provided a project type in Visual Studio called a "Unit Test App". Add one of those projects to your Solution and define some tests. 
 
@@ -79,19 +78,19 @@ Here are some tests:
 
 ```
 
-## Shortcomings of Running these tests
+### Shortcomings of Running these tests
 
 Naturally, you may be thinking how do you now run these tests? Well by default you have to manually run them. This is an app. Starting the tests project in VSis like starting any other Android application - it should deploy the APK to your Android device, and launch the app, which then shows a UI, and you must click various buttons on said UI to run the various tests that you want to run MANUALLY.
 
-## An enormous pain in the ass..
+### An enormous pain in the ass..
 
 This ofcourse, is a rediculous way forward and we need to get these automated ASAP!
 
-## The short answer
+### The short answer
 
 The short answer, is that we need to take a few steps to get these tests automated.. Read on..
 
-## Step 1 - The NuGet Package
+### Step 1 - The NuGet Package
 
 I created a NuGet package called [TestyDroid](https://www.nuget.org/packages/Xamarin.TestyDroid/). 
 
@@ -103,7 +102,7 @@ It contains two things. Firstly, it contains a command line executable in it's t
 
 Secondly, it contains an Android library that is added to your Android tests project as a reference. This library includes an improved base class that you will derive form instead of the default Xamrin one. We will cover this in the next step.
 
-## Step 2
+### Step 2
 
 After that is installed, we need to address how these tests get "launched" in the first place.
 
@@ -148,7 +147,7 @@ Then the Attribute above the MyCoolTestInstrumentation class should look like th
     {   
 ```
 
-## Step 3 - Jot things down
+### Step 3 - Jot things down
 
 We now need to make a note of a few variables that we will need in order to call `TestyDroid.exe` to run our tests. 
 
@@ -179,7 +178,7 @@ You will also need to know some more general paramaters about where things are o
 
 Once you have these things, you are ready to give TestyDroid.exe a whirl!
 
-## Step 4 - Running things locally.
+### Step 4 - Running things locally.
 
 Armed with the information in the previous step:
 
@@ -220,7 +219,7 @@ Emulator killed.
 
 ```
 
-## Step 5 - Running On Team City
+### Step 5 - Running On Team City
 
 Once you have verified you can automate the tests locally, the next step is to set up your build system to run them during your build!
 
@@ -241,12 +240,12 @@ The second step to create is the one that actually runs the tests using TestyDro
 The follwing screenshot shows setting up a Command line step to do this:
 ![tc testydroid commandlinestep.PNG]({{site.baseurl}}/assets/posts/tc testydroid commandlinestep.PNG)
 
-## Step 6 - Admire your tests in Team City.
+### Step 6 - Admire your tests in Team City.
 Now you can run a build - and if all is well - you should see your tests results added to a tests tab in Team City.
 
 ![tc Tests Tab.PNG]({{site.baseurl}}/assets/posts/tc Tests Tab.PNG)
 
-## Any Questions?
+### Any Questions?
 I have been someone limited by time so this was fairly rushed together! If there is anything you would like me to elaborate on, please leave a comment below.
 
 Also you can read more information about TestyDroid on Github: https://github.com/dazinator/Xamarin.TestyDroid/wiki/Getting-Started

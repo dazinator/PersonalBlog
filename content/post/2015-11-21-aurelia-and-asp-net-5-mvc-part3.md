@@ -1,12 +1,15 @@
 ---
 layout: post
 comments: true
-categories: ""
-published: false
+categories: 
+    - "Development"
+tags: 
+    - "ASP.NET CORE"
+    - "Aurelia"
 title: "ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2"
 date: 2015-11-21
+draft: true
 ---
-
 
 
 ### Aurelia
@@ -14,6 +17,7 @@ date: 2015-11-21
 Now let's create an Aurelia javascript application to run on our home page.
 Aurelia is a popular new javascript framework for creating SPA's. I have chosen it because I really liked Durandal, it's predessor, and I feel it's time for me to start getting more familiar with it!
 
+<!--more-->
 todo:
 1. jspm install aurelia packages.
 2. add necessary javascript script includes and system js import call

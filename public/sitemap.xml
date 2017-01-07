@@ -92,79 +92,31 @@
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/</loc>
-    <lastmod>2015-11-21T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/android/</loc>
+    <loc>http://darrelltunnell.net/tags/android/</loc>
     <lastmod>2015-11-04T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/asp/index.net/</loc>
-    <lastmod>2016-01-24T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/asp/index.netnuget/</loc>
-    <lastmod>2015-01-18T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/asp.netnugetasp/index.netnuget/</loc>
-    <lastmod>2015-01-18T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/aspnet-mvc/</loc>
+    <loc>http://darrelltunnell.net/tags/asp/index.net-core/</loc>
     <lastmod>2016-07-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/aspnetcore/</loc>
-    <lastmod>2016-07-25T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/aurelia/</loc>
+    <loc>http://darrelltunnell.net/tags/aurelia/</loc>
     <lastmod>2016-01-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/automate/</loc>
-    <lastmod>2015-11-04T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/bower/</loc>
-    <lastmod>2016-01-24T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/build/</loc>
+    <loc>http://darrelltunnell.net/tags/automate/</loc>
     <lastmod>2015-11-04T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://darrelltunnell.net/categories/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/ci/</loc>
-    <lastmod>2015-11-04T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -175,38 +127,32 @@
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/deployment/</loc>
-    <lastmod>2015-04-29T00:00:00+00:00</lastmod>
+    <loc>http://darrelltunnell.net/categories/development/</loc>
+    <lastmod>2016-07-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/dnn/</loc>
+    <loc>http://darrelltunnell.net/tags/dnn-project-system/</loc>
     <lastmod>2016-01-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/dnnpackager/</loc>
+    <loc>http://darrelltunnell.net/tags/dnnpackager/</loc>
     <lastmod>2016-03-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/dotnetnuke/</loc>
+    <loc>http://darrelltunnell.net/tags/dotnetnuke/</loc>
     <lastmod>2016-03-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/dynamics-crm/</loc>
+    <loc>http://darrelltunnell.net/tags/dynamics-crm/</loc>
     <lastmod>2015-02-26T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/dynamics-crmunit-testing/</loc>
-    <lastmod>2014-12-14T17:50:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -217,25 +163,31 @@
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/gulp/</loc>
+    <loc>http://darrelltunnell.net/tags/general/</loc>
+    <lastmod>2014-11-16T16:20:59+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/tags/git/</loc>
+    <lastmod>2015-08-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://darrelltunnell.net/tags/jspm/</loc>
     <lastmod>2016-01-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/jspm/</loc>
-    <lastmod>2016-01-24T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://darrelltunnell.net/categories/nuget/</loc>
+    <loc>http://darrelltunnell.net/tags/nuget/</loc>
     <lastmod>2015-01-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/octopus/</loc>
+    <loc>http://darrelltunnell.net/tags/octopus/</loc>
     <lastmod>2015-04-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -247,31 +199,30 @@
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/spa/</loc>
+    <loc>http://darrelltunnell.net/tags/spa/</loc>
     <lastmod>2015-04-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/taghelper/</loc>
-    <lastmod>2016-07-25T00:00:00+00:00</lastmod>
+    <loc>http://darrelltunnell.net/tags/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/teamcity/</loc>
+    <loc>http://darrelltunnell.net/tags/teamcity/</loc>
     <lastmod>2015-11-04T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/tests/</loc>
-    <lastmod>2015-11-04T00:00:00+00:00</lastmod>
+    <loc>http://darrelltunnell.net/tags/unit-testing/</loc>
+    <lastmod>2014-12-14T17:50:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://darrelltunnell.net/categories/xamarin/</loc>
+    <loc>http://darrelltunnell.net/tags/xamarin/</loc>
     <lastmod>2015-11-04T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>

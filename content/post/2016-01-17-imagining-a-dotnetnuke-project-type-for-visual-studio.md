@@ -2,15 +2,17 @@
 layout: post
 comments: true
 categories: 
+    - "Development"
+tags: 
     - "DotNetNuke"
     - "DnnPackager"
-    - "Dnn"
+    - "Dnn Project System"
 published: true
 title: "Imagining a DotNetNuke Project Type for Visual Studio"
 date: 2016-01-17
 ---
 
-## Introduction
+### Introduction
 
 When developing DotNetNuke extensions, we typically use one of the existing Visual Studio Project Type's, for example - an ASP.NET Web Application project.
 
@@ -24,16 +26,16 @@ However these Project Types do not "gel" well with DotNetNuke development in a n
 
 So.. what if there was a new Project Type, one that was purpose built for DotNetNuke development? What would that look like?
 
-<!-- more -->
-## Introducing the "DotNetNuke" Project Type
+<!--more-->
+### Introducing the "DotNetNuke" Project Type
 
 I am currently developing a new VS Project Type explicitly for DotNetNuke development. The rest of this blog post will describe my vision for how this will work.
 
-### Installing the Project Type
+#### Installing the Project Type
 
 You would start by installing the VSIX package from the VS gallery. This will install the DotNetNuke project type, and make this project type available to you when you create new projects in VS.
 
-### Create a New Project
+#### Create a New Project
 
 You can now create a new "DotNetNuke" project using Visual Studio.
 
@@ -47,7 +49,7 @@ Your new project, has it's own ".dnnproj" file. This is a new project type and t
 
 ![SolutionExplorer1.PNG]({{site.baseurl}}/assets/posts/SolutionExplorer1.PNG)
 
-### Adding Content
+#### Adding Content
 
 You can now add items to your project. If you "Add new item" - you will be able select from a number of standard DotNetNuke item templates. For example a "Module View". 
 
@@ -63,7 +65,7 @@ So for example, adding a Module View for Dnn 7, will automatically bring in the 
 
 In other words, you don't need to worry about adding any Dnn assembly references for the most part, as they will be bought in for you as you add items to your project. Ofcourse, you are still free to add references to other dependencies you might have as normal. 
 
-### Running and Debugging
+#### Running and Debugging
 
 When you want to run and debug your extension, for those of you that have read my previous blog about DnnPackager, you may recall that this could be accomplished via a command that you could enter in the Package Manager Console window and DnnPackager would handle the deployment and attaching the debugger.
 
@@ -88,7 +90,7 @@ Therefore, to use a different Dnn website as the host for running and debugging 
 
 This is going to wayyyy better than previous workflows for Dnn development. 
 
-## What Now?
+### What Now?
 
 Well.. I am pretty far into the development of this at the moment, which is why I have been able to include some screenshots. However it is a steep learning curve, and I am continuosly hitting hurdles with [Microsoft's new Project System (CPS)](https://github.com/Microsoft/VSProjectSystem). This is my first attempt at developing a VS project type and I don't have any in roads with microsoft or any support. So all of this means, I am "hoping" I can pull this off, and the signs are promising, but I'm not through the woods yet. The (very) dark, mystical woods, of VS project type development.
 
