@@ -39,27 +39,27 @@ You would start by installing the VSIX package from the VS gallery. This will in
 
 You can now create a new "DotNetNuke" project using Visual Studio.
 
-![new dnn project.PNG]({{site.baseurl}}/assets/posts/new dnn project.PNG)
+![new dnn project.PNG](/img/new dnn project.PNG)
 
 This creates your new project. It also imports the "DnnPackager" NuGet package automatically - [something I have blogged about seperately.](http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/)
 
-![adding DnnPackager.PNG]({{site.baseurl}}/assets/posts/adding DnnPackager.PNG)
+![adding DnnPackager.PNG](/img/adding DnnPackager.PNG)
 
 Your new project, has it's own ".dnnproj" file. This is a new project type and that's why it has its own file extension ".dnnproj".
 
-![SolutionExplorer1.PNG]({{site.baseurl}}/assets/posts/SolutionExplorer1.PNG)
+![SolutionExplorer1.PNG](/img/SolutionExplorer1.PNG)
 
 #### Adding Content
 
 You can now add items to your project. If you "Add new item" - you will be able select from a number of standard DotNetNuke item templates. For example a "Module View". 
 
-![AddModuleView.png]({{site.baseurl}}/assets/posts/AddModuleView.png)
+![AddModuleView.png](/img/AddModuleView.png)
 
 Initially, I will just show Dnn 7 compatible item templates, but eventually I'd also like to add a seperate group for Dnn 8 item templates, which would include item templates for the new MVC and SPA stuff.
 
 When you add the new item, not only do the source code files get added to your project, but any required dependencies also get brought in by the magical power of NuGet:
 
-![AddingDotNetNukeCoreNuget.PNG]({{site.baseurl}}/assets/posts/AddingDotNetNukeCoreNuget.PNG)
+![AddingDotNetNukeCoreNuget.PNG](/img/AddingDotNetNukeCoreNuget.PNG)
 
 So for example, adding a Module View for Dnn 7, will automatically bring in the DotNetNuke.Core NuGet package for Dnn7 as depicted above.
 
@@ -73,7 +73,7 @@ Well that approach was only ever necessary because there was not any first class
 
 In VS, I am going to extend the debugging toolbar (where the "play" button is)
 
-![debug toolbar.PNG]({{site.baseurl}}/assets/posts/debug toolbar.PNG)
+![debug toolbar.PNG](/img/debug toolbar.PNG)
 
 You can see in the screenshot there is an empty dropdown at present, but this will list your DotNetNuke websites that you have on your local IIS. The first one in that list will be selected by default.
 

@@ -178,7 +178,7 @@ The ExecuteMultipleRequest is not a good fit for sending multiple individual `ba
 
 Consider the following T-SQL:
 
-``` sql
+```sql
 INSERT INTO contact (firstname, lastname) VALUES ('albert', 'einstein');
 GO
 DELETE FROM contact WHERE contactid = '6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42';
@@ -191,7 +191,7 @@ In this scenario - each batch of commands contains only a single command. What t
 
 For an example of the danger I am referring to here, consider this:
 
-``` sql
+```sql
 DELETE FROM contact WHERE contactid = '6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42';
 DELETE FROM account WHERE primarycontactid = '6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42';
 GO

@@ -33,7 +33,7 @@ Here is the process we want:
 It all begins with adding the unit tests project itself.
 Xamarin have provided a project type in Visual Studio called a "Unit Test App". Add one of those projects to your Solution and define some tests. 
 
-![New Android Unit Test Project.PNG]({{site.baseurl}}/assets/posts/New Android Unit Test Project.PNG)
+![New Android Unit Test Project.PNG](/img/New Android Unit Test Project.PNG)
 
 Here are some tests:
 
@@ -232,18 +232,18 @@ To configure TeamCity it's a case of:
 
 The first step is easy, but the important thing to remember is to set the target to SignAndroidPackage
 
-![tc commandlineparams testydroid.PNG]({{site.baseurl}}/assets/posts/tc commandlineparams testydroid.PNG)
+![tc commandlineparams testydroid.PNG](/img/tc commandlineparams testydroid.PNG)
 
 That will now take care of producing the APK in the output directory for your project during your team city build.
 
 The second step to create is the one that actually runs the tests using TestyDroid!
 The follwing screenshot shows setting up a Command line step to do this:
-![tc testydroid commandlinestep.PNG]({{site.baseurl}}/assets/posts/tc testydroid commandlinestep.PNG)
+![tc testydroid commandlinestep.PNG](/img/tc testydroid commandlinestep.PNG)
 
 ### Step 6 - Admire your tests in Team City.
 Now you can run a build - and if all is well - you should see your tests results added to a tests tab in Team City.
 
-![tc Tests Tab.PNG]({{site.baseurl}}/assets/posts/tc Tests Tab.PNG)
+![tc Tests Tab.PNG](/img/tc Tests Tab.PNG)
 
 ### Any Questions?
 I have been someone limited by time so this was fairly rushed together! If there is anything you would like me to elaborate on, please leave a comment below.

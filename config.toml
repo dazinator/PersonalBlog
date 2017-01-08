@@ -1,7 +1,7 @@
 # Hugo variables
 #
 
-baseurl = "http://darrelltunnell.net//"
+baseurl = "http://darrelltunnell.net/"
 title = "Darrell Tunnell's Blog"
 languageCode = "en-us"
 theme = "hugo-geo"

@@ -24,7 +24,7 @@ You will need a local instance of DotNetNuke website installed so that you have 
 ### Create a Project
 Open Visual Studio, and Create a New "ASP.NET Empty Web Application" project. Make sure you select ".NET 4" from the drop down at the top.
 
-![New Project]({{site.baseurl}}/assets/posts/NewAspNetProject.PNG)
+![New Project](/img/NewAspNetProject.PNG)
 
 Note: Create your project wherever you like - where you put your source code - that's your business!
 
@@ -34,7 +34,7 @@ The reason we choose to create a web project in the previous step, rather than s
 
 Select the project in Solution Explorer window, then in the properties window, change "Always Start When Debugging" to false.
 
-![alwaysstartwhendebuggingfalse.PNG]({{site.baseurl}}/assets/posts/alwaysstartwhendebuggingfalse.PNG)
+![alwaysstartwhendebuggingfalse.PNG](/img/alwaysstartwhendebuggingfalse.PNG)
 
 This will help later as it will prevent Visual Studio from needlessly trying to host your module project as its own website whenever you try and debug your module - which will be running in your local Dnn website instead.
 
@@ -48,11 +48,11 @@ Install-Package DnnPackager
 
 ```
 
-![NuGetConsoleAddDnnPackagerNuGet.PNG]({{site.baseurl}}/assets/posts/NuGetConsoleAddDnnPackagerNuGet.PNG)
+![NuGetConsoleAddDnnPackagerNuGet.PNG](/img/NuGetConsoleAddDnnPackagerNuGet.PNG)
 
 This will add some new items to your project, and to your solution. I will cover what these are for later.
 
-![ProjectAfterAddingDnnPackager.PNG]({{site.baseurl}}/assets/posts/ProjectAfterAddingDnnPackager.PNG)
+![ProjectAfterAddingDnnPackager.PNG](/img/ProjectAfterAddingDnnPackager.PNG)
 
 ### Dnn Sdk Assemblies
 In order to proceed with Dnn development, we will actually need to add references to the Dnn assemblies. Depending on the version of DotNetNuke you want your extension to be compatible with will often determine what version of the Dnn assemblies you will need to reference.
@@ -69,14 +69,14 @@ Install-Package DotNetNuke.Core
 
 This should add a reference to the DotNetNuke assembly to your project's references:
 
-![ReferencesAfterAddingDnnCore.PNG]({{site.baseurl}}/assets/posts/ReferencesAfterAddingDnnCore.PNG)
+![ReferencesAfterAddingDnnCore.PNG](/img/ReferencesAfterAddingDnnCore.PNG)
 
 ### Let's Develop a Module!
 Now we have got most of the setup out of the way, it's time to get cracking on our module!
 
 First add a new User Control to the project. This is going to be the default UI for our super cool DNN module.
 
-![AddUserControl.PNG]({{site.baseurl}}/assets/posts/AddUserControl.PNG)
+![AddUserControl.PNG](/img/AddUserControl.PNG)
 
 We then need to change our new User Control to make it inherit from `PortalModuleBase` rather than `System.Web.UI.UserControl`.
 
@@ -311,13 +311,13 @@ In VS, go to the "Package Manager Console" window, and make sure your project is
 
 For example, on my IIS, the name of my Dnn website is "DotNetNuke"
 
-![IISDnnWebsite.PNG]({{site.baseurl}}/assets/posts/IISDnnWebsite.PNG)
+![IISDnnWebsite.PNG](/img/IISDnnWebsite.PNG)
 
 So I type into the Package Manager Console `Install-Module DotNetNuke` and hit enter.
 
 After that completes, you can Login to your DotNetNuke website as host, and go to the Host-->Extensions page, and you should see that your module is now listed as an installed extension! Pretty cool!
 
-![hostextensionsmodules.PNG]({{site.baseurl}}/assets/posts/hostextensionsmodules.PNG)
+![hostextensionsmodules.PNG](/img/hostextensionsmodules.PNG)
 
 ### Setting up a Page to Host it
 
@@ -333,7 +333,7 @@ This is a quick one time task, of simply creating a page in DotNetNuke to displa
 
 You should see:
 
-![AddedModule.PNG]({{site.baseurl}}/assets/posts/AddedModule.PNG)
+![AddedModule.PNG](/img/AddedModule.PNG)
 
 ### Debugging it & Testing Changes
 
@@ -348,7 +348,7 @@ Let's make some changes. Add some more content:
 
 Add some code in your code behind, and set a breakpoint on it:
 
-![codebehindbreakpoint.PNG]({{site.baseurl}}/assets/posts/codebehindbreakpoint.PNG)
+![codebehindbreakpoint.PNG](/img/codebehindbreakpoint.PNG)
 
 Now deploy this very simply by placing your cursor in the Package Manager Console window, and hitting "up" arrow on your keyboard. This will bring up the last command:
 
@@ -362,7 +362,7 @@ hit enter.
 
 Once that completes, refresh the page displaying your module:
 
-![redeployedmodulewithchanges.PNG]({{site.baseurl}}/assets/posts/redeployedmodulewithchanges.PNG)
+![redeployedmodulewithchanges.PNG](/img/redeployedmodulewithchanges.PNG)
 
 Simples!
 
@@ -382,7 +382,7 @@ So do that, and hit enter. You should see it deploy your module as before but th
 
 So.. refresh your page.. and BAM! Breakpoint is hit!
 
-![breakpointhit.PNG]({{site.baseurl}}/assets/posts/breakpointhit.PNG)
+![breakpointhit.PNG](/img/breakpointhit.PNG)
 
 **You need to be running Visual Studio as an Administrator before you can attach to the w3p process.**
 
@@ -397,7 +397,7 @@ However, if for some strange reason you'd prefer to attach to process in some ot
 3. Select any process in the list, then hit "w" on your keyboard - this should scroll you to the "w3wp.exe" process.
 4. Click "attach".
 
-![attachtoprocess.PNG]({{site.baseurl}}/assets/posts/attachtoprocess.PNG)
+![attachtoprocess.PNG](/img/attachtoprocess.PNG)
 
 ### What about if I just want my Zip file
 

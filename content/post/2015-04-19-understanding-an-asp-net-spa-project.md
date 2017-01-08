@@ -21,9 +21,9 @@ Let's see what that's about!
 ## Creating a project
 
 1. Within the New Project dialog, select ASP.NET Web Application
-![New ASP.NET Project.PNG](/source/assets/posts/New ASP.NET Project.PNG)
+![New ASP.NET Project.PNG](/img/New ASP.NET Project.PNG)
 
 2. Select "single page application"
-![Spa.PNG](/source/assets/posts/Spa.PNG)
+![Spa.PNG](/img/Spa.PNG)
  
 3 Creating a project

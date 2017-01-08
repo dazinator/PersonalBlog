@@ -33,14 +33,14 @@ The first step on our quest is simply to create a new ASP.NET application. I am 
 
 1. In VS 2015, File --> New Project
 2. "ASP.NET Web Application"
-![new aspnet project.PNG]({{site.baseurl}}/assets/posts/new aspnet project.PNG)
+![new aspnet project.PNG](/img/new aspnet project.PNG)
 3. "Web Application"
-![new aspnet project 2.PNG]({{site.baseurl}}/assets/posts/new aspnet project 2.PNG)
+![new aspnet project 2.PNG](/img/new aspnet project 2.PNG)
 
 ### Project Structure
 At this point, with the project created, let's stop and appreciate some noteworthy files in our new project.
 
-![asp net project sol explorer.PNG]({{site.baseurl}}/assets/posts/asp net project sol explorer.PNG)
+![asp net project sol explorer.PNG](/img/asp net project sol explorer.PNG)
 
 - `project.json` - this is the new form of the project file. It replaces for example the older `.csproj` and `.vbproj` files.
 - `package.json` - this file is managed by [NPM](https://docs.npmjs.com/). It records the dependencies that your application has on NPM packages. More on NPM later.
@@ -51,7 +51,7 @@ At this point, with the project created, let's stop and appreciate some notewort
 #### NPM - it's an important citizen
 [NPM](https://docs.npmjs.com/) is now a first class citizen of an ASP.NET 5 project. This is why you have a `package.json` file in your project.
 
-![packages json file.PNG]({{site.baseurl}}/assets/posts/packages json file.PNG)
+![packages json file.PNG](/img/packages json file.PNG)
 
 NPM is a package manager - the Node Package Manager to be precise. Think `NuGet` but for NodeJs packages. You could be forgiven for thinking it stands for "Not another Package Manager" - it doesn't, I checked.
 

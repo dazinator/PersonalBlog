@@ -24,23 +24,23 @@ For reasons discussed in [part 1](http://darrelltunnell.net/blog/2015/08/16/aure
 ### Uninstall Bower
 You will notice that your ASP.NET 5 application has a number of bower packages included by default:
 
-![bowerpackages.PNG]({{site.baseurl}}/assets/posts/bowerpackages.PNG)
+![bowerpackages.PNG](/img/bowerpackages.PNG)
 
 First, let's uninstall Bower. In your project is a `Bower.json` file. Delete it! (If you can't see it in Solution Explorer, you might need to 'show all files'
 
-![bowerjson.PNG]({{site.baseurl}}/assets/posts/bowerjson.PNG)
+![bowerjson.PNG](/img/bowerjson.PNG)
 
 When you install `Bower` packages, they are installed under the "lib" folder within your `wwwroot` directory. So, let's now delete this lib folder which will delete all of these packages.
 
-![wwwrootlibfolder.PNG]({{site.baseurl}}/assets/posts/wwwrootlibfolder.PNG)
+![wwwrootlibfolder.PNG](/img/wwwrootlibfolder.PNG)
 
 After those changes, your project should look something like this:
 
-![projectremovedbower.PNG]({{site.baseurl}}/assets/posts/projectremovedbower.PNG)
+![projectremovedbower.PNG](/img/projectremovedbower.PNG)
 
 With Bower gone and those javascript / css packages deleted, what happens if we run the application now? Let's run it and find out..
 
-![runappbowerremoved.PNG]({{site.baseurl}}/assets/posts/runappbowerremoved.PNG)
+![runappbowerremoved.PNG](/img/runappbowerremoved.PNG)
 
 As you can see, there are now errors displayed in the browser, and our site looks awful. This makes sense - our application is referencing javascript and css files that used to live in the lib folder, and now they are no longer found because we deleted them. 
 
@@ -53,13 +53,13 @@ JSPM can be installed as a local `NPM` package.
 1. Open `Package.json`
 2. Add `JSPM` and whatever the latest version is:
 
-![addjspmnodejspackage.PNG]({{site.baseurl}}/assets/posts/addjspmnodejspackage.PNG)
+![addjspmnodejspackage.PNG](/img/addjspmnodejspackage.PNG)
 
 3. Save the file. 
 
 The `NPM` package for `JSPM` should now be downloaded and installed into your project. You will see that the package is installed into the "node_modules" folder within your project.
 
-![nodemodulesfolderjspm.PNG]({{site.baseurl}}/assets/posts/nodemodulesfolderjspm.PNG)
+![nodemodulesfolderjspm.PNG](/img/nodemodulesfolderjspm.PNG)
 
 ### Configure JSPM
 
@@ -69,13 +69,13 @@ The way to do this, is a little bit fiddely, as you have to drop to the command 
 1. Open a `command prompt` window, and `CD` to your project directory
 2. Type `jspm init` and hit enter.
 
-![commandlinejspminit.PNG]({{site.baseurl}}/assets/posts/commandlinejspminit.PNG)
+![commandlinejspminit.PNG](/img/commandlinejspminit.PNG)
 
 You will now be asked a series of questions. At the end of answering these questions, the relevent `config` will be produced within the project.
 
 Here are the answers. Some of them you can just hit enter without typing anything, and the default value will be used.
 
-![jspminit.PNG]({{site.baseurl}}/assets/posts/jspminit.PNG)
+![jspminit.PNG](/img/jspminit.PNG)
 
 I'll quickly run through each option briefly.. But you should defer to the `JSPM` documentation site for further clarifications.
 
@@ -118,7 +118,7 @@ Back in the `command prompt` run the following commands:
 
 Once that is done, those packages will now be installed under your `wwwroot\jspm_packages` folder:
 
-![jspmpackages.PNG]({{site.baseurl}}/assets/posts/jspmpackages.PNG)
+![jspmpackages.PNG](/img/jspmpackages.PNG)
 
 The next step is to fix up our MVC application so that it loads our javascript and css using the `module loader`.
 
@@ -166,7 +166,7 @@ At this point, let's run the application!
 
 You should now be able to see that we no longer get any errors about failing to load  javascript files `jquery.js` and `bootstrap.js`. In fact, **those javascript files are not being loaded anymore.**
 
-![jspmmissingcss.PNG]({{site.baseurl}}/assets/posts/jspmmissingcss.PNG)
+![jspmmissingcss.PNG](/img/jspmmissingcss.PNG)
 
 #### Why aren't we loading JQuery and Bootstrap anymore?
 
@@ -199,7 +199,7 @@ This is `ES6` syntax for declaring a module dependency.
 
 You should now see that `JQuery` and `Bootstrap` are loaded on every page:
 
-![jspmjqueryandbootstrapdependency.PNG]({{site.baseurl}}/assets/posts/jspmjqueryandbootstrapdependency.PNG)
+![jspmjqueryandbootstrapdependency.PNG](/img/jspmjqueryandbootstrapdependency.PNG)
 
 ### What about CSS
 
@@ -242,7 +242,7 @@ Lastly, in `_Layout.cshtml`, comment out the link to the old - non existent, boo
 
 Now run your application!
 
-![jspmnoerrors.PNG]({{site.baseurl}}/assets/posts/jspmnoerrors.PNG)
+![jspmnoerrors.PNG](/img/jspmnoerrors.PNG)
 
 Wahoo! We now have no errors in the console window, our javascript and css is being loaded - and our application looks ok again.
 
@@ -256,7 +256,7 @@ Our application is running again, but you may notice a few of the pages have err
 
 If you click on "Register" link for example you will see these errors in the browser console window:
 
-![jspmregisterpageproblems.PNG]({{site.baseurl}}/assets/posts/jspmregisterpageproblems.PNG)
+![jspmregisterpageproblems.PNG](/img/jspmregisterpageproblems.PNG)
 
 This is because many of the views within our MVC application are rendering a partial called `_ValidationScriptsPartial.cshtml`
 
@@ -302,7 +302,7 @@ So change the contents of `_ValidationScriptsPartial.cshtml` to this:
 
 And now - everything is working!
 
-![jspmallworking.PNG]({{site.baseurl}}/assets/posts/jspmallworking.PNG)
+![jspmallworking.PNG](/img/jspmallworking.PNG)
 
 ### Recap
 
