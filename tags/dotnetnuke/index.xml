@@ -147,27 +147,27 @@ solution/projectB/projectB.csproj
 
 &lt;p&gt;You can now create a new &amp;ldquo;DotNetNuke&amp;rdquo; project using Visual Studio.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/new dnn project.PNG&#34; alt=&#34;new dnn project.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/new dnn project.PNG&#34; alt=&#34;new dnn project.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;This creates your new project. It also imports the &amp;ldquo;DnnPackager&amp;rdquo; NuGet package automatically - &lt;a href=&#34;http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/&#34;&gt;something I have blogged about seperately.&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/adding DnnPackager.PNG&#34; alt=&#34;adding DnnPackager.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/adding DnnPackager.PNG&#34; alt=&#34;adding DnnPackager.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Your new project, has it&amp;rsquo;s own &amp;ldquo;.dnnproj&amp;rdquo; file. This is a new project type and that&amp;rsquo;s why it has its own file extension &amp;ldquo;.dnnproj&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/SolutionExplorer1.PNG&#34; alt=&#34;SolutionExplorer1.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/SolutionExplorer1.PNG&#34; alt=&#34;SolutionExplorer1.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&#34;adding-content&#34;&gt;Adding Content&lt;/h4&gt;
 
 &lt;p&gt;You can now add items to your project. If you &amp;ldquo;Add new item&amp;rdquo; - you will be able select from a number of standard DotNetNuke item templates. For example a &amp;ldquo;Module View&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/AddModuleView.png&#34; alt=&#34;AddModuleView.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/AddModuleView.png&#34; alt=&#34;AddModuleView.png&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Initially, I will just show Dnn 7 compatible item templates, but eventually I&amp;rsquo;d also like to add a seperate group for Dnn 8 item templates, which would include item templates for the new MVC and SPA stuff.&lt;/p&gt;
 
 &lt;p&gt;When you add the new item, not only do the source code files get added to your project, but any required dependencies also get brought in by the magical power of NuGet:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/AddingDotNetNukeCoreNuget.PNG&#34; alt=&#34;AddingDotNetNukeCoreNuget.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/AddingDotNetNukeCoreNuget.PNG&#34; alt=&#34;AddingDotNetNukeCoreNuget.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;So for example, adding a Module View for Dnn 7, will automatically bring in the DotNetNuke.Core NuGet package for Dnn7 as depicted above.&lt;/p&gt;
 
@@ -181,7 +181,7 @@ solution/projectB/projectB.csproj
 
 &lt;p&gt;In VS, I am going to extend the debugging toolbar (where the &amp;ldquo;play&amp;rdquo; button is)&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/debug toolbar.PNG&#34; alt=&#34;debug toolbar.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/debug toolbar.PNG&#34; alt=&#34;debug toolbar.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;You can see in the screenshot there is an empty dropdown at present, but this will list your DotNetNuke websites that you have on your local IIS. The first one in that list will be selected by default.&lt;/p&gt;
 
@@ -233,7 +233,7 @@ solution/projectB/projectB.csproj
 
 &lt;p&gt;Open Visual Studio, and Create a New &amp;ldquo;ASP.NET Empty Web Application&amp;rdquo; project. Make sure you select &amp;ldquo;.NET 4&amp;rdquo; from the drop down at the top.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/NewAspNetProject.PNG&#34; alt=&#34;New Project&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/NewAspNetProject.PNG&#34; alt=&#34;New Project&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Note: Create your project wherever you like - where you put your source code - that&amp;rsquo;s your business!&lt;/p&gt;
 
@@ -243,7 +243,7 @@ solution/projectB/projectB.csproj
 
 &lt;p&gt;Select the project in Solution Explorer window, then in the properties window, change &amp;ldquo;Always Start When Debugging&amp;rdquo; to false.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/alwaysstartwhendebuggingfalse.PNG&#34; alt=&#34;alwaysstartwhendebuggingfalse.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/alwaysstartwhendebuggingfalse.PNG&#34; alt=&#34;alwaysstartwhendebuggingfalse.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;This will help later as it will prevent Visual Studio from needlessly trying to host your module project as its own website whenever you try and debug your module - which will be running in your local Dnn website instead.&lt;/p&gt;
 
@@ -256,11 +256,11 @@ Install-Package DnnPackager
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/NuGetConsoleAddDnnPackagerNuGet.PNG&#34; alt=&#34;NuGetConsoleAddDnnPackagerNuGet.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/NuGetConsoleAddDnnPackagerNuGet.PNG&#34; alt=&#34;NuGetConsoleAddDnnPackagerNuGet.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;This will add some new items to your project, and to your solution. I will cover what these are for later.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/ProjectAfterAddingDnnPackager.PNG&#34; alt=&#34;ProjectAfterAddingDnnPackager.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/ProjectAfterAddingDnnPackager.PNG&#34; alt=&#34;ProjectAfterAddingDnnPackager.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;dnn-sdk-assemblies&#34;&gt;Dnn Sdk Assemblies&lt;/h3&gt;
 
@@ -277,7 +277,7 @@ Install-Package DotNetNuke.Core
 
 &lt;p&gt;This should add a reference to the DotNetNuke assembly to your project&amp;rsquo;s references:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/ReferencesAfterAddingDnnCore.PNG&#34; alt=&#34;ReferencesAfterAddingDnnCore.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/ReferencesAfterAddingDnnCore.PNG&#34; alt=&#34;ReferencesAfterAddingDnnCore.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;let-s-develop-a-module&#34;&gt;Let&amp;rsquo;s Develop a Module!&lt;/h3&gt;
 
@@ -285,7 +285,7 @@ Install-Package DotNetNuke.Core
 
 &lt;p&gt;First add a new User Control to the project. This is going to be the default UI for our super cool DNN module.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/AddUserControl.PNG&#34; alt=&#34;AddUserControl.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/AddUserControl.PNG&#34; alt=&#34;AddUserControl.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;We then need to change our new User Control to make it inherit from &lt;code&gt;PortalModuleBase&lt;/code&gt; rather than &lt;code&gt;System.Web.UI.UserControl&lt;/code&gt;.&lt;/p&gt;
 
@@ -519,13 +519,13 @@ namespace MySuperModule
 
 &lt;p&gt;For example, on my IIS, the name of my Dnn website is &amp;ldquo;DotNetNuke&amp;rdquo;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/IISDnnWebsite.PNG&#34; alt=&#34;IISDnnWebsite.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/IISDnnWebsite.PNG&#34; alt=&#34;IISDnnWebsite.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;So I type into the Package Manager Console &lt;code&gt;Install-Module DotNetNuke&lt;/code&gt; and hit enter.&lt;/p&gt;
 
 &lt;p&gt;After that completes, you can Login to your DotNetNuke website as host, and go to the Host&amp;ndash;&amp;gt;Extensions page, and you should see that your module is now listed as an installed extension! Pretty cool!&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/hostextensionsmodules.PNG&#34; alt=&#34;hostextensionsmodules.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/hostextensionsmodules.PNG&#34; alt=&#34;hostextensionsmodules.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;setting-up-a-page-to-host-it&#34;&gt;Setting up a Page to Host it&lt;/h3&gt;
 
@@ -543,7 +543,7 @@ namespace MySuperModule
 
 &lt;p&gt;You should see:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/AddedModule.PNG&#34; alt=&#34;AddedModule.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/AddedModule.PNG&#34; alt=&#34;AddedModule.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;debugging-it-testing-changes&#34;&gt;Debugging it &amp;amp; Testing Changes&lt;/h3&gt;
 
@@ -557,7 +557,7 @@ namespace MySuperModule
 
 &lt;p&gt;Add some code in your code behind, and set a breakpoint on it:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/codebehindbreakpoint.PNG&#34; alt=&#34;codebehindbreakpoint.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/codebehindbreakpoint.PNG&#34; alt=&#34;codebehindbreakpoint.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Now deploy this very simply by placing your cursor in the Package Manager Console window, and hitting &amp;ldquo;up&amp;rdquo; arrow on your keyboard. This will bring up the last command:&lt;/p&gt;
 
@@ -570,7 +570,7 @@ Install-Module DotNetNuke
 
 &lt;p&gt;Once that completes, refresh the page displaying your module:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/redeployedmodulewithchanges.PNG&#34; alt=&#34;redeployedmodulewithchanges.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/redeployedmodulewithchanges.PNG&#34; alt=&#34;redeployedmodulewithchanges.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Simples!&lt;/p&gt;
 
@@ -589,7 +589,7 @@ Install-Module DotNetNuke Debug Attach
 
 &lt;p&gt;So.. refresh your page.. and BAM! Breakpoint is hit!&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/breakpointhit.PNG&#34; alt=&#34;breakpointhit.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/breakpointhit.PNG&#34; alt=&#34;breakpointhit.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;You need to be running Visual Studio as an Administrator before you can attach to the w3p process.&lt;/strong&gt;&lt;/p&gt;
 
@@ -606,7 +606,7 @@ Install-Module DotNetNuke Debug Attach
 &lt;li&gt;Click &amp;ldquo;attach&amp;rdquo;.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;img src=&#34;{{site.baseurl}}/assets/posts/attachtoprocess.PNG&#34; alt=&#34;attachtoprocess.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;img/attachtoprocess.PNG&#34; alt=&#34;attachtoprocess.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;what-about-if-i-just-want-my-zip-file&#34;&gt;What about if I just want my Zip file&lt;/h3&gt;
 

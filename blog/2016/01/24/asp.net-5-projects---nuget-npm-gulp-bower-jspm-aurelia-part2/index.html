@@ -109,23 +109,23 @@
 
 <p>You will notice that your ASP.NET 5 application has a number of bower packages included by default:</p>
 
-<p><img src="{{site.baseurl}}/assets/posts/bowerpackages.PNG" alt="bowerpackages.PNG" /></p>
+<p><img src="img/bowerpackages.PNG" alt="bowerpackages.PNG" /></p>
 
 <p>First, let&rsquo;s uninstall Bower. In your project is a <code>Bower.json</code> file. Delete it! (If you can&rsquo;t see it in Solution Explorer, you might need to &lsquo;show all files&rsquo;</p>
 
-<p><img src="{{site.baseurl}}/assets/posts/bowerjson.PNG" alt="bowerjson.PNG" /></p>
+<p><img src="img/bowerjson.PNG" alt="bowerjson.PNG" /></p>
 
 <p>When you install <code>Bower</code> packages, they are installed under the &ldquo;lib&rdquo; folder within your <code>wwwroot</code> directory. So, let&rsquo;s now delete this lib folder which will delete all of these packages.</p>
 
-<p><img src="{{site.baseurl}}/assets/posts/wwwrootlibfolder.PNG" alt="wwwrootlibfolder.PNG" /></p>
+<p><img src="img/wwwrootlibfolder.PNG" alt="wwwrootlibfolder.PNG" /></p>
 
 <p>After those changes, your project should look something like this:</p>
 
-<p><img src="{{site.baseurl}}/assets/posts/projectremovedbower.PNG" alt="projectremovedbower.PNG" /></p>
+<p><img src="img/projectremovedbower.PNG" alt="projectremovedbower.PNG" /></p>
 
 <p>With Bower gone and those javascript / css packages deleted, what happens if we run the application now? Let&rsquo;s run it and find out..</p>
 
-<p><img src="{{site.baseurl}}/assets/posts/runappbowerremoved.PNG" alt="runappbowerremoved.PNG" /></p>
+<p><img src="img/runappbowerremoved.PNG" alt="runappbowerremoved.PNG" /></p>
 
 <p>As you can see, there are now errors displayed in the browser, and our site looks awful. This makes sense - our application is referencing javascript and css files that used to live in the lib folder, and now they are no longer found because we deleted them.</p>
 
@@ -140,7 +140,7 @@
 <li>Add <code>JSPM</code> and whatever the latest version is:</li>
 </ol>
 
-<p><img src="{{site.baseurl}}/assets/posts/addjspmnodejspackage.PNG" alt="addjspmnodejspackage.PNG" /></p>
+<p><img src="img/addjspmnodejspackage.PNG" alt="addjspmnodejspackage.PNG" /></p>
 
 <ol>
 <li>Save the file.</li>
@@ -148,7 +148,7 @@
 
 <p>The <code>NPM</code> package for <code>JSPM</code> should now be downloaded and installed into your project. You will see that the package is installed into the &ldquo;node_modules&rdquo; folder within your project.</p>
 
-<p><img src="{{site.baseurl}}/assets/posts/nodemodulesfolderjspm.PNG" alt="nodemodulesfolderjspm.PNG" /></p>
+<p><img src="img/nodemodulesfolderjspm.PNG" alt="nodemodulesfolderjspm.PNG" /></p>
 
 <h3 id="configure-jspm">Configure JSPM</h3>
 
@@ -160,13 +160,13 @@ The way to do this, is a little bit fiddely, as you have to drop to the command 
 <li>Type <code>jspm init</code> and hit enter.</li>
 </ol>
 
-<p><img src="{{site.baseurl}}/assets/posts/commandlinejspminit.PNG" alt="commandlinejspminit.PNG" /></p>
+<p><img src="img/commandlinejspminit.PNG" alt="commandlinejspminit.PNG" /></p>
 
 <p>You will now be asked a series of questions. At the end of answering these questions, the relevent <code>config</code> will be produced within the project.</p>
 
 <p>Here are the answers. Some of them you can just hit enter without typing anything, and the default value will be used.</p>
 
-<p><img src="{{site.baseurl}}/assets/posts/jspminit.PNG" alt="jspminit.PNG" /></p>
+<p><img src="img/jspminit.PNG" alt="jspminit.PNG" /></p>
 
 <p>I&rsquo;ll quickly run through each option briefly.. But you should defer to the <code>JSPM</code> documentation site for further clarifications.</p>
 
@@ -213,7 +213,7 @@ For the purposes of this blog, I am accepting the default of &ldquo;Babel&rdquo;
 
 <p>Once that is done, those packages will now be installed under your <code>wwwroot\jspm_packages</code> folder:</p>
 
-<p><img src="{{site.baseurl}}/assets/posts/jspmpackages.PNG" alt="jspmpackages.PNG" /></p>
+<p><img src="img/jspmpackages.PNG" alt="jspmpackages.PNG" /></p>
 
 <p>The next step is to fix up our MVC application so that it loads our javascript and css using the <code>module loader</code>.</p>
 
@@ -258,7 +258,7 @@ For the purposes of this blog, I am accepting the default of &ldquo;Babel&rdquo;
 
 <p>You should now be able to see that we no longer get any errors about failing to load  javascript files <code>jquery.js</code> and <code>bootstrap.js</code>. In fact, <strong>those javascript files are not being loaded anymore.</strong></p>
 
-<p><img src="{{site.baseurl}}/assets/posts/jspmmissingcss.PNG" alt="jspmmissingcss.PNG" /></p>
+<p><img src="img/jspmmissingcss.PNG" alt="jspmmissingcss.PNG" /></p>
 
 <h4 id="why-aren-t-we-loading-jquery-and-bootstrap-anymore">Why aren&rsquo;t we loading JQuery and Bootstrap anymore?</h4>
 
@@ -291,7 +291,7 @@ import bootstrap from 'bootstrap';
 
 <p>You should now see that <code>JQuery</code> and <code>Bootstrap</code> are loaded on every page:</p>
 
-<p><img src="{{site.baseurl}}/assets/posts/jspmjqueryandbootstrapdependency.PNG" alt="jspmjqueryandbootstrapdependency.PNG" /></p>
+<p><img src="img/jspmjqueryandbootstrapdependency.PNG" alt="jspmjqueryandbootstrapdependency.PNG" /></p>
 
 <h3 id="what-about-css">What about CSS</h3>
 
@@ -331,7 +331,7 @@ import 'bootstrap/css/bootstrap.css!'
 
 <p>Now run your application!</p>
 
-<p><img src="{{site.baseurl}}/assets/posts/jspmnoerrors.PNG" alt="jspmnoerrors.PNG" /></p>
+<p><img src="img/jspmnoerrors.PNG" alt="jspmnoerrors.PNG" /></p>
 
 <p>Wahoo! We now have no errors in the console window, our javascript and css is being loaded - and our application looks ok again.</p>
 
@@ -345,7 +345,7 @@ import 'bootstrap/css/bootstrap.css!'
 
 <p>If you click on &ldquo;Register&rdquo; link for example you will see these errors in the browser console window:</p>
 
-<p><img src="{{site.baseurl}}/assets/posts/jspmregisterpageproblems.PNG" alt="jspmregisterpageproblems.PNG" /></p>
+<p><img src="img/jspmregisterpageproblems.PNG" alt="jspmregisterpageproblems.PNG" /></p>
 
 <p>This is because many of the views within our MVC application are rendering a partial called <code>_ValidationScriptsPartial.cshtml</code></p>
 
@@ -388,7 +388,7 @@ import 'bootstrap/css/bootstrap.css!'
 
 <p>And now - everything is working!</p>
 
-<p><img src="{{site.baseurl}}/assets/posts/jspmallworking.PNG" alt="jspmallworking.PNG" /></p>
+<p><img src="img/jspmallworking.PNG" alt="jspmallworking.PNG" /></p>
 
 <h3 id="recap">Recap</h3>
 
