@@ -146,32 +146,49 @@ For the purposes of this blog, I am accepting the default of &amp;ldquo;Babel&am
 
 &lt;p&gt;If you open &lt;code&gt;_Layout.cshtml&lt;/code&gt; you will see a section like this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt; &amp;lt;environment names=&amp;quot;Development&amp;quot;&amp;gt;
-            &amp;lt;script src=&amp;quot;~/lib/jquery/dist/jquery.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-            &amp;lt;script src=&amp;quot;~/lib/bootstrap/dist/js/bootstrap.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-            &amp;lt;script src=&amp;quot;~/js/site.js&amp;quot; asp-append-version=&amp;quot;true&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-        &amp;lt;/environment&amp;gt;
-        &amp;lt;environment names=&amp;quot;Staging,Production&amp;quot;&amp;gt;
-            &amp;lt;script src=&amp;quot;https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js&amp;quot;
-                    asp-fallback-src=&amp;quot;~/lib/jquery/dist/jquery.min.js&amp;quot;
-                    asp-fallback-test=&amp;quot;window.jQuery&amp;quot;&amp;gt;
-            &amp;lt;/script&amp;gt;
-            &amp;lt;script src=&amp;quot;https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js&amp;quot;
-                    asp-fallback-src=&amp;quot;~/lib/bootstrap/dist/js/bootstrap.min.js&amp;quot;
-                    asp-fallback-test=&amp;quot;window.jQuery &amp;amp;&amp;amp; window.jQuery.fn &amp;amp;&amp;amp; window.jQuery.fn.modal&amp;quot;&amp;gt;
-            &amp;lt;/script&amp;gt;
-            &amp;lt;script src=&amp;quot;~/js/site.min.js&amp;quot; asp-append-version=&amp;quot;true&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-        &amp;lt;/environment&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;environment&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;names=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Development&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;script&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/lib/jquery/dist/jquery.js&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;script&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/lib/bootstrap/dist/js/bootstrap.js&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;script&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/js/site.js&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;asp-append-version=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;/environment&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;environment&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;names=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Staging,Production&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;script&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js&amp;quot;&lt;/span&gt;
+                    &lt;span style=&#34;color: #7D9029&#34;&gt;asp-fallback-src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/lib/jquery/dist/jquery.min.js&amp;quot;&lt;/span&gt;
+                    &lt;span style=&#34;color: #7D9029&#34;&gt;asp-fallback-test=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;window.jQuery&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;script&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js&amp;quot;&lt;/span&gt;
+                    &lt;span style=&#34;color: #7D9029&#34;&gt;asp-fallback-src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/lib/bootstrap/dist/js/bootstrap.min.js&amp;quot;&lt;/span&gt;
+                    &lt;span style=&#34;color: #7D9029&#34;&gt;asp-fallback-test=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;window.jQuery &amp;amp;&amp;amp; window.jQuery.fn &amp;amp;&amp;amp; window.jQuery.fn.modal&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;script&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/js/site.min.js&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;asp-append-version=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;/environment&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 
 &lt;p&gt;Let&amp;rsquo;s comment out that whole section and replace it with this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;
-&amp;lt;script src=&amp;quot;~/jspm_packages/system.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;script src=&amp;quot;~/config.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;script&amp;gt;System.import(&amp;quot;js/site&amp;quot;);&amp;lt;/script&amp;gt;
-
-&lt;/code&gt;&lt;/pre&gt;
+&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;1
+2
+3&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;script&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/jspm_packages/system.js&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;script&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/config.js&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;script&amp;gt;&lt;/span&gt;System.import(&amp;quot;js/site&amp;quot;);&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 
 &lt;p&gt;At this point, let&amp;rsquo;s run the application!&lt;/p&gt;
 
@@ -187,8 +204,9 @@ For the purposes of this blog, I am accepting the default of &amp;ldquo;Babel&am
 
 &lt;p&gt;With that in mind, let&amp;rsquo;s look at the module we are currently loading via the module loader. It&amp;rsquo;s one called &lt;code&gt;js/site&lt;/code&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;script&amp;gt;System.import(&amp;quot;js/site&amp;quot;);&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;script&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt;System.&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;js/site&amp;quot;&lt;/span&gt;);&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;border: 1px solid #FF0000&#34;&gt;/script&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 
 &lt;p&gt;This resolves (thanks to the &lt;code&gt;config.js&lt;/code&gt; file) to the &lt;code&gt;js/site.js&lt;/code&gt; file in our &lt;code&gt;wwwroot&lt;/code&gt; directory. This file is currently empty, meaning it also has no dependencies declared in it for any other modules. This is why the module loader no longer bothers to load &lt;code&gt;JQuery&lt;/code&gt; or &lt;code&gt;Bootstrap&lt;/code&gt; anymore.&lt;/p&gt;
 
@@ -202,9 +220,11 @@ For the purposes of this blog, I am accepting the default of &amp;ldquo;Babel&am
 &lt;li&gt;Open &lt;code&gt;site.js&lt;/code&gt; and insert the following code, then save it an re-run the application:&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;import $ from &#39;jquery&#39;;
-import bootstrap from &#39;bootstrap&#39;;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;1
+2&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; $ from &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;jquery&amp;#39;&lt;/span&gt;;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; bootstrap from &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;bootstrap&amp;#39;&lt;/span&gt;;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 
 &lt;p&gt;This is &lt;code&gt;ES6&lt;/code&gt; syntax for declaring a module dependency.&lt;/p&gt;
 
@@ -222,31 +242,41 @@ import bootstrap from &#39;bootstrap&#39;;
 
 &lt;p&gt;Back in the &lt;code&gt;command prompt&lt;/code&gt; in your project directory, run the following&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;jspm install css
-&lt;/code&gt;&lt;/pre&gt;
+&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;jspm install css
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 
 &lt;p&gt;Now go back to your &lt;code&gt;site.js&lt;/code&gt; file, and add an import for the bootstrap.css. It should now look like this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;import $ from &#39;jquery&#39;;
-import bootstrap from &#39;bootstrap&#39;;
-import &#39;bootstrap/css/bootstrap.css!&#39;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;1
+2&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; $ from &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;jquery&amp;#39;&lt;/span&gt;;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; bootstrap from &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;bootstrap&amp;#39;&lt;/span&gt;;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 
 &lt;p&gt;Lastly, in &lt;code&gt;_Layout.cshtml&lt;/code&gt;, comment out the link to the old - non existent, bootstrap.css file:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;
- &amp;lt;environment names=&amp;quot;Development&amp;quot;&amp;gt;
-        @*&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;~/lib/bootstrap/dist/css/bootstrap.css&amp;quot; /&amp;gt;*@
-        &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;~/css/site.css&amp;quot; /&amp;gt;
-    &amp;lt;/environment&amp;gt;
-    &amp;lt;environment names=&amp;quot;Staging,Production&amp;quot;&amp;gt;
-        @*&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css&amp;quot;
-            asp-fallback-href=&amp;quot;~/lib/bootstrap/dist/css/bootstrap.min.css&amp;quot;*@
-        asp-fallback-test-class=&amp;quot;sr-only&amp;quot; asp-fallback-test-property=&amp;quot;position&amp;quot; asp-fallback-test-value=&amp;quot;absolute&amp;quot; /&amp;gt;
-        &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;~/css/site.min.css&amp;quot; asp-append-version=&amp;quot;true&amp;quot; /&amp;gt;
-    &amp;lt;/environment&amp;gt;
-
-&lt;/code&gt;&lt;/pre&gt;
+&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;environment&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;names=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Development&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&lt;/span&gt;
+        @*&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;link&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;rel=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;stylesheet&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;href=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/lib/bootstrap/dist/css/bootstrap.css&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;/&amp;gt;&lt;/span&gt;*@
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;link&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;rel=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;stylesheet&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;href=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/css/site.css&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;/environment&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;environment&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;names=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Staging,Production&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&lt;/span&gt;
+        @*&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;link&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;rel=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;stylesheet&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;href=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css&amp;quot;&lt;/span&gt;
+            &lt;span style=&#34;color: #7D9029&#34;&gt;asp-fallback-href=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/lib/bootstrap/dist/css/bootstrap.min.css&amp;quot;&lt;/span&gt;&lt;span style=&#34;border: 1px solid #FF0000&#34;&gt;*@&lt;/span&gt;
+        &lt;span style=&#34;color: #7D9029&#34;&gt;asp-fallback-test-class=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;sr-only&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;asp-fallback-test-property=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;position&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;asp-fallback-test-value=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;absolute&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;link&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;rel=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;stylesheet&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;href=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/css/site.min.css&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;asp-append-version=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;true&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;/environment&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 
 &lt;p&gt;Now run your application!&lt;/p&gt;
 
@@ -270,31 +300,45 @@ import &#39;bootstrap/css/bootstrap.css!&#39;
 
 &lt;p&gt;For example, if you look at the bottom of &lt;code&gt;Register.cshtml&lt;/code&gt;, you will see the following:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-csharp&#34;&gt;
-@section Scripts {
-    @{ await Html.RenderPartialAsync(&amp;quot;_ValidationScriptsPartial&amp;quot;); }
+&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;1
+2
+3&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;@section Scripts {
+    &lt;span style=&#34;border: 1px solid #FF0000&#34;&gt;@&lt;/span&gt;{ &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;await&lt;/span&gt; Html.RenderPartialAsync(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;_ValidationScriptsPartial&amp;quot;&lt;/span&gt;); }
 }
-
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 
 &lt;p&gt;If you look at the contents of &lt;code&gt;_ValidationScriptsPartial&lt;/code&gt; we can see that it is actually including additional scripts onto the page:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;&amp;lt;environment names=&amp;quot;Development&amp;quot;&amp;gt;
-    &amp;lt;script src=&amp;quot;~/lib/jquery-validation/dist/jquery.validate.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script src=&amp;quot;~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;/environment&amp;gt;
-&amp;lt;environment names=&amp;quot;Staging,Production&amp;quot;&amp;gt;
-    &amp;lt;script src=&amp;quot;https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js&amp;quot;
-            asp-fallback-src=&amp;quot;~/lib/jquery-validation/dist/jquery.validate.min.js&amp;quot;
-            asp-fallback-test=&amp;quot;window.jQuery &amp;amp;&amp;amp; window.jQuery.validator&amp;quot;&amp;gt;
-    &amp;lt;/script&amp;gt;
-    &amp;lt;script src=&amp;quot;https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js&amp;quot;
-            asp-fallback-src=&amp;quot;~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js&amp;quot;
-            asp-fallback-test=&amp;quot;window.jQuery &amp;amp;&amp;amp; window.jQuery.validator &amp;amp;&amp;amp; window.jQuery.validator.unobtrusive&amp;quot;&amp;gt;
-    &amp;lt;/script&amp;gt;
-&amp;lt;/environment&amp;gt;
-
-&lt;/code&gt;&lt;/pre&gt;
+&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;environment&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;names=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Development&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;script&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/lib/jquery-validation/dist/jquery.validate.js&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;script&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;/environment&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;environment&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;names=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Staging,Production&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;script&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js&amp;quot;&lt;/span&gt;
+            &lt;span style=&#34;color: #7D9029&#34;&gt;asp-fallback-src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/lib/jquery-validation/dist/jquery.validate.min.js&amp;quot;&lt;/span&gt;
+            &lt;span style=&#34;color: #7D9029&#34;&gt;asp-fallback-test=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;window.jQuery &amp;amp;&amp;amp; window.jQuery.validator&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;script&lt;/span&gt; &lt;span style=&#34;color: #7D9029&#34;&gt;src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js&amp;quot;&lt;/span&gt;
+            &lt;span style=&#34;color: #7D9029&#34;&gt;asp-fallback-src=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js&amp;quot;&lt;/span&gt;
+            &lt;span style=&#34;color: #7D9029&#34;&gt;asp-fallback-test=&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;window.jQuery &amp;amp;&amp;amp; window.jQuery.validator &amp;amp;&amp;amp; window.jQuery.validator.unobtrusive&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;lt;/environment&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 
 &lt;p&gt;As you can see, depending upon the environment that ASP.NET determines your application is running on, this renders some script includes to particular js files, used for forms validation. These were previoulsy located within &lt;code&gt;Bower&lt;/code&gt; packages, that we have deleted.&lt;/p&gt;
 
@@ -302,8 +346,9 @@ import &#39;bootstrap/css/bootstrap.css!&#39;
 
 &lt;p&gt;So change the contents of &lt;code&gt;_ValidationScriptsPartial.cshtml&lt;/code&gt; to this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;&amp;lt;script&amp;gt;System.import(&amp;quot;aspnet/jquery-validation-unobtrusive&amp;quot;);&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;1&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;script&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt;System.&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;aspnet/jquery-validation-unobtrusive&amp;quot;&lt;/span&gt;);&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;border: 1px solid #FF0000&#34;&gt;/script&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 
 &lt;p&gt;And now - everything is working!&lt;/p&gt;
 

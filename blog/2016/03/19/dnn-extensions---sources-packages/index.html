@@ -26,7 +26,17 @@
     
     <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
     
-    
+    <style>
+     
+.highlight pre {
+    word-wrap: normal;
+}
+
+.highlight pre code {
+    white-space: pre;
+}
+
+    </style>
 
     
     
@@ -68,7 +78,7 @@
 		
 		
 		
-			<img id="profile-pic" src="http://darrelltunnell.net//img/profile.png" alt="My Picture" class="img-circle center-block">
+			<img id="profile-pic" src="http://darrelltunnell.net//img/profile.jpg" alt="My Picture" class="img-circle center-block">
 		
 		<div id="social" class="text-center">
 			<a href="https://twitter.com/dazinate"><i class="fa fa-twitter fa-2x"></i></a>
@@ -207,5 +217,10 @@ solution/projectB/projectB.csproj
   
   <script src="http://darrelltunnell.net//js/App.js"></script>
   
+  <script>
+  $(document).ready(function () {
+	$( ".highlighttable" ).wrap("<div class='table-responsive'></div>");
+});
+  </script>
 </body>
 </html>

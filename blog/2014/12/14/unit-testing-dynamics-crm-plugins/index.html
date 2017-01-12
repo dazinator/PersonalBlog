@@ -28,7 +28,17 @@
     
     <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
     
-    
+    <style>
+     
+.highlight pre {
+    word-wrap: normal;
+}
+
+.highlight pre code {
+    white-space: pre;
+}
+
+    </style>
 
     
     
@@ -70,7 +80,7 @@
 		
 		
 		
-			<img id="profile-pic" src="http://darrelltunnell.net//img/profile.png" alt="My Picture" class="img-circle center-block">
+			<img id="profile-pic" src="http://darrelltunnell.net//img/profile.jpg" alt="My Picture" class="img-circle center-block">
 		
 		<div id="social" class="text-center">
 			<a href="https://twitter.com/dazinate"><i class="fa fa-twitter fa-2x"></i></a>
@@ -117,40 +127,80 @@
 
 <p>Jon Doe immediately gets to work on writing the plugin for those requirements. He produces the following plugin:</p>
 
-<pre><code class="language-csharp">    public class ReclaimCreditPlugin : IPlugin
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span>    <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">ReclaimCreditPlugin</span> : IPlugin
     {
 
-        public void Execute(IServiceProvider serviceProvider)
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">void</span> <span style="color: #0000FF">Execute</span>(IServiceProvider serviceProvider)
         {
 
-            var executionContext = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+            <span style="color: #B00040">var</span> executionContext = (IPluginExecutionContext)serviceProvider.GetService(<span style="color: #008000; font-weight: bold">typeof</span>(IPluginExecutionContext));
 
-            // 1. We must run only within a transaction
-            if (!executionContext.IsInTransaction)
+            <span style="color: #408080; font-style: italic">// 1. We must run only within a transaction</span>
+            <span style="color: #008000; font-weight: bold">if</span> (!executionContext.IsInTransaction)
             {
-                throw new InvalidPluginExecutionException(&quot;The plugin detected that it was not running within a database transaction. The plugin requires a database transaction.&quot;);
+                <span style="color: #008000; font-weight: bold">throw</span> <span style="color: #008000; font-weight: bold">new</span> <span style="color: #0000FF">InvalidPluginExecutionException</span>(<span style="color: #BA2121">&quot;The plugin detected that it was not running within a database transaction. The plugin requires a database transaction.&quot;</span>);
             }
 
-            // 2. Get the contact, check its parent account.
-            if (executionContext.InputParameters.Contains(&quot;Target&quot;) &amp;&amp; executionContext.InputParameters[&quot;Target&quot;] is Entity)
+            <span style="color: #408080; font-style: italic">// 2. Get the contact, check its parent account.</span>
+            <span style="color: #008000; font-weight: bold">if</span> (executionContext.InputParameters.Contains(<span style="color: #BA2121">&quot;Target&quot;</span>) &amp;&amp; executionContext.InputParameters[<span style="color: #BA2121">&quot;Target&quot;</span>] <span style="color: #008000; font-weight: bold">is</span> Entity)
             {
-                // Obtain the target entity from the input parameters.
-                var contactEntity = (Entity)executionContext.InputParameters[&quot;Target&quot;];
-                // Get the parent account id.
-                var parentAccountId = (EntityReference)contactEntity[&quot;parentaccountid&quot;];
+                <span style="color: #408080; font-style: italic">// Obtain the target entity from the input parameters.</span>
+                <span style="color: #B00040">var</span> contactEntity = (Entity)executionContext.InputParameters[<span style="color: #BA2121">&quot;Target&quot;</span>];
+                <span style="color: #408080; font-style: italic">// Get the parent account id.</span>
+                <span style="color: #B00040">var</span> parentAccountId = (EntityReference)contactEntity[<span style="color: #BA2121">&quot;parentaccountid&quot;</span>];
 
-                // Get the parent account entity.
-                var orgServiceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
-                var orgService = orgServiceFactory.CreateOrganizationService(executionContext.UserId);
-                var parentAccountEntity = orgService.Retrieve(&quot;account&quot;, parentAccountId.Id, new ColumnSet(&quot;creditonhold&quot;));
+                <span style="color: #408080; font-style: italic">// Get the parent account entity.</span>
+                <span style="color: #B00040">var</span> orgServiceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(<span style="color: #008000; font-weight: bold">typeof</span>(IOrganizationServiceFactory));
+                <span style="color: #B00040">var</span> orgService = orgServiceFactory.CreateOrganizationService(executionContext.UserId);
+                <span style="color: #B00040">var</span> parentAccountEntity = orgService.Retrieve(<span style="color: #BA2121">&quot;account&quot;</span>, parentAccountId.Id, <span style="color: #008000; font-weight: bold">new</span> ColumnSet(<span style="color: #BA2121">&quot;creditonhold&quot;</span>));
 
-                var accountOnHold = (bool)parentAccountEntity[&quot;creditonhold&quot;];
+                <span style="color: #B00040">var</span> accountOnHold = (<span style="color: #B00040">bool</span>)parentAccountEntity[<span style="color: #BA2121">&quot;creditonhold&quot;</span>];
 
-                if (accountOnHold)
+                <span style="color: #008000; font-weight: bold">if</span> (accountOnHold)
                 {
-                    contactEntity[&quot;taketheirshoes&quot;] = true;
-                    var tracingService = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-                    tracingService.Trace(&quot;Have indicated that we should take the shoes from contact: {0}&quot;, contactEntity.Id.ToString());
+                    contactEntity[<span style="color: #BA2121">&quot;taketheirshoes&quot;</span>] = <span style="color: #008000; font-weight: bold">true</span>;
+                    <span style="color: #B00040">var</span> tracingService = (ITracingService)serviceProvider.GetService(<span style="color: #008000; font-weight: bold">typeof</span>(ITracingService));
+                    tracingService.Trace(<span style="color: #BA2121">&quot;Have indicated that we should take the shoes from contact: {0}&quot;</span>, contactEntity.Id.ToString());
                 }
 
             }
@@ -158,7 +208,8 @@
         }
 
     }
-</code></pre>
+</pre></div>
+</td></tr></table>
 
 <h4 id="good-job">Good Job?</h4>
 
@@ -217,23 +268,39 @@
 
 <p>PSEUDO CODE:</p>
 
-<pre><code>if (!IsRunningInTransaction)
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">if</span> (!IsRunningInTransaction)
 {
-    Throw &quot;Plugin requires a transaction.&quot;
+	Throw <span style="color: #BA2121">&quot;Plugin requires a transaction.&quot;</span>
 }
 
-If (IsUpdateOf(&quot;contact&quot;))
+If (IsUpdateOf(<span style="color: #BA2121">&quot;contact&quot;</span>))
 {
 
-var contact = GetTargetEntity();
-var account = GetAccountForContact(contact);
+<span style="color: #B00040">var</span> contact = GetTargetEntity();
+<span style="color: #B00040">var</span> account = GetAccountForContact(contact);
 
-var isOnHold = (bool)account[&quot;creditonhold&quot;];
-if(isOnHold)
+<span style="color: #B00040">var</span> isOnHold = (<span style="color: #B00040">bool</span>)account[<span style="color: #BA2121">&quot;creditonhold&quot;</span>];
+<span style="color: #008000; font-weight: bold">if</span>(isOnHold)
 {
-    contact[&quot;taketheirshoes&quot;] = true;
+ 	contact[<span style="color: #BA2121">&quot;taketheirshoes&quot;</span>] = <span style="color: #008000; font-weight: bold">true</span>;
 }
-</code></pre>
+</pre></div>
+</td></tr></table>
 
 <h3 id="look-at-that-pseudo-code-do-you-see-any-runtime-services">Look at that Pseudo Code -  Do you see <em>any</em> runtime services?</h3>
 
@@ -247,95 +314,183 @@ if(isOnHold)
 
 <h3 id="new-and-improved-plugin">New and Improved Plugin</h3>
 
-<pre><code class="language-csharp"> public class ReclaimCreditPlugin2 : IPlugin
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span> <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">ReclaimCreditPlugin2</span> : IPlugin
     {
 
-        private IServiceProvider _ServiceProvider;
+        <span style="color: #008000; font-weight: bold">private</span> IServiceProvider _ServiceProvider;
 
-        public void Execute(IServiceProvider serviceProvider)
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">void</span> <span style="color: #0000FF">Execute</span>(IServiceProvider serviceProvider)
         {
             _ServiceProvider = serviceProvider;
             Execute();
         }
 
-        /// &lt;summary&gt;
-        /// This is the method containing the business logic that we want to be able to assert at unit test time.
-        /// &lt;/summary&gt;
-        public void Execute()
+        <span style="color: #408080; font-style: italic">/// &lt;summary&gt;</span>
+        <span style="color: #408080; font-style: italic">/// This is the method containing the business logic that we want to be able to assert at unit test time.</span>
+        <span style="color: #408080; font-style: italic">/// &lt;/summary&gt;</span>
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">void</span> <span style="color: #0000FF">Execute</span>()
         {
-            // 1. We must run only within a transaction
-            if (IsInTransaction())
+            <span style="color: #408080; font-style: italic">// 1. We must run only within a transaction</span>
+            <span style="color: #008000; font-weight: bold">if</span> (IsInTransaction())
             {
-                throw new InvalidPluginExecutionException(&quot;The plugin detected that it was not running within a database transaction. The plugin requires a database transaction.&quot;);
+                <span style="color: #008000; font-weight: bold">throw</span> <span style="color: #008000; font-weight: bold">new</span> <span style="color: #0000FF">InvalidPluginExecutionException</span>(<span style="color: #BA2121">&quot;The plugin detected that it was not running within a database transaction. The plugin requires a database transaction.&quot;</span>);
             }
 
-            // 2. Get the contact
-            var contact = GetTargetEntity();
+            <span style="color: #408080; font-style: italic">// 2. Get the contact</span>
+            <span style="color: #B00040">var</span> contact = GetTargetEntity();
 
-            // 3. Get the Parent Account for the contact.
-            var parentAccount = GetAccountEntity(contact);
-            if (parentAccount == null)
+            <span style="color: #408080; font-style: italic">// 3. Get the Parent Account for the contact.</span>
+            <span style="color: #B00040">var</span> parentAccount = GetAccountEntity(contact);
+            <span style="color: #008000; font-weight: bold">if</span> (parentAccount == <span style="color: #008000; font-weight: bold">null</span>)
             {
-                return;
+                <span style="color: #008000; font-weight: bold">return</span>;
             }
 
-            // 4. If credit on hold, set taketheirshoes.
-            var accountOnHold = (bool)parentAccount[&quot;creditonhold&quot;];
-            if (accountOnHold)
+            <span style="color: #408080; font-style: italic">// 4. If credit on hold, set taketheirshoes.</span>
+            <span style="color: #B00040">var</span> accountOnHold = (<span style="color: #B00040">bool</span>)parentAccount[<span style="color: #BA2121">&quot;creditonhold&quot;</span>];
+            <span style="color: #008000; font-weight: bold">if</span> (accountOnHold)
             {
-                contact[&quot;taketheirshoes&quot;] = true;
+                contact[<span style="color: #BA2121">&quot;taketheirshoes&quot;</span>] = <span style="color: #008000; font-weight: bold">true</span>;
             }
 
         }
 
-        /// &lt;summary&gt;
-        /// Returns the parent account entity for the contact.
-        /// &lt;/summary&gt;
-        /// &lt;param name=&quot;contact&quot;&gt;&lt;/param&gt;
-        /// &lt;returns&gt;&lt;/returns&gt;
-        protected virtual Entity GetAccountEntity(Entity contact)
+        <span style="color: #408080; font-style: italic">/// &lt;summary&gt;</span>
+        <span style="color: #408080; font-style: italic">/// Returns the parent account entity for the contact.</span>
+        <span style="color: #408080; font-style: italic">/// &lt;/summary&gt;</span>
+        <span style="color: #408080; font-style: italic">/// &lt;param name=&quot;contact&quot;&gt;&lt;/param&gt;</span>
+        <span style="color: #408080; font-style: italic">/// &lt;returns&gt;&lt;/returns&gt;</span>
+        <span style="color: #008000; font-weight: bold">protected</span> <span style="color: #008000; font-weight: bold">virtual</span> Entity <span style="color: #0000FF">GetAccountEntity</span>(Entity contact)
         {
-            // Get the p[arent account id.
-            var parentAccountId = (EntityReference)contact[&quot;parentaccountid&quot;];
+            <span style="color: #408080; font-style: italic">// Get the p[arent account id.</span>
+            <span style="color: #B00040">var</span> parentAccountId = (EntityReference)contact[<span style="color: #BA2121">&quot;parentaccountid&quot;</span>];
 
-            // Get an instance of the IOrganisationService.
-            var orgServiceFactory = (IOrganizationServiceFactory)_ServiceProvider.GetService(typeof(IOrganizationServiceFactory));
-            var executionContext = (IPluginExecutionContext)_ServiceProvider.GetService(typeof(IPluginExecutionContext));
-            var orgService = orgServiceFactory.CreateOrganizationService(executionContext.UserId);
+            <span style="color: #408080; font-style: italic">// Get an instance of the IOrganisationService.</span>
+            <span style="color: #B00040">var</span> orgServiceFactory = (IOrganizationServiceFactory)_ServiceProvider.GetService(<span style="color: #008000; font-weight: bold">typeof</span>(IOrganizationServiceFactory));
+            <span style="color: #B00040">var</span> executionContext = (IPluginExecutionContext)_ServiceProvider.GetService(<span style="color: #008000; font-weight: bold">typeof</span>(IPluginExecutionContext));
+            <span style="color: #B00040">var</span> orgService = orgServiceFactory.CreateOrganizationService(executionContext.UserId);
             
-            // Get the account entity, with only the column / attribute that we need.
-            var parentAccountEntity = orgService.Retrieve(&quot;account&quot;, parentAccountId.Id, new ColumnSet(&quot;creditonhold&quot;));
-            return parentAccountEntity;
+            <span style="color: #408080; font-style: italic">// Get the account entity, with only the column / attribute that we need.</span>
+            <span style="color: #B00040">var</span> parentAccountEntity = orgService.Retrieve(<span style="color: #BA2121">&quot;account&quot;</span>, parentAccountId.Id, <span style="color: #008000; font-weight: bold">new</span> ColumnSet(<span style="color: #BA2121">&quot;creditonhold&quot;</span>));
+            <span style="color: #008000; font-weight: bold">return</span> parentAccountEntity;
         }
 
-        /// &lt;summary&gt;
-        /// Returns the current &quot;Target&quot; entity that the plugin is executing against.
-        /// &lt;/summary&gt;
-        /// &lt;returns&gt;&lt;/returns&gt;
-        protected virtual Entity GetTargetEntity()
+        <span style="color: #408080; font-style: italic">/// &lt;summary&gt;</span>
+        <span style="color: #408080; font-style: italic">/// Returns the current &quot;Target&quot; entity that the plugin is executing against.</span>
+        <span style="color: #408080; font-style: italic">/// &lt;/summary&gt;</span>
+        <span style="color: #408080; font-style: italic">/// &lt;returns&gt;&lt;/returns&gt;</span>
+        <span style="color: #008000; font-weight: bold">protected</span> <span style="color: #008000; font-weight: bold">virtual</span> Entity <span style="color: #0000FF">GetTargetEntity</span>()
         {
-            var context = (IPluginExecutionContext)_ServiceProvider.GetService(typeof(IPluginExecutionContext));
-            if (context.InputParameters.Contains(&quot;Target&quot;) &amp;&amp; context.InputParameters[&quot;Target&quot;] is Entity)
+            <span style="color: #B00040">var</span> context = (IPluginExecutionContext)_ServiceProvider.GetService(<span style="color: #008000; font-weight: bold">typeof</span>(IPluginExecutionContext));
+            <span style="color: #008000; font-weight: bold">if</span> (context.InputParameters.Contains(<span style="color: #BA2121">&quot;Target&quot;</span>) &amp;&amp; context.InputParameters[<span style="color: #BA2121">&quot;Target&quot;</span>] <span style="color: #008000; font-weight: bold">is</span> Entity)
             {
-                var contactEntity = (Entity)context.InputParameters[&quot;Target&quot;];
-                return contactEntity;
+                <span style="color: #B00040">var</span> contactEntity = (Entity)context.InputParameters[<span style="color: #BA2121">&quot;Target&quot;</span>];
+                <span style="color: #008000; font-weight: bold">return</span> contactEntity;
             }
 
-            return null;
+            <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000; font-weight: bold">null</span>;
         }
 
-        /// &lt;summary&gt;
-        /// Returns whether the plugin is currently enrolled within a database transaction.
-        /// &lt;/summary&gt;
-        /// &lt;returns&gt;&lt;/returns&gt;
-        protected virtual bool IsInTransaction()
+        <span style="color: #408080; font-style: italic">/// &lt;summary&gt;</span>
+        <span style="color: #408080; font-style: italic">/// Returns whether the plugin is currently enrolled within a database transaction.</span>
+        <span style="color: #408080; font-style: italic">/// &lt;/summary&gt;</span>
+        <span style="color: #408080; font-style: italic">/// &lt;returns&gt;&lt;/returns&gt;</span>
+        <span style="color: #008000; font-weight: bold">protected</span> <span style="color: #008000; font-weight: bold">virtual</span> <span style="color: #B00040">bool</span> <span style="color: #0000FF">IsInTransaction</span>()
         {
-            var context = (IPluginExecutionContext)_ServiceProvider.GetService(typeof(IPluginExecutionContext));
-            return context.IsInTransaction;
+            <span style="color: #B00040">var</span> context = (IPluginExecutionContext)_ServiceProvider.GetService(<span style="color: #008000; font-weight: bold">typeof</span>(IPluginExecutionContext));
+            <span style="color: #008000; font-weight: bold">return</span> context.IsInTransaction;
         }
 
     }
-</code></pre>
+</pre></div>
+</td></tr></table>
 
 <h3 id="what-just-happened">What just happened?</h3>
 
@@ -343,20 +498,29 @@ if(isOnHold)
 
 <p>For example rather than having the following code directly within the execute method:</p>
 
-<pre><code class="language-csharp">  var executionContext = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span>  <span style="color: #B00040">var</span> executionContext = (IPluginExecutionContext)serviceProvider.GetService(<span style="color: #008000; font-weight: bold">typeof</span>(IPluginExecutionContext));
 
-            // 1. We must run only within a transaction
-            if (!executionContext.IsInTransaction)
+            <span style="color: #408080; font-style: italic">// 1. We must run only within a transaction</span>
+            <span style="color: #008000; font-weight: bold">if</span> (!executionContext.IsInTransaction)
             {
-</code></pre>
+</pre></div>
+</td></tr></table>
 
 <p>It has been replaced by a call to virtual method:</p>
 
-<pre><code class="language-csharp">            if (IsInTransaction())
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span>  	        <span style="color: #008000; font-weight: bold">if</span> (IsInTransaction())
             {
             
             }
-</code></pre>
+</pre></div>
+</td></tr></table>
 
 <p>Because the interactions with the various CRM runtime Services now occur within Virtual methods, we no longer need to mock them up at unit test time. Say goodbye to having to mockup <code>IPluginExecutionContext</code>, <code>IServiceProvider</code> or <em>any</em> of the Crm runtime services. All we need to do now is just override the various virtual methods that our Execute() method calls, and return appropriate values at test time.</p>
 
@@ -366,100 +530,187 @@ if(isOnHold)
 
 <p>For the purpose of our unit tests all we do, is create a class that derives from our original plugin class, but overrides the various virtual methods to provide different values at test time.</p>
 
-<pre><code class="language-csharp"> public class UnitTestableReclaimCreditPlugin : ReclaimCreditPlugin2
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span> <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">UnitTestableReclaimCreditPlugin</span> : ReclaimCreditPlugin2
     {
 
-        public UnitTestableReclaimCreditPlugin()
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #0000FF">UnitTestableReclaimCreditPlugin</span>()
         {
-            AccountIsOnHold = false;
-            IsRunningInTransaction = false;
-            ContactEntity = new Entity(&quot;contact&quot;);
+            AccountIsOnHold = <span style="color: #008000; font-weight: bold">false</span>;
+            IsRunningInTransaction = <span style="color: #008000; font-weight: bold">false</span>;
+            ContactEntity = <span style="color: #008000; font-weight: bold">new</span> Entity(<span style="color: #BA2121">&quot;contact&quot;</span>);
         }
 
-        protected override Entity GetTargetEntity()
+        <span style="color: #008000; font-weight: bold">protected</span> <span style="color: #008000; font-weight: bold">override</span> Entity <span style="color: #0000FF">GetTargetEntity</span>()
         {
-            ContactEntity[&quot;parentaccountid&quot;] = new EntityReference(&quot;account&quot;, Guid.NewGuid());
-            return ContactEntity;
+            ContactEntity[<span style="color: #BA2121">&quot;parentaccountid&quot;</span>] = <span style="color: #008000; font-weight: bold">new</span> EntityReference(<span style="color: #BA2121">&quot;account&quot;</span>, Guid.NewGuid());
+            <span style="color: #008000; font-weight: bold">return</span> ContactEntity;
         }
 
-        protected override Entity GetAccountEntity(Entity contact)
+        <span style="color: #008000; font-weight: bold">protected</span> <span style="color: #008000; font-weight: bold">override</span> Entity <span style="color: #0000FF">GetAccountEntity</span>(Entity contact)
         {
-            var accountEntity = new Entity(&quot;account&quot;);
-            accountEntity[&quot;creditonhold&quot;] = AccountIsOnHold;
-            return accountEntity;
+            <span style="color: #B00040">var</span> accountEntity = <span style="color: #008000; font-weight: bold">new</span> Entity(<span style="color: #BA2121">&quot;account&quot;</span>);
+            accountEntity[<span style="color: #BA2121">&quot;creditonhold&quot;</span>] = AccountIsOnHold;
+            <span style="color: #008000; font-weight: bold">return</span> accountEntity;
         }
 
-        protected override bool IsInTransaction()
+        <span style="color: #008000; font-weight: bold">protected</span> <span style="color: #008000; font-weight: bold">override</span> <span style="color: #B00040">bool</span> <span style="color: #0000FF">IsInTransaction</span>()
         {
-            return IsRunningInTransaction;
+            <span style="color: #008000; font-weight: bold">return</span> IsRunningInTransaction;
         }
 
-        public bool AccountIsOnHold { get; set; }
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #B00040">bool</span> AccountIsOnHold { <span style="color: #008000; font-weight: bold">get</span>; <span style="color: #008000; font-weight: bold">set</span>; }
 
-        public bool IsRunningInTransaction { get; set; }
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #B00040">bool</span> IsRunningInTransaction { <span style="color: #008000; font-weight: bold">get</span>; <span style="color: #008000; font-weight: bold">set</span>; }
 
-        public Entity ContactEntity { get; set; }
+        <span style="color: #008000; font-weight: bold">public</span> Entity ContactEntity { <span style="color: #008000; font-weight: bold">get</span>; <span style="color: #008000; font-weight: bold">set</span>; }
 
     }
-</code></pre>
+</pre></div>
+</td></tr></table>
 
 <h3 id="and-here-are-the-unit-tests">And here are the Unit Tests</h3>
 
-<pre><code class="language-csharp">
-    [TestFixture]
-    public class ReclaimCreditPluginUnitTests
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #7D9029">    [TestFixture]</span>
+    <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">ReclaimCreditPluginUnitTests</span>
     {
-        public ReclaimCreditPluginUnitTests()
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #0000FF">ReclaimCreditPluginUnitTests</span>()
         {
 
         }
 
-        [ExpectedException(typeof(InvalidPluginExecutionException),
-            ExpectedMessage = &quot;The plugin detected that it was not running within a database transaction&quot;,
-            MatchType = MessageMatch.Contains)]
-        public void Should_Only_Run_Within_Transaction()
+<span style="color: #7D9029">        [ExpectedException(typeof(InvalidPluginExecutionException),</span>
+<span style="color: #7D9029">            ExpectedMessage = &quot;The plugin detected that it was not running within a database transaction&quot;,</span>
+<span style="color: #7D9029">            MatchType = MessageMatch.Contains)]</span>
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">void</span> <span style="color: #0000FF">Should_Only_Run_Within_Transaction</span>()
         {
-            // arrange
-            var sut = new UnitTestableReclaimCreditPlugin();
-            sut.IsRunningInTransaction = false;
+            <span style="color: #408080; font-style: italic">// arrange</span>
+            <span style="color: #B00040">var</span> sut = <span style="color: #008000; font-weight: bold">new</span> UnitTestableReclaimCreditPlugin();
+            sut.IsRunningInTransaction = <span style="color: #008000; font-weight: bold">false</span>;
 
-            // act 
+            <span style="color: #408080; font-style: italic">// act </span>
             sut.Execute();
 
         }
 
 
-        public void Should_Take_Shoes_When_Credit_On_Hold()
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">void</span> <span style="color: #0000FF">Should_Take_Shoes_When_Credit_On_Hold</span>()
         {
-            // arrange
-            var sut = new UnitTestableReclaimCreditPlugin();
-            sut.IsRunningInTransaction = true;
-            sut.AccountIsOnHold = true;
+            <span style="color: #408080; font-style: italic">// arrange</span>
+            <span style="color: #B00040">var</span> sut = <span style="color: #008000; font-weight: bold">new</span> UnitTestableReclaimCreditPlugin();
+            sut.IsRunningInTransaction = <span style="color: #008000; font-weight: bold">true</span>;
+            sut.AccountIsOnHold = <span style="color: #008000; font-weight: bold">true</span>;
 
-            // act 
+            <span style="color: #408080; font-style: italic">// act </span>
             sut.Execute();
 
-            //assert
-            Assert.That(sut.ContactEntity[&quot;taketheirshoes&quot;], Is.EqualTo(true));
+            <span style="color: #408080; font-style: italic">//assert</span>
+            Assert.That(sut.ContactEntity[<span style="color: #BA2121">&quot;taketheirshoes&quot;</span>], Is.EqualTo(<span style="color: #008000; font-weight: bold">true</span>));
 
         }
 
-        public void Should_Not_Take_Shoes_When_Credit_Not_On_Hold()
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">void</span> <span style="color: #0000FF">Should_Not_Take_Shoes_When_Credit_Not_On_Hold</span>()
         {
-            // arrange
-            var sut = new UnitTestableReclaimCreditPlugin();
-            sut.IsRunningInTransaction = true;
-            sut.AccountIsOnHold = false;
+            <span style="color: #408080; font-style: italic">// arrange</span>
+            <span style="color: #B00040">var</span> sut = <span style="color: #008000; font-weight: bold">new</span> UnitTestableReclaimCreditPlugin();
+            sut.IsRunningInTransaction = <span style="color: #008000; font-weight: bold">true</span>;
+            sut.AccountIsOnHold = <span style="color: #008000; font-weight: bold">false</span>;
 
-            // act 
+            <span style="color: #408080; font-style: italic">// act </span>
             sut.Execute();
 
-            //assert
-            Assert.That(sut.ContactEntity[&quot;taketheirshoes&quot;], Is.Not.EqualTo(true));
+            <span style="color: #408080; font-style: italic">//assert</span>
+            Assert.That(sut.ContactEntity[<span style="color: #BA2121">&quot;taketheirshoes&quot;</span>], Is.Not.EqualTo(<span style="color: #008000; font-weight: bold">true</span>));
 
         }
     }
-</code></pre>
+</pre></div>
+</td></tr></table>
 
 <h3 id="wrapping-up">Wrapping Up</h3>
 
@@ -504,5 +755,10 @@ if(isOnHold)
   
   <script src="http://darrelltunnell.net//js/App.js"></script>
   
+  <script>
+  $(document).ready(function () {
+	$( ".highlighttable" ).wrap("<div class='table-responsive'></div>");
+});
+  </script>
 </body>
 </html>
