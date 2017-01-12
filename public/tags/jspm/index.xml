@@ -28,23 +28,23 @@
 
 &lt;p&gt;You will notice that your ASP.NET 5 application has a number of bower packages included by default:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/bowerpackages.PNG&#34; alt=&#34;bowerpackages.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/bowerpackages.PNG&#34; alt=&#34;bowerpackages.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;First, let&amp;rsquo;s uninstall Bower. In your project is a &lt;code&gt;Bower.json&lt;/code&gt; file. Delete it! (If you can&amp;rsquo;t see it in Solution Explorer, you might need to &amp;lsquo;show all files&amp;rsquo;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/bowerjson.PNG&#34; alt=&#34;bowerjson.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/bowerjson.PNG&#34; alt=&#34;bowerjson.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;When you install &lt;code&gt;Bower&lt;/code&gt; packages, they are installed under the &amp;ldquo;lib&amp;rdquo; folder within your &lt;code&gt;wwwroot&lt;/code&gt; directory. So, let&amp;rsquo;s now delete this lib folder which will delete all of these packages.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/wwwrootlibfolder.PNG&#34; alt=&#34;wwwrootlibfolder.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/wwwrootlibfolder.PNG&#34; alt=&#34;wwwrootlibfolder.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;After those changes, your project should look something like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/projectremovedbower.PNG&#34; alt=&#34;projectremovedbower.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/projectremovedbower.PNG&#34; alt=&#34;projectremovedbower.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;With Bower gone and those javascript / css packages deleted, what happens if we run the application now? Let&amp;rsquo;s run it and find out..&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/runappbowerremoved.PNG&#34; alt=&#34;runappbowerremoved.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/runappbowerremoved.PNG&#34; alt=&#34;runappbowerremoved.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;As you can see, there are now errors displayed in the browser, and our site looks awful. This makes sense - our application is referencing javascript and css files that used to live in the lib folder, and now they are no longer found because we deleted them.&lt;/p&gt;
 
@@ -59,7 +59,7 @@
 &lt;li&gt;Add &lt;code&gt;JSPM&lt;/code&gt; and whatever the latest version is:&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/addjspmnodejspackage.PNG&#34; alt=&#34;addjspmnodejspackage.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/addjspmnodejspackage.PNG&#34; alt=&#34;addjspmnodejspackage.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Save the file.&lt;/li&gt;
@@ -67,7 +67,7 @@
 
 &lt;p&gt;The &lt;code&gt;NPM&lt;/code&gt; package for &lt;code&gt;JSPM&lt;/code&gt; should now be downloaded and installed into your project. You will see that the package is installed into the &amp;ldquo;node_modules&amp;rdquo; folder within your project.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/nodemodulesfolderjspm.PNG&#34; alt=&#34;nodemodulesfolderjspm.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/nodemodulesfolderjspm.PNG&#34; alt=&#34;nodemodulesfolderjspm.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;configure-jspm&#34;&gt;Configure JSPM&lt;/h3&gt;
 
@@ -79,13 +79,13 @@ The way to do this, is a little bit fiddely, as you have to drop to the command 
 &lt;li&gt;Type &lt;code&gt;jspm init&lt;/code&gt; and hit enter.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/commandlinejspminit.PNG&#34; alt=&#34;commandlinejspminit.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/commandlinejspminit.PNG&#34; alt=&#34;commandlinejspminit.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;You will now be asked a series of questions. At the end of answering these questions, the relevent &lt;code&gt;config&lt;/code&gt; will be produced within the project.&lt;/p&gt;
 
 &lt;p&gt;Here are the answers. Some of them you can just hit enter without typing anything, and the default value will be used.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/jspminit.PNG&#34; alt=&#34;jspminit.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/jspminit.PNG&#34; alt=&#34;jspminit.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;I&amp;rsquo;ll quickly run through each option briefly.. But you should defer to the &lt;code&gt;JSPM&lt;/code&gt; documentation site for further clarifications.&lt;/p&gt;
 
@@ -132,7 +132,7 @@ For the purposes of this blog, I am accepting the default of &amp;ldquo;Babel&am
 
 &lt;p&gt;Once that is done, those packages will now be installed under your &lt;code&gt;wwwroot\jspm_packages&lt;/code&gt; folder:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/jspmpackages.PNG&#34; alt=&#34;jspmpackages.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/jspmpackages.PNG&#34; alt=&#34;jspmpackages.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The next step is to fix up our MVC application so that it loads our javascript and css using the &lt;code&gt;module loader&lt;/code&gt;.&lt;/p&gt;
 
@@ -177,7 +177,7 @@ For the purposes of this blog, I am accepting the default of &amp;ldquo;Babel&am
 
 &lt;p&gt;You should now be able to see that we no longer get any errors about failing to load  javascript files &lt;code&gt;jquery.js&lt;/code&gt; and &lt;code&gt;bootstrap.js&lt;/code&gt;. In fact, &lt;strong&gt;those javascript files are not being loaded anymore.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/jspmmissingcss.PNG&#34; alt=&#34;jspmmissingcss.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/jspmmissingcss.PNG&#34; alt=&#34;jspmmissingcss.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&#34;why-aren-t-we-loading-jquery-and-bootstrap-anymore&#34;&gt;Why aren&amp;rsquo;t we loading JQuery and Bootstrap anymore?&lt;/h4&gt;
 
@@ -210,7 +210,7 @@ import bootstrap from &#39;bootstrap&#39;;
 
 &lt;p&gt;You should now see that &lt;code&gt;JQuery&lt;/code&gt; and &lt;code&gt;Bootstrap&lt;/code&gt; are loaded on every page:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/jspmjqueryandbootstrapdependency.PNG&#34; alt=&#34;jspmjqueryandbootstrapdependency.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/jspmjqueryandbootstrapdependency.PNG&#34; alt=&#34;jspmjqueryandbootstrapdependency.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;what-about-css&#34;&gt;What about CSS&lt;/h3&gt;
 
@@ -250,7 +250,7 @@ import &#39;bootstrap/css/bootstrap.css!&#39;
 
 &lt;p&gt;Now run your application!&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/jspmnoerrors.PNG&#34; alt=&#34;jspmnoerrors.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/jspmnoerrors.PNG&#34; alt=&#34;jspmnoerrors.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Wahoo! We now have no errors in the console window, our javascript and css is being loaded - and our application looks ok again.&lt;/p&gt;
 
@@ -264,7 +264,7 @@ import &#39;bootstrap/css/bootstrap.css!&#39;
 
 &lt;p&gt;If you click on &amp;ldquo;Register&amp;rdquo; link for example you will see these errors in the browser console window:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/jspmregisterpageproblems.PNG&#34; alt=&#34;jspmregisterpageproblems.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/jspmregisterpageproblems.PNG&#34; alt=&#34;jspmregisterpageproblems.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;This is because many of the views within our MVC application are rendering a partial called &lt;code&gt;_ValidationScriptsPartial.cshtml&lt;/code&gt;&lt;/p&gt;
 
@@ -307,7 +307,7 @@ import &#39;bootstrap/css/bootstrap.css!&#39;
 
 &lt;p&gt;And now - everything is working!&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/jspmallworking.PNG&#34; alt=&#34;jspmallworking.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/jspmallworking.PNG&#34; alt=&#34;jspmallworking.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;recap&#34;&gt;Recap&lt;/h3&gt;
 

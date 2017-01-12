@@ -38,7 +38,7 @@
 &lt;p&gt;It all begins with adding the unit tests project itself.
 Xamarin have provided a project type in Visual Studio called a &amp;ldquo;Unit Test App&amp;rdquo;. Add one of those projects to your Solution and define some tests.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/New Android Unit Test Project.PNG&#34; alt=&#34;New Android Unit Test Project.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/New Android Unit Test Project.PNG&#34; alt=&#34;New Android Unit Test Project.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Here are some tests:&lt;/p&gt;
 
@@ -237,19 +237,19 @@ Emulator killed.
 
 &lt;p&gt;The first step is easy, but the important thing to remember is to set the target to SignAndroidPackage&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/tc commandlineparams testydroid.PNG&#34; alt=&#34;tc commandlineparams testydroid.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/tc commandlineparams testydroid.PNG&#34; alt=&#34;tc commandlineparams testydroid.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;That will now take care of producing the APK in the output directory for your project during your team city build.&lt;/p&gt;
 
 &lt;p&gt;The second step to create is the one that actually runs the tests using TestyDroid!
 The follwing screenshot shows setting up a Command line step to do this:
-&lt;img src=&#34;img/tc testydroid commandlinestep.PNG&#34; alt=&#34;tc testydroid commandlinestep.PNG&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://darrelltunnell.net/img/tc testydroid commandlinestep.PNG&#34; alt=&#34;tc testydroid commandlinestep.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;step-6-admire-your-tests-in-team-city&#34;&gt;Step 6 - Admire your tests in Team City.&lt;/h3&gt;
 
 &lt;p&gt;Now you can run a build - and if all is well - you should see your tests results added to a tests tab in Team City.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/tc Tests Tab.PNG&#34; alt=&#34;tc Tests Tab.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/tc Tests Tab.PNG&#34; alt=&#34;tc Tests Tab.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;any-questions&#34;&gt;Any Questions?&lt;/h3&gt;
 
