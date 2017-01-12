@@ -45,27 +45,27 @@
 
 &lt;p&gt;You can now create a new &amp;ldquo;DotNetNuke&amp;rdquo; project using Visual Studio.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/new dnn project.PNG&#34; alt=&#34;new dnn project.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/new dnn project.PNG&#34; alt=&#34;new dnn project.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;This creates your new project. It also imports the &amp;ldquo;DnnPackager&amp;rdquo; NuGet package automatically - &lt;a href=&#34;http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/&#34;&gt;something I have blogged about seperately.&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/adding DnnPackager.PNG&#34; alt=&#34;adding DnnPackager.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/adding DnnPackager.PNG&#34; alt=&#34;adding DnnPackager.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Your new project, has it&amp;rsquo;s own &amp;ldquo;.dnnproj&amp;rdquo; file. This is a new project type and that&amp;rsquo;s why it has its own file extension &amp;ldquo;.dnnproj&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/SolutionExplorer1.PNG&#34; alt=&#34;SolutionExplorer1.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/SolutionExplorer1.PNG&#34; alt=&#34;SolutionExplorer1.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&#34;adding-content&#34;&gt;Adding Content&lt;/h4&gt;
 
 &lt;p&gt;You can now add items to your project. If you &amp;ldquo;Add new item&amp;rdquo; - you will be able select from a number of standard DotNetNuke item templates. For example a &amp;ldquo;Module View&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/AddModuleView.png&#34; alt=&#34;AddModuleView.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/AddModuleView.png&#34; alt=&#34;AddModuleView.png&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Initially, I will just show Dnn 7 compatible item templates, but eventually I&amp;rsquo;d also like to add a seperate group for Dnn 8 item templates, which would include item templates for the new MVC and SPA stuff.&lt;/p&gt;
 
 &lt;p&gt;When you add the new item, not only do the source code files get added to your project, but any required dependencies also get brought in by the magical power of NuGet:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/AddingDotNetNukeCoreNuget.PNG&#34; alt=&#34;AddingDotNetNukeCoreNuget.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/AddingDotNetNukeCoreNuget.PNG&#34; alt=&#34;AddingDotNetNukeCoreNuget.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;So for example, adding a Module View for Dnn 7, will automatically bring in the DotNetNuke.Core NuGet package for Dnn7 as depicted above.&lt;/p&gt;
 
@@ -79,7 +79,7 @@
 
 &lt;p&gt;In VS, I am going to extend the debugging toolbar (where the &amp;ldquo;play&amp;rdquo; button is)&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;img/debug toolbar.PNG&#34; alt=&#34;debug toolbar.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/debug toolbar.PNG&#34; alt=&#34;debug toolbar.PNG&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;You can see in the screenshot there is an empty dropdown at present, but this will list your DotNetNuke websites that you have on your local IIS. The first one in that list will be selected by default.&lt;/p&gt;
 
