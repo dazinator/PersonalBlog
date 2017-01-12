@@ -28,7 +28,17 @@
     
     <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
     
-    
+    <style>
+     
+.highlight pre {
+    word-wrap: normal;
+}
+
+.highlight pre code {
+    white-space: pre;
+}
+
+    </style>
 
     
     
@@ -70,7 +80,7 @@
 		
 		
 		
-			<img id="profile-pic" src="http://darrelltunnell.net//img/profile.png" alt="My Picture" class="img-circle center-block">
+			<img id="profile-pic" src="http://darrelltunnell.net//img/profile.jpg" alt="My Picture" class="img-circle center-block">
 		
 		<div id="social" class="text-center">
 			<a href="https://twitter.com/dazinate"><i class="fa fa-twitter fa-2x"></i></a>
@@ -227,32 +237,49 @@ For the purposes of this blog, I am accepting the default of &ldquo;Babel&rdquo;
 
 <p>If you open <code>_Layout.cshtml</code> you will see a section like this:</p>
 
-<pre><code class="language-xml"> &lt;environment names=&quot;Development&quot;&gt;
-            &lt;script src=&quot;~/lib/jquery/dist/jquery.js&quot;&gt;&lt;/script&gt;
-            &lt;script src=&quot;~/lib/bootstrap/dist/js/bootstrap.js&quot;&gt;&lt;/script&gt;
-            &lt;script src=&quot;~/js/site.js&quot; asp-append-version=&quot;true&quot;&gt;&lt;/script&gt;
-        &lt;/environment&gt;
-        &lt;environment names=&quot;Staging,Production&quot;&gt;
-            &lt;script src=&quot;https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js&quot;
-                    asp-fallback-src=&quot;~/lib/jquery/dist/jquery.min.js&quot;
-                    asp-fallback-test=&quot;window.jQuery&quot;&gt;
-            &lt;/script&gt;
-            &lt;script src=&quot;https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js&quot;
-                    asp-fallback-src=&quot;~/lib/bootstrap/dist/js/bootstrap.min.js&quot;
-                    asp-fallback-test=&quot;window.jQuery &amp;&amp; window.jQuery.fn &amp;&amp; window.jQuery.fn.modal&quot;&gt;
-            &lt;/script&gt;
-            &lt;script src=&quot;~/js/site.min.js&quot; asp-append-version=&quot;true&quot;&gt;&lt;/script&gt;
-        &lt;/environment&gt;
-</code></pre>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span> <span style="color: #008000; font-weight: bold">&lt;environment</span> <span style="color: #7D9029">names=</span><span style="color: #BA2121">&quot;Development&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/lib/jquery/dist/jquery.js&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/lib/bootstrap/dist/js/bootstrap.js&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/js/site.js&quot;</span> <span style="color: #7D9029">asp-append-version=</span><span style="color: #BA2121">&quot;true&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/environment&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;environment</span> <span style="color: #7D9029">names=</span><span style="color: #BA2121">&quot;Staging,Production&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js&quot;</span>
+                    <span style="color: #7D9029">asp-fallback-src=</span><span style="color: #BA2121">&quot;~/lib/jquery/dist/jquery.min.js&quot;</span>
+                    <span style="color: #7D9029">asp-fallback-test=</span><span style="color: #BA2121">&quot;window.jQuery&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;/script&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js&quot;</span>
+                    <span style="color: #7D9029">asp-fallback-src=</span><span style="color: #BA2121">&quot;~/lib/bootstrap/dist/js/bootstrap.min.js&quot;</span>
+                    <span style="color: #7D9029">asp-fallback-test=</span><span style="color: #BA2121">&quot;window.jQuery &amp;&amp; window.jQuery.fn &amp;&amp; window.jQuery.fn.modal&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;/script&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/js/site.min.js&quot;</span> <span style="color: #7D9029">asp-append-version=</span><span style="color: #BA2121">&quot;true&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/environment&gt;</span>
+</pre></div>
+</td></tr></table>
 
 <p>Let&rsquo;s comment out that whole section and replace it with this:</p>
 
-<pre><code class="language-xml">
-&lt;script src=&quot;~/jspm_packages/system.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;~/config.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;System.import(&quot;js/site&quot;);&lt;/script&gt;
-
-</code></pre>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1
+2
+3</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/jspm_packages/system.js&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/config.js&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;script&gt;</span>System.import(&quot;js/site&quot;);<span style="color: #008000; font-weight: bold">&lt;/script&gt;</span>
+</pre></div>
+</td></tr></table>
 
 <p>At this point, let&rsquo;s run the application!</p>
 
@@ -268,8 +295,9 @@ For the purposes of this blog, I am accepting the default of &ldquo;Babel&rdquo;
 
 <p>With that in mind, let&rsquo;s look at the module we are currently loading via the module loader. It&rsquo;s one called <code>js/site</code></p>
 
-<pre><code class="language-xml">&lt;script&gt;System.import(&quot;js/site&quot;);&lt;/script&gt;
-</code></pre>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #666666">&lt;</span>script<span style="color: #666666">&gt;</span>System.<span style="color: #008000; font-weight: bold">import</span>(<span style="color: #BA2121">&quot;js/site&quot;</span>);<span style="color: #666666">&lt;</span><span style="border: 1px solid #FF0000">/script&gt;</span>
+</pre></div>
+</td></tr></table>
 
 <p>This resolves (thanks to the <code>config.js</code> file) to the <code>js/site.js</code> file in our <code>wwwroot</code> directory. This file is currently empty, meaning it also has no dependencies declared in it for any other modules. This is why the module loader no longer bothers to load <code>JQuery</code> or <code>Bootstrap</code> anymore.</p>
 
@@ -283,9 +311,11 @@ For the purposes of this blog, I am accepting the default of &ldquo;Babel&rdquo;
 <li>Open <code>site.js</code> and insert the following code, then save it an re-run the application:</li>
 </ol>
 
-<pre><code class="language-javascript">import $ from 'jquery';
-import bootstrap from 'bootstrap';
-</code></pre>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1
+2</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">import</span> $ from <span style="color: #BA2121">&#39;jquery&#39;</span>;
+<span style="color: #008000; font-weight: bold">import</span> bootstrap from <span style="color: #BA2121">&#39;bootstrap&#39;</span>;
+</pre></div>
+</td></tr></table>
 
 <p>This is <code>ES6</code> syntax for declaring a module dependency.</p>
 
@@ -303,31 +333,41 @@ import bootstrap from 'bootstrap';
 
 <p>Back in the <code>command prompt</code> in your project directory, run the following</p>
 
-<pre><code>jspm install css
-</code></pre>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span>jspm install css
+</pre></div>
+</td></tr></table>
 
 <p>Now go back to your <code>site.js</code> file, and add an import for the bootstrap.css. It should now look like this:</p>
 
-<pre><code>import $ from 'jquery';
-import bootstrap from 'bootstrap';
-import 'bootstrap/css/bootstrap.css!'
-</code></pre>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1
+2</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">import</span> $ from <span style="color: #BA2121">&#39;jquery&#39;</span>;
+<span style="color: #008000; font-weight: bold">import</span> bootstrap from <span style="color: #BA2121">&#39;bootstrap&#39;</span>;
+</pre></div>
+</td></tr></table>
 
 <p>Lastly, in <code>_Layout.cshtml</code>, comment out the link to the old - non existent, bootstrap.css file:</p>
 
-<pre><code class="language-xml">
- &lt;environment names=&quot;Development&quot;&gt;
-        @*&lt;link rel=&quot;stylesheet&quot; href=&quot;~/lib/bootstrap/dist/css/bootstrap.css&quot; /&gt;*@
-        &lt;link rel=&quot;stylesheet&quot; href=&quot;~/css/site.css&quot; /&gt;
-    &lt;/environment&gt;
-    &lt;environment names=&quot;Staging,Production&quot;&gt;
-        @*&lt;link rel=&quot;stylesheet&quot; href=&quot;https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css&quot;
-            asp-fallback-href=&quot;~/lib/bootstrap/dist/css/bootstrap.min.css&quot;*@
-        asp-fallback-test-class=&quot;sr-only&quot; asp-fallback-test-property=&quot;position&quot; asp-fallback-test-value=&quot;absolute&quot; /&gt;
-        &lt;link rel=&quot;stylesheet&quot; href=&quot;~/css/site.min.css&quot; asp-append-version=&quot;true&quot; /&gt;
-    &lt;/environment&gt;
-
-</code></pre>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span> <span style="color: #008000; font-weight: bold">&lt;environment</span> <span style="color: #7D9029">names=</span><span style="color: #BA2121">&quot;Development&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+        @*<span style="color: #008000; font-weight: bold">&lt;link</span> <span style="color: #7D9029">rel=</span><span style="color: #BA2121">&quot;stylesheet&quot;</span> <span style="color: #7D9029">href=</span><span style="color: #BA2121">&quot;~/lib/bootstrap/dist/css/bootstrap.css&quot;</span> <span style="color: #008000; font-weight: bold">/&gt;</span>*@
+        <span style="color: #008000; font-weight: bold">&lt;link</span> <span style="color: #7D9029">rel=</span><span style="color: #BA2121">&quot;stylesheet&quot;</span> <span style="color: #7D9029">href=</span><span style="color: #BA2121">&quot;~/css/site.css&quot;</span> <span style="color: #008000; font-weight: bold">/&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/environment&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;environment</span> <span style="color: #7D9029">names=</span><span style="color: #BA2121">&quot;Staging,Production&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+        @*<span style="color: #008000; font-weight: bold">&lt;link</span> <span style="color: #7D9029">rel=</span><span style="color: #BA2121">&quot;stylesheet&quot;</span> <span style="color: #7D9029">href=</span><span style="color: #BA2121">&quot;https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css&quot;</span>
+            <span style="color: #7D9029">asp-fallback-href=</span><span style="color: #BA2121">&quot;~/lib/bootstrap/dist/css/bootstrap.min.css&quot;</span><span style="border: 1px solid #FF0000">*@</span>
+        <span style="color: #7D9029">asp-fallback-test-class=</span><span style="color: #BA2121">&quot;sr-only&quot;</span> <span style="color: #7D9029">asp-fallback-test-property=</span><span style="color: #BA2121">&quot;position&quot;</span> <span style="color: #7D9029">asp-fallback-test-value=</span><span style="color: #BA2121">&quot;absolute&quot;</span> <span style="color: #008000; font-weight: bold">/&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;link</span> <span style="color: #7D9029">rel=</span><span style="color: #BA2121">&quot;stylesheet&quot;</span> <span style="color: #7D9029">href=</span><span style="color: #BA2121">&quot;~/css/site.min.css&quot;</span> <span style="color: #7D9029">asp-append-version=</span><span style="color: #BA2121">&quot;true&quot;</span> <span style="color: #008000; font-weight: bold">/&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/environment&gt;</span>
+</pre></div>
+</td></tr></table>
 
 <p>Now run your application!</p>
 
@@ -351,31 +391,45 @@ import 'bootstrap/css/bootstrap.css!'
 
 <p>For example, if you look at the bottom of <code>Register.cshtml</code>, you will see the following:</p>
 
-<pre><code class="language-csharp">
-@section Scripts {
-    @{ await Html.RenderPartialAsync(&quot;_ValidationScriptsPartial&quot;); }
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1
+2
+3</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span>@section Scripts {
+    <span style="border: 1px solid #FF0000">@</span>{ <span style="color: #008000; font-weight: bold">await</span> Html.RenderPartialAsync(<span style="color: #BA2121">&quot;_ValidationScriptsPartial&quot;</span>); }
 }
-
-</code></pre>
+</pre></div>
+</td></tr></table>
 
 <p>If you look at the contents of <code>_ValidationScriptsPartial</code> we can see that it is actually including additional scripts onto the page:</p>
 
-<pre><code>&lt;environment names=&quot;Development&quot;&gt;
-    &lt;script src=&quot;~/lib/jquery-validation/dist/jquery.validate.js&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js&quot;&gt;&lt;/script&gt;
-&lt;/environment&gt;
-&lt;environment names=&quot;Staging,Production&quot;&gt;
-    &lt;script src=&quot;https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js&quot;
-            asp-fallback-src=&quot;~/lib/jquery-validation/dist/jquery.validate.min.js&quot;
-            asp-fallback-test=&quot;window.jQuery &amp;&amp; window.jQuery.validator&quot;&gt;
-    &lt;/script&gt;
-    &lt;script src=&quot;https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js&quot;
-            asp-fallback-src=&quot;~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js&quot;
-            asp-fallback-test=&quot;window.jQuery &amp;&amp; window.jQuery.validator &amp;&amp; window.jQuery.validator.unobtrusive&quot;&gt;
-    &lt;/script&gt;
-&lt;/environment&gt;
-
-</code></pre>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">&lt;environment</span> <span style="color: #7D9029">names=</span><span style="color: #BA2121">&quot;Development&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/lib/jquery-validation/dist/jquery.validate.js&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/environment&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;environment</span> <span style="color: #7D9029">names=</span><span style="color: #BA2121">&quot;Staging,Production&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js&quot;</span>
+            <span style="color: #7D9029">asp-fallback-src=</span><span style="color: #BA2121">&quot;~/lib/jquery-validation/dist/jquery.validate.min.js&quot;</span>
+            <span style="color: #7D9029">asp-fallback-test=</span><span style="color: #BA2121">&quot;window.jQuery &amp;&amp; window.jQuery.validator&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/script&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js&quot;</span>
+            <span style="color: #7D9029">asp-fallback-src=</span><span style="color: #BA2121">&quot;~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js&quot;</span>
+            <span style="color: #7D9029">asp-fallback-test=</span><span style="color: #BA2121">&quot;window.jQuery &amp;&amp; window.jQuery.validator &amp;&amp; window.jQuery.validator.unobtrusive&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/script&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/environment&gt;</span>
+</pre></div>
+</td></tr></table>
 
 <p>As you can see, depending upon the environment that ASP.NET determines your application is running on, this renders some script includes to particular js files, used for forms validation. These were previoulsy located within <code>Bower</code> packages, that we have deleted.</p>
 
@@ -383,8 +437,9 @@ import 'bootstrap/css/bootstrap.css!'
 
 <p>So change the contents of <code>_ValidationScriptsPartial.cshtml</code> to this:</p>
 
-<pre><code>&lt;script&gt;System.import(&quot;aspnet/jquery-validation-unobtrusive&quot;);&lt;/script&gt;
-</code></pre>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #666666">&lt;</span>script<span style="color: #666666">&gt;</span>System.<span style="color: #008000; font-weight: bold">import</span>(<span style="color: #BA2121">&quot;aspnet/jquery-validation-unobtrusive&quot;</span>);<span style="color: #666666">&lt;</span><span style="border: 1px solid #FF0000">/script&gt;</span>
+</pre></div>
+</td></tr></table>
 
 <p>And now - everything is working!</p>
 
@@ -441,5 +496,10 @@ import 'bootstrap/css/bootstrap.css!'
   
   <script src="http://darrelltunnell.net//js/App.js"></script>
   
+  <script>
+  $(document).ready(function () {
+	$( ".highlighttable" ).wrap("<div class='table-responsive'></div>");
+});
+  </script>
 </body>
 </html>

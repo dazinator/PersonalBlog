@@ -11,8 +11,6 @@ tags:
     - "DnnPackager"
 ---
 
-
-
 ### Module Debugging - Two Approaches
 
 When developing DotNetNuke modules people take many different approaches but they boil down to two alternatives in terms of workflow:

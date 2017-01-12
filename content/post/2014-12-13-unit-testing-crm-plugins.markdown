@@ -34,7 +34,8 @@ Firstly, let's look at a plugin that we will call the `ReclaimCreditPlugin`. Her
 
 Jon Doe immediately gets to work on writing the plugin for those requirements. He produces the following plugin:
 
-```csharp
+{{< highlight csharp "linenos=true,style=default" >}}
+
     public class ReclaimCreditPlugin : IPlugin
     {
 
@@ -76,7 +77,7 @@ Jon Doe immediately gets to work on writing the plugin for those requirements. H
         }
 
     }
-```
+{{< / highlight >}}
     
 #### Good Job?
 Take a moment to peer review the above code. Would you vindicate Jon Doe's effort? It seems it has all the required logic in all the required places. It appears he has covered the list of requirements. Although Jon doesn't check to make sure the current entity being updated is definately a contact entity.. But within the confines of this blog post we will assume that there is no possible danger that the plugin could ever be registered against the wrong entity. 
@@ -128,7 +129,7 @@ With those requirements - forget everything you know about Dynamics Crm and writ
 
 PSEUDO CODE:
 
-```
+{{< highlight csharp "linenos=true,style=default" >}}
 if (!IsRunningInTransaction)
 {
 	Throw "Plugin requires a transaction."
@@ -145,7 +146,7 @@ if(isOnHold)
 {
  	contact["taketheirshoes"] = true;
 }
-```
+{{< / highlight >}}
 
 ### Look at that Pseudo Code -  Do you see _any_ runtime services?
 Notice how it contains only the logic we really care about testing - the logic as described by the requirements. It doesn't contain needless fluff. No `IServiceProvider`, No `IPluginExecutionContext`. It looks very simple, very basic. If we could actually write a CRM plugin like this, it would be about 1.5 million times easier to test. Well we can.
@@ -158,7 +159,7 @@ With this principle in mind, let's revisit our plugin and refactor it to remove 
 
 ### New and Improved Plugin
 
-```csharp
+{{< highlight csharp "linenos=true,style=default" >}}
  public class ReclaimCreditPlugin2 : IPlugin
     {
 
@@ -247,7 +248,7 @@ With this principle in mind, let's revisit our plugin and refactor it to remove 
         }
 
     }
-```
+{{< / highlight >}}
 
 ### What just happened?
 
@@ -255,22 +256,22 @@ I applied a technique called the [Extract and Override](http://taswar.zeytinsoft
 
 For example rather than having the following code directly within the execute method:
 
-``` csharp
+{{< highlight csharp "linenos=true,style=default" >}}
   var executionContext = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
 
             // 1. We must run only within a transaction
             if (!executionContext.IsInTransaction)
             {
-```
+{{< / highlight >}}
 
 It has been replaced by a call to virtual method:
 
-``` csharp
+{{< highlight csharp "linenos=true,style=default" >}}
   	        if (IsInTransaction())
             {
             
             }
-```
+{{< / highlight >}}
 
 Because the interactions with the various CRM runtime Services now occur within Virtual methods, we no longer need to mock them up at unit test time. Say goodbye to having to mockup `IPluginExecutionContext`, `IServiceProvider` or _any_ of the Crm runtime services. All we need to do now is just override the various virtual methods that our Execute() method calls, and return appropriate values at test time.
 
@@ -280,7 +281,7 @@ Certainly Sir / Madame. Now that I can write one within a few minutes as opposed
 
 For the purpose of our unit tests all we do, is create a class that derives from our original plugin class, but overrides the various virtual methods to provide different values at test time. 
 
-``` csharp
+{{< highlight csharp "linenos=true,style=default" >}}
  public class UnitTestableReclaimCreditPlugin : ReclaimCreditPlugin2
     {
 
@@ -316,11 +317,11 @@ For the purpose of our unit tests all we do, is create a class that derives from
         public Entity ContactEntity { get; set; }
 
     }
-```
+{{< / highlight >}}
 
 ### And here are the Unit Tests
 
-```csharp
+{{< highlight csharp "linenos=true,style=default" >}}
 
     [TestFixture]
     public class ReclaimCreditPluginUnitTests
@@ -375,7 +376,7 @@ For the purpose of our unit tests all we do, is create a class that derives from
 
         }
     }
-```
+{{< / highlight >}}
 
 ### Wrapping Up
 

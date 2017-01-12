@@ -37,7 +37,7 @@ Xamarin have provided a project type in Visual Studio called a "Unit Test App". 
 
 Here are some tests:
 
-```csharp
+{{< highlight csharp "linenos=true,style=default" >}}
   [TestFixture]
     public class TestsSample
     {
@@ -114,7 +114,7 @@ So, in order to "start" the tests running on the Android device (after the APK) 
 
 Add the following class to your Tests project:
 
-```csharp
+{{< highlight csharp "linenos=true,style=default" >}}
 namespace Xamarin.TestyDroid.TestTests
 {
     [Instrumentation(Name = "xamarin.testydroid.testtests.TestInstrumentation")]
@@ -141,7 +141,7 @@ So if you changed the namespace of this class to MyCoolApp.Tests
 And you changed the Class Name of this class to MyCoolTestInstrumentation
 Then the Attribute above the MyCoolTestInstrumentation class should look like this:
 
-```csharp
+{{< highlight csharp "linenos=true,style=default" >}}
  [Instrumentation(Name = "mycoolapp.tests.MyCoolTestInstrumentation")]
     public class MyCoolTestInstrumentation : TestyDroid.Android.TestyDroidTestSuiteInstrumentation
     {   
@@ -159,7 +159,7 @@ The next thing we need is the Package name of your tests package. This you can g
 
 Here is mine:
 
-```xml
+{{< highlight xml "linenos=true,style=default" >}}
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="Xamarin.TestyDroid.TestTests" android:versionCode="1" android:versionName="1.0">
 	<uses-sdk />
@@ -188,15 +188,15 @@ Armed with the information in the previous step:
 
 Here is an example:
 
-```
+{{< highlight bat "linenos=true,style=default" >}}
 Xamarin.TestyDroid.exe -e "C:\Program Files (x86)\Android\android-sdk\tools\emulator.exe" -d "C:\Program Files (x86)\Android\android-sdk\platform-tools\adb.exe" -f "src\MyTests\bin\Release\MyTests.apk-Signed.apk" -i "AVD_GalaxyNexus_ToolsForApacheCordova" -n "MyTests" -c "mytests.TestInstrumentation" -w 120
-```
+{{< / highlight >}}
 
 Substitute the argument values accordingly.
 
 You should see output similar to the following:
 
-```
+{{< highlight bat "linenos=true,style=default" >}}
 Starting emulator: D:\android-sdk\tools\emulator.exe -avd Xamarin_Android_API_15 -port 5554 -no-boot-anim -prop emu.uuid=013b8394-db8d-4224-a36f-889ce164f74e
 
 Waiting until: 04/11/2015 19:21:29 for device to complete boot up..
@@ -217,7 +217,7 @@ OK: killing emulator, bye bye
 
 Emulator killed.
 
-```
+{{< / highlight >}}
 
 ### Step 5 - Running On Team City
 

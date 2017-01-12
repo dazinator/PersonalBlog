@@ -19,9 +19,9 @@ In this post, I will explore what kinds of things can be achieved using the SDK'
 ### Starting Simple
 Consider this SQL:
 
-```sql
+{{< highlight sql "linenos=true,style=default" >}}
 INSERT INTO contact (firstname, lastname) VALUES ('albert', 'einstein');
-```
+{{< / highlight >}}
 
 Well you hardly need a ExecuteMultipleRequest for this, but if you really wanted to you could create one no problem. I am going to assume you are already familiar with the code to create a ExecuteMultipleRequest - if not it's described [here.](https://msdn.microsoft.com/en-gb/library/jj863631.aspx)
 
@@ -41,9 +41,9 @@ Let's now imagine that when a contact is INSERTED, an `accountnumber` is generat
 
 Here's it is in T-SQL:
 
-```sql
+{{< highlight sql "linenos=true,style=default" >}}
 INSERT INTO contact (firstname, lastname) OUTPUT inserted.accountnumber VALUES ('albert', 'einstein');
-```
+{{< / highlight >}}
 
 This equates to the following using the SDK:-
 
@@ -62,9 +62,9 @@ However in order to construct the appropriate RetrieveRequestMessage we need to 
 
 With the previous example in mind, consider the following SQL
 
-```sql
+{{< highlight sql "linenos=true,style=default" >}}
 INSERT INTO contact (contactid, firstname, lastname) OUTPUT inserted.accountnumber VALUES ('2f4941ec-2f6f-4c7f-8adc-c6f4fb002d42', 'albert', 'einstein');
-```
+{{< / highlight >}}
 
 If you are quick, you've already cottoned on that this one is possible, and it equates to:-
 
@@ -79,11 +79,11 @@ An ExecuteMultipleRequest (ContinueOnError = false) containing:-
 ### Let's start to push the boat out a little.
 Here is a batch of T-SQL commands:
 
-```sql
+{{< highlight sql "linenos=true,style=default" >}}
 INSERT INTO contact (firstname, lastname) VALUES ('albert', 'einstein');
 UPDATE contact SET lastname = 'Johnson' WHERE contactid = '3a4941ec-2f6f-4c7f-8adc-c6f4fb002d42';
 DELETE FROM contact WHERE contactid = '4b4941ec-2f6f-4c7f-8adc-c6f4fb002d42'
-```
+{{< / highlight >}}
 
 Now, we know that SQL Server would execute that SQL, by executing each sql command within that batch in sequence, and if there were any errors it will not continue to process the rest of the commands in the same batch. It would also not execute that batch within a transaction, so it would not roll back should errors occur half way through etc.
 
@@ -102,17 +102,17 @@ It seems like this is a good fit between the SQL and an ExecuteMultipleRequest.
 ### The boat is now heading towards the open ocean
 Let's add a bit of complexity to the previous T-SQL - consider this:
 
-```sql
+{{< highlight sql "linenos=true,style=default" >}}
 INSERT INTO contact (contactid, firstname, lastname) OUTPUT inserted.accountnumber VALUES ('2f4941ec-2f6f-4c7f-8adc-c6f4fb002d42', 'albert', 'einstein');
 UPDATE contact SET lastname = 'Johnson' WHERE contactid = '3a4941ec-2f6f-4c7f-8adc-c6f4fb002d42';
 DELETE FROM contact WHERE contactid = '4b4941ec-2f6f-4c7f-8adc-c6f4fb002d42'
-```
+{{< / highlight >}}
 
 The first command in that batch of SQL commands is this:
 
-```sql 
+{{< highlight sql "linenos=true,style=default" >}}
 INSERT INTO contact (contactid, firstname, lastname) OUTPUT inserted.accountnumber VALUES ('2f4941ec-2f6f-4c7f-8adc-c6f4fb002d42', 'albert', 'einstein');
-```
+{{< / highlight >}}
 
 And we know that this actually equates to 2 seperate RequestMessages, a CreateRequest and a RetrieveRequest. We then also need to do an Update and a then a Delete. So this equates to:
 
@@ -133,11 +133,11 @@ Ok good so far!
 ### Should look at Boat Breakdown cover
 Now consider this one:
 
-```sql
+{{< highlight sql "linenos=true,style=default" >}}
 INSERT INTO contact (firstname, lastname) OUTPUT inserted.accountnumber VALUES ('albert', 'einstein');
 GO
 DELETE FROM contact WHERE contactid = '6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42'
-```
+{{< / highlight >}}
 
 What this says is:
 
@@ -178,26 +178,26 @@ The ExecuteMultipleRequest is not a good fit for sending multiple individual `ba
 
 Consider the following T-SQL:
 
-```sql
+{{< highlight sql "linenos=true,style=default" >}}
 INSERT INTO contact (firstname, lastname) VALUES ('albert', 'einstein');
 GO
 DELETE FROM contact WHERE contactid = '6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42';
 GO
 UPDATE contact SET firstname = 'bob' WHERE lastname = 'Hoskins';
 GO
-```
+{{< / highlight >}}
 
 In this scenario - each batch of commands contains only a single command. What this means is that you can construct an ExecuteMultipleRequest with 'ContinueOnError' set to true, and there will be no danger that a particular command in a batch will error, and that the rest of the commands in that batch will execute regardless - because there is only a single command in each batch!
 
 For an example of the danger I am referring to here, consider this:
 
-```sql
+{{< highlight sql "linenos=true,style=default" >}}
 DELETE FROM contact WHERE contactid = '6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42';
 DELETE FROM account WHERE primarycontactid = '6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42';
 GO
 UPDATE contact SET firstname = 'bob' WHERE lastname = 'Hoskins';
 GO
-```
+{{< / highlight >}}
 
 The first batch above, contains 2 operations. The second batch contains 1.
 

@@ -55,7 +55,7 @@ canonifyurls = true
 	header = "Radiating Awesomeness, One Blog Post at a Time."
 	
 	# Sidebar profile picture
-	profilepic = "img/profile.png"
+	profilepic = "img/profile.jpg"
 	
 	# Title/subtitle for the sidebar
 	title = "Darrell Tunnell"

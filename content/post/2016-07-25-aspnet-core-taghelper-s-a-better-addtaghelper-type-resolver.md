@@ -46,13 +46,13 @@ This is because you don't have any `@addTagHelper` directive yet in your razor v
 
 So we add the directive to our __ViewImports.cshtml file:
 
-```
+{{< highlight bat "linenos=true,style=default" >}}
 @addTagHelper "*, Plugin.Markdown"
-```
+{{< / highlight >}}
 
 Now when we start our application, BOOM:
 
-```
+{{< highlight bat "linenos=true,style=default" >}}
 
 An error occurred during the compilation of a resource required to process this request. Please review the following specific error details and modify your source code appropriately.
 
@@ -62,7 +62,7 @@ Cannot resolve TagHelper containing assembly 'Plugin.Markdown'. Error: Could not
 @addTagHelper "*, Plugin.Markdown"
 
 
-```
+{{< / highlight >}}
 
 This is because by defualt MVC does not resolve `TagHelper` assemblies registered with the parts system (atleast this is true as of RTM 1.0.0) so it complains when it processes that directive, saying it can't find such an assembly - because it can only see assemblies that are in the bin folder by default. So it can't see your plugin assembly.
 
@@ -70,21 +70,21 @@ This is because by defualt MVC does not resolve `TagHelper` assemblies registere
 
 Well if you add this line:
 
-```csharp
+{{< highlight csharp "linenos=true,style=default" >}}
 
 mvcBuilder.AddTagHelpersAsServices();
 
-```
+{{< / highlight >}}
 
 That will register some replacement services that will check the application parts system when trying to resolve the tag helper assemblies based on the name provided by the addTagHelper directive.
 
 However - this now works but it's still not ideal because we still have to add a directive for each `plugin` before it will work on our page/s. So when someone develops a new plugin, it won't work until we modify our `_ViewImports.cshtml` file and add another line:
 
-```
+{{< highlight csharp "linenos=true,style=default" >}}
 @addTagHelper "*, Plugin.Markdown"
 @addTagHelper "*, Plugin.Another"
 @addTagHelper "*, Plugin.YetAnother"
-```
+{{< / highlight >}}
 
 This can be incredibly frustrating because if you are wanting an extensibile system where plugins can be installed on the fly, then they should just work without constant modifications to source code.
 
@@ -102,7 +102,7 @@ We need to create an `ITagHelperTypeResolver` and implement it's `Resolve` metho
 
 Here is my quick and dirty implementation, where I took a lot of the code from the microsoft implementation, and just added a few tweaks for globbing:
 
-```csharp 
+{{< highlight csharp "linenos=true,style=default" >}}
 
 public class AssemblyNameGlobbingTagHelperTypeResolver : ITagHelperTypeResolver
     {
@@ -235,23 +235,23 @@ public class AssemblyNameGlobbingTagHelperTypeResolver : ITagHelperTypeResolver
     }
 
 
-```
+{{< / highlight >}}
 
 Now we just register this on startup, after we have registered `MVC`:
 
-```
+{{< highlight csharp "linenos=true,style=default" >}}
 
   services.AddSingleton<ITagHelperTypeResolver, AssemblyNameGlobbingTagHelperTypeResolver>();
 
-```
+{{< / highlight >}}
 
 Now we can just add one directive to our __ViewImports.cshtml file, like this:
 
 
-```
+{{< highlight csharp "linenos=true,style=default" >}}
 @addTagHelper "*, Plugin.*"
 
-```
+{{< / highlight >}}
 
 Now that will include all TagHelpers that live in assemblies matching that glob. We can drop new plugins in and their tag helpers will light up automatically.
 

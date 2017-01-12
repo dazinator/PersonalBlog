@@ -132,7 +132,7 @@ First, we need to include the module loader itself, and it's configuration file,
 
 If you open `_Layout.cshtml` you will see a section like this:
 
-```xml
+{{< highlight xml "linenos=true,style=default" >}}
  <environment names="Development">
             <script src="~/lib/jquery/dist/jquery.js"></script>
             <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
@@ -149,18 +149,18 @@ If you open `_Layout.cshtml` you will see a section like this:
             </script>
             <script src="~/js/site.min.js" asp-append-version="true"></script>
         </environment>
-```
+{{< / highlight >}}
 
 Let's comment out that whole section and replace it with this:
 
 
-```xml
+{{< highlight xml "linenos=true,style=default" >}}
 
 <script src="~/jspm_packages/system.js"></script>
 <script src="~/config.js"></script>
 <script>System.import("js/site");</script>
 
-```
+{{< / highlight >}}
 
 At this point, let's run the application!
 
@@ -176,9 +176,9 @@ This is the nature of `modular` javascript. What we are in the process of transi
 
 With that in mind, let's look at the module we are currently loading via the module loader. It's one called `js/site`
 
-```xml
+{{< highlight javascript "linenos=true,style=default" >}}
 <script>System.import("js/site");</script>
-```
+{{< / highlight >}}
 
 This resolves (thanks to the `config.js` file) to the `js/site.js` file in our `wwwroot` directory. This file is currently empty, meaning it also has no dependencies declared in it for any other modules. This is why the module loader no longer bothers to load `JQuery` or `Bootstrap` anymore.
 
@@ -190,10 +190,10 @@ So, let's now assume that we are willing to load `JQuery`, and `Bootstrap` as a 
 
 1. Open `site.js` and insert the following code, then save it an re-run the application:
 
-```javascript
+{{< highlight javascript "linenos=true,style=default" >}}
 import $ from 'jquery';
 import bootstrap from 'bootstrap';
-```
+{{< / highlight >}}
 
 This is `ES6` syntax for declaring a module dependency.
 
@@ -211,21 +211,20 @@ Well we can use JSPM for CSS too, but we need to install the `CSS` plugin.
 
 Back in the `command prompt` in your project directory, run the following
 
-```
+{{< highlight bat "linenos=true,style=default" >}}
 jspm install css
-```
+{{< / highlight >}}
 
 Now go back to your `site.js` file, and add an import for the bootstrap.css. It should now look like this:
 
-```
+{{< highlight javascript "linenos=true,style=default" >}}
 import $ from 'jquery';
 import bootstrap from 'bootstrap';
-import 'bootstrap/css/bootstrap.css!'
-```
+{{< / highlight >}}
 
 Lastly, in `_Layout.cshtml`, comment out the link to the old - non existent, bootstrap.css file:
 
-```xml
+{{< highlight xml "linenos=true,style=default" >}}
 
  <environment names="Development">
         @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />*@
@@ -238,7 +237,7 @@ Lastly, in `_Layout.cshtml`, comment out the link to the old - non existent, boo
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 
-```
+{{< / highlight >}}
 
 Now run your application!
 
@@ -262,17 +261,17 @@ This is because many of the views within our MVC application are rendering a par
 
 For example, if you look at the bottom of `Register.cshtml`, you will see the following:
 
-```csharp
+{{< highlight csharp "linenos=true,style=default" >}}
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
 
-```
+{{< / highlight >}}
 
 If you look at the contents of `_ValidationScriptsPartial` we can see that it is actually including additional scripts onto the page:
 
-```
+{{< highlight xml "linenos=true,style=default" >}}
 <environment names="Development">
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
@@ -288,7 +287,7 @@ If you look at the contents of `_ValidationScriptsPartial` we can see that it is
     </script>
 </environment>
 
-```
+{{< / highlight >}}
 
 As you can see, depending upon the environment that ASP.NET determines your application is running on, this renders some script includes to particular js files, used for forms validation. These were previoulsy located within `Bower` packages, that we have deleted.
 
@@ -296,9 +295,9 @@ To correct this, we'll just need to instruct the module loader to load the `jque
 
 So change the contents of `_ValidationScriptsPartial.cshtml` to this:
 
-```
+{{< highlight javascript "linenos=true,style=default" >}}
 <script>System.import("aspnet/jquery-validation-unobtrusive");</script>
-```
+{{< / highlight >}}
 
 And now - everything is working!
 

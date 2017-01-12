@@ -42,11 +42,11 @@ This will help later as it will prevent Visual Studio from needlessly trying to 
 
 Open the Package Manager Console (Tools --> NuGet Package Manager) and (With your project selected in the "Default Project" dropdown, type into it the following command and hit enter to install the DnnPackager NuGet package:
 
-```
+{{< highlight powershell "linenos=true,style=default" >}}
 
 Install-Package DnnPackager
 
-```
+{{< / highlight >}}
 
 ![NuGetConsoleAddDnnPackagerNuGet.PNG](/img/NuGetConsoleAddDnnPackagerNuGet.PNG)
 
@@ -61,11 +61,11 @@ For the sake of this blog post I am going to assume that you are going to target
 
 Using the Package Manager Console again:
 
-```
+{{< highlight powershell "linenos=true,style=default" >}}
 
 Install-Package DotNetNuke.Core
 
-```
+{{< / highlight >}}
 
 This should add a reference to the DotNetNuke assembly to your project's references:
 
@@ -82,7 +82,7 @@ We then need to change our new User Control to make it inherit from `PortalModul
 
 So change this:
 
-``` csharp
+{{< highlight csharp "linenos=true,style=default" >}}
 
 namespace MySuperModule
 {
@@ -95,11 +95,11 @@ namespace MySuperModule
     }
 }
 
-```
+{{< / highlight >}}
 
 To this:
 
-``` csharp
+{{< highlight csharp "linenos=true,style=default" >}}
 using DotNetNuke.Entities.Modules;
 
 namespace MySuperModule
@@ -113,7 +113,7 @@ namespace MySuperModule
     }
 }
 
-```
+{{< / highlight >}}
 ** Don't forget to add the 'using' statement depicted above! **
 
 ### Making an awesome module
@@ -122,13 +122,13 @@ Further development of this super awesome module is beyond the scope of this pos
 
 Add the following h1 content to your markup for the user control:
 
-``` html
+{{< highlight html "linenos=true,style=default" >}}
 
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Default.ascx.cs" Inherits="MySuperModule.Default" %>
 
 <h1>I came, I read a blog, I conquered!</h1>
 
-```
+{{< / highlight >}}
 
 ### Module Manifest
 Now that we have this incredible... work of art, naturally we want to run it and test it out. In order to do this though, we first need to make sure our module is going to identify itself with DotNetNuke correctly. This means it should have a manifest.
@@ -139,7 +139,7 @@ Open up manifest.dnn and replace the values in square brackets with appropriate 
 
 For example, you will see something that looks like this:
 
-``` xml
+{{< highlight xml "linenos=true,style=default" >}}
 
 <dotnetnuke type="Package" version="6.0">
   <packages>    
@@ -217,11 +217,11 @@ For example, you will see something that looks like this:
   </packages>
 </dotnetnuke>
 
-```
+{{< / highlight >}}
 
 Fill it in so it looks more like this:
 
-``` xml
+{{< highlight xml "linenos=true,style=default" >}}
 
 <dotnetnuke type="Package" version="6.0">
   <packages>    
@@ -290,7 +290,7 @@ Fill it in so it looks more like this:
   </packages>
 </dotnetnuke>
 
-```
+{{< / highlight >}}
 
 Note: I removed the entry for the "settings" for our module as we don't have a settings screen in this example. I also changed the default cache time to -1, which disables caching.. just because I have a feeling this module is going to one day become a lot more dynamic and I don't want outdated content causing confusion :-)
 
@@ -339,12 +339,12 @@ You should see:
 
 Let's make some changes. Add some more content:
 
-``` html
+{{< highlight html "linenos=true,style=default" >}}
 
 <h1>I came, I read a blog, I conquered!</h1>
 <p>Everyday I'm shuffling!</p>
 
-```
+{{< / highlight >}}
 
 Add some code in your code behind, and set a breakpoint on it:
 
@@ -352,11 +352,11 @@ Add some code in your code behind, and set a breakpoint on it:
 
 Now deploy this very simply by placing your cursor in the Package Manager Console window, and hitting "up" arrow on your keyboard. This will bring up the last command:
 
-```
+{{< highlight powershell "linenos=true,style=default" >}}
 
 Install-Module DotNetNuke
 
-```
+{{< / highlight >}}
 
 hit enter.
 
@@ -372,11 +372,11 @@ That's because your module is being executed within the process running your Dot
 
 You can do this manually, or you can let DnnPackager do it for you. To let DnnPackager handle this, go back to the package manager console, and amend that command you are using, by adding on a couple of arguments:
 
-```
+{{< highlight powershell "linenos=true,style=default" >}}
 
 Install-Module DotNetNuke Debug Attach
 
-```
+{{< / highlight >}}
 
 So do that, and hit enter. You should see it deploy your module as before but this time it will also attach your debugger!
 

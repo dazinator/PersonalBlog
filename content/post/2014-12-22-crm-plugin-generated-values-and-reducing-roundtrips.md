@@ -33,7 +33,7 @@ For quite some time now - as of `CRM 2011 Update Rollup 12 - (SDK 5.0.13)` you c
 
 Here is an example of creating an account, and retrieiving it in a single round trip:
 
-```csharp
+{{< highlight csharp "linenos=true,style=default" >}}
  				 // Create an ExecuteMultipleRequest object.
                 var multipleRequests = new ExecuteMultipleRequest()
                 {
@@ -85,7 +85,7 @@ Here is an example of creating an account, and retrieiving it in a single round 
 
                 Console.Write(retrieveResponse.Entity["createdon"]); // yup - we got the value we needed!
 
-```
+{{< / highlight >}}
 
 ### What happened?
 Both the CreateRequest, and the RetrieveRequest (for the created entity) are batched up into a single Request and shipped off to the CRM server for processing.
