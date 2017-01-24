@@ -1,7 +1,7 @@
 
 # Hugo on GitHub Pages
 ### PersonalBlog
-My Hugo Blog, based on the [template repo](http://spencerlyon2.github.io/hugo_gh_blog)
+My Hugo Blog: http://darrelltunnell.net
 
 
 ---
