@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://darrelltunnell.net/blog/2017/01/24/csla-and-asp.net-core/</loc>
+    <lastmod>2017-01-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/</loc>
     <lastmod>2016-07-25T00:00:00+00:00</lastmod>
   </url>
@@ -99,7 +104,7 @@
   
   <url>
     <loc>http://darrelltunnell.net/tags/asp/index.net-core/</loc>
-    <lastmod>2016-07-25T00:00:00+00:00</lastmod>
+    <lastmod>2017-01-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -121,14 +126,20 @@
   </url>
   
   <url>
+    <loc>http://darrelltunnell.net/tags/csla/</loc>
+    <lastmod>2017-01-24T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://darrelltunnell.net/</loc>
-    <lastmod>2016-07-25T00:00:00+00:00</lastmod>
+    <lastmod>2017-01-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://darrelltunnell.net/categories/development/</loc>
-    <lastmod>2016-07-25T00:00:00+00:00</lastmod>
+    <lastmod>2017-01-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -194,7 +205,7 @@
   
   <url>
     <loc>http://darrelltunnell.net/post/</loc>
-    <lastmod>2016-07-25T00:00:00+00:00</lastmod>
+    <lastmod>2017-01-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
