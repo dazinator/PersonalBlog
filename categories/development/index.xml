@@ -10,6 +10,470 @@
     <atom:link href="http://darrelltunnell.net/categories/development/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>CSLA and ASP.NET Core</title>
+      <link>http://darrelltunnell.net/blog/2017/01/24/csla-and-asp.net-core/</link>
+      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2017/01/24/csla-and-asp.net-core/</guid>
+      <description>&lt;p&gt;I am a fan of CSLA and I recently came accross a need to make a shiny CSLA business layer work nicely within the context of an ASP.NET Core application.
+This post is aimed at CSLA developers with a similar need.
+As of the &lt;a href=&#34;https://www.nuget.org/packages/CSLA-Core/4.6.500&#34;&gt;current release&lt;/a&gt;, there are a few things that you will need to take care of in order to get CSLA working smoothly, and I will cover those in this post.
+&lt;/p&gt;
+
+&lt;h3 id=&#34;csla-applicationcontext&#34;&gt;Csla.ApplicationContext&lt;/h3&gt;
+
+&lt;p&gt;CSLA developers should be familiar with &lt;code&gt;Csla.ApplicationContext&lt;/code&gt; which provides the means to access useful context, as well as the current &lt;code&gt;User&lt;/code&gt; / &lt;code&gt;IPrinciple&lt;/code&gt;.
+However when running under ASP.NET Core, &lt;code&gt;Csla.ApplicationContext&lt;/code&gt; doesn&amp;rsquo;t work correctly - as CSLA decides that your application is not a web application (as &lt;code&gt;HttpContext.Current&lt;/code&gt; is null under ASP.NET Core) and so
+it ends up storing things that should be stored in &lt;code&gt;HttpContext&lt;/code&gt; on the current &lt;code&gt;Thread&lt;/code&gt; instead.&lt;/p&gt;
+
+&lt;p&gt;To overcome this, however, is pretty straight forward. You just need to implement an extensibility point that Rocky has provided, called an &lt;code&gt;IContextManager&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;icontextmanager-for-asp-net-core&#34;&gt;IContextManager for ASP.NET Core.&lt;/h3&gt;
+
+&lt;p&gt;Here is an implementation of an &lt;code&gt;IContextManager&lt;/code&gt; that resolves the &lt;code&gt;HttpContext&lt;/code&gt; using the &lt;code&gt;IHttpContextAccessor&lt;/code&gt; instead:&lt;/p&gt;
+
+&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;summary&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// Application context manager that uses HttpContextAccessor whenr esolving HttpContext&lt;/span&gt;
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// to store context values.&lt;/span&gt;
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;HttpContextAccessorContextMananger&lt;/span&gt; : IContextManager
+    {
+
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; _localContextName = &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Csla.LocalContext&amp;quot;&lt;/span&gt;;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; _clientContextName = &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Csla.ClientContext&amp;quot;&lt;/span&gt;;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; _globalContextName = &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Csla.GlobalContext&amp;quot;&lt;/span&gt;;
+
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;readonly&lt;/span&gt; IServiceProvider _serviceProvider;
+
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;HttpContextAccessorContextMananger&lt;/span&gt;(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+      
+
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;virtual&lt;/span&gt; HttpContext &lt;span style=&#34;color: #0000FF&#34;&gt;GetHttpContext&lt;/span&gt;()
+        {
+            &lt;span style=&#34;color: #B00040&#34;&gt;var&lt;/span&gt; httpContextAccessor = (IHttpContextAccessor)_serviceProvider.GetService(&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;typeof&lt;/span&gt;(IHttpContextAccessor));
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; (httpContextAccessor != &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;null&lt;/span&gt;)
+            {
+                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; (httpContextAccessor.HttpContext == &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;null&lt;/span&gt;)
+                {
+                    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//   Debugger.Break();&lt;/span&gt;
+                }
+                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; httpContextAccessor.HttpContext;
+            }
+
+            &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Debugger.Break();&lt;/span&gt;
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;null&lt;/span&gt;;
+        }
+
+
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// Gets a value indicating whether this&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// context manager is valid for use in&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// the current environment.&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;bool&lt;/span&gt; IsValid
+        {
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;get&lt;/span&gt;
+            {
+                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;GetHttpContext&lt;/span&gt;() != &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;null&lt;/span&gt;;
+            }
+        }
+
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// Gets the current principal.&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; System.Security.Principal.IPrincipal GetUser()
+        {
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;GetHttpContext&lt;/span&gt;()?.User;
+        }
+
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// Sets the current principal.&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;param name=&amp;quot;principal&amp;quot;&amp;gt;Principal object.&amp;lt;/param&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;SetUser&lt;/span&gt;(System.Security.Principal.IPrincipal principal)
+        {
+            &lt;span style=&#34;color: #B00040&#34;&gt;var&lt;/span&gt; context = GetHttpContext();
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; (context != &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;null&lt;/span&gt;)
+            {
+                context.User = (ClaimsPrincipal)principal;
+            }
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt;
+            {
+                &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//  Debugger.Break();&lt;/span&gt;
+            }
+           
+        }
+
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// Gets the local context.&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; ContextDictionary &lt;span style=&#34;color: #0000FF&#34;&gt;GetLocalContext&lt;/span&gt;()
+        {
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; (ContextDictionary)GetHttpContext()?.Items[_localContextName];
+        }
+
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// Sets the local context.&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;param name=&amp;quot;localContext&amp;quot;&amp;gt;Local context.&amp;lt;/param&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;SetLocalContext&lt;/span&gt;(ContextDictionary localContext)
+        {
+            &lt;span style=&#34;color: #B00040&#34;&gt;var&lt;/span&gt; context = GetHttpContext();
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; (context != &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;null&lt;/span&gt;)
+            {
+                context.Items[_localContextName] = localContext;
+            }
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt;
+            {
+              &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//  Debugger.Break();&lt;/span&gt;
+            }
+        }
+
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// Gets the client context.&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; ContextDictionary &lt;span style=&#34;color: #0000FF&#34;&gt;GetClientContext&lt;/span&gt;()
+        {
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; (ContextDictionary)GetHttpContext()?.Items[_clientContextName];
+        }
+
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// Sets the client context.&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;param name=&amp;quot;clientContext&amp;quot;&amp;gt;Client context.&amp;lt;/param&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;SetClientContext&lt;/span&gt;(ContextDictionary clientContext)
+        {
+            &lt;span style=&#34;color: #B00040&#34;&gt;var&lt;/span&gt; context = GetHttpContext();
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; (context != &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;null&lt;/span&gt;)
+            {
+                context.Items[_clientContextName] = clientContext;
+            }
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt;
+            {
+              &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//  Debugger.Break();&lt;/span&gt;
+            }
+        }
+
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// Gets the global context.&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; ContextDictionary &lt;span style=&#34;color: #0000FF&#34;&gt;GetGlobalContext&lt;/span&gt;()
+        {
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; (ContextDictionary)GetHttpContext()?.Items[_globalContextName];
+        }
+
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// Sets the global context.&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/// &amp;lt;param name=&amp;quot;globalContext&amp;quot;&amp;gt;Global context.&amp;lt;/param&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;SetGlobalContext&lt;/span&gt;(ContextDictionary globalContext)
+        {
+            &lt;span style=&#34;color: #B00040&#34;&gt;var&lt;/span&gt; context = GetHttpContext();
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; (context != &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;null&lt;/span&gt;)
+            {
+                context.Items[_globalContextName] = globalContext;
+            }
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt;
+            {
+              &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//  Debugger.Break();&lt;/span&gt;
+            }
+        }
+    }
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;h3 id=&#34;configuring-csla&#34;&gt;Configuring CSLA&lt;/h3&gt;
+
+&lt;p&gt;Now that you have this implementation, you need to tell CSLA to use it. In the ASP.NET Core world, we are used to nice extension methods that we can use in our
+&lt;code&gt;startup.cs&lt;/code&gt; classes, in order to configure things fluently.&lt;/p&gt;
+
+&lt;p&gt;CSLA doesn&amp;rsquo;t provide one of these just yet, but we can create one fairly easily:&lt;/p&gt;
+
+&lt;p&gt;&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;CslaConfiguration&lt;/span&gt;
+    {
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;static&lt;/span&gt; IServiceCollection &lt;span style=&#34;color: #0000FF&#34;&gt;ConfigureCsla&lt;/span&gt;(&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;this&lt;/span&gt; IServiceCollection services, Action&amp;lt;CslaOptions, IServiceProvider&amp;gt; setupAction = &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;null&lt;/span&gt;)
+        {
+            services.AddSingleton&amp;lt;CslaOptions&amp;gt;((sp) =&amp;gt;
+            {
+                &lt;span style=&#34;color: #B00040&#34;&gt;var&lt;/span&gt; options = &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;new&lt;/span&gt; CslaOptions();
+                setupAction?.Invoke(options, sp);
+                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; options;
+            });
+
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; services;
+        }
+
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;static&lt;/span&gt; IApplicationBuilder &lt;span style=&#34;color: #0000FF&#34;&gt;UseCsla&lt;/span&gt;(&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;this&lt;/span&gt; IApplicationBuilder appBuilder)
+        {
+            &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// grab the options&lt;/span&gt;
+            &lt;span style=&#34;color: #B00040&#34;&gt;var&lt;/span&gt; options = appBuilder.ApplicationServices.GetRequiredService&amp;lt;CslaOptions&amp;gt;();
+
+            &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// configure csla according to options.&lt;/span&gt;
+            Csla.Server.FactoryDataPortal.FactoryLoader = options.ObjectFactoryLoader;
+            Csla.ApplicationContext.WebContextManager = options.WebContextManager ?? &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;new&lt;/span&gt; HttpContextAccessorContextMananger(appBuilder.ApplicationServices);
+            
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; appBuilder;
+        }
+
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;CslaOptions&lt;/span&gt;
+        {
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; IObjectFactoryLoader ObjectFactoryLoader { &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;get&lt;/span&gt;; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;set&lt;/span&gt;; }
+
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; IContextManager WebContextManager { &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;get&lt;/span&gt;; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;set&lt;/span&gt;; }           
+
+        }
+    }
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/p&gt;
+
+&lt;p&gt;So we can now configure CSLA in our &lt;code&gt;startup.cs&lt;/code&gt; like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Startup&lt;/span&gt;
+    {              
+       
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// This method gets called by the runtime. Use this method to add services to the container.&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;ConfigureServices&lt;/span&gt;(IServiceCollection services)
+        {
+            &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Configure Csla&lt;/span&gt;
+           services.ConfigureCsla((options, sp) =&amp;gt; {               
+                &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// could configure other CSLA hooks / options here in future.&lt;/span&gt;
+            });
+
+        }
+
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;Configure&lt;/span&gt;(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            app.UseCookieAuthentication(&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;new&lt;/span&gt; CookieAuthenticationOptions
+            {
+                AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
+                LoginPath = &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;new&lt;/span&gt; PathString(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;/Account/Login&amp;quot;&lt;/span&gt;)
+            });
+           app.UseCsla();      
+        }        
+    }
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/p&gt;
+
+&lt;p&gt;CSLA &lt;code&gt;ApplicationContext&lt;/code&gt; should now behave correctly thanks to the custom &lt;code&gt;IContextManager&lt;/code&gt; for ASP.NET Core.&lt;/p&gt;
+
+&lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;I also went a few steps further in my particular application, to enable DI to flow from my ASP.NET Core &lt;code&gt;IServiceProvider&lt;/code&gt; into my CSLA business tier, but that&amp;rsquo;s a topic for another article.&lt;/p&gt;
+
+&lt;p&gt;I suspect that Rocky will release improved support for ASP.NET Core in the future, so that this post becomes obsolete.
+Until then, Bon Appétit!&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>ASPNET Core TagHelper&#39;s - A Better @addTagHelper type resolver</title>
       <link>http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/</link>
       <pubDate>Mon, 25 Jul 2016 00:00:00 +0000</pubDate>
@@ -4222,42 +4686,6 @@ Well in that scenario, because the first batch actually contains 2 operations, t
 &lt;p&gt;If you would like to send a batch of commands to the CRM server in one go, the good news is you can. The bad news is, it&amp;rsquo;s not perfect, there are limitations, and hopefully I have shown you just about how far you can stretch things.&lt;/p&gt;
 
 &lt;p&gt;If you need to send multiple batches of commands to the CRM server in one go, the good news is you can if each batch contains only a single request message (i.e Create, Retreive, Delete, Update etc) - the bad news is, if thats not the case, then you will need to send each batch as an individual ExecuteMultipleRequest, and implement your own &amp;ldquo;ContinueOnError&amp;rdquo; behaviour clientside such that should one ExecuteMultipleRequest fail to be processed it doesn&amp;rsquo;t halt subsequent batches (ExecuteMultipleRequests) from being processed.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</title>
-      <link>http://darrelltunnell.net/blog/2015/01/18/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/</link>
-      <pubDate>Sun, 18 Jan 2015 00:00:00 +0000</pubDate>
-      
-      <guid>http://darrelltunnell.net/blog/2015/01/18/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/</guid>
-      <description>&lt;h3 id=&#34;don-t-assume-nuget-packages-that-you-have-authored-will-continue-to-work-with-asp-net-5-vnext-projects&#34;&gt;Don&amp;rsquo;t assume NuGet Packages that you have authored will continue to work with ASP.NET 5 (vNext) projects.&lt;/h3&gt;
-
-&lt;p&gt;Over the past year or so, I have authored &lt;a href=&#34;https://www.nuget.org/packages?q=darrell.tunnell&#34;&gt;a number of NuGet packages&lt;/a&gt; - because, well&amp;hellip; I am just an all around great guy.&lt;/p&gt;
-
-&lt;p&gt;Recently, &lt;a href=&#34;http://stackoverflow.com/questions/27762659/error-while-adding-nuget-package-to-asp-net-vnext-project#comment44383264_27762659&#34;&gt;I was contacted by someone&lt;/a&gt; who was trying to use one of my NuGet packages with an ASP.NET vNext project (Preview release). Not something I have tried before - and this is where things get a little interesting.
-&lt;/p&gt;
-
-&lt;h3 id=&#34;when-nuget-packages-are-installed-into-an-asp-net-vnext-project-powershell-scripts-included-in-the-package-are-not-run&#34;&gt;When NuGet packages are installed into an ASP.NET vNext project - powershell scripts included in the package, are not run.&lt;/h3&gt;
-
-&lt;p&gt;As most NuGet package authors will already know, it&amp;rsquo;s a &lt;a href=&#34;http://docs.nuget.org/docs/creating-packages/creating-and-publishing-a-package#Automatically_Running_PowerShell_Scripts_During_Package_Installation_and_Removal&#34;&gt;standard feature of NuGet&lt;/a&gt; that you can include powershell scripts within your NuGet package, that will then be executed when your package is installed (or uninstalled) into a visual studio project / solution.&lt;/p&gt;
-
-&lt;p&gt;Many NuGet packages out there currently rely on this feature - else they will not work.&lt;/p&gt;
-
-&lt;p&gt;Well, the issue with my NuGet package failing to install into an ASP.NET vNext project  was eventually posted on the asp.net forums, and &lt;a href=&#34;http://forums.asp.net/members/davidfowl.aspx&#34;&gt;David Fowler&lt;/a&gt; (who&amp;rsquo;s on the ASP.NET team) - kindly responded with some insight into the matter. He seems to suggest that &lt;a href=&#34;http://forums.asp.net/t/2027698.aspx?Error+while+adding+NuGet+package+to+ASP+NET+vNext+project&#34;&gt;ASP.NET v5 does not support running the packages powershell scripts when you install a NuGet package into an ASP.NET v5 project.&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;I wanted to confirm that with him a second time - because &lt;strong&gt;that&amp;rsquo;s a huge problem for some of my NuGet packages&lt;/strong&gt;, but as you will see from that thread, I am still awaiting a secondary confirmation of this - although his first answer seems pretty clear cut.&lt;/p&gt;
-
-&lt;h3 id=&#34;surely-this-is-documented-somewhere-or-perhaps-asp-net-5-offers-an-alternative-mechanism-for-running-tasks-on-installation-uninstallation-of-a-nuget-package&#34;&gt;Surely this is documented somewhere - or perhaps ASP.NET 5 offers an alternative mechanism for running tasks on installation / uninstallation of a NuGet package?&lt;/h3&gt;
-
-&lt;p&gt;I have tried to look for more information. At the moment all I have to go on is David Fowlers response. Perhaps this is because there is still work in progress in this area, who knows. All I can suggest is that if your NuGet package currently requires custom tasks to be performed and you are using an &lt;code&gt;init&lt;/code&gt;, &lt;code&gt;install&lt;/code&gt; or &lt;code&gt;uninstall&lt;/code&gt; ps1 script - then be prepared for the fact that it may not work with ASP.NET 5 projects - and also be prepared for the fact that there may not be any workaround either. I seriously hope this is false speculation on my part - but if this does turn out the be true after ASP.NET 5 is released, I&amp;rsquo;ll be left with a slightly bitter taste in my mouth.&lt;/p&gt;
-
-&lt;h3 id=&#34;so-where-from-here&#34;&gt;So where from here?&lt;/h3&gt;
-
-&lt;p&gt;I am generally really excited about ASP.NET 5. I love what the team are doing. However I beleive that the ASP.NET team really should put some guidance out there to the NuGet community, so that NuGet package authors can gain an understanding of how their packages might have to change to work in the context of ASP.NET 5 projects.&lt;/p&gt;
-
-&lt;p&gt;At a minimum, if ASP.NET 5 will indeed no longer support the running of these powershell scripts, then it should atleast warn you that the package contains such scripts and that they will not be executed - which means the package may not beahve as desired.&lt;/p&gt;
-
-&lt;p&gt;My hope is that David Fowler or someone from the ASP.NET team will offer a clarification, insight, or workaround for this issue that makes it a non issue. Fingers crossed.&lt;/p&gt;</description>
     </item>
     
   </channel>
