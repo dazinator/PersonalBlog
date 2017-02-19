@@ -104,129 +104,6 @@
 	<div class="panel panel-default">
 	<div class="panel-header">
 		<h3>
-			<a href="http://darrelltunnell.net/blog/2015/01/18/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/">ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</a>
-			<br>
-			<small>
-				18 January 2015
-			</small>
-		</h3>
-	</div>
-	<div class="panel-body">
-		<h3 id="don-t-assume-nuget-packages-that-you-have-authored-will-continue-to-work-with-asp-net-5-vnext-projects">Don&rsquo;t assume NuGet Packages that you have authored will continue to work with ASP.NET 5 (vNext) projects.</h3>
-
-<p>Over the past year or so, I have authored <a href="https://www.nuget.org/packages?q=darrell.tunnell">a number of NuGet packages</a> - because, well&hellip; I am just an all around great guy.</p>
-
-<p>Recently, <a href="http://stackoverflow.com/questions/27762659/error-while-adding-nuget-package-to-asp-net-vnext-project#comment44383264_27762659">I was contacted by someone</a> who was trying to use one of my NuGet packages with an ASP.NET vNext project (Preview release). Not something I have tried before - and this is where things get a little interesting.
-</p>
-		
-			... <a href="http://darrelltunnell.net/blog/2015/01/18/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/">Read More</a>
-		
-	</div>
-	<div class="panel-footer">
-		
-		<small class="text-muted">
-			
-			
-				<a href="http://darrelltunnell.net/tags/nuget"><span class="label label-success">NuGet</span></a>
-			
-				<a href="http://darrelltunnell.net/tags/asp.net-core"><span class="label label-success">ASP.NET CORE</span></a>
-			
-		</small>
-		
-	</div>
-</div>
-
-
-	<div class="panel panel-default">
-	<div class="panel-header">
-		<h3>
-			<a href="http://darrelltunnell.net/blog/2014/12/22/crm-/-plugin-generated-values---and-reducing-roundtrips/">CRM / Plugin Generated Values - and Reducing Roundtrips!</a>
-			<br>
-			<small>
-				22 December 2014
-			</small>
-		</h3>
-	</div>
-	<div class="panel-body">
-		<h3 id="setting-the-scene">Setting the Scene</h3>
-
-<p>Imagine we have an application that uses the CRM SDK. It needs to:</p>
-
-<ol>
-<li>Create a new <code>account</code> entity in crm.</li>
-<li>Get some value that was just generated as a result of a synchronous plugin that fires on the create. For example, suppose there is a plugin that generates an account reference number.</li>
-</ol>
-
-<h3 id="the-i-don-t-care-about-network-latency-method">The &ldquo;I don&rsquo;t care about network latency method!&rdquo;</h3>
-
-<p>The &lsquo;I don&rsquo;t care about network latency&rsquo; way of dealing with this is to just do 2 seperate Requests (roundtrips) with the CRM server.</p>
-
-<ol>
-<li>Create the new <code>account</code> which returns you the ID.</li>
-<li>Retrieve the <code>account</code> using that ID, along with the values that you need.</li>
-</ol>
-
-<p>This approach is sub optimal where network latency is a concern, as it incurs the penalty of making two roundtrips accross the network with the server, where 1 is possible.</p>
-
-<p>Let&rsquo;s now have a look at the &ldquo;I&rsquo;m running on a 56k modem method&rdquo; of doing the same thing!
-</p>
-		
-			... <a href="http://darrelltunnell.net/blog/2014/12/22/crm-/-plugin-generated-values---and-reducing-roundtrips/">Read More</a>
-		
-	</div>
-	<div class="panel-footer">
-		
-		<small class="text-muted">
-			
-			
-				<a href="http://darrelltunnell.net/tags/dynamics-crm"><span class="label label-success">Dynamics CRM</span></a>
-			
-		</small>
-		
-	</div>
-</div>
-
-
-	<div class="panel panel-default">
-	<div class="panel-header">
-		<h3>
-			<a href="http://darrelltunnell.net/blog/2014/12/14/unit-testing-dynamics-crm-plugins/">Unit Testing Dynamics CRM Plugins</a>
-			<br>
-			<small>
-				14 December 2014
-			</small>
-		</h3>
-	</div>
-	<div class="panel-body">
-		<h3 id="there-is-no-spoon-crm">There is no <del>Spoon</del> CRM</h3>
-
-<p>The purpose of this post will be to look at the code for a fairly typical looking crm plugin, and examine how to implement a unit test with the least possible effort. Reduced Effort == Reduced Person Hours == Reduced Cost.</p>
-
-<p>Remember, this is Unit Testing, not Integration testing - so at test time - there is no CRM!</p>
-
-<p></p>
-		
-			... <a href="http://darrelltunnell.net/blog/2014/12/14/unit-testing-dynamics-crm-plugins/">Read More</a>
-		
-	</div>
-	<div class="panel-footer">
-		
-		<small class="text-muted">
-			
-			
-				<a href="http://darrelltunnell.net/tags/dynamics-crm"><span class="label label-success">Dynamics CRM</span></a>
-			
-				<a href="http://darrelltunnell.net/tags/unit-testing"><span class="label label-success">Unit Testing</span></a>
-			
-		</small>
-		
-	</div>
-</div>
-
-
-	<div class="panel panel-default">
-	<div class="panel-header">
-		<h3>
 			<a href="http://darrelltunnell.net/blog/2014/11/16/a-proclamation/">A Proclamation</a>
 			<br>
 			<small>
@@ -311,6 +188,7 @@
   <script>
   $(document).ready(function () {
 	$( ".highlighttable" ).wrap("<div class='table-responsive'></div>");
+  $( "img" ).addClass("img-responsive");
 });
   </script>
 </body>

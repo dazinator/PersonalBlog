@@ -105,11 +105,7 @@
 	
 	<li><a href="http://darrelltunnell.net/blog/2016/01/24/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/">ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</a></li>
 	
-	<li><a href="http://darrelltunnell.net/blog/2015/11/21/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/">ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</a></li>
-	
 	<li><a href="http://darrelltunnell.net/blog/2015/08/16/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia/">ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia</a></li>
-	
-	<li><a href="http://darrelltunnell.net/blog/2015/04/19/understanding-an-asp.net-spa-project/">Understanding an ASP.NET SPA Project</a></li>
 	
 	<li><a href="http://darrelltunnell.net/blog/2015/01/18/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/">ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</a></li>
 	
@@ -132,6 +128,7 @@
   <script>
   $(document).ready(function () {
 	$( ".highlighttable" ).wrap("<div class='table-responsive'></div>");
+  $( "img" ).addClass("img-responsive");
 });
   </script>
 </body>
