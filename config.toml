@@ -8,9 +8,7 @@ theme = "hugo-geo"
 # number of posts to show on home/category/tag pages (Default: 10)
 paginate = 5
 #relativeURLs = false
-copyright = "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
 
-# optionally override the site's footer with custom copyright text
 copyright = "© Darrell Tunnell and darrelltunnell.net, 2017. Unauthorized use and/or duplication of this material without express and written permission from this site’s author and/or owner is strictly prohibited. Excerpts and links may be used, provided that full and clear credit is given to Darrell Tunnell and darrelltunnell.net with appropriate and specific direction to the original content."
 [author]
 	name = "Darrell Tunnell"
