@@ -1899,17 +1899,29 @@ For the purposes of this blog, I am accepting the default of &amp;ldquo;Babel&am
 
 &lt;p&gt;You should see:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/AddedModule.PNG&#34; alt=&#34;AddedModule.PNG&#34; /&gt;&lt;/p&gt;
+
+&lt;figure class=&#34;img-responsive&#34;&gt;
+    
+        &lt;img src=&#34;http://darrelltunnell.net/img/AddedModule.PNG&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Dnn Screenshot&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
 
 &lt;h3 id=&#34;debugging-it-testing-changes&#34;&gt;Debugging it &amp;amp; Testing Changes&lt;/h3&gt;
 
 &lt;p&gt;Let&amp;rsquo;s make some changes. Add some more content:&lt;/p&gt;
 
-&lt;p&gt;&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;1
+&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;1
 2&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&amp;lt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;h1&lt;/span&gt;&amp;gt;I came, I read a blog, I conquered!&amp;lt;/&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;h1&lt;/span&gt;&amp;gt;
 &amp;lt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;p&lt;/span&gt;&amp;gt;Everyday I&amp;#39;m shuffling!&amp;lt;/&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;p&lt;/span&gt;&amp;gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/p&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 
 &lt;p&gt;Add some code in your code behind, and set a breakpoint on it:&lt;/p&gt;
 

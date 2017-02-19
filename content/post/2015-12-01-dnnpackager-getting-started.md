@@ -333,7 +333,7 @@ This is a quick one time task, of simply creating a page in DotNetNuke to displa
 
 You should see:
 
-![AddedModule.PNG](/img/AddedModule.PNG)
+{{< figure src="/img/AddedModule.PNG" title="Dnn Screenshot" class="img-responsive" >}}
 
 ### Debugging it & Testing Changes
 
