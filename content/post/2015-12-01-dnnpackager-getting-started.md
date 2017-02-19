@@ -7,7 +7,7 @@ tags:
     - "DotNetNuke"
     - "DnnPackager"
 published: true
-title: "DnnPackager - Getting Started"
+title: "DnnPackager Getting Started"
 date: 2015-12-01
 ---
 

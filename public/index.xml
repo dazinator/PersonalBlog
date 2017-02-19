@@ -1412,11 +1412,11 @@ For the purposes of this blog, I am accepting the default of &amp;ldquo;Babel&am
     </item>
     
     <item>
-      <title>DnnPackager - Getting Started</title>
-      <link>http://darrelltunnell.net/blog/2015/12/01/dnnpackager---getting-started/</link>
+      <title>DnnPackager Getting Started</title>
+      <link>http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/</link>
       <pubDate>Tue, 01 Dec 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2015/12/01/dnnpackager---getting-started/</guid>
+      <guid>http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/</guid>
       <description>&lt;h3 id=&#34;dnn-packager-super-smooth-module-development&#34;&gt;Dnn Packager - Super Smooth Module Development&lt;/h3&gt;
 
 &lt;p&gt;In this post, I am going to show you how to get up and running with DnnPackager for your DotNetNuke module / extension development.&lt;/p&gt;
