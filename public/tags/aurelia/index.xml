@@ -370,50 +370,6 @@ For the purposes of this blog, I am accepting the default of &amp;ldquo;Babel&am
     </item>
     
     <item>
-      <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</title>
-      <link>http://darrelltunnell.net/blog/2015/11/21/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</link>
-      <pubDate>Sat, 21 Nov 2015 00:00:00 +0000</pubDate>
-      
-      <guid>http://darrelltunnell.net/blog/2015/11/21/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</guid>
-      <description>&lt;h3 id=&#34;aurelia&#34;&gt;Aurelia&lt;/h3&gt;
-
-&lt;p&gt;Now let&amp;rsquo;s create an Aurelia javascript application to run on our home page.
-Aurelia is a popular new javascript framework for creating SPA&amp;rsquo;s. I have chosen it because I really liked Durandal, it&amp;rsquo;s predessor, and I feel it&amp;rsquo;s time for me to start getting more familiar with it!&lt;/p&gt;
-
-&lt;p&gt;
-todo:
-1. jspm install aurelia packages.
-2. add necessary javascript script includes and system js import call
-3. add html and js for our first aurelia page
-4. run the website in VS, make sure we see the app load up on the home page.&lt;/p&gt;
-
-&lt;h3 id=&#34;linting-bundling-and-minification&#34;&gt;Linting, Bundling, and Minification&lt;/h3&gt;
-
-&lt;p&gt;The app works great, but it&amp;rsquo;s not very optimised..
-We are now going to set up a gulp task so that whenever we build our application in visual studio, the gulp task runs that will&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;JSHint (Lint) our javascript code to check for common errors.&lt;/li&gt;
-&lt;li&gt;Bundle the javascript files into 1 file.&lt;/li&gt;
-&lt;li&gt;Minify the javascript file.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;In addition, this gulp task should also re-run whenever we save changes to any of the javascript files for our app.&lt;/p&gt;
-
-&lt;p&gt;Having our application just include a single bundled and minified javascript file should give it a nice performance boost.&lt;/p&gt;
-
-&lt;p&gt;TODO:&lt;/p&gt;
-
-&lt;h3 id=&#34;browser-refresh&#34;&gt;Browser Refresh&lt;/h3&gt;
-
-&lt;p&gt;Isn&amp;rsquo;t it annoying though that whenever we make a change to our javascript file, or some HTML for our application, we have to refresh the browser to see our changes!&lt;/p&gt;
-
-&lt;p&gt;Well with Browser-Sync that is a thing of the past.&lt;/p&gt;
-
-&lt;p&gt;TODO: Explain how to set up browser-sync, gulp task etc, and sepcify port number in gulp task options, and proxy.. Then change project website settings to launch default url of the proxy when we start the project. Then all we have to do is serve which starts browser sync, and gets gulp watching for changes, then with gulp serve running we can run the website and debug in VS as normal whever we need to.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
       <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia</title>
       <link>http://darrelltunnell.net/blog/2015/08/16/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia/</link>
       <pubDate>Sun, 16 Aug 2015 00:00:00 +0000</pubDate>
