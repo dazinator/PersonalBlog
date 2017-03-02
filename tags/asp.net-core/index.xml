@@ -6,7 +6,6 @@
     <description>Recent content in Asp.Net Core on Darrell Tunnell</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>© Darrell Tunnell and darrelltunnell.net, 2017. Unauthorized use and/or duplication of this material without express and written permission from this site’s author and/or owner is strictly prohibited. Excerpts and links may be used, provided that full and clear credit is given to Darrell Tunnell and darrelltunnell.net with appropriate and specific direction to the original content.</copyright>
     <atom:link href="http://darrelltunnell.net/tags/asp.net-core/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
@@ -475,10 +474,10 @@ Until then, Bon Appétit!&lt;/p&gt;</description>
     
     <item>
       <title>ASPNET Core TagHelper&#39;s - A Better @addTagHelper type resolver</title>
-      <link>http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/</link>
+      <link>http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelper-s-a-better-addtaghelper-type-resolver/</link>
       <pubDate>Mon, 25 Jul 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/</guid>
+      <guid>http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelper-s-a-better-addtaghelper-type-resolver/</guid>
       <description>&lt;h3 id=&#34;what-s-this-about&#34;&gt;What&amp;rsquo;s this about?&lt;/h3&gt;
 
 &lt;p&gt;This is about TagHelper&amp;rsquo;s in ASP.NET Core, and how to get more flexible &lt;code&gt;@addTagHelper&lt;/code&gt; directives.
@@ -852,10 +851,10 @@ Cannot resolve TagHelper containing assembly &amp;#39;Plugin.Markdown&amp;#39;. 
     
     <item>
       <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</title>
-      <link>http://darrelltunnell.net/blog/2016/01/24/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</link>
+      <link>http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/</link>
       <pubDate>Sun, 24 Jan 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2016/01/24/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</guid>
+      <guid>http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/</guid>
       <description>&lt;p&gt;&lt;strong&gt;This post is part two of a series. For part one see &lt;a href=&#34;http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/&#34;&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;part-2-replacing-bower-with-jspm&#34;&gt;Part 2 - Replacing Bower with JSPM&lt;/h3&gt;
@@ -1212,10 +1211,10 @@ For the purposes of this blog, I am accepting the default of &amp;ldquo;Babel&am
     
     <item>
       <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia</title>
-      <link>http://darrelltunnell.net/blog/2015/08/16/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia/</link>
+      <link>http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/</link>
       <pubDate>Sun, 16 Aug 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2015/08/16/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia/</guid>
+      <guid>http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/</guid>
       <description>&lt;p&gt;&lt;strong&gt;This post is part 1 of a series. Part 2 is &lt;a href=&#34;http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/&#34;&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;asp-a-sea-of-packages-net-5&#34;&gt;ASP (A Sea of Packages).NET 5&lt;/h3&gt;
@@ -1320,10 +1319,10 @@ For the purposes of this blog, I am accepting the default of &amp;ldquo;Babel&am
     
     <item>
       <title>ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</title>
-      <link>http://darrelltunnell.net/blog/2015/01/18/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/</link>
+      <link>http://darrelltunnell.net/blog/2015/01/18/asp-net-5-vnext-projects-why-your-nuget-package-may-fail-to-install/</link>
       <pubDate>Sun, 18 Jan 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2015/01/18/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/</guid>
+      <guid>http://darrelltunnell.net/blog/2015/01/18/asp-net-5-vnext-projects-why-your-nuget-package-may-fail-to-install/</guid>
       <description>&lt;h3 id=&#34;don-t-assume-nuget-packages-that-you-have-authored-will-continue-to-work-with-asp-net-5-vnext-projects&#34;&gt;Don&amp;rsquo;t assume NuGet Packages that you have authored will continue to work with ASP.NET 5 (vNext) projects.&lt;/h3&gt;
 
 &lt;p&gt;Over the past year or so, I have authored &lt;a href=&#34;https://www.nuget.org/packages?q=darrell.tunnell&#34;&gt;a number of NuGet packages&lt;/a&gt; - because, well&amp;hellip; I am just an all around great guy.&lt;/p&gt;

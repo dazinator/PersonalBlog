@@ -6,15 +6,14 @@
     <description>Recent content in Dnnpackager on Darrell Tunnell</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>© Darrell Tunnell and darrelltunnell.net, 2017. Unauthorized use and/or duplication of this material without express and written permission from this site’s author and/or owner is strictly prohibited. Excerpts and links may be used, provided that full and clear credit is given to Darrell Tunnell and darrelltunnell.net with appropriate and specific direction to the original content.</copyright>
     <atom:link href="http://darrelltunnell.net/tags/dnnpackager/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Dnn Extensions - Sources Packages?</title>
-      <link>http://darrelltunnell.net/blog/2016/03/19/dnn-extensions---sources-packages/</link>
+      <link>http://darrelltunnell.net/blog/2016/03/19/dnn-extensions-sources-packages-what-are-they/</link>
       <pubDate>Sat, 19 Mar 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2016/03/19/dnn-extensions---sources-packages/</guid>
+      <guid>http://darrelltunnell.net/blog/2016/03/19/dnn-extensions-sources-packages-what-are-they/</guid>
       <description>&lt;p&gt;I have been doing some work on DnnPackager recently, and I&amp;rsquo;ve come accross the concept of &amp;ldquo;Source&amp;rdquo; packages. I have to admit I am not entirely new to these, but I&amp;rsquo;ve never personally used them for my projects in the past.&lt;/p&gt;
 
 &lt;p&gt;Source packages are basically identical to the ordinary install zip&amp;rsquo;s for your dnn module / extension, i.e you &amp;ldquo;install&amp;rdquo; them into your Dnn site like any other install package, except that they also include &amp;ldquo;source code&amp;rdquo; files within them, like .cs, .vb files etc.
@@ -94,10 +93,10 @@ solution/projectB/projectB.csproj
     
     <item>
       <title>DnnPackager - v2.0.6</title>
-      <link>http://darrelltunnell.net/blog/2016/03/19/dnnpackager---v2.0.6/</link>
+      <link>http://darrelltunnell.net/blog/2016/03/19/dnnpackager-v2-0-6/</link>
       <pubDate>Sat, 19 Mar 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2016/03/19/dnnpackager---v2.0.6/</guid>
+      <guid>http://darrelltunnell.net/blog/2016/03/19/dnnpackager-v2-0-6/</guid>
       <description>&lt;h3 id=&#34;dnnpackager-release-v2-0-6&#34;&gt;DnnPackager Release -v2.0.6&lt;/h3&gt;
 
 &lt;p&gt;A short post to announce that a new minor release of DnnPackager is out.&lt;/p&gt;
@@ -787,10 +786,10 @@ solution/projectB/projectB.csproj
     
     <item>
       <title>DotNetNuke - Streamlining Module Development Workflow</title>
-      <link>http://darrelltunnell.net/blog/2015/06/13/dotnetnuke---streamlining-module-development-workflow/</link>
+      <link>http://darrelltunnell.net/blog/2015/06/13/automating-dotnetnuke-deployments-with-octopus-deploy/</link>
       <pubDate>Sat, 13 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2015/06/13/dotnetnuke---streamlining-module-development-workflow/</guid>
+      <guid>http://darrelltunnell.net/blog/2015/06/13/automating-dotnetnuke-deployments-with-octopus-deploy/</guid>
       <description>&lt;h3 id=&#34;module-debugging-two-approaches&#34;&gt;Module Debugging - Two Approaches&lt;/h3&gt;
 
 &lt;p&gt;When developing DotNetNuke modules people take many different approaches but they boil down to two alternatives in terms of workflow:&lt;/p&gt;
