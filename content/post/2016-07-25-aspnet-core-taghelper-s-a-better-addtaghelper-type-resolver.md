@@ -1,8 +1,8 @@
 ---
-layout: post
 comments: true
 published: true
 title: "ASPNET Core TagHelper's - A Better @addTagHelper type resolver"
+slug: "aspnet-core-taghelper-s-a-better-addtaghelper-type-resolver"
 date: 2016-07-25
 categories:
     - "Development"      

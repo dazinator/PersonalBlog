@@ -6,7 +6,6 @@
     <description>Recent content in Posts on Darrell Tunnell</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>© Darrell Tunnell and darrelltunnell.net, 2017. Unauthorized use and/or duplication of this material without express and written permission from this site’s author and/or owner is strictly prohibited. Excerpts and links may be used, provided that full and clear credit is given to Darrell Tunnell and darrelltunnell.net with appropriate and specific direction to the original content.</copyright>
     <lastBuildDate>Tue, 24 Jan 2017 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://darrelltunnell.net/post/index.xml" rel="self" type="application/rss+xml" />
     
@@ -476,10 +475,10 @@ Until then, Bon Appétit!&lt;/p&gt;</description>
     
     <item>
       <title>ASPNET Core TagHelper&#39;s - A Better @addTagHelper type resolver</title>
-      <link>http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/</link>
+      <link>http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelper-s-a-better-addtaghelper-type-resolver/</link>
       <pubDate>Mon, 25 Jul 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/</guid>
+      <guid>http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelper-s-a-better-addtaghelper-type-resolver/</guid>
       <description>&lt;h3 id=&#34;what-s-this-about&#34;&gt;What&amp;rsquo;s this about?&lt;/h3&gt;
 
 &lt;p&gt;This is about TagHelper&amp;rsquo;s in ASP.NET Core, and how to get more flexible &lt;code&gt;@addTagHelper&lt;/code&gt; directives.
@@ -853,10 +852,10 @@ Cannot resolve TagHelper containing assembly &amp;#39;Plugin.Markdown&amp;#39;. 
     
     <item>
       <title>Dnn Extensions - Sources Packages?</title>
-      <link>http://darrelltunnell.net/blog/2016/03/19/dnn-extensions---sources-packages/</link>
+      <link>http://darrelltunnell.net/blog/2016/03/19/dnn-extensions-sources-packages-what-are-they/</link>
       <pubDate>Sat, 19 Mar 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2016/03/19/dnn-extensions---sources-packages/</guid>
+      <guid>http://darrelltunnell.net/blog/2016/03/19/dnn-extensions-sources-packages-what-are-they/</guid>
       <description>&lt;p&gt;I have been doing some work on DnnPackager recently, and I&amp;rsquo;ve come accross the concept of &amp;ldquo;Source&amp;rdquo; packages. I have to admit I am not entirely new to these, but I&amp;rsquo;ve never personally used them for my projects in the past.&lt;/p&gt;
 
 &lt;p&gt;Source packages are basically identical to the ordinary install zip&amp;rsquo;s for your dnn module / extension, i.e you &amp;ldquo;install&amp;rdquo; them into your Dnn site like any other install package, except that they also include &amp;ldquo;source code&amp;rdquo; files within them, like .cs, .vb files etc.
@@ -936,10 +935,10 @@ solution/projectB/projectB.csproj
     
     <item>
       <title>DnnPackager - v2.0.6</title>
-      <link>http://darrelltunnell.net/blog/2016/03/19/dnnpackager---v2.0.6/</link>
+      <link>http://darrelltunnell.net/blog/2016/03/19/dnnpackager-v2-0-6/</link>
       <pubDate>Sat, 19 Mar 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2016/03/19/dnnpackager---v2.0.6/</guid>
+      <guid>http://darrelltunnell.net/blog/2016/03/19/dnnpackager-v2-0-6/</guid>
       <description>&lt;h3 id=&#34;dnnpackager-release-v2-0-6&#34;&gt;DnnPackager Release -v2.0.6&lt;/h3&gt;
 
 &lt;p&gt;A short post to announce that a new minor release of DnnPackager is out.&lt;/p&gt;
@@ -955,10 +954,10 @@ solution/projectB/projectB.csproj
     
     <item>
       <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</title>
-      <link>http://darrelltunnell.net/blog/2016/01/24/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</link>
+      <link>http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/</link>
       <pubDate>Sun, 24 Jan 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2016/01/24/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/</guid>
+      <guid>http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/</guid>
       <description>&lt;p&gt;&lt;strong&gt;This post is part two of a series. For part one see &lt;a href=&#34;http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/&#34;&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;part-2-replacing-bower-with-jspm&#34;&gt;Part 2 - Replacing Bower with JSPM&lt;/h3&gt;
@@ -1988,7 +1987,7 @@ For the purposes of this blog, I am accepting the default of &amp;ldquo;Babel&am
     </item>
     
     <item>
-      <title>Automating Android Unit Test Apps (Xamarin) Like A Pro</title>
+      <title>automating-android-unit-test-apps-xamarin-like-a-pro</title>
       <link>http://darrelltunnell.net/blog/2015/11/04/automating-android-unit-test-apps-xamarin-like-a-pro/</link>
       <pubDate>Wed, 04 Nov 2015 00:00:00 +0000</pubDate>
       
@@ -4127,10 +4126,10 @@ Also you can read more information about TestyDroid &amp;lt;span style=&amp;lt;s
     
     <item>
       <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia</title>
-      <link>http://darrelltunnell.net/blog/2015/08/16/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia/</link>
+      <link>http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/</link>
       <pubDate>Sun, 16 Aug 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2015/08/16/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia/</guid>
+      <guid>http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/</guid>
       <description>&lt;p&gt;&lt;strong&gt;This post is part 1 of a series. Part 2 is &lt;a href=&#34;http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/&#34;&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;asp-a-sea-of-packages-net-5&#34;&gt;ASP (A Sea of Packages).NET 5&lt;/h3&gt;
@@ -4235,10 +4234,10 @@ Also you can read more information about TestyDroid &amp;lt;span style=&amp;lt;s
     
     <item>
       <title>DotNetNuke - Streamlining Module Development Workflow</title>
-      <link>http://darrelltunnell.net/blog/2015/06/13/dotnetnuke---streamlining-module-development-workflow/</link>
+      <link>http://darrelltunnell.net/blog/2015/06/13/automating-dotnetnuke-deployments-with-octopus-deploy/</link>
       <pubDate>Sat, 13 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2015/06/13/dotnetnuke---streamlining-module-development-workflow/</guid>
+      <guid>http://darrelltunnell.net/blog/2015/06/13/automating-dotnetnuke-deployments-with-octopus-deploy/</guid>
       <description>&lt;h3 id=&#34;module-debugging-two-approaches&#34;&gt;Module Debugging - Two Approaches&lt;/h3&gt;
 
 &lt;p&gt;When developing DotNetNuke modules people take many different approaches but they boil down to two alternatives in terms of workflow:&lt;/p&gt;
@@ -4380,10 +4379,10 @@ You should package this tool up into a NuGet package and, you guessed it, stick 
     
     <item>
       <title>How far does the XRM SDK&#39;s ExecuteMultipleRequest get you?</title>
-      <link>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdks-executemultiplerequest-get-you/</link>
+      <link>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you/</link>
       <pubDate>Thu, 26 Feb 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdks-executemultiplerequest-get-you/</guid>
+      <guid>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you/</guid>
       <description>&lt;h3 id=&#34;executemultiplerequest-let-s-take-it-to-the-max&#34;&gt;ExecuteMultipleRequest - Let&amp;rsquo;s take it to the max&lt;/h3&gt;
 
 &lt;p&gt;In this post, I will explore what kinds of things can be achieved using the SDK&amp;rsquo;s ExecuteMultipleRequest, by starting of with a simple SQL command, and implementing a semantically equivalent ExecuteMultipleRequest, and then slowly introducing some additional complexity - so that, we can see some areas where the SDK starts to fall short!&lt;/p&gt;
@@ -4619,10 +4618,10 @@ Well in that scenario, because the first batch actually contains 2 operations, t
     
     <item>
       <title>ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</title>
-      <link>http://darrelltunnell.net/blog/2015/01/18/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/</link>
+      <link>http://darrelltunnell.net/blog/2015/01/18/asp-net-5-vnext-projects-why-your-nuget-package-may-fail-to-install/</link>
       <pubDate>Sun, 18 Jan 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2015/01/18/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/</guid>
+      <guid>http://darrelltunnell.net/blog/2015/01/18/asp-net-5-vnext-projects-why-your-nuget-package-may-fail-to-install/</guid>
       <description>&lt;h3 id=&#34;don-t-assume-nuget-packages-that-you-have-authored-will-continue-to-work-with-asp-net-5-vnext-projects&#34;&gt;Don&amp;rsquo;t assume NuGet Packages that you have authored will continue to work with ASP.NET 5 (vNext) projects.&lt;/h3&gt;
 
 &lt;p&gt;Over the past year or so, I have authored &lt;a href=&#34;https://www.nuget.org/packages?q=darrell.tunnell&#34;&gt;a number of NuGet packages&lt;/a&gt; - because, well&amp;hellip; I am just an all around great guy.&lt;/p&gt;
@@ -4655,10 +4654,10 @@ Well in that scenario, because the first batch actually contains 2 operations, t
     
     <item>
       <title>CRM / Plugin Generated Values - and Reducing Roundtrips!</title>
-      <link>http://darrelltunnell.net/blog/2014/12/22/crm-/-plugin-generated-values---and-reducing-roundtrips/</link>
-      <pubDate>Mon, 22 Dec 2014 00:00:00 +0000</pubDate>
+      <link>http://darrelltunnell.net/blog/2014/12/22/crm-plugin-generated-values-and-reducing-roundtrips/</link>
+      <pubDate>Mon, 22 Dec 2014 17:50:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2014/12/22/crm-/-plugin-generated-values---and-reducing-roundtrips/</guid>
+      <guid>http://darrelltunnell.net/blog/2014/12/22/crm-plugin-generated-values-and-reducing-roundtrips/</guid>
       <description>&lt;h3 id=&#34;setting-the-scene&#34;&gt;Setting the Scene&lt;/h3&gt;
 
 &lt;p&gt;Imagine we have an application that uses the CRM SDK. It needs to:&lt;/p&gt;

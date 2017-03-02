@@ -1,7 +1,7 @@
 ---
-layout: post
 published: true
 title: "How far does the XRM SDK's ExecuteMultipleRequest get you?"
+slug: "how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you"
 date: 2015-02-26
 comments: true
 categories: 

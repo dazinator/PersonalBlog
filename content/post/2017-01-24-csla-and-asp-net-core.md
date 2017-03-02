@@ -1,8 +1,8 @@
 ---
-layout: post
 comments: true
 published: true
 title: "CSLA and ASP.NET Core"
+slug: "csla-and-asp.net-core"
 date: 2017-01-24
 categories:
     - "Development"      

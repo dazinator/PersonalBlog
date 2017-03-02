@@ -12,7 +12,7 @@
     <meta property="og:url" content="http://darrelltunnell.net/tags/asp/index.net-core/">
     <meta property="og:site_name" content="Darrell Tunnell">
     
-    <meta name="generator" content="Hugo 0.18.1" />
+    <meta name="generator" content="Hugo 0.19" />
     <title>Asp.Net Core &middot; Darrell Tunnell</title>
     
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -101,13 +101,13 @@
 	
 	<li><a href="http://darrelltunnell.net/blog/2017/01/24/csla-and-asp.net-core/">CSLA and ASP.NET Core</a></li>
 	
-	<li><a href="http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelpers---a-better-addtaghelper-type-resolver/">ASPNET Core TagHelper&#39;s - A Better @addTagHelper type resolver</a></li>
+	<li><a href="http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelper-s-a-better-addtaghelper-type-resolver/">ASPNET Core TagHelper&#39;s - A Better @addTagHelper type resolver</a></li>
 	
-	<li><a href="http://darrelltunnell.net/blog/2016/01/24/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia-part2/">ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</a></li>
+	<li><a href="http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/">ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</a></li>
 	
-	<li><a href="http://darrelltunnell.net/blog/2015/08/16/asp.net-5-projects---nuget-npm-gulp-bower-jspm-aurelia/">ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia</a></li>
+	<li><a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/">ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia</a></li>
 	
-	<li><a href="http://darrelltunnell.net/blog/2015/01/18/asp.net-5-vnext-projects---your-nuget-package-may-fail-to-install-correctly/">ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</a></li>
+	<li><a href="http://darrelltunnell.net/blog/2015/01/18/asp-net-5-vnext-projects-why-your-nuget-package-may-fail-to-install/">ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</a></li>
 	
 </ul>
 </article>
@@ -121,6 +121,9 @@
   
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
   
   
   <script src="http://darrelltunnell.net//js/App.js"></script>

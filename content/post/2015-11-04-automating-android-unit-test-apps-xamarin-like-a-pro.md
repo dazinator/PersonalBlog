@@ -1,5 +1,4 @@
 ---
-layout: post
 comments: true
 categories: 
     - "Development"
@@ -9,7 +8,8 @@ tags:
     - "TeamCity"
     - "Automate"
 published: true
-title: "Automating Android Unit Test Apps (Xamarin) Like A Pro"
+title: "automating-android-unit-test-apps-xamarin-like-a-pro"
+slug: "automating-android-unit-test-apps-xamarin-like-a-pro"
 date: "2015-11-04"
 ---
 

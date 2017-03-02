@@ -6,15 +6,14 @@
     <description>Recent content in Dynamics Crm on Darrell Tunnell</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>© Darrell Tunnell and darrelltunnell.net, 2017. Unauthorized use and/or duplication of this material without express and written permission from this site’s author and/or owner is strictly prohibited. Excerpts and links may be used, provided that full and clear credit is given to Darrell Tunnell and darrelltunnell.net with appropriate and specific direction to the original content.</copyright>
     <atom:link href="http://darrelltunnell.net/tags/dynamics-crm/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>How far does the XRM SDK&#39;s ExecuteMultipleRequest get you?</title>
-      <link>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdks-executemultiplerequest-get-you/</link>
+      <link>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you/</link>
       <pubDate>Thu, 26 Feb 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdks-executemultiplerequest-get-you/</guid>
+      <guid>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you/</guid>
       <description>&lt;h3 id=&#34;executemultiplerequest-let-s-take-it-to-the-max&#34;&gt;ExecuteMultipleRequest - Let&amp;rsquo;s take it to the max&lt;/h3&gt;
 
 &lt;p&gt;In this post, I will explore what kinds of things can be achieved using the SDK&amp;rsquo;s ExecuteMultipleRequest, by starting of with a simple SQL command, and implementing a semantically equivalent ExecuteMultipleRequest, and then slowly introducing some additional complexity - so that, we can see some areas where the SDK starts to fall short!&lt;/p&gt;
@@ -250,10 +249,10 @@ Well in that scenario, because the first batch actually contains 2 operations, t
     
     <item>
       <title>CRM / Plugin Generated Values - and Reducing Roundtrips!</title>
-      <link>http://darrelltunnell.net/blog/2014/12/22/crm-/-plugin-generated-values---and-reducing-roundtrips/</link>
-      <pubDate>Mon, 22 Dec 2014 00:00:00 +0000</pubDate>
+      <link>http://darrelltunnell.net/blog/2014/12/22/crm-plugin-generated-values-and-reducing-roundtrips/</link>
+      <pubDate>Mon, 22 Dec 2014 17:50:00 +0000</pubDate>
       
-      <guid>http://darrelltunnell.net/blog/2014/12/22/crm-/-plugin-generated-values---and-reducing-roundtrips/</guid>
+      <guid>http://darrelltunnell.net/blog/2014/12/22/crm-plugin-generated-values-and-reducing-roundtrips/</guid>
       <description>&lt;h3 id=&#34;setting-the-scene&#34;&gt;Setting the Scene&lt;/h3&gt;
 
 &lt;p&gt;Imagine we have an application that uses the CRM SDK. It needs to:&lt;/p&gt;

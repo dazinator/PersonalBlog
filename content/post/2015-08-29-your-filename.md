@@ -1,5 +1,4 @@
 ---
-layout: post
 comments: true
 categories: ""
 published: false

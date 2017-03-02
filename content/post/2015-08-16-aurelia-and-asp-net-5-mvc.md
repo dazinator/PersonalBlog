@@ -1,8 +1,8 @@
 ---
-layout: post
 comments: true
 published: true
 title: "ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia"
+slug: "aurelia-and-asp-net-5-mvc"
 date: 2015-08-16
 categories: 
     - "Development"

@@ -1,14 +1,15 @@
 ---
-layout: post
 published: true
 title: "CRM / Plugin Generated Values - and Reducing Roundtrips!"
-date: 2014-12-22
+slug: "crm-plugin-generated-values-and-reducing-roundtrips"
 comments: true
 highlight: true
+date: 2014-12-22T17:50:00Z
+sharing: true
 categories: 
     - "Development"
 tags: 
-    - "Dynamics CRM"
+    - "Dynamics CRM"    
 ---
 
 ### Setting the Scene

@@ -1,5 +1,6 @@
 +++
 title = "Unit Testing Dynamics CRM Plugins"
+slug = "unit-testing-dynamics-crm-plugins"
 description = ""
 tags = [
     "Dynamics CRM", "Unit Testing"   

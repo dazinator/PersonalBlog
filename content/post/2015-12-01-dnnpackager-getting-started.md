@@ -1,5 +1,4 @@
 ---
-layout: post
 comments: true
 categories: 
     - "Development"
@@ -8,6 +7,7 @@ tags:
     - "DnnPackager"
 published: true
 title: "DnnPackager Getting Started"
+slug: "dnnpackager-getting-started"
 date: 2015-12-01
 ---
 

@@ -1,5 +1,4 @@
 ---
-layout: post
 comments: true
 categories: 
     - "Development"
@@ -9,6 +8,7 @@ tags:
     - "JSPM"
 published: true
 title: "ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2"
+slug: "aurelia-and-asp-net-5-mvc-part2"
 date: 2016-01-24
 ---
 

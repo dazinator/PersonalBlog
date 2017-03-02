@@ -1,5 +1,4 @@
 ---
-layout: post
 comments: true
 categories: 
     - "Development"
@@ -9,6 +8,7 @@ tags:
     - "Dnn Project System"
 published: true
 title: "Imagining a DotNetNuke Project Type for Visual Studio"
+slug: "imagining-a-dotnetnuke-project-type-for-visual-studio"
 date: 2016-01-17
 ---
 

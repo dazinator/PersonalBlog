@@ -1,5 +1,6 @@
 +++
 title = "A Proclamation"
+slug = "a-proclamation"
 description = ""
 tags = [
     "General"   

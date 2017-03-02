@@ -1,5 +1,4 @@
 ---
-layout: post
 comments: true
 categories: 
     - "Development"
@@ -9,6 +8,7 @@ tags:
 published: true
 title: "Dnn Extensions - Sources Packages?"
 date: 2016-03-19
+slug: "dnn-extensions-sources-packages-what-are-they"
 ---
 
 

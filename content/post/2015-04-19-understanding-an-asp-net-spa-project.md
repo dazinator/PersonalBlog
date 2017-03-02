@@ -1,5 +1,4 @@
 ---
-layout: post
 published: false
 title: Understanding an ASP.NET SPA Project
 date: 2015-04-19

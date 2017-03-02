@@ -1,5 +1,4 @@
 ---
-layout: post
 comments: true
 categories: 
     - "Development"
@@ -8,6 +7,7 @@ tags:
     - "DnnPackager"
 published: true
 title: "DnnPackager - v2.0.6"
+slug: "dnnpackager-v2-0-6"
 date: 2016-03-19
 ---
 
