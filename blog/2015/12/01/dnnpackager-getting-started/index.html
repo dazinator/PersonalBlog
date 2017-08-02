@@ -17,7 +17,7 @@
     
     <meta property="og:tags" content="DnnPackager">
     
-    <meta name="generator" content="Hugo 0.19" />
+    <meta name="generator" content="Hugo 0.25.1" />
     <title>DnnPackager Getting Started &middot; Darrell Tunnell</title>
     
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">
     
     <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
+    
     
     <style>
      
@@ -81,9 +82,8 @@
 			<img id="profile-pic" src="http://darrelltunnell.net//img/profile.jpg" alt="My Picture" class="img-circle center-block">
 		
 		<div id="social" class="text-center">
-			<a href="https://twitter.com/dazinate"><i class="fa fa-twitter fa-2x"></i></a>
-			<a href="https://uk.linkedin.com/in/darrell-tunnell-33845331"><i class="fa fa-linkedin fa-2x"></i></a>
-			<a href="https://github.com/dazinator"><i class="fa fa-github fa-2x"></i></a>
+			
+
 			<a href="mailto:darrell.tunnell@googlemail.com"><i class="fa fa-envelope-o fa-2x"></i></a>
 		</div>
 		<div id="links" class="text-center">
@@ -94,6 +94,7 @@
 		</div>
 	</div>
 </div>
+
 		<div id="content" class="col-xs-12 col-sm-8 col-md-9">
 			<div class="row">
 				<div id="post" class="col-sm-offset-1 col-sm-10 col-md-10 col-lg-8">
@@ -122,7 +123,7 @@
 
 <p>Open Visual Studio, and Create a New &ldquo;ASP.NET Empty Web Application&rdquo; project. Make sure you select &ldquo;.NET 4&rdquo; from the drop down at the top.</p>
 
-<p><img src="/img/NewAspNetProject.PNG" alt="New Project" /></p>
+<p><img src="http://darrelltunnell.net/img/NewAspNetProject.PNG" alt="New Project" /></p>
 
 <p>Note: Create your project wherever you like - where you put your source code - that&rsquo;s your business!</p>
 
@@ -132,7 +133,7 @@
 
 <p>Select the project in Solution Explorer window, then in the properties window, change &ldquo;Always Start When Debugging&rdquo; to false.</p>
 
-<p><img src="/img/alwaysstartwhendebuggingfalse.PNG" alt="alwaysstartwhendebuggingfalse.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/alwaysstartwhendebuggingfalse.PNG" alt="alwaysstartwhendebuggingfalse.PNG" /></p>
 
 <p>This will help later as it will prevent Visual Studio from needlessly trying to host your module project as its own website whenever you try and debug your module - which will be running in your local Dnn website instead.</p>
 
@@ -144,11 +145,11 @@
 </pre></div>
 </td></tr></table>
 
-<p><img src="/img/NuGetConsoleAddDnnPackagerNuGet.PNG" alt="NuGetConsoleAddDnnPackagerNuGet.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/NuGetConsoleAddDnnPackagerNuGet.PNG" alt="NuGetConsoleAddDnnPackagerNuGet.PNG" /></p>
 
 <p>This will add some new items to your project, and to your solution. I will cover what these are for later.</p>
 
-<p><img src="/img/ProjectAfterAddingDnnPackager.PNG" alt="ProjectAfterAddingDnnPackager.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/ProjectAfterAddingDnnPackager.PNG" alt="ProjectAfterAddingDnnPackager.PNG" /></p>
 
 <h3 id="dnn-sdk-assemblies">Dnn Sdk Assemblies</h3>
 
@@ -164,7 +165,7 @@
 
 <p>This should add a reference to the DotNetNuke assembly to your project&rsquo;s references:</p>
 
-<p><img src="/img/ReferencesAfterAddingDnnCore.PNG" alt="ReferencesAfterAddingDnnCore.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/ReferencesAfterAddingDnnCore.PNG" alt="ReferencesAfterAddingDnnCore.PNG" /></p>
 
 <h3 id="let-s-develop-a-module">Let&rsquo;s Develop a Module!</h3>
 
@@ -172,7 +173,7 @@
 
 <p>First add a new User Control to the project. This is going to be the default UI for our super cool DNN module.</p>
 
-<p><img src="/img/AddUserControl.PNG" alt="AddUserControl.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/AddUserControl.PNG" alt="AddUserControl.PNG" /></p>
 
 <p>We then need to change our new User Control to make it inherit from <code>PortalModuleBase</code> rather than <code>System.Web.UI.UserControl</code>.</p>
 
@@ -562,13 +563,13 @@
 
 <p>For example, on my IIS, the name of my Dnn website is &ldquo;DotNetNuke&rdquo;</p>
 
-<p><img src="/img/IISDnnWebsite.PNG" alt="IISDnnWebsite.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/IISDnnWebsite.PNG" alt="IISDnnWebsite.PNG" /></p>
 
 <p>So I type into the Package Manager Console <code>Install-Module DotNetNuke</code> and hit enter.</p>
 
 <p>After that completes, you can Login to your DotNetNuke website as host, and go to the Host&ndash;&gt;Extensions page, and you should see that your module is now listed as an installed extension! Pretty cool!</p>
 
-<p><img src="/img/hostextensionsmodules.PNG" alt="hostextensionsmodules.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/hostextensionsmodules.PNG" alt="hostextensionsmodules.PNG" /></p>
 
 <h3 id="setting-up-a-page-to-host-it">Setting up a Page to Host it</h3>
 
@@ -589,7 +590,7 @@
 
 <figure class="img-responsive">
     
-        <img src="/img/AddedModule.PNG" />
+        <img src="http://darrelltunnell.net/img/AddedModule.PNG" />
     
     
     <figcaption>
@@ -612,7 +613,7 @@
 
 <p>Add some code in your code behind, and set a breakpoint on it:</p>
 
-<p><img src="/img/codebehindbreakpoint.PNG" alt="codebehindbreakpoint.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/codebehindbreakpoint.PNG" alt="codebehindbreakpoint.PNG" /></p>
 
 <p>Now deploy this very simply by placing your cursor in the Package Manager Console window, and hitting &ldquo;up&rdquo; arrow on your keyboard. This will bring up the last command:</p>
 
@@ -624,7 +625,7 @@
 
 <p>Once that completes, refresh the page displaying your module:</p>
 
-<p><img src="/img/redeployedmodulewithchanges.PNG" alt="redeployedmodulewithchanges.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/redeployedmodulewithchanges.PNG" alt="redeployedmodulewithchanges.PNG" /></p>
 
 <p>Simples!</p>
 
@@ -642,7 +643,7 @@
 
 <p>So.. refresh your page.. and BAM! Breakpoint is hit!</p>
 
-<p><img src="/img/breakpointhit.PNG" alt="breakpointhit.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/breakpointhit.PNG" alt="breakpointhit.PNG" /></p>
 
 <p><strong>You need to be running Visual Studio as an Administrator before you can attach to the w3p process.</strong></p>
 
@@ -659,7 +660,7 @@
 <li>Click &ldquo;attach&rdquo;.</li>
 </ol>
 
-<p><img src="/img/attachtoprocess.PNG" alt="attachtoprocess.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/attachtoprocess.PNG" alt="attachtoprocess.PNG" /></p>
 
 <h3 id="what-about-if-i-just-want-my-zip-file">What about if I just want my Zip file</h3>
 
@@ -681,16 +682,21 @@
 
 
   <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'darrelltunnellsblog';
-    var disqus_identifier = 'http:\/\/darrelltunnell.net\/blog\/2015\/12\/01\/dnnpackager-getting-started\/';
-    var disqus_title = 'DnnPackager Getting Started';
-    var disqus_url = 'http:\/\/darrelltunnell.net\/blog\/2015\/12\/01\/dnnpackager-getting-started\/';
-
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "darrelltunnellsblog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
