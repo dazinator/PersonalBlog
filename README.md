@@ -5,7 +5,13 @@ My Hugo Blog: http://darrelltunnell.net
 
 
 ---
-
+### Setting up Windows environment
+1. Install Python 2.7
+2. Install setup tools:
+    `python -m pip install -U pip setuptools`
+3. Install pygments by doing this on command line:
+    `easy_install Pygments`
+    
 ### Snippet
 
 Quick start
