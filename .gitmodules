@@ -1,19 +1,6 @@
-[submodule "themes/Shapez-Theme"]
-        path = themes/Shapez-Theme
-        url = https://github.com/djuelg/Shapez-Theme.git
-[submodule "themes/cocoa-eh-hugo-theme"]
-        path = themes/cocoa-eh-hugo-theme
-        url = https://github.com/fuegowolf/cocoa-eh-hugo-theme.git
+[submodule "themes/minimal"]
+	path = themes/minimal
+	url = https://github.com/dazinator/minimal.git
 [submodule "themes/hugo-geo"]
-        path = themes/hugo-geo
-        url = https://github.com/alexurquhart/hugo-geo.git
-[submodule "themes/hugo-theme-bootstrap4-blog"]
-        path = themes/hugo-theme-bootstrap4-blog
-        url = https://github.com/alanorth/hugo-theme-bootstrap4-blog.git
-
-
-
-
-
-
-
+	path = themes/hugo-geo
+	url = https://github.com/dazinator/hugo-geo.git

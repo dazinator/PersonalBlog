@@ -19,7 +19,7 @@
     
     <meta property="og:tags" content="Dnn Project System">
     
-    <meta name="generator" content="Hugo 0.19" />
+    <meta name="generator" content="Hugo 0.25.1" />
     <title>Imagining a DotNetNuke Project Type for Visual Studio &middot; Darrell Tunnell</title>
     
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">
     
     <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
+    
     
     <style>
      
@@ -83,9 +84,8 @@
 			<img id="profile-pic" src="http://darrelltunnell.net//img/profile.jpg" alt="My Picture" class="img-circle center-block">
 		
 		<div id="social" class="text-center">
-			<a href="https://twitter.com/dazinate"><i class="fa fa-twitter fa-2x"></i></a>
-			<a href="https://uk.linkedin.com/in/darrell-tunnell-33845331"><i class="fa fa-linkedin fa-2x"></i></a>
-			<a href="https://github.com/dazinator"><i class="fa fa-github fa-2x"></i></a>
+			
+
 			<a href="mailto:darrell.tunnell@googlemail.com"><i class="fa fa-envelope-o fa-2x"></i></a>
 		</div>
 		<div id="links" class="text-center">
@@ -96,6 +96,7 @@
 		</div>
 	</div>
 </div>
+
 		<div id="content" class="col-xs-12 col-sm-8 col-md-9">
 			<div class="row">
 				<div id="post" class="col-sm-offset-1 col-sm-10 col-md-10 col-lg-8">
@@ -136,27 +137,27 @@
 
 <p>You can now create a new &ldquo;DotNetNuke&rdquo; project using Visual Studio.</p>
 
-<p><img src="/img/new dnn project.PNG" alt="new dnn project.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/new dnn project.PNG" alt="new dnn project.PNG" /></p>
 
 <p>This creates your new project. It also imports the &ldquo;DnnPackager&rdquo; NuGet package automatically - <a href="http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/">something I have blogged about seperately.</a></p>
 
-<p><img src="/img/adding DnnPackager.PNG" alt="adding DnnPackager.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/adding DnnPackager.PNG" alt="adding DnnPackager.PNG" /></p>
 
 <p>Your new project, has it&rsquo;s own &ldquo;.dnnproj&rdquo; file. This is a new project type and that&rsquo;s why it has its own file extension &ldquo;.dnnproj&rdquo;.</p>
 
-<p><img src="/img/SolutionExplorer1.PNG" alt="SolutionExplorer1.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/SolutionExplorer1.PNG" alt="SolutionExplorer1.PNG" /></p>
 
 <h4 id="adding-content">Adding Content</h4>
 
 <p>You can now add items to your project. If you &ldquo;Add new item&rdquo; - you will be able select from a number of standard DotNetNuke item templates. For example a &ldquo;Module View&rdquo;.</p>
 
-<p><img src="/img/AddModuleView.png" alt="AddModuleView.png" /></p>
+<p><img src="http://darrelltunnell.net/img/AddModuleView.png" alt="AddModuleView.png" /></p>
 
 <p>Initially, I will just show Dnn 7 compatible item templates, but eventually I&rsquo;d also like to add a seperate group for Dnn 8 item templates, which would include item templates for the new MVC and SPA stuff.</p>
 
 <p>When you add the new item, not only do the source code files get added to your project, but any required dependencies also get brought in by the magical power of NuGet:</p>
 
-<p><img src="/img/AddingDotNetNukeCoreNuget.PNG" alt="AddingDotNetNukeCoreNuget.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/AddingDotNetNukeCoreNuget.PNG" alt="AddingDotNetNukeCoreNuget.PNG" /></p>
 
 <p>So for example, adding a Module View for Dnn 7, will automatically bring in the DotNetNuke.Core NuGet package for Dnn7 as depicted above.</p>
 
@@ -170,7 +171,7 @@
 
 <p>In VS, I am going to extend the debugging toolbar (where the &ldquo;play&rdquo; button is)</p>
 
-<p><img src="/img/debug toolbar.PNG" alt="debug toolbar.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/debug toolbar.PNG" alt="debug toolbar.PNG" /></p>
 
 <p>You can see in the screenshot there is an empty dropdown at present, but this will list your DotNetNuke websites that you have on your local IIS. The first one in that list will be selected by default.</p>
 
@@ -205,16 +206,21 @@
 
 
   <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'darrelltunnellsblog';
-    var disqus_identifier = 'http:\/\/darrelltunnell.net\/blog\/2016\/01\/17\/imagining-a-dotnetnuke-project-type-for-visual-studio\/';
-    var disqus_title = 'Imagining a DotNetNuke Project Type for Visual Studio';
-    var disqus_url = 'http:\/\/darrelltunnell.net\/blog\/2016\/01\/17\/imagining-a-dotnetnuke-project-type-for-visual-studio\/';
-
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "darrelltunnellsblog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>

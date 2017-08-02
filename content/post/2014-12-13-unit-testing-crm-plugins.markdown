@@ -1,20 +1,20 @@
-+++
-title = "Unit Testing Dynamics CRM Plugins"
-slug = "unit-testing-dynamics-crm-plugins"
-description = ""
-tags = [
+---
+title: "Unit Testing Dynamics CRM Plugins"
+slug: "unit-testing-dynamics-crm-plugins"
+description: ""
+tags: [
     "Dynamics CRM", "Unit Testing"   
 ]
-date = 2014-12-14T17:50:00Z
-categories = [
+date: 2014-12-14T17:50:00Z
+categories: [
     "Development"   
 ]
-menu = "main"
-published = true
-comments = true
-thumbnail = "img/profile.png"
-highlight = true
-+++
+menu: "main"
+published: true
+comments: true
+thumbnail: "img/profile.png"
+highlight: true
+---
 
 ### There is no ~~Spoon~~ CRM
 
@@ -34,6 +34,17 @@ Firstly, let's look at a plugin that we will call the `ReclaimCreditPlugin`. Her
 ### Developer Jon Doe
 
 Jon Doe immediately gets to work on writing the plugin for those requirements. He produces the following plugin:
+
+{{< highlight html >}}
+<section id="main">
+  <div>
+    <h1 id="title">{{ .Title }}</h1>
+    {{ range .Data.Pages }}
+      {{ .Render "summary"}}
+    {{ end }}
+  </div>
+</section>
+{{< /highlight >}}
 
 {{< highlight csharp "linenos=true,style=default" >}}
 

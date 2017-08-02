@@ -19,7 +19,7 @@
     
     <meta property="og:tags" content="JSPM">
     
-    <meta name="generator" content="Hugo 0.19" />
+    <meta name="generator" content="Hugo 0.25.1" />
     <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2 &middot; Darrell Tunnell</title>
     
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">
     
     <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
+    
     
     <style>
      
@@ -83,9 +84,8 @@
 			<img id="profile-pic" src="http://darrelltunnell.net//img/profile.jpg" alt="My Picture" class="img-circle center-block">
 		
 		<div id="social" class="text-center">
-			<a href="https://twitter.com/dazinate"><i class="fa fa-twitter fa-2x"></i></a>
-			<a href="https://uk.linkedin.com/in/darrell-tunnell-33845331"><i class="fa fa-linkedin fa-2x"></i></a>
-			<a href="https://github.com/dazinator"><i class="fa fa-github fa-2x"></i></a>
+			
+
 			<a href="mailto:darrell.tunnell@googlemail.com"><i class="fa fa-envelope-o fa-2x"></i></a>
 		</div>
 		<div id="links" class="text-center">
@@ -96,6 +96,7 @@
 		</div>
 	</div>
 </div>
+
 		<div id="content" class="col-xs-12 col-sm-8 col-md-9">
 			<div class="row">
 				<div id="post" class="col-sm-offset-1 col-sm-10 col-md-10 col-lg-8">
@@ -119,23 +120,23 @@
 
 <p>You will notice that your ASP.NET 5 application has a number of bower packages included by default:</p>
 
-<p><img src="/img/bowerpackages.PNG" alt="bowerpackages.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/bowerpackages.PNG" alt="bowerpackages.PNG" /></p>
 
 <p>First, let&rsquo;s uninstall Bower. In your project is a <code>Bower.json</code> file. Delete it! (If you can&rsquo;t see it in Solution Explorer, you might need to &lsquo;show all files&rsquo;</p>
 
-<p><img src="/img/bowerjson.PNG" alt="bowerjson.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/bowerjson.PNG" alt="bowerjson.PNG" /></p>
 
 <p>When you install <code>Bower</code> packages, they are installed under the &ldquo;lib&rdquo; folder within your <code>wwwroot</code> directory. So, let&rsquo;s now delete this lib folder which will delete all of these packages.</p>
 
-<p><img src="/img/wwwrootlibfolder.PNG" alt="wwwrootlibfolder.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/wwwrootlibfolder.PNG" alt="wwwrootlibfolder.PNG" /></p>
 
 <p>After those changes, your project should look something like this:</p>
 
-<p><img src="/img/projectremovedbower.PNG" alt="projectremovedbower.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/projectremovedbower.PNG" alt="projectremovedbower.PNG" /></p>
 
 <p>With Bower gone and those javascript / css packages deleted, what happens if we run the application now? Let&rsquo;s run it and find out..</p>
 
-<p><img src="/img/runappbowerremoved.PNG" alt="runappbowerremoved.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/runappbowerremoved.PNG" alt="runappbowerremoved.PNG" /></p>
 
 <p>As you can see, there are now errors displayed in the browser, and our site looks awful. This makes sense - our application is referencing javascript and css files that used to live in the lib folder, and now they are no longer found because we deleted them.</p>
 
@@ -150,7 +151,7 @@
 <li>Add <code>JSPM</code> and whatever the latest version is:</li>
 </ol>
 
-<p><img src="/img/addjspmnodejspackage.PNG" alt="addjspmnodejspackage.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/addjspmnodejspackage.PNG" alt="addjspmnodejspackage.PNG" /></p>
 
 <ol>
 <li>Save the file.</li>
@@ -158,7 +159,7 @@
 
 <p>The <code>NPM</code> package for <code>JSPM</code> should now be downloaded and installed into your project. You will see that the package is installed into the &ldquo;node_modules&rdquo; folder within your project.</p>
 
-<p><img src="/img/nodemodulesfolderjspm.PNG" alt="nodemodulesfolderjspm.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/nodemodulesfolderjspm.PNG" alt="nodemodulesfolderjspm.PNG" /></p>
 
 <h3 id="configure-jspm">Configure JSPM</h3>
 
@@ -170,13 +171,13 @@ The way to do this, is a little bit fiddely, as you have to drop to the command 
 <li>Type <code>jspm init</code> and hit enter.</li>
 </ol>
 
-<p><img src="/img/commandlinejspminit.PNG" alt="commandlinejspminit.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/commandlinejspminit.PNG" alt="commandlinejspminit.PNG" /></p>
 
 <p>You will now be asked a series of questions. At the end of answering these questions, the relevent <code>config</code> will be produced within the project.</p>
 
 <p>Here are the answers. Some of them you can just hit enter without typing anything, and the default value will be used.</p>
 
-<p><img src="/img/jspminit.PNG" alt="jspminit.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/jspminit.PNG" alt="jspminit.PNG" /></p>
 
 <p>I&rsquo;ll quickly run through each option briefly.. But you should defer to the <code>JSPM</code> documentation site for further clarifications.</p>
 
@@ -223,7 +224,7 @@ For the purposes of this blog, I am accepting the default of &ldquo;Babel&rdquo;
 
 <p>Once that is done, those packages will now be installed under your <code>wwwroot\jspm_packages</code> folder:</p>
 
-<p><img src="/img/jspmpackages.PNG" alt="jspmpackages.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/jspmpackages.PNG" alt="jspmpackages.PNG" /></p>
 
 <p>The next step is to fix up our MVC application so that it loads our javascript and css using the <code>module loader</code>.</p>
 
@@ -285,7 +286,7 @@ For the purposes of this blog, I am accepting the default of &ldquo;Babel&rdquo;
 
 <p>You should now be able to see that we no longer get any errors about failing to load  javascript files <code>jquery.js</code> and <code>bootstrap.js</code>. In fact, <strong>those javascript files are not being loaded anymore.</strong></p>
 
-<p><img src="/img/jspmmissingcss.PNG" alt="jspmmissingcss.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/jspmmissingcss.PNG" alt="jspmmissingcss.PNG" /></p>
 
 <h4 id="why-aren-t-we-loading-jquery-and-bootstrap-anymore">Why aren&rsquo;t we loading JQuery and Bootstrap anymore?</h4>
 
@@ -321,7 +322,7 @@ For the purposes of this blog, I am accepting the default of &ldquo;Babel&rdquo;
 
 <p>You should now see that <code>JQuery</code> and <code>Bootstrap</code> are loaded on every page:</p>
 
-<p><img src="/img/jspmjqueryandbootstrapdependency.PNG" alt="jspmjqueryandbootstrapdependency.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/jspmjqueryandbootstrapdependency.PNG" alt="jspmjqueryandbootstrapdependency.PNG" /></p>
 
 <h3 id="what-about-css">What about CSS</h3>
 
@@ -371,7 +372,7 @@ For the purposes of this blog, I am accepting the default of &ldquo;Babel&rdquo;
 
 <p>Now run your application!</p>
 
-<p><img src="/img/jspmnoerrors.PNG" alt="jspmnoerrors.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/jspmnoerrors.PNG" alt="jspmnoerrors.PNG" /></p>
 
 <p>Wahoo! We now have no errors in the console window, our javascript and css is being loaded - and our application looks ok again.</p>
 
@@ -385,7 +386,7 @@ For the purposes of this blog, I am accepting the default of &ldquo;Babel&rdquo;
 
 <p>If you click on &ldquo;Register&rdquo; link for example you will see these errors in the browser console window:</p>
 
-<p><img src="/img/jspmregisterpageproblems.PNG" alt="jspmregisterpageproblems.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/jspmregisterpageproblems.PNG" alt="jspmregisterpageproblems.PNG" /></p>
 
 <p>This is because many of the views within our MVC application are rendering a partial called <code>_ValidationScriptsPartial.cshtml</code></p>
 
@@ -443,7 +444,7 @@ For the purposes of this blog, I am accepting the default of &ldquo;Babel&rdquo;
 
 <p>And now - everything is working!</p>
 
-<p><img src="/img/jspmallworking.PNG" alt="jspmallworking.PNG" /></p>
+<p><img src="http://darrelltunnell.net/img/jspmallworking.PNG" alt="jspmallworking.PNG" /></p>
 
 <h3 id="recap">Recap</h3>
 
@@ -467,16 +468,21 @@ For the purposes of this blog, I am accepting the default of &ldquo;Babel&rdquo;
 
 
   <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'darrelltunnellsblog';
-    var disqus_identifier = 'http:\/\/darrelltunnell.net\/blog\/2016\/01\/24\/aurelia-and-asp-net-5-mvc-part2\/';
-    var disqus_title = 'ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2';
-    var disqus_url = 'http:\/\/darrelltunnell.net\/blog\/2016\/01\/24\/aurelia-and-asp-net-5-mvc-part2\/';
-
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "darrelltunnellsblog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>

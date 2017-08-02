@@ -2,11 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>General on Darrell Tunnell</title>
-    <link>http://darrelltunnell.net/categories/general/index.xml</link>
+    <link>http://darrelltunnell.net/categories/general/</link>
     <description>Recent content in General on Darrell Tunnell</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://darrelltunnell.net/categories/general/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 16 Nov 2014 16:20:59 +0000</lastBuildDate>
+    
+	<atom:link href="http://darrelltunnell.net/categories/general/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>A Proclamation</title>
@@ -16,22 +19,7 @@
       <guid>http://darrelltunnell.net/blog/2014/11/16/a-proclamation/</guid>
       <description>&lt;p&gt;On this day the 16th November 2014, let it be known that Darrell&amp;rsquo;s blog was rendered forth unto the internet.&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;Let the knowledge and manner of its creation also be recorded, lest it be lost from mortal ken. Thus humanity, need not be stricken in ignorance and awe, and need not refer to my blogging website as &amp;ldquo;Witchcraft&amp;rdquo; or &amp;ldquo;Devilry&amp;rdquo;.&lt;/p&gt;
-
-&lt;h3 id=&#34;the-mechanism-of-creation&#34;&gt;The Mechanism of Creation&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Inspiration taken from JakeGinnivan&amp;rsquo;s blog which is powered by OctoPress: &lt;a href=&#34;http://jake.ginnivan.net/&#34;&gt;http://jake.ginnivan.net/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Purchased a domain name: darrelltunnell.net&lt;/li&gt;
-&lt;li&gt;Followed this OctoPress documentation: &lt;a href=&#34;http://octopress.org/docs/setup/&#34;&gt;http://octopress.org/docs/setup/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Hosted on &lt;a href=&#34;https://github.com/&#34;&gt;https://github.com/&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;a-revelation&#34;&gt;A revelation&lt;/h3&gt;
-
-&lt;p&gt;And so it came to pass that Darrell Tunnell&amp;rsquo;s blog was incredibly useful to others. Darrell&amp;rsquo;s blog is currently read by 3.1 million people. Web browser requests for Darrell&amp;rsquo;s blog constitute approximately 85.2% of all browser requests made, worldwide. NetFlix was eventually absorbed into Darrell&amp;rsquo;s Blog at the end of 2014, through internet osmosis.&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

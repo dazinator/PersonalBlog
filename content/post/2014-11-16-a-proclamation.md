@@ -1,19 +1,10 @@
-+++
-title = "A Proclamation"
-slug = "a-proclamation"
-description = ""
-tags = [
-    "General"   
-]
-date = 2014-11-16T16:20:59Z
-categories = [
-    "General"   
-]
-menu = "main"
-published = true
-comments = true
-thumbnail = "img/profile.png"
-+++
+---
+title: "A Proclamation"
+slug: "a-proclamation"
+description: ""
+tags: [ "General" ]
+date: 2014-11-16T16:20:59Z
+---
 
 On this day the 16th November 2014, let it be known that Darrell's blog was rendered forth unto the internet.
 

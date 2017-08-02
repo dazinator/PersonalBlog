@@ -1,13 +1,78 @@
-# Hugo variables
-#
-
 disqusShortname = "darrelltunnellsblog"
 baseurl = "http://darrelltunnell.net/"
+languageCode = "en-gb"
 title = "Darrell Tunnell's Blog"
-languageCode = "en-us"
 theme = "hugo-geo"
+contentdir = "content"
+layoutdir = "layouts"
+publishdir = "public"
+pygmentsCodeFences = true
+pygmentsStyle = "monokai"
+canonifyurls = true
+relativeURLs = false
 # number of posts to show on home/category/tag pages (Default: 10)
 paginate = 5
+
+[permalinks]
+  post = "/blog/:year/:month/:day/:slug/"
+
+#googleAnalytics = "UA-123-45"
+
+[taxonomies]
+	tag = "tags"
+	tutorial = "tutorials"
+    category = "categories"
+
+[params]   
+    showglobe = true
+	favicon = "favicon.ico"	
+	analytics = "code-here"
+	email = "darrelltunnell@gmail.com"
+
+    # Header Title for the main page
+	# header = "Radiating Awesomeness, One Blog Post at a Time."
+	
+	# Sidebar profile picture
+	profilepic = "img/profile.jpg"	
+	
+    title = "Darrell Tunnell"
+	subtitle = "Developer Extraordinaire"
+
+	# Social buttons for sidebar
+	# Each of these are optional
+	[[params.socialbuttons]]
+	faicon = "github"
+	url = "https://github.com/dazinator"
+	[[params.socialbuttons]]
+	faicon = "twitter"
+	url = "https://twitter.com/dazinate"
+	[[params.socialbuttons]]
+	faicon = "linkedin"
+	url = "https://uk.linkedin.com/in/darrell-tunnell-33845331"
+	#[[params.socialbuttons]]
+	#faicon = "google-plus"
+	#url = "https://plus.google.com/+YourID"
+
+    # Nav links below the profile picture	
+	[[params.navlinks]]
+	name = "Blog"
+	url = ""
+    
+	#[[params.navlinks]]
+	#name = "About"
+	#url = "about"
+	
+	[[params.navlinks]]
+	name = "Posts"
+	url = "post/"
+	
+	#[[params.navlinks]]
+	#name = "Tutorials"
+	#url = "tutorial/"
+
+	# BEGIN HUGOGEO PARAMS Render the rotating globe in the sidebar
+		
+	
 
 #copyright = "© Darrell Tunnell and darrelltunnell.net, 2017. Unauthorized use and/or duplication of this material without express and written permission from this site’s author and/or owner is strictly prohibited. Excerpts and links may be used, provided that full and clear credit is given to #Darrell Tunnell and darrelltunnell.net with appropriate and specific direction to the original content."
 
@@ -15,53 +80,6 @@ paginate = 5
 	name = "Darrell Tunnell"
 
 
-contentdir = "content"
-layoutdir = "layouts"
-publishdir = "public"
-metaDataFormat = "yaml"
-pygmentsCodeFencesGuessSyntax = true
-pygmentsStyle = "monokai"
-canonifyurls = true
-
-[taxonomies]
-	tag = "tags"
-	category = "categories"
-
-[permalinks]
-  post = "/blog/:year/:month/:day/:slug/"
-
-#googleAnalytics = "UA-123-45"
 
 # custom navbar menu entry for hugo-geo theme.
 # See the custom_navbar parameter below for details.
-
-#[[menu.navbar]]
-#  name = "Link 1"
-#  url = "https://example.org"
-
-[params]
-	# Render the rotating globe in the sidebar
-	showglobe = true 	
-	# Google Analytics
-	#analytics = "SHORT-CODE-HERE"
-
-	# Social buttons for sidebar
-	github = "https://github.com/dazinator"
-	twitter = "https://twitter.com/dazinate"
-	linkedin = "https://uk.linkedin.com/in/darrell-tunnell-33845331"
-	email = "darrell.tunnell@googlemail.com"
-	
-	# Header Title for the main page
-	header = "Radiating Awesomeness, One Blog Post at a Time."
-	
-	# Sidebar profile picture
-	profilepic = "img/profile.jpg"
-	
-	# Title/subtitle for the sidebar
-	title = "Darrell Tunnell"
-	subtitle = "Developer Extraordinaire"
-	
-	# Nav links below the profile picture	
-	[[params.navlinks]]
-	name = "Blog"
-	url = "post/"
