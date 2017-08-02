@@ -196,6 +196,11 @@
   </url>
   
   <url>
+    <loc>http://darrelltunnell.net/tutorials/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://darrelltunnell.net/tags/unit-testing/</loc>
     <lastmod>2014-12-14T17:50:00+00:00</lastmod>
     <priority>0</priority>
