@@ -22,6 +22,8 @@
     <link href="http://darrelltunnell.net/index.xml" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
     
     
+    <link rel="icon" href="http://darrelltunnell.net/favicon.ico" />
+    
     <style>
      
 .highlight pre {
@@ -55,7 +57,9 @@
 			<ul class="nav navbar-nav">
 				
 				
-					<li><a href="http://darrelltunnell.net/post/">Blog</a></li>
+					<li><a href="http://darrelltunnell.net/">Blog</a></li>
+				
+					<li><a href="http://darrelltunnell.net/post/">Posts</a></li>
 				
 			</ul>
 		</div>
@@ -78,13 +82,21 @@
 		
 		<div id="social" class="text-center">
 			
+				<a href="https://github.com/dazinator"><i class="fa fa-github fa-2x"></i></a>
+			
+				<a href="https://twitter.com/dazinate"><i class="fa fa-twitter fa-2x"></i></a>
+			
+				<a href="https://uk.linkedin.com/in/darrell-tunnell-33845331"><i class="fa fa-linkedin fa-2x"></i></a>
+			
 
-			<a href="mailto:darrell.tunnell@googlemail.com"><i class="fa fa-envelope-o fa-2x"></i></a>
+			<a href="mailto:darrelltunnell@gmail.com"><i class="fa fa-envelope-o fa-2x"></i></a>
 		</div>
 		<div id="links" class="text-center">
 			
 			
-				<a href="http://darrelltunnell.net/post/">Blog</a>
+				<a href="http://darrelltunnell.net/">Blog</a>
+			
+				<a href="http://darrelltunnell.net/post/">Posts</a>
 			
 		</div>
 	</div>
@@ -97,7 +109,7 @@
 <header>
 	
 	
-		<h1>Radiating Awesomeness, One Blog Post at a Time.</h1>
+		<h1>What I'm Thinking</h1>
 	
 </header>
 
@@ -105,22 +117,33 @@
 	<div class="panel panel-default">
 	<div class="panel-header">
 		<h3>
-			<a href="http://darrelltunnell.net/blog/2015/04/29/automating-dotnetnuke-deployments-with-octopus-deploy/">Automating DotNetNuke deployments with Octopus Deploy</a>
+			<a href="http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio/">Imagining a DotNetNuke Project Type for Visual Studio</a>
 			<br>
 			<small>
-				29 April 2015
+				17 January 2016
 			</small>
 		</h3>
 	</div>
 	<div class="panel-body">
-		<h3 id="automating-dotnetnuke-deployments-using-octopus-deploy">Automating DotNetNuke Deployments using Octopus Deploy</h3>
+		<h3 id="introduction">Introduction</h3>
 
-<p>Because I am an awesome dude, i&rsquo;ll share with you how I automate dotnetnuke delivery / deployments. This works. It takes some effort to get this set up though, but it will be well worth it in the end.</p>
+<p>When developing DotNetNuke extensions, we typically use one of the existing Visual Studio Project Type&rsquo;s, for example - an ASP.NET Web Application project.</p>
 
-<p>First i&rsquo;ll explain the process for automating the deployment of the DotNetNuke website itself. Then I&rsquo;ll explain how you can automate the deployment of modules / extensions on a continous basis.
-</p>
+<p>Even when using a Project Template such as Christoc&rsquo;s, the project template is still based upon one of the standard Visual Studio project types - usually an ASP.NET Web Application project.</p>
+
+<p>However these Project Types do not &ldquo;gel&rdquo; well with DotNetNuke development in a number of areas, the main ones being:</p>
+
+<ol>
+<li>Running the project in VS (clicking play) - wants to run the extensions as a Web Application, but this makes no sense for a Dnn extension - which has to be hosted by the DotNetNuke website.</li>
+<li>Deploying the extension - there is no support for that in the project system - you have to manually deploy your extensions to the Dnn instance.</li>
+<li>Debugging the extension - you have to manually attach to process.</li>
+</ol>
+
+<p>So.. what if there was a new Project Type, one that was purpose built for DotNetNuke development? What would that look like?</p>
+
+<p></p>
 		
-			... <a href="http://darrelltunnell.net/blog/2015/04/29/automating-dotnetnuke-deployments-with-octopus-deploy/">Read More</a>
+			... <a href="http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio/">Read More</a>
 		
 	</div>
 	<div class="panel-footer">
@@ -130,7 +153,9 @@
 			
 				<a href="http://darrelltunnell.net/tags/dotnetnuke"><span class="label label-success">DotNetNuke</span></a>
 			
-				<a href="http://darrelltunnell.net/tags/octopus"><span class="label label-success">Octopus</span></a>
+				<a href="http://darrelltunnell.net/tags/dnnpackager"><span class="label label-success">DnnPackager</span></a>
+			
+				<a href="http://darrelltunnell.net/tags/dnn-project-system"><span class="label label-success">Dnn Project System</span></a>
 			
 		</small>
 		
@@ -141,21 +166,25 @@
 	<div class="panel panel-default">
 	<div class="panel-header">
 		<h3>
-			<a href="http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you/">How far does the XRM SDK&#39;s ExecuteMultipleRequest get you?</a>
+			<a href="http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/">DnnPackager Getting Started</a>
 			<br>
 			<small>
-				26 February 2015
+				1 December 2015
 			</small>
 		</h3>
 	</div>
 	<div class="panel-body">
-		<h3 id="executemultiplerequest-let-s-take-it-to-the-max">ExecuteMultipleRequest - Let&rsquo;s take it to the max</h3>
+		<h3 id="dnn-packager-super-smooth-module-development">Dnn Packager - Super Smooth Module Development</h3>
 
-<p>In this post, I will explore what kinds of things can be achieved using the SDK&rsquo;s ExecuteMultipleRequest, by starting of with a simple SQL command, and implementing a semantically equivalent ExecuteMultipleRequest, and then slowly introducing some additional complexity - so that, we can see some areas where the SDK starts to fall short!</p>
+<p>In this post, I am going to show you how to get up and running with DnnPackager for your DotNetNuke module / extension development.</p>
+
+<h3 id="tools-of-the-trade">Tools of the Trade</h3>
+
+<p>I am using VS2015 Community Edition, but this should work equally well with previous versions.</p>
 
 <p></p>
 		
-			... <a href="http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you/">Read More</a>
+			... <a href="http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/">Read More</a>
 		
 	</div>
 	<div class="panel-footer">
@@ -163,7 +192,9 @@
 		<small class="text-muted">
 			
 			
-				<a href="http://darrelltunnell.net/tags/dynamics-crm"><span class="label label-success">Dynamics CRM</span></a>
+				<a href="http://darrelltunnell.net/tags/dotnetnuke"><span class="label label-success">DotNetNuke</span></a>
+			
+				<a href="http://darrelltunnell.net/tags/dnnpackager"><span class="label label-success">DnnPackager</span></a>
 			
 		</small>
 		
@@ -174,22 +205,23 @@
 	<div class="panel panel-default">
 	<div class="panel-header">
 		<h3>
-			<a href="http://darrelltunnell.net/blog/2015/01/18/asp-net-5-vnext-projects-why-your-nuget-package-may-fail-to-install/">ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</a>
+			<a href="http://darrelltunnell.net/blog/2015/11/04/automating-android-unit-test-apps-xamarin-like-a-pro/">automating-android-unit-test-apps-xamarin-like-a-pro</a>
 			<br>
 			<small>
-				18 January 2015
+				4 November 2015
 			</small>
 		</h3>
 	</div>
 	<div class="panel-body">
-		<h3 id="don-t-assume-nuget-packages-that-you-have-authored-will-continue-to-work-with-asp-net-5-vnext-projects">Don&rsquo;t assume NuGet Packages that you have authored will continue to work with ASP.NET 5 (vNext) projects.</h3>
+		<h3 id="first-off">First Off..</h3>
 
-<p>Over the past year or so, I have authored <a href="https://www.nuget.org/packages?q=darrell.tunnell">a number of NuGet packages</a> - because, well&hellip; I am just an all around great guy.</p>
+<p>This article is for those of you out there who use Xamarin to write Android applications and want to automate the process of running your tests on an Android device. I&rsquo;ll show you how you can set this up with relative ease.</p>
 
-<p>Recently, <a href="http://stackoverflow.com/questions/27762659/error-while-adding-nuget-package-to-asp-net-vnext-project#comment44383264_27762659">I was contacted by someone</a> who was trying to use one of my NuGet packages with an ASP.NET vNext project (Preview release). Not something I have tried before - and this is where things get a little interesting.
-</p>
+<p>Here is the process we want:</p>
+
+<p></p>
 		
-			... <a href="http://darrelltunnell.net/blog/2015/01/18/asp-net-5-vnext-projects-why-your-nuget-package-may-fail-to-install/">Read More</a>
+			... <a href="http://darrelltunnell.net/blog/2015/11/04/automating-android-unit-test-apps-xamarin-like-a-pro/">Read More</a>
 		
 	</div>
 	<div class="panel-footer">
@@ -197,59 +229,64 @@
 		<small class="text-muted">
 			
 			
-				<a href="http://darrelltunnell.net/tags/nuget"><span class="label label-success">NuGet</span></a>
+				<a href="http://darrelltunnell.net/tags/xamarin"><span class="label label-success">Xamarin</span></a>
+			
+				<a href="http://darrelltunnell.net/tags/android"><span class="label label-success">Android</span></a>
+			
+				<a href="http://darrelltunnell.net/tags/teamcity"><span class="label label-success">TeamCity</span></a>
+			
+				<a href="http://darrelltunnell.net/tags/automate"><span class="label label-success">Automate</span></a>
+			
+		</small>
+		
+	</div>
+</div>
+
+
+	<div class="panel panel-default">
+	<div class="panel-header">
+		<h3>
+			<a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/">ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia</a>
+			<br>
+			<small>
+				16 August 2015
+			</small>
+		</h3>
+	</div>
+	<div class="panel-body">
+		<p><strong>This post is part 1 of a series. Part 2 is <a href="http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/">here</a></strong></p>
+
+<h3 id="asp-a-sea-of-packages-net-5">ASP (A Sea of Packages).NET 5</h3>
+
+<p>When you create a new ASP.NET 5 project, you will see all sorts of new-ness. I am going to guide you, the uninitiated ASP.NET 5 web developer, through creating your first ASP.NET 5 MVC application, but we won&rsquo;t stop there. In the next post of this series, we will then enhance the project with a number of features:</p>
+
+<ol>
+<li>Bundling and Minification.</li>
+<li>Auto browser refresh (as you make changes to files during development)</li>
+</ol>
+
+<p>In addition, I will touch upon important tooling that you need to be aware of:</p>
+
+<ol>
+<li>NPM</li>
+<li>Bower and why we are going to replace it with Jspm</li>
+<li>Gulp - and why is it useful</li>
+</ol>
+
+<p>To be able to do all of this, we will be creating an ASP.NET MVC 5 project, and then we will be using <a href="http://aurelia.io/">Aurelia</a> to run an Aurelia application on Home page (Index.cshtml)
+</p>
+		
+			... <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/">Read More</a>
+		
+	</div>
+	<div class="panel-footer">
+		
+		<small class="text-muted">
+			
 			
 				<a href="http://darrelltunnell.net/tags/asp.net-core"><span class="label label-success">ASP.NET CORE</span></a>
 			
-		</small>
-		
-	</div>
-</div>
-
-
-	<div class="panel panel-default">
-	<div class="panel-header">
-		<h3>
-			<a href="http://darrelltunnell.net/blog/2014/12/22/crm-plugin-generated-values-and-reducing-roundtrips/">CRM / Plugin Generated Values - and Reducing Roundtrips!</a>
-			<br>
-			<small>
-				22 December 2014
-			</small>
-		</h3>
-	</div>
-	<div class="panel-body">
-		<h3 id="setting-the-scene">Setting the Scene</h3>
-
-<p>Imagine we have an application that uses the CRM SDK. It needs to:</p>
-
-<ol>
-<li>Create a new <code>account</code> entity in crm.</li>
-<li>Get some value that was just generated as a result of a synchronous plugin that fires on the create. For example, suppose there is a plugin that generates an account reference number.</li>
-</ol>
-
-<h3 id="the-i-don-t-care-about-network-latency-method">The &ldquo;I don&rsquo;t care about network latency method!&rdquo;</h3>
-
-<p>The &lsquo;I don&rsquo;t care about network latency&rsquo; way of dealing with this is to just do 2 seperate Requests (roundtrips) with the CRM server.</p>
-
-<ol>
-<li>Create the new <code>account</code> which returns you the ID.</li>
-<li>Retrieve the <code>account</code> using that ID, along with the values that you need.</li>
-</ol>
-
-<p>This approach is sub optimal where network latency is a concern, as it incurs the penalty of making two roundtrips accross the network with the server, where 1 is possible.</p>
-
-<p>Let&rsquo;s now have a look at the &ldquo;I&rsquo;m running on a 56k modem method&rdquo; of doing the same thing!
-</p>
-		
-			... <a href="http://darrelltunnell.net/blog/2014/12/22/crm-plugin-generated-values-and-reducing-roundtrips/">Read More</a>
-		
-	</div>
-	<div class="panel-footer">
-		
-		<small class="text-muted">
-			
-			
-				<a href="http://darrelltunnell.net/tags/dynamics-crm"><span class="label label-success">Dynamics CRM</span></a>
+				<a href="http://darrelltunnell.net/tags/aurelia"><span class="label label-success">Aurelia</span></a>
 			
 		</small>
 		
@@ -260,23 +297,29 @@
 	<div class="panel panel-default">
 	<div class="panel-header">
 		<h3>
-			<a href="http://darrelltunnell.net/blog/2014/12/14/unit-testing-dynamics-crm-plugins/">Unit Testing Dynamics CRM Plugins</a>
+			<a href="http://darrelltunnell.net/blog/2015/06/13/automating-dotnetnuke-deployments-with-octopus-deploy/">DotNetNuke - Streamlining Module Development Workflow</a>
 			<br>
 			<small>
-				14 December 2014
+				13 June 2015
 			</small>
 		</h3>
 	</div>
 	<div class="panel-body">
-		<h3 id="there-is-no-spoon-crm">There is no <del>Spoon</del> CRM</h3>
+		<h3 id="module-debugging-two-approaches">Module Debugging - Two Approaches</h3>
 
-<p>The purpose of this post will be to look at the code for a fairly typical looking crm plugin, and examine how to implement a unit test with the least possible effort. Reduced Effort == Reduced Person Hours == Reduced Cost.</p>
+<p>When developing DotNetNuke modules people take many different approaches but they boil down to two alternatives in terms of workflow:</p>
 
-<p>Remember, this is Unit Testing, not Integration testing - so at test time - there is no CRM!</p>
+<ol>
+<li><p>Placing / checking out your source code directly into the \DesktopModules folder of a DotNetNuke website, and having your module dll&rsquo;s output to directly into the DotNetNuke website&rsquo;s \bin folder.</p></li>
+
+<li><p>Checking out and working on your code wherever you like, but having to deploy your module (content and assemblies) to a local DNN website when you are ready to run it.</p></li>
+</ol>
+
+<p>Both approaches require that you &ldquo;attach to process&rdquo; from within Visual Studio in order to debug your module.</p>
 
 <p></p>
 		
-			... <a href="http://darrelltunnell.net/blog/2014/12/14/unit-testing-dynamics-crm-plugins/">Read More</a>
+			... <a href="http://darrelltunnell.net/blog/2015/06/13/automating-dotnetnuke-deployments-with-octopus-deploy/">Read More</a>
 		
 	</div>
 	<div class="panel-footer">
@@ -284,40 +327,9 @@
 		<small class="text-muted">
 			
 			
-				<a href="http://darrelltunnell.net/tags/dynamics-crm"><span class="label label-success">Dynamics CRM</span></a>
+				<a href="http://darrelltunnell.net/tags/dotnetnuke"><span class="label label-success">DotNetNuke</span></a>
 			
-				<a href="http://darrelltunnell.net/tags/unit-testing"><span class="label label-success">Unit Testing</span></a>
-			
-		</small>
-		
-	</div>
-</div>
-
-
-	<div class="panel panel-default">
-	<div class="panel-header">
-		<h3>
-			<a href="http://darrelltunnell.net/blog/2014/11/16/a-proclamation/">A Proclamation</a>
-			<br>
-			<small>
-				16 November 2014
-			</small>
-		</h3>
-	</div>
-	<div class="panel-body">
-		<p>On this day the 16th November 2014, let it be known that Darrell&rsquo;s blog was rendered forth unto the internet.</p>
-
-<p></p>
-		
-			... <a href="http://darrelltunnell.net/blog/2014/11/16/a-proclamation/">Read More</a>
-		
-	</div>
-	<div class="panel-footer">
-		
-		<small class="text-muted">
-			
-			
-				<a href="http://darrelltunnell.net/tags/general"><span class="label label-success">General</span></a>
+				<a href="http://darrelltunnell.net/tags/dnnpackager"><span class="label label-success">DnnPackager</span></a>
 			
 		</small>
 		
@@ -365,13 +377,37 @@
     class="active"><a href="http://darrelltunnell.net/page/2/">2</a></li>
     
     
+    
+    
+    
+     
+        
+        
+    
+    
     <li
-    class="disabled">
-    <a href="" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+    ><a href="http://darrelltunnell.net/page/3/">3</a></li>
+    
+    
+    
+    
+    
+     
+        
+        
+    
+    
+    <li
+    ><a href="http://darrelltunnell.net/page/4/">4</a></li>
+    
+    
+    <li
+    >
+    <a href="http://darrelltunnell.net/page/3/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
     </li>
     
     <li>
-        <a href="http://darrelltunnell.net/page/2/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="http://darrelltunnell.net/page/4/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
     
 </ul>
@@ -384,6 +420,17 @@
 			</div>
 		</div>
   </div>
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'code-here', 'auto');
+    ga('send', 'pageview');
+    window.baseURL = "http:\/\/darrelltunnell.net\/";
+  </script>
   
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
