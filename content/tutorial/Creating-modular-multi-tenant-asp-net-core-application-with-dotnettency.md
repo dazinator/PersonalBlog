@@ -57,7 +57,7 @@ Notice that you can achieve multiple layers of isloation (all of which are ofcou
  2. Isolate modules from other modules. (you don't have to, and could do this with some modules and not others)
  3. Isolate a tenants view of the host file system, from other tenants (i.e so one tenants files can not conflict with another tenants files - even though they might use the same paths. )
 
- Before I go any further I would like to mention Ben's wonderful `saaskit` library which was the man inspiration for `dotnettency` and I would highly recommend [you read Ben's blog](http://benfoster.io/blog/saaskit-multi-tenancy-made-easy) (after mine, ofcourse ;-))
+ Before I go any further I would like to mention Ben Foster's wonderful `saaskit` library which was a big inspiration for many of the features in `dotnettency` and I would highly recommend [you read Ben's blog](http://benfoster.io/blog/saaskit-multi-tenancy-made-easy) - after mine, ofcourse ;-)
 
 ## Ok so what is this turorial series going to look like?
 
