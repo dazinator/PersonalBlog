@@ -13,7 +13,7 @@
     <meta property="og:url" content="http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency/">
     <meta property="og:site_name" content="Darrell Tunnell">
     
-    <meta property="og:tags" content="dotnet">
+    <meta property="og:tags" content="dotnettency">
     
     <meta property="og:tags" content="asp.net core">
     
@@ -125,13 +125,15 @@
 
 <h2 id="multitenancy-you-say">Multitenancy you say?</h2>
 
-<p>Yes. You are probably familiar with multi-tenancy already, but if you aren&rsquo;t - here is a brief summary for you!</p>
+<p>Yes. You are probably familiar with multi-tenancy already, but if you aren&rsquo;t - here is a brief summary for you.</p>
 
-<p>A muti-tenant web application means you have a single instance of the running web application, that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a tenant. Users accessing the site from audience A are considered by the system to be accessing it under a different &ldquo;tenant&rdquo; than the users from audience B. To to all intense and purposes, each tenant is a collection of users who are using the application &ldquo;unaware&rdquo; of other tenants also doing the same. It&rsquo;s essentially like the application is splitting itself into multiple applications - one for each seperate tenant - and where one Tenant can have a completely different <code>view of the world</code> than another tenant.</p>
+<p>A muti-tenant web application means you have a single instance of the running web application, that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a tenant. To to all intense and purposes, each tenant is a collection of users who are using the application &ldquo;unaware&rdquo; of the other tenants who&rsquo;s users are also doing the same.</p>
 
-<p>## Why would I want this?</p>
+<p>It&rsquo;s essentially like the application is splitting itself into multiple applications - one for each  tenant - so that one Tenant can have a completely different <code>view of the world</code> than another.</p>
 
-<p>Some indicators as to why you might want multi-tenancy are that, cor certain audiences, you might want to:</p>
+<h2 id="why-would-i-want-this">Why would I want this?</h2>
+
+<p>Some indicators as to why you might want multi-tenancy are that, for certain audiences, you might want to:</p>
 
 <ol>
 <li>Display a different branding / appearance.</li>
@@ -139,26 +141,33 @@
 <li>Have different content or files accessible.</li>
 </ol>
 
+<p>For example one tenant could look like this:</p>
+
+<p><div style="width:100%;height:0;padding-bottom:75%;position:relative;"><iframe src="https://giphy.com/embed/3oKIPwoeGErMmaI43S" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/culture--run-3oKIPwoeGErMmaI43S">via GIPHY</a></p></p>
+
+<p>Whilst the other is simultaneously looking like this:</p>
+
+<p><div style="width:100%;height:0;padding-bottom:84%;position:relative;"><iframe src="https://giphy.com/embed/JltOMwYmi0VrO" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/JltOMwYmi0VrO">via GIPHY</a></p></p>
+
 <p>For the sake of this series we will be using a couple of ficticious tenants:
  - Gicrosoft
  - Moogle</p>
 
-<p>## What are we going to cover?</p>
+<h2 id="what-are-we-going-to-cover">What are we going to cover?</h2>
 
 <p>During this series, I will take you through the following, starting with basic stuff like tenant resolution, and slowly adding more advanced features. However it would help if you already have a good understanding of:</p>
 
-<ol>
-<li>The Middleware Pipeline.</li>
-<li>DI Containers.</li>
-</ol>
+<pre><code> 1. The Middleware Pipeline.
+ 2. DI Containers.
+</code></pre>
 
-<p>For a high level view of the sort of architecture we will be exploring, here is a quick diagram!</p>
+<p>For a high level view of the sort of architecture we will be exploring, here is a quick diagram of he type of architecture that <code>dotnettency</code> allows you to easily setup within your application:</p>
 
-<p>## Dotnettency&rsquo;s vision of multitenancy.</p>
+<p><img src="http://darrelltunnell.net/img/dotnettencyhighlevel.png" alt="dotnettencyhighlevel.PNG" /></p>
 
-<p><img src="http://darrelltunnell.net/img/dotnettencyhighlevel.PNG" alt="dotnettencyhighlevel.PNG" /></p>
+<p>Notice that you can achieve multiple layers of isloation (all of which are ofcourse optional) depending upon your needs. You can isolate things both at a tenant level, and at an individual module level, whilst ensuring that your host application will always behave a certain way by default.</p>
 
-<p>## Isolation, Isolation, Isolation - but optional.</p>
+<h2 id="isolation-isolation-isolation-but-optional">Isolation, Isolation, Isolation - but optional.</h2>
 
 <p>Dotnettency&rsquo;s approach as a multi-tenancy library is to allow you to use as much, or as little isolation as you require. For example you can choose to do any of these:</p>
 
@@ -167,6 +176,8 @@
 <li>Isolate modules from other modules. (you don&rsquo;t have to, and could do this with some modules and not others)</li>
 <li>Isolate a tenants view of the host file system, from other tenants (i.e so one tenants files can not conflict with another tenants files - even though they might use the same paths. )</li>
 </ol>
+
+<p>Before I go any further I would like to mention Ben&rsquo;s wonderful <code>saaskit</code> library which was the man inspiration for <code>dotnettency</code> and I would highly recommend <a href="http://benfoster.io/blog/saaskit-multi-tenancy-made-easy">you read Ben&rsquo;s blog</a> (after mine, ofcourse ;-))</p>
 
 <h2 id="ok-so-what-is-this-turorial-series-going-to-look-like">Ok so what is this turorial series going to look like?</h2>
 
