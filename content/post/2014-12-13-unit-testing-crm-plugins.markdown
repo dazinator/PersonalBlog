@@ -35,17 +35,6 @@ Firstly, let's look at a plugin that we will call the `ReclaimCreditPlugin`. Her
 
 Jon Doe immediately gets to work on writing the plugin for those requirements. He produces the following plugin:
 
-{{< highlight html >}}
-<section id="main">
-  <div>
-    <h1 id="title">{{ .Title }}</h1>
-    {{ range .Data.Pages }}
-      {{ .Render "summary"}}
-    {{ end }}
-  </div>
-</section>
-{{< /highlight >}}
-
 {{< highlight csharp "linenos=true,style=default" >}}
 
     public class ReclaimCreditPlugin : IPlugin

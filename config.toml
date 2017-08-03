@@ -66,9 +66,9 @@ paginate = 5
 	name = "Posts"
 	url = "post/"
 	
-	#[[params.navlinks]]
-	#name = "Tutorials"
-	#url = "tutorial/"
+	[[params.navlinks]]
+	name = "Tutorials"
+	url = "tutorial/"
 
 	# BEGIN HUGOGEO PARAMS Render the rotating globe in the sidebar
 		

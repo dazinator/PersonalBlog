@@ -6,10 +6,20 @@
     <description>Recent content on Darrell Tunnell</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Tue, 24 Jan 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 03 Aug 2017 15:06:44 +0100</lastBuildDate>
     
 	<atom:link href="http://darrelltunnell.net/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Creating Modular Multi-tenant ASP.NET Core Application with Dotnettency</title>
+      <link>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency/</link>
+      <pubDate>Thu, 03 Aug 2017 15:06:44 +0100</pubDate>
+      
+      <guid>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency/</guid>
+      <description>Multitenancy you say? Yes. You are probably familiar with multi-tenancy already, but if you aren&amp;rsquo;t - here is a brief summary for you!
+A muti-tenant web application means you have a single instance of the running web application, that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a tenant. Users accessing the site from audience A are considered by the system to be accessing it under a different &amp;ldquo;tenant&amp;rdquo; than the users from audience B.</description>
+    </item>
     
     <item>
       <title>CSLA and ASP.NET Core</title>
