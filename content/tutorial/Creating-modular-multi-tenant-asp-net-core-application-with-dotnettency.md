@@ -59,9 +59,9 @@ Notice that you can achieve multiple layers of isloation (all of which are ofcou
 
  Before I go any further I would like to mention Ben Foster's wonderful `saaskit` library which was a big inspiration for many of the features in `dotnettency` and I would highly recommend [you read Ben's blog](http://benfoster.io/blog/saaskit-multi-tenancy-made-easy) - after mine, ofcourse ;-)
 
-## Ok so what is this turorial series going to look like?
+## Ok so what is this tutorial series going to look like?
 
-We will be creating a basic asp.net core website (from the starting template) and then enhancing with more and more multi-tenancy features so that it:
+We will be creating a basic asp.net core website (from the starting template) and then enhancing with one multi-tenancy feature at a time, provided by `dotnettency`, so that our site:
 
  - Has multiple tenants (Gicrosoft and Moogle) and we can distguish between them.
  - Has a null (default) tenant enabled (or disabled - thats up to you)
@@ -73,7 +73,7 @@ We will be creating a basic asp.net core website (from the starting template) an
     - Routed Modules: Modules that have their own isolated container that will be restored during the request when they are routed too. Routed Modules are so called because they must have routes registered with the asp.net core routing system. Dotnettency makes it really easy. If you are developing an extension for your application that has MVC Controllers, then this would be an example of a `Routed Module`. Dotnettency does not tie your module to a particular technology - you could have a mixture `MVC` and `Nancy` based modules running for a particular tenant.
 
 
-At the end of this tutorial, you will have a multi-tenant, and modular application, with two types of modules that you can dbe used to extend it with funtionality.
+At the end of this tutorial, you will have a multi-tenant, modular & extensible application to serve as a good basis for developing your next multi-tenant capable web application.
 
 If there is anything else you would like me to cover, please let me know in the comments.
 
