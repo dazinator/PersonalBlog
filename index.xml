@@ -17,8 +17,8 @@
       <pubDate>Thu, 03 Aug 2017 15:06:44 +0100</pubDate>
       
       <guid>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency/</guid>
-      <description>Multitenancy you say? Yes. You are probably familiar with multi-tenancy already, but if you aren&amp;rsquo;t - here is a brief summary for you!
-A muti-tenant web application means you have a single instance of the running web application, that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a tenant. Users accessing the site from audience A are considered by the system to be accessing it under a different &amp;ldquo;tenant&amp;rdquo; than the users from audience B.</description>
+      <description>Multitenancy you say? Yes. You are probably familiar with multi-tenancy already, but if you aren&amp;rsquo;t - here is a brief summary for you.
+A muti-tenant web application means you have a single instance of the running web application, that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a tenant. To to all intense and purposes, each tenant is a collection of users who are using the application &amp;ldquo;unaware&amp;rdquo; of the other tenants who&amp;rsquo;s users are also doing the same.</description>
     </item>
     
     <item>
