@@ -17,17 +17,13 @@
       <pubDate>Sun, 06 Aug 2017 13:18:44 +0100</pubDate>
       
       <guid>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-1/</guid>
-      <description>&lt;p&gt;&lt;em&gt;This is part of a series. &lt;a href=&#34;http://localhost:1313/tags/dotnettency/&#34;&gt;You can find the other parts here&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+      <description>&lt;p&gt;&lt;em&gt;This is part of a series. &lt;a href=&#34;http://darrelltunnell.net/tags/dotnettency/&#34;&gt;You can find the other parts here&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;You can find the sample code for this post &lt;a href=&#34;https://github.com/dazinator/Dotnettency.Samples&#34;&gt;here&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;In this first part of the tutorial, we will create a shiny new asp.net core project that we will use moving forwards. We will then add some very basic multi-tenancy! We will expand on this in future posts.&lt;/p&gt;
-
-&lt;h2 id=&#34;project-setup&#34;&gt;Project Setup&lt;/h2&gt;
-
-&lt;p&gt;Open VS2017 and create a new &amp;ldquo;empty&amp;rdquo; ASP.NET Core Web project:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/new-aspnetcore-project.PNG&#34; alt=&#34;new-aspnetcore-project.PNG&#34; /&gt;&lt;/p&gt;</description>
+&lt;p&gt;In this first part of the tutorial, we will create a shiny new asp.net core project that we will use moving forwards. We will then add some very basic multi-tenancy! We will expand on this in future posts.
+Before starting this tutortial, you may wish to &lt;a href=&#34;http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency/&#34;&gt;read to the introduction&lt;/a&gt; although this isn&amp;rsquo;t a necessity. Ok if you are ready, let&amp;rsquo;s dive in!
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -36,7 +32,7 @@
       <pubDate>Thu, 03 Aug 2017 15:06:44 +0100</pubDate>
       
       <guid>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency/</guid>
-      <description>&lt;p&gt;&lt;em&gt;This is part of a series. &lt;a href=&#34;http://localhost:1313/tags/dotnettency/&#34;&gt;You can find the other parts here&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+      <description>&lt;p&gt;&lt;em&gt;This is part of a series. &lt;a href=&#34;http://darrelltunnell.net/tags/dotnettency/&#34;&gt;You can find the other parts here&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;multitenancy-who&#34;&gt;Multitenancy who?&lt;/h2&gt;
 
