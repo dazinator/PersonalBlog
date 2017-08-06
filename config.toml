@@ -23,6 +23,9 @@ paginate = 5
 	tutorial = "tutorials"
     category = "categories"
 
+[social]
+	twitter="dazinator"
+
 [params]   
     showglobe = true
 	favicon = "favicon.ico"	

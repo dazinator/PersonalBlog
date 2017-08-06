@@ -5,6 +5,7 @@ published: true
 tags: [ "dotnettency", "asp.net core" ]
 categories: [ "Development" ]
 index: true
+images: ["/img/new-aspnetcore-project.PNG"]
 ---
 
 *This is part of a series. [You can find the other parts here](/tags/dotnettency/)*
