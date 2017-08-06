@@ -17,8 +17,36 @@
       <pubDate>Thu, 03 Aug 2017 15:06:44 +0100</pubDate>
       
       <guid>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency/</guid>
-      <description>Multitenancy you say? Yes. You are probably familiar with multi-tenancy already, but if you aren&amp;rsquo;t - here is a brief summary for you.
-A muti-tenant web application means you have a single instance of the running web application, that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a tenant. To to all intense and purposes, each tenant is a collection of users who are using the application &amp;ldquo;unaware&amp;rdquo; of the other tenants who&amp;rsquo;s users are also doing the same.</description>
+      <description>&lt;p&gt;&lt;em&gt;This is part of a series. &lt;a href=&#34;http://localhost:1313/tags/dotnettency/&#34;&gt;You can find the other parts here&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;multitenancy-who&#34;&gt;Multitenancy who?&lt;/h2&gt;
+
+&lt;p&gt;Just in case you need a quick recap, a muti-tenant web application is one that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a &lt;code&gt;tenant&lt;/code&gt;. To to all intense and purposes, each tenant is just a collection of users who are using the application &amp;ldquo;unaware&amp;rdquo; of the other tenants who&amp;rsquo;s users are also doing the same.&lt;/p&gt;
+
+&lt;p&gt;A multi-tenant application is essentially an application that splits itself into multiple applications - one for each  tenant - so that one Tenant can have a completely different &lt;code&gt;view of the world&lt;/code&gt; than another.&lt;/p&gt;
+
+&lt;p&gt;Now that we are all caught up, let&amp;rsquo;s get down to business!&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Creating Modular Multi-tenant ASP.NET Core Application with Dotnettency - Part 1</title>
+      <link>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-1/</link>
+      <pubDate>Thu, 03 Aug 2017 15:06:44 +0100</pubDate>
+      
+      <guid>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-1/</guid>
+      <description>&lt;p&gt;&lt;em&gt;This is part of a series. &lt;a href=&#34;http://localhost:1313/tags/dotnettency/&#34;&gt;You can find the other parts here&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;You can find the sample code for this post &lt;a href=&#34;https://github.com/dazinator/Dotnettency.Samples&#34;&gt;here&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;In this first part of the tutorial, we will create a shiny new asp.net core project that we will use moving forwards. We will then add some very basic multi-tenancy! We will expand on this in future posts.&lt;/p&gt;
+
+&lt;h2 id=&#34;project-setup&#34;&gt;Project Setup&lt;/h2&gt;
+
+&lt;p&gt;Open VS2017 and create a new &amp;ldquo;empty&amp;rdquo; ASP.NET Core Web project:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://darrelltunnell.net/img/new-aspnetcore-project.PNG&#34; alt=&#34;new-aspnetcore-project.PNG&#34; /&gt;&lt;/p&gt;</description>
     </item>
     
     <item>

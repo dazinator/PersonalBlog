@@ -128,10 +128,61 @@
         		</h3>
         	</div>
         	<div class="panel-body">
-        		Multitenancy you say? Yes. You are probably familiar with multi-tenancy already, but if you aren&rsquo;t - here is a brief summary for you.
-A muti-tenant web application means you have a single instance of the running web application, that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a tenant. To to all intense and purposes, each tenant is a collection of users who are using the application &ldquo;unaware&rdquo; of the other tenants who&rsquo;s users are also doing the same.
+        		<p><em>This is part of a series. <a href="http://localhost:1313/tags/dotnettency/">You can find the other parts here</a></em></p>
+
+<h2 id="multitenancy-who">Multitenancy who?</h2>
+
+<p>Just in case you need a quick recap, a muti-tenant web application is one that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a <code>tenant</code>. To to all intense and purposes, each tenant is just a collection of users who are using the application &ldquo;unaware&rdquo; of the other tenants who&rsquo;s users are also doing the same.</p>
+
+<p>A multi-tenant application is essentially an application that splits itself into multiple applications - one for each  tenant - so that one Tenant can have a completely different <code>view of the world</code> than another.</p>
+
+<p>Now that we are all caught up, let&rsquo;s get down to business!</p>
+
+<p></p>
         		
         			... <a href="http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency/">Read More</a>
+        		
+        	</div>
+        	<div class="panel-footer">
+        		
+        		<small class="text-muted">
+        			
+        			
+        				<a href="http://darrelltunnell.net/tags/dotnettency"><span class="label label-success">dotnettency</span></a>
+        			
+        				<a href="http://darrelltunnell.net/tags/asp.net-core"><span class="label label-success">asp.net core</span></a>
+        			
+        		</small>
+        		
+        	</div>
+        </div>
+	
+	
+	
+        <div class="panel panel-default">
+        	<div class="panel-header">
+        		<h3>
+        			<a href="http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-1/">Creating Modular Multi-tenant ASP.NET Core Application with Dotnettency - Part 1</a>
+        			<br>
+        			<small>
+        				First Published: 3 August 2017
+        			</small>
+        		</h3>
+        	</div>
+        	<div class="panel-body">
+        		<p><em>This is part of a series. <a href="http://localhost:1313/tags/dotnettency/">You can find the other parts here</a></em></p>
+
+<p><em>You can find the sample code for this post <a href="https://github.com/dazinator/Dotnettency.Samples">here</a></em></p>
+
+<p>In this first part of the tutorial, we will create a shiny new asp.net core project that we will use moving forwards. We will then add some very basic multi-tenancy! We will expand on this in future posts.</p>
+
+<h2 id="project-setup">Project Setup</h2>
+
+<p>Open VS2017 and create a new &ldquo;empty&rdquo; ASP.NET Core Web project:</p>
+
+<p><img src="http://darrelltunnell.net/img/new-aspnetcore-project.PNG" alt="new-aspnetcore-project.PNG" /></p>
+        		
+        			... <a href="http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-1/">Read More</a>
         		
         	</div>
         	<div class="panel-footer">

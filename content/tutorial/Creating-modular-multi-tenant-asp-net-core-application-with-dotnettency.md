@@ -7,15 +7,19 @@ categories: [ "Development" ]
 index: true
 ---
 
-## Multitenancy you say?
+*This is part of a series. [You can find the other parts here](http://localhost:1313/tags/dotnettency/)*
 
-Yes. You are probably familiar with multi-tenancy already, but if you aren't - here is a brief summary for you.
+## Multitenancy who?
 
- A muti-tenant web application means you have a single instance of the running web application, that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a tenant. To to all intense and purposes, each tenant is a collection of users who are using the application "unaware" of the other tenants who's users are also doing the same. 
+Just in case you need a quick recap, a muti-tenant web application is one that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a `tenant`. To to all intense and purposes, each tenant is just a collection of users who are using the application "unaware" of the other tenants who's users are also doing the same. 
  
- It's essentially like the application is splitting itself into multiple applications - one for each  tenant - so that one Tenant can have a completely different `view of the world` than another.
+A multi-tenant application is essentially an application that splits itself into multiple applications - one for each  tenant - so that one Tenant can have a completely different `view of the world` than another.
 
-## Why would I want this?
+Now that we are all caught up, let's get down to business!
+
+<!--more--> 
+
+## But wait.. Why would I want this?
 
 Some indicators as to why you might want multi-tenancy are that, for certain audiences, you might want to:
 

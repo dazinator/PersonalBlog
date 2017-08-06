@@ -121,17 +121,19 @@
 	</header>
 
 	<article>
-		
+		<p><em>This is part of a series. <a href="http://localhost:1313/tags/dotnettency/">You can find the other parts here</a></em></p>
 
-<h2 id="multitenancy-you-say">Multitenancy you say?</h2>
+<h2 id="multitenancy-who">Multitenancy who?</h2>
 
-<p>Yes. You are probably familiar with multi-tenancy already, but if you aren&rsquo;t - here is a brief summary for you.</p>
+<p>Just in case you need a quick recap, a muti-tenant web application is one that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a <code>tenant</code>. To to all intense and purposes, each tenant is just a collection of users who are using the application &ldquo;unaware&rdquo; of the other tenants who&rsquo;s users are also doing the same.</p>
 
-<p>A muti-tenant web application means you have a single instance of the running web application, that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a tenant. To to all intense and purposes, each tenant is a collection of users who are using the application &ldquo;unaware&rdquo; of the other tenants who&rsquo;s users are also doing the same.</p>
+<p>A multi-tenant application is essentially an application that splits itself into multiple applications - one for each  tenant - so that one Tenant can have a completely different <code>view of the world</code> than another.</p>
 
-<p>It&rsquo;s essentially like the application is splitting itself into multiple applications - one for each  tenant - so that one Tenant can have a completely different <code>view of the world</code> than another.</p>
+<p>Now that we are all caught up, let&rsquo;s get down to business!</p>
 
-<h2 id="why-would-i-want-this">Why would I want this?</h2>
+<p></p>
+
+<h2 id="but-wait-why-would-i-want-this">But wait.. Why would I want this?</h2>
 
 <p>Some indicators as to why you might want multi-tenancy are that, for certain audiences, you might want to:</p>
 
@@ -202,7 +204,6 @@
 <p>If there is anything else you would like me to cover, please let me know in the comments.</p>
 
 <p>In the meantime, if you would like to check out <code>dotnettency</code> and run the samples etc, feel free! <a href="https://github.com/dazinator/Dotnettency">https://github.com/dazinator/Dotnettency</a></p>
-
 	</article>
 </main>
 
