@@ -28,6 +28,10 @@ paginate = 5
 	favicon = "favicon.ico"	
 	analytics = "code-here"
 	email = "darrelltunnell@gmail.com"
+    shareTwitter = true
+    shareFacebook = false
+    shareGooglePlus = true
+    shareLinkedIn = true
 
     # Header Title for the main page
 	# header = "Radiating Awesomeness, One Blog Post at a Time."

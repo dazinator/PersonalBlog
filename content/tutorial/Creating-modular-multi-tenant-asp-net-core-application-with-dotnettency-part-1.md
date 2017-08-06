@@ -7,19 +7,19 @@ categories: [ "Development" ]
 index: true
 ---
 
-*This is part of a series. [You can find the other parts here](http://localhost:1313/tags/dotnettency/)*
+*This is part of a series. [You can find the other parts here](/tags/dotnettency/)*
 
 *You can find the sample code for this post [here](https://github.com/dazinator/Dotnettency.Samples)*
 
 In this first part of the tutorial, we will create a shiny new asp.net core project that we will use moving forwards. We will then add some very basic multi-tenancy! We will expand on this in future posts.
-
+Before starting this tutortial, you may wish to [read to the introduction](/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency/) although this isn't a necessity. Ok if you are ready, let's dive in!
+<!--more--> 
 ## Project Setup
 
 Open VS2017 and create a new "empty" ASP.NET Core Web project:
 
 ![new-aspnetcore-project.PNG](/img/new-aspnetcore-project.PNG)
 
-<!--more--> 
 Add the `dotnettency` nuget package:
 
 ![neget-dotnettency.PNG](/img/nugetdotnettency.PNG)
@@ -189,6 +189,6 @@ Overall, we still have a lot of `dotnettency` features to get through in this se
 Don't forget to leave a comment if you find this stuff useful!
 
 
-*This is part of a series. [You can find the other parts here](http://localhost:1313/tags/dotnettency/)*
+*This is part of a series. [You can find the other parts here](/tags/dotnettency/)*
 
 *You can find the sample code for this post [here](https://github.com/dazinator/Dotnettency.Samples)*

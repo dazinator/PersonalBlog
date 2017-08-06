@@ -7,7 +7,7 @@ categories: [ "Development" ]
 index: true
 ---
 
-*This is part of a series. [You can find the other parts here](http://localhost:1313/tags/dotnettency/)*
+*This is part of a series. [You can find the other parts here](/tags/dotnettency/)*
 
 ## Multitenancy who?
 
