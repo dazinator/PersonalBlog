@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-2/</loc>
+    <lastmod>2017-08-07T06:20:44+01:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-1/</loc>
     <lastmod>2017-08-06T13:18:44+01:00</lastmod>
   </url>
@@ -100,7 +105,7 @@
   
   <url>
     <loc>http://darrelltunnell.net/tags/asp.net-core/</loc>
-    <lastmod>2017-08-06T13:18:44+01:00</lastmod>
+    <lastmod>2017-08-07T06:20:44+01:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -129,13 +134,13 @@
   
   <url>
     <loc>http://darrelltunnell.net/</loc>
-    <lastmod>2017-08-06T13:18:44+01:00</lastmod>
+    <lastmod>2017-08-07T06:20:44+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://darrelltunnell.net/categories/development/</loc>
-    <lastmod>2017-08-06T13:18:44+01:00</lastmod>
+    <lastmod>2017-08-07T06:20:44+01:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -159,7 +164,7 @@
   
   <url>
     <loc>http://darrelltunnell.net/tags/dotnettency/</loc>
-    <lastmod>2017-08-06T13:18:44+01:00</lastmod>
+    <lastmod>2017-08-07T06:20:44+01:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -213,7 +218,7 @@
   
   <url>
     <loc>http://darrelltunnell.net/tutorial/</loc>
-    <lastmod>2017-08-06T13:18:44+01:00</lastmod>
+    <lastmod>2017-08-07T06:20:44+01:00</lastmod>
     <priority>0</priority>
   </url>
   
