@@ -1,8 +1,8 @@
 ---
-title: "Creating Modular Multi-tenant ASP.NET Core Application with Dotnettency - Part 1"
+title: "Modular Multi-tenant ASP.NET Core Application with Dotnettency - Part 1"
 date: 2017-08-06T13:18:44+01:00
 published: true
-tags: [ "dotnettency", "asp.net core" ]
+tags: [ "dotnettency", "asp.net core","multitenancy", "aspnetcore" ]
 categories: [ "Development" ]
 index: true
 images: ["/img/new-aspnetcore-project.PNG"]
