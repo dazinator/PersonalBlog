@@ -6,13 +6,27 @@
     <description>Recent content in Dotnettency on Darrell Tunnell</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Mon, 07 Aug 2017 06:20:44 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 24 Aug 2017 06:20:44 +0100</lastBuildDate>
     
 	<atom:link href="http://darrelltunnell.net/tags/dotnettency/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Creating Modular Multi-tenant ASP.NET Core Application with Dotnettency - Part 2</title>
+      <title>Modular, Multi-tenant, ASP.NET Core Applications with Dotnettency - Part 3</title>
+      <link>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-3/</link>
+      <pubDate>Thu, 24 Aug 2017 06:20:44 +0100</pubDate>
+      
+      <guid>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-3/</guid>
+      <description>&lt;p&gt;&lt;em&gt;This is part of a series. &lt;a href=&#34;http://darrelltunnell.net/tags/dotnettency/&#34;&gt;You can find the other parts here&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;You can find the sample code for this post &lt;a href=&#34;https://github.com/dazinator/Dotnettency.Samples&#34;&gt;here&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;In this part of the tutorial, we will cover &lt;code&gt;Per Tenant DI Containers&lt;/code&gt; in ASP.NET Core.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Modular Multi-tenant ASP.NET Core Application with Dotnettency - Part 2</title>
       <link>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-2/</link>
       <pubDate>Mon, 07 Aug 2017 06:20:44 +0100</pubDate>
       
@@ -27,7 +41,7 @@
     </item>
     
     <item>
-      <title>Creating Modular Multi-tenant ASP.NET Core Application with Dotnettency - Part 1</title>
+      <title>Modular Multi-tenant ASP.NET Core Application with Dotnettency - Part 1</title>
       <link>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-1/</link>
       <pubDate>Sun, 06 Aug 2017 13:18:44 +0100</pubDate>
       
@@ -42,7 +56,7 @@ Before starting this tutortial, you may wish to &lt;a href=&#34;http://darrelltu
     </item>
     
     <item>
-      <title>Creating Modular Multi-tenant ASP.NET Core Application with Dotnettency</title>
+      <title>Modular Multi-tenant ASP.NET Core Application with Dotnettency</title>
       <link>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency/</link>
       <pubDate>Thu, 03 Aug 2017 15:06:44 +0100</pubDate>
       

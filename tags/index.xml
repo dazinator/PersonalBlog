@@ -23,9 +23,18 @@
     <item>
       <title>Asp.Net Core</title>
       <link>http://darrelltunnell.net/tags/asp.net-core/</link>
-      <pubDate>Mon, 07 Aug 2017 06:20:44 +0100</pubDate>
+      <pubDate>Thu, 24 Aug 2017 06:20:44 +0100</pubDate>
       
       <guid>http://darrelltunnell.net/tags/asp.net-core/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Aspnetcore</title>
+      <link>http://darrelltunnell.net/tags/aspnetcore/</link>
+      <pubDate>Thu, 24 Aug 2017 06:20:44 +0100</pubDate>
+      
+      <guid>http://darrelltunnell.net/tags/aspnetcore/</guid>
       <description></description>
     </item>
     
@@ -86,7 +95,7 @@
     <item>
       <title>Dotnettency</title>
       <link>http://darrelltunnell.net/tags/dotnettency/</link>
-      <pubDate>Mon, 07 Aug 2017 06:20:44 +0100</pubDate>
+      <pubDate>Thu, 24 Aug 2017 06:20:44 +0100</pubDate>
       
       <guid>http://darrelltunnell.net/tags/dotnettency/</guid>
       <description></description>
@@ -116,6 +125,15 @@
       <pubDate>Sun, 24 Jan 2016 00:00:00 +0000</pubDate>
       
       <guid>http://darrelltunnell.net/tags/jspm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Multitenancy</title>
+      <link>http://darrelltunnell.net/tags/multitenancy/</link>
+      <pubDate>Thu, 24 Aug 2017 06:20:44 +0100</pubDate>
+      
+      <guid>http://darrelltunnell.net/tags/multitenancy/</guid>
       <description></description>
     </item>
     
