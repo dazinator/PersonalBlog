@@ -9,7 +9,29 @@
 
   
   
-  
+  <meta name="twitter:title" content="CRM / Plugin Generated Values - and Reducing Roundtrips!"/>
+  <meta name="twitter:description" content="Setting the Scene
+
+Imagine we have an application that uses the CRM SDK. It needs to:
+
+
+Create a new account entity in crm.
+Get some value that was just generated as a result of a synchronous plugin that fires on the create. For example, suppose there is a plugin that generates an account reference number.
+
+
+The &ldquo;I don&rsquo;t care about network latency method!&rdquo;
+
+The &lsquo;I don&rsquo;t care about network latency&rsquo; way of dealing with this is to just do 2 seperate Requests (roundtrips) with the CRM server.
+
+
+Create the new account which returns you the ID.
+Retrieve the account using that ID, along with the values that you need.
+
+
+This approach is sub optimal where network latency is a concern, as it incurs the penalty of making two roundtrips accross the network with the server, where 1 is possible.
+
+Let&rsquo;s now have a look at the &ldquo;I&rsquo;m running on a 56k modem method&rdquo; of doing the same thing!
+"/>
   
     <meta name="twitter:site" content="@dazinator"/>
   
