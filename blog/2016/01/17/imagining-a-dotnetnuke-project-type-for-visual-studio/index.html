@@ -9,7 +9,24 @@
 
   
   
-  
+  <meta name="twitter:title" content="Imagining a DotNetNuke Project Type for Visual Studio"/>
+  <meta name="twitter:description" content="Introduction
+
+When developing DotNetNuke extensions, we typically use one of the existing Visual Studio Project Type&rsquo;s, for example - an ASP.NET Web Application project.
+
+Even when using a Project Template such as Christoc&rsquo;s, the project template is still based upon one of the standard Visual Studio project types - usually an ASP.NET Web Application project.
+
+However these Project Types do not &ldquo;gel&rdquo; well with DotNetNuke development in a number of areas, the main ones being:
+
+
+Running the project in VS (clicking play) - wants to run the extensions as a Web Application, but this makes no sense for a Dnn extension - which has to be hosted by the DotNetNuke website.
+Deploying the extension - there is no support for that in the project system - you have to manually deploy your extensions to the Dnn instance.
+Debugging the extension - you have to manually attach to process.
+
+
+So.. what if there was a new Project Type, one that was purpose built for DotNetNuke development? What would that look like?
+
+"/>
   
     <meta name="twitter:site" content="@dazinator"/>
   
