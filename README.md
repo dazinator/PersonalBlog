@@ -16,7 +16,7 @@ My Hugo Blog: http://darrelltunnell.net
 
 Quick start
 
-* Checkout the theme sub-repository:
+* Clone repo, and then `CD` into the repo directory and initialise the theme submodules:
 ```
  git submodule init
  git submodule update
