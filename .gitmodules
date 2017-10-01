@@ -9,3 +9,6 @@
 	url = https://github.com/dazinator/ghostwriter.git
 
 
+[submodule "themes/hugo-theme-wave"]
+	path = themes/hugo-theme-wave
+	url = https://github.com/dazinator/hugo-theme-wave.git
