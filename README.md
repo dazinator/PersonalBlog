@@ -15,6 +15,13 @@ My Hugo Blog: http://darrelltunnell.net
 ### Snippet
 
 Quick start
+
+* Checkout the theme sub-repository:
+```
+ git submodule init
+ git submodule update
+```
+
 * Run hugo server on root folder.
 
    ``` 
