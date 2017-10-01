@@ -1,159 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
-<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# website: http://ogp.me/ns/website#">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <meta name="description" content="">
-    <meta property="og:title" content="ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia">
-    
-
-  
-  
-  <meta name="twitter:title" content="ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia"/>
-  <meta name="twitter:description" content="This post is part 1 of a series. Part 2 is here
-
-ASP (A Sea of Packages).NET 5
-
-When you create a new ASP.NET 5 project, you will see all sorts of new-ness. I am going to guide you, the uninitiated ASP.NET 5 web developer, through creating your first ASP.NET 5 MVC application, but we won&rsquo;t stop there. In the next post of this series, we will then enhance the project with a number of features:
-
-
-Bundling and Minification.
-Auto browser refresh (as you make changes to files during development)
-
-
-In addition, I will touch upon important tooling that you need to be aware of:
-
-
-NPM
-Bower and why we are going to replace it with Jspm
-Gulp - and why is it useful
-
-
-To be able to do all of this, we will be creating an ASP.NET MVC 5 project, and then we will be using Aurelia to run an Aurelia application on Home page (Index.cshtml)
-"/>
-  
-    <meta name="twitter:site" content="@dazinator"/>
-  
-  
-  
-
-    
-    <meta property="og:type" content="article">
-    <meta property="article:published_time" content="2015-08-16">
-    
-    <meta property="og:description" content="">
-    <meta property="og:url" content="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/">
-    <meta property="og:site_name" content="Darrell Tunnell">
-    
-    <meta property="og:tags" content="ASP.NET CORE">
-    
-    <meta property="og:tags" content="Aurelia">
-    
-    <meta name="generator" content="Hugo 0.25.1" />
-    <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia &middot; Darrell Tunnell</title>
-    
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
-    
-    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">
-    
-    <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
+<html lang="en-gb">
+<head>
+    <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia</title>
+    <meta name="generator" content="Hugo 0.29" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     
     
+
+    <script src="http://darrelltunnell.net/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="http://darrelltunnell.net/bower_components/bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://darrelltunnell.net/bower_components/bootstrap/js/dropdowns-enhancement.js"></script>
+    <script src="http://darrelltunnell.net/bower_components/bluebird/js/browser/bluebird.js"></script>
+    <script src="http://darrelltunnell.net//bower_components/talaria/dist/talaria.js"></script>
+    <script src="http://darrelltunnell.net/bower_components/d3/d3.min.js" charset="utf-8"></script>
+    <script src="http://darrelltunnell.net/bower_components/cal-heatmap/cal-heatmap.min.js"></script>
+    <script src="http://darrelltunnell.net/bower_components/highlightjs/highlight.pack.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']]}
+      });
+    </script>
+
     <link rel="icon" href="http://darrelltunnell.net/favicon.ico" />
+    <link rel="apple-touch-icon" href="http://darrelltunnell.net/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/highlightjs/styles/monokai.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/bootstrap/css/dropdowns-enhancement.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/talaria/dist/talaria.css" />   
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/createjs/createjs.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/icomoon/css/icomoon.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/css/mobile.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/cal-heatmap/cal-heatmap.css" />
+
     
-    <style>
-     
-.highlight pre {
-    word-wrap: normal;
-}
 
-.highlight pre code {
-    white-space: pre;
-}
-
-    </style>
-
-    
     
 </head>
 <body>
-<nav class="navbar navbar-default navbar-fixed-top visible-xs">
-	<div class="container-fluid">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			
-				<a class="navbar-brand" href="http://darrelltunnell.net/">Darrell Tunnell</a>
-			
-		</div>
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav">
-				
-				
-					<li><a href="http://darrelltunnell.net/">Blog</a></li>
-				
-					<li><a href="http://darrelltunnell.net/post/">Posts</a></li>
-				
-					<li><a href="http://darrelltunnell.net/tutorial/">Tutorials</a></li>
-				
-			</ul>
-		</div>
-	</div>
+<div class="container">
+
+
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+
+    	    <div class="navbar-header">
+      		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+      		  <span class="sr-only">Toggle navigation</span>
+      		  <span class="icon-bar"></span>
+      		  <span class="icon-bar"></span>
+      		  <span class="icon-bar"></span>
+      		</button>
+		    <h1>
+			    <a class="navbar-brand" href="http://darrelltunnell.net/">
+				    <span class="icon-phoenix_logo"></span>
+				    
+				    
+				    
+			    </a>
+		    </h1>
+	    </div>
+
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+    
+        <li><a href="#">Home</a></li>
+        <li><a href="http://darrelltunnell.net/hugo-theme-wave/archive">Archives</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Wiki<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">User</a></li>
+            <li role="separator" class="divider"></li>
+            <li class="dropdown-submenu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Application</a>
+            <ul class="dropdown-menu">
+              <li><a href="#">List Application</a></li>
+                    <li role="separator" class="divider"></li>
+              <li><a href="#">Accessibility</a></li>
+              <li><a href="#">Application launchers</a></li>
+              <li class="dropdown-submenu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Command shells</a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-submenu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bash</a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Invocation</a></li>
+                  <li><a href="#">Command line</a></li>
+                </ul>
+                </li>
+              </ul>
+              </li>
+            </ul>
+            </li>
+            <li><a href="#">Development</a></li>
+            <li><a href="#">Hardware</a></li>
+            <li><a href="#">Networking</a></li>
+            <li><a href="#">System administration</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">GitHub</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Issue</a></li>
+
+    <li>
+	<a href="https://gitlab.com/">
+		<i class="fa fa-gitlab" aria-hidden="true"></i>
+	</a>
+</li>
+<li>
+	<a href="https://github.com/">
+		<i class="fa fa-github" aria-hidden="true"></i>
+	</a>
+</li>
+<li>
+	<a href="https://twitter.com/">
+		<i class="fa fa-twitter" aria-hidden="true"></i>
+	</a>
+
+</li>
+
+<li>
+	<a href="">
+		 <i class="fa fa-rss-square" aria-hidden="true"></i>
+	</a>
+</li>
+
+    
+      </ul>
+    </div>
+
+  </div>
 </nav>
-<div class="container-fluid">
-	<div class="row">
-		<div id="menu" class="hidden-xs col-sm-4 col-md-3">
-	<div id="menu-content" class="vertical-align">
-		
-			<h1 class="text-center"><a href="http://darrelltunnell.net/">Darrell Tunnell</a></h1>
-		
-		
-		
-			<small class="text-center center-block">Developer Extraordinaire</small>
-		
-		
-		
-			<img id="profile-pic" src="http://darrelltunnell.net//img/profile.jpg" alt="My Picture" class="img-circle center-block">
-		
-		<div id="social" class="text-center">
-			
-				<a href="https://github.com/dazinator"><i class="fa fa-github fa-2x"></i></a>
-			
-				<a href="https://twitter.com/dazinate"><i class="fa fa-twitter fa-2x"></i></a>
-			
-				<a href="https://uk.linkedin.com/in/darrell-tunnell-33845331"><i class="fa fa-linkedin fa-2x"></i></a>
-			
 
-			<a href="mailto:darrelltunnell@gmail.com"><i class="fa fa-envelope-o fa-2x"></i></a>
-		</div>
-		<div id="links" class="text-center">
-			
-			
-				<a href="http://darrelltunnell.net/">Blog</a>
-			
-				<a href="http://darrelltunnell.net/post/">Posts</a>
-			
-				<a href="http://darrelltunnell.net/tutorial/">Tutorials</a>
-			
-		</div>
-	</div>
-</div>
+</header>
 
-		<div id="content" class="col-xs-12 col-sm-8 col-md-9">
-			<div class="row">
-				<div id="post" class="col-sm-offset-1 col-sm-10 col-md-10 col-lg-8">
 
-<main>
-	<header>
-		<h1>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia</h1>
-	</header>
 
-	<article>
-		<p><strong>This post is part 1 of a series. Part 2 is <a href="http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/">here</a></strong></p>
+
+<div id="container">
+   <div class="outer">
+    <section id="main">
+    <article>
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    
+    <h1 class="article-title" itemprop="name">
+	<a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/" class="permalink">ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia</a>
+    </h1>
+	<time datetime="2015-08-16 00:00:00 &#43;0000 UTC" itemprop="datePublished">2015-08-16</time>
+    <div class="article-meta">
+
+        
+    </div>
+</header>
+
+
+            <div class="article-entry" itemprop="articleBody">
+                <p><strong>This post is part 1 of a series. Part 2 is <a href="http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/">here</a></strong></p>
 
 <h3 id="asp-a-sea-of-packages-net-5">ASP (A Sea of Packages).NET 5</h3>
 
@@ -253,42 +268,43 @@ To be able to do all of this, we will be creating an ASP.NET MVC 5 project, and 
 </ol>
 
 <p>If there is anything else you would like me to cover in this series, drop me a comment below!</p>
-	</article>
-</main>
+            </div>
 
- <div class="share">
-        
-            <a class="icon-twitter" href="https://twitter.com/share?text=ASP.NET%205%20Projects%20-%20NuGet-NPM-Gulp-Bower-Jspm-Aurelia&url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f08%2f16%2faurelia-and-asp-net-5-mvc%2f"
-                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                <i class="fa fa-twitter"></i>
-                <span class="hidden">Twitter</span>
-            </a>
-        
-
-        
-
-        
-            <a class="icon-google-plus" href="https://plus.google.com/share?url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f08%2f16%2faurelia-and-asp-net-5-mvc%2f"
-              onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-              <i class="fa fa-google-plus"></i>
-                <span class="hidden">Google+</span>
-            </a>
-        
-        
-            <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&title=ASP.NET%205%20Projects%20-%20NuGet-NPM-Gulp-Bower-Jspm-Aurelia&url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f08%2f16%2faurelia-and-asp-net-5-mvc%2f&summary="
-               onclick="window.open(this.href, 'linkedin-share', 'width=554,height=481');return false;">
-               <i class="fa fa-linkedin"></i>
-               <span class="hidden">LinkedIn</span>
-            </a>
-        
-    </div>
-
-<div id="bottom-nav" class="text-center center-block">
-	<a href=" http://darrelltunnell.net/" class="btn btn-default"><i class="fa fa-home"></i> Home</a>
+            <div class="tweet-footer">
+<a href="http://twitter.com/share?url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f08%2f16%2faurelia-and-asp-net-5-mvc%2f&text=ASP.NET%205%20Projects%20-%20NuGet-NPM-Gulp-Bower-Jspm-Aurelia" target="_blank" title="Twitter" >
+<span class="tweet-botton">
+    	<i class="fa fa-twitter" aria-hidden="true"></i>
+    	   Compose new Tweet 
+    </span>
+    </a>
 </div>
 
+<footer class="article-footer">
 
-  <div id="disqus_thread"></div>
+    
+    
+
+    <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc//#disqus_thread" class="article-comment-link">
+        
+    </a>
+    
+</footer>
+
+        </div>
+
+        
+
+
+  <script type="text/javascript">
+   talaria.init({REPOSITORY_NAME: 'syui.gitlab.io-comment',
+                 GITHUB_USERNAME: 'mba-hack'});
+  </script>
+    </article>
+
+    <section id="comments">
+
+        <div id="disqus_thread">
+            <div id="disqus_thread"></div>
 <script>
     var disqus_config = function () {
     
@@ -306,44 +322,46 @@ To be able to do all of this, we will be creating an ASP.NET MVC 5 project, and 
         (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
+    </section>
+</section>
 
+    <aside id="sidebar">
+    <div class="widget-wrap">
+<input id="search" type="text" placeholder="search">
+<ul id="results">
+</ul>
+<script type="text/javascript" src="http://darrelltunnell.net/js/search.js"></script>
+<script type="text/javascript" src="http://darrelltunnell.net/bower_components/lunr.js/lunr.min.js"></script>
+</div>
 
-						</div>
-					</div>
-				</div>
-			</div>
-    </div>
-  
- 
-  
-  <script type="text/javascript">
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'code-here', 'auto');
-    ga('send', 'pageview');
-    window.baseURL = "http:\/\/darrelltunnell.net\/";
-  </script>
-  
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
-  
-  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
-  
-  
-  <script src="http://darrelltunnell.net//js/App.js"></script>
-  
-  <script type="text/javascript">   
-  $(document).ready(function () {
-	$( ".highlighttable" ).wrap("<div class='table-responsive'></div>");
-  $( "img" ).addClass("img-responsive");
-});
-</script>
     
+
+
+    
+
+    
+
+    
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+	<footer id="footer-left">
+	    &copy; 2017 <a href="https://github.com/syui">syui</a>. <br>
+	    
+	</footer>
+	    <footer id="footer-center"> <a href="#"><span class="icon-phoenix_logo"></span></a>  </footer>
+	   <footer id="footer-right"> <a href="">Reference</a> <a href="">Keybind</a> <a href="">Command</a> <a href="">API</a>  </footer>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>

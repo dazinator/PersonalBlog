@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Asp.Net Core on Darrell Tunnell</title>
+    <title>Asp.net Core on Darrell Tunnell</title>
     <link>http://darrelltunnell.net/tags/asp.net-core/</link>
-    <description>Recent content in Asp.Net Core on Darrell Tunnell</description>
+    <description>Recent content in Asp.net Core on Darrell Tunnell</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <lastBuildDate>Thu, 24 Aug 2017 06:20:44 +0100</lastBuildDate>

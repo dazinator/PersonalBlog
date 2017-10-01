@@ -1,141 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
-<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# website: http://ogp.me/ns/website#">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <meta name="description" content="">
-    <meta property="og:title" content="How far does the XRM SDK&#39;s ExecuteMultipleRequest get you?">
+<html lang="en-gb">
+<head>
+    <title>How far does the XRM SDK&#39;s ExecuteMultipleRequest get you?</title>
+    <meta name="generator" content="Hugo 0.29" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    
     
 
-  
-  
-  <meta name="twitter:title" content="How far does the XRM SDK&#39;s ExecuteMultipleRequest get you?"/>
-  <meta name="twitter:description" content="ExecuteMultipleRequest - Let&rsquo;s take it to the max
+    <script src="http://darrelltunnell.net/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="http://darrelltunnell.net/bower_components/bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://darrelltunnell.net/bower_components/bootstrap/js/dropdowns-enhancement.js"></script>
+    <script src="http://darrelltunnell.net/bower_components/bluebird/js/browser/bluebird.js"></script>
+    <script src="http://darrelltunnell.net//bower_components/talaria/dist/talaria.js"></script>
+    <script src="http://darrelltunnell.net/bower_components/d3/d3.min.js" charset="utf-8"></script>
+    <script src="http://darrelltunnell.net/bower_components/cal-heatmap/cal-heatmap.min.js"></script>
+    <script src="http://darrelltunnell.net/bower_components/highlightjs/highlight.pack.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']]}
+      });
+    </script>
 
-In this post, I will explore what kinds of things can be achieved using the SDK&rsquo;s ExecuteMultipleRequest, by starting of with a simple SQL command, and implementing a semantically equivalent ExecuteMultipleRequest, and then slowly introducing some additional complexity - so that, we can see some areas where the SDK starts to fall short!
-
-"/>
-  
-    <meta name="twitter:site" content="@dazinator"/>
-  
-  
-  
-
-    
-    <meta property="og:type" content="article">
-    <meta property="article:published_time" content="2015-02-26">
-    
-    <meta property="og:description" content="">
-    <meta property="og:url" content="http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you/">
-    <meta property="og:site_name" content="Darrell Tunnell">
-    
-    <meta property="og:tags" content="Dynamics CRM">
-    
-    <meta name="generator" content="Hugo 0.25.1" />
-    <title>How far does the XRM SDK&#39;s ExecuteMultipleRequest get you? &middot; Darrell Tunnell</title>
-    
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
-    
-    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">
-    
-    <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
-    
-    
     <link rel="icon" href="http://darrelltunnell.net/favicon.ico" />
+    <link rel="apple-touch-icon" href="http://darrelltunnell.net/apple-touch-icon.png" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/highlightjs/styles/monokai.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/bootstrap/css/dropdowns-enhancement.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/talaria/dist/talaria.css" />   
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/createjs/createjs.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/icomoon/css/icomoon.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/css/mobile.css" />
+    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/cal-heatmap/cal-heatmap.css" />
+
     
-    <style>
-     
-.highlight pre {
-    word-wrap: normal;
-}
 
-.highlight pre code {
-    white-space: pre;
-}
-
-    </style>
-
-    
     
 </head>
 <body>
-<nav class="navbar navbar-default navbar-fixed-top visible-xs">
-	<div class="container-fluid">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			
-				<a class="navbar-brand" href="http://darrelltunnell.net/">Darrell Tunnell</a>
-			
-		</div>
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav">
-				
-				
-					<li><a href="http://darrelltunnell.net/">Blog</a></li>
-				
-					<li><a href="http://darrelltunnell.net/post/">Posts</a></li>
-				
-					<li><a href="http://darrelltunnell.net/tutorial/">Tutorials</a></li>
-				
-			</ul>
-		</div>
-	</div>
+<div class="container">
+
+
+
+<header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+
+    	    <div class="navbar-header">
+      		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+      		  <span class="sr-only">Toggle navigation</span>
+      		  <span class="icon-bar"></span>
+      		  <span class="icon-bar"></span>
+      		  <span class="icon-bar"></span>
+      		</button>
+		    <h1>
+			    <a class="navbar-brand" href="http://darrelltunnell.net/">
+				    <span class="icon-phoenix_logo"></span>
+				    
+				    
+				    
+			    </a>
+		    </h1>
+	    </div>
+
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+    
+        <li><a href="#">Home</a></li>
+        <li><a href="http://darrelltunnell.net/hugo-theme-wave/archive">Archives</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Wiki<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">User</a></li>
+            <li role="separator" class="divider"></li>
+            <li class="dropdown-submenu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Application</a>
+            <ul class="dropdown-menu">
+              <li><a href="#">List Application</a></li>
+                    <li role="separator" class="divider"></li>
+              <li><a href="#">Accessibility</a></li>
+              <li><a href="#">Application launchers</a></li>
+              <li class="dropdown-submenu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Command shells</a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-submenu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bash</a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Invocation</a></li>
+                  <li><a href="#">Command line</a></li>
+                </ul>
+                </li>
+              </ul>
+              </li>
+            </ul>
+            </li>
+            <li><a href="#">Development</a></li>
+            <li><a href="#">Hardware</a></li>
+            <li><a href="#">Networking</a></li>
+            <li><a href="#">System administration</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">GitHub</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Issue</a></li>
+
+    <li>
+	<a href="https://gitlab.com/">
+		<i class="fa fa-gitlab" aria-hidden="true"></i>
+	</a>
+</li>
+<li>
+	<a href="https://github.com/">
+		<i class="fa fa-github" aria-hidden="true"></i>
+	</a>
+</li>
+<li>
+	<a href="https://twitter.com/">
+		<i class="fa fa-twitter" aria-hidden="true"></i>
+	</a>
+
+</li>
+
+<li>
+	<a href="">
+		 <i class="fa fa-rss-square" aria-hidden="true"></i>
+	</a>
+</li>
+
+    
+      </ul>
+    </div>
+
+  </div>
 </nav>
-<div class="container-fluid">
-	<div class="row">
-		<div id="menu" class="hidden-xs col-sm-4 col-md-3">
-	<div id="menu-content" class="vertical-align">
-		
-			<h1 class="text-center"><a href="http://darrelltunnell.net/">Darrell Tunnell</a></h1>
-		
-		
-		
-			<small class="text-center center-block">Developer Extraordinaire</small>
-		
-		
-		
-			<img id="profile-pic" src="http://darrelltunnell.net//img/profile.jpg" alt="My Picture" class="img-circle center-block">
-		
-		<div id="social" class="text-center">
-			
-				<a href="https://github.com/dazinator"><i class="fa fa-github fa-2x"></i></a>
-			
-				<a href="https://twitter.com/dazinate"><i class="fa fa-twitter fa-2x"></i></a>
-			
-				<a href="https://uk.linkedin.com/in/darrell-tunnell-33845331"><i class="fa fa-linkedin fa-2x"></i></a>
-			
 
-			<a href="mailto:darrelltunnell@gmail.com"><i class="fa fa-envelope-o fa-2x"></i></a>
-		</div>
-		<div id="links" class="text-center">
-			
-			
-				<a href="http://darrelltunnell.net/">Blog</a>
-			
-				<a href="http://darrelltunnell.net/post/">Posts</a>
-			
-				<a href="http://darrelltunnell.net/tutorial/">Tutorials</a>
-			
-		</div>
-	</div>
-</div>
+</header>
 
-		<div id="content" class="col-xs-12 col-sm-8 col-md-9">
-			<div class="row">
-				<div id="post" class="col-sm-offset-1 col-sm-10 col-md-10 col-lg-8">
 
-<main>
-	<header>
-		<h1>How far does the XRM SDK&#39;s ExecuteMultipleRequest get you?</h1>
-	</header>
 
-	<article>
-		<h3 id="executemultiplerequest-let-s-take-it-to-the-max">ExecuteMultipleRequest - Let&rsquo;s take it to the max</h3>
+
+<div id="container">
+   <div class="outer">
+    <section id="main">
+    <article>
+        <div class="article-inner">
+            
+
+            <header class="article-header">
+    
+    <h1 class="article-title" itemprop="name">
+	<a href="http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you/" class="permalink">How far does the XRM SDK&#39;s ExecuteMultipleRequest get you?</a>
+    </h1>
+	<time datetime="2015-02-26 00:00:00 &#43;0000 UTC" itemprop="datePublished">2015-02-26</time>
+    <div class="article-meta">
+
+        
+    </div>
+</header>
+
+
+            <div class="article-entry" itemprop="articleBody">
+                <h3 id="executemultiplerequest-let-s-take-it-to-the-max">ExecuteMultipleRequest - Let&rsquo;s take it to the max</h3>
 
 <p>In this post, I will explore what kinds of things can be achieved using the SDK&rsquo;s ExecuteMultipleRequest, by starting of with a simple SQL command, and implementing a semantically equivalent ExecuteMultipleRequest, and then slowly introducing some additional complexity - so that, we can see some areas where the SDK starts to fall short!</p>
 
@@ -145,9 +178,8 @@ In this post, I will explore what kinds of things can be achieved using the SDK&
 
 <p>Consider this SQL:</p>
 
-<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">INSERT</span> <span style="color: #008000; font-weight: bold">INTO</span> contact (firstname, lastname) <span style="color: #008000; font-weight: bold">VALUES</span> (<span style="color: #BA2121">&#39;albert&#39;</span>, <span style="color: #BA2121">&#39;einstein&#39;</span>);
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span><span style="color:#fff;font-weight:bold">INSERT</span> <span style="color:#fff;font-weight:bold">INTO</span> contact (firstname, lastname) <span style="color:#fff;font-weight:bold">VALUES</span> (<span style="color:#0ff;font-weight:bold">&#39;albert&#39;</span>, <span style="color:#0ff;font-weight:bold">&#39;einstein&#39;</span>);</code></pre>
+</div>
 
 <p>Well you hardly need a ExecuteMultipleRequest for this, but if you really wanted to you could create one no problem. I am going to assume you are already familiar with the code to create a ExecuteMultipleRequest - if not it&rsquo;s described <a href="https://msdn.microsoft.com/en-gb/library/jj863631.aspx">here.</a></p>
 
@@ -167,9 +199,8 @@ In this post, I will explore what kinds of things can be achieved using the SDK&
 
 <p>Here&rsquo;s it is in T-SQL:</p>
 
-<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">INSERT</span> <span style="color: #008000; font-weight: bold">INTO</span> contact (firstname, lastname) <span style="color: #008000; font-weight: bold">OUTPUT</span> inserted.accountnumber <span style="color: #008000; font-weight: bold">VALUES</span> (<span style="color: #BA2121">&#39;albert&#39;</span>, <span style="color: #BA2121">&#39;einstein&#39;</span>);
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span><span style="color:#fff;font-weight:bold">INSERT</span> <span style="color:#fff;font-weight:bold">INTO</span> contact (firstname, lastname) <span style="color:#fff;font-weight:bold">OUTPUT</span> inserted.accountnumber <span style="color:#fff;font-weight:bold">VALUES</span> (<span style="color:#0ff;font-weight:bold">&#39;albert&#39;</span>, <span style="color:#0ff;font-weight:bold">&#39;einstein&#39;</span>);</code></pre>
+</div>
 
 <p>This equates to the following using the SDK:-</p>
 
@@ -188,9 +219,8 @@ In this post, I will explore what kinds of things can be achieved using the SDK&
 
 <p>With the previous example in mind, consider the following SQL</p>
 
-<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">INSERT</span> <span style="color: #008000; font-weight: bold">INTO</span> contact (contactid, firstname, lastname) <span style="color: #008000; font-weight: bold">OUTPUT</span> inserted.accountnumber <span style="color: #008000; font-weight: bold">VALUES</span> (<span style="color: #BA2121">&#39;2f4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>, <span style="color: #BA2121">&#39;albert&#39;</span>, <span style="color: #BA2121">&#39;einstein&#39;</span>);
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span><span style="color:#fff;font-weight:bold">INSERT</span> <span style="color:#fff;font-weight:bold">INTO</span> contact (contactid, firstname, lastname) <span style="color:#fff;font-weight:bold">OUTPUT</span> inserted.accountnumber <span style="color:#fff;font-weight:bold">VALUES</span> (<span style="color:#0ff;font-weight:bold">&#39;2f4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>, <span style="color:#0ff;font-weight:bold">&#39;albert&#39;</span>, <span style="color:#0ff;font-weight:bold">&#39;einstein&#39;</span>);</code></pre>
+</div>
 
 <p>If you are quick, you&rsquo;ve already cottoned on that this one is possible, and it equates to:-</p>
 
@@ -206,13 +236,10 @@ In this post, I will explore what kinds of things can be achieved using the SDK&
 
 <p>Here is a batch of T-SQL commands:</p>
 
-<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1
-2
-3</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">INSERT</span> <span style="color: #008000; font-weight: bold">INTO</span> contact (firstname, lastname) <span style="color: #008000; font-weight: bold">VALUES</span> (<span style="color: #BA2121">&#39;albert&#39;</span>, <span style="color: #BA2121">&#39;einstein&#39;</span>);
-<span style="color: #008000; font-weight: bold">UPDATE</span> contact <span style="color: #008000; font-weight: bold">SET</span> lastname <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;Johnson&#39;</span> <span style="color: #008000; font-weight: bold">WHERE</span> contactid <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;3a4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>;
-<span style="color: #008000; font-weight: bold">DELETE</span> <span style="color: #008000; font-weight: bold">FROM</span> contact <span style="color: #008000; font-weight: bold">WHERE</span> contactid <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;4b4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span><span style="color:#fff;font-weight:bold">INSERT</span> <span style="color:#fff;font-weight:bold">INTO</span> contact (firstname, lastname) <span style="color:#fff;font-weight:bold">VALUES</span> (<span style="color:#0ff;font-weight:bold">&#39;albert&#39;</span>, <span style="color:#0ff;font-weight:bold">&#39;einstein&#39;</span>);
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">2</span><span style="color:#fff;font-weight:bold">UPDATE</span> contact <span style="color:#fff;font-weight:bold">SET</span> lastname = <span style="color:#0ff;font-weight:bold">&#39;Johnson&#39;</span> <span style="color:#fff;font-weight:bold">WHERE</span> contactid = <span style="color:#0ff;font-weight:bold">&#39;3a4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">3</span><span style="color:#fff;font-weight:bold">DELETE</span> <span style="color:#fff;font-weight:bold">FROM</span> contact <span style="color:#fff;font-weight:bold">WHERE</span> contactid = <span style="color:#0ff;font-weight:bold">&#39;4b4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span></code></pre>
+</div>
 
 <p>Now, we know that SQL Server would execute that SQL, by executing each sql command within that batch in sequence, and if there were any errors it will not continue to process the rest of the commands in the same batch. It would also not execute that batch within a transaction, so it would not roll back should errors occur half way through etc.</p>
 
@@ -232,19 +259,15 @@ In this post, I will explore what kinds of things can be achieved using the SDK&
 
 <p>Let&rsquo;s add a bit of complexity to the previous T-SQL - consider this:</p>
 
-<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1
-2
-3</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">INSERT</span> <span style="color: #008000; font-weight: bold">INTO</span> contact (contactid, firstname, lastname) <span style="color: #008000; font-weight: bold">OUTPUT</span> inserted.accountnumber <span style="color: #008000; font-weight: bold">VALUES</span> (<span style="color: #BA2121">&#39;2f4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>, <span style="color: #BA2121">&#39;albert&#39;</span>, <span style="color: #BA2121">&#39;einstein&#39;</span>);
-<span style="color: #008000; font-weight: bold">UPDATE</span> contact <span style="color: #008000; font-weight: bold">SET</span> lastname <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;Johnson&#39;</span> <span style="color: #008000; font-weight: bold">WHERE</span> contactid <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;3a4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>;
-<span style="color: #008000; font-weight: bold">DELETE</span> <span style="color: #008000; font-weight: bold">FROM</span> contact <span style="color: #008000; font-weight: bold">WHERE</span> contactid <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;4b4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span><span style="color:#fff;font-weight:bold">INSERT</span> <span style="color:#fff;font-weight:bold">INTO</span> contact (contactid, firstname, lastname) <span style="color:#fff;font-weight:bold">OUTPUT</span> inserted.accountnumber <span style="color:#fff;font-weight:bold">VALUES</span> (<span style="color:#0ff;font-weight:bold">&#39;2f4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>, <span style="color:#0ff;font-weight:bold">&#39;albert&#39;</span>, <span style="color:#0ff;font-weight:bold">&#39;einstein&#39;</span>);
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">2</span><span style="color:#fff;font-weight:bold">UPDATE</span> contact <span style="color:#fff;font-weight:bold">SET</span> lastname = <span style="color:#0ff;font-weight:bold">&#39;Johnson&#39;</span> <span style="color:#fff;font-weight:bold">WHERE</span> contactid = <span style="color:#0ff;font-weight:bold">&#39;3a4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">3</span><span style="color:#fff;font-weight:bold">DELETE</span> <span style="color:#fff;font-weight:bold">FROM</span> contact <span style="color:#fff;font-weight:bold">WHERE</span> contactid = <span style="color:#0ff;font-weight:bold">&#39;4b4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span></code></pre>
+</div>
 
 <p>The first command in that batch of SQL commands is this:</p>
 
-<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">INSERT</span> <span style="color: #008000; font-weight: bold">INTO</span> contact (contactid, firstname, lastname) <span style="color: #008000; font-weight: bold">OUTPUT</span> inserted.accountnumber <span style="color: #008000; font-weight: bold">VALUES</span> (<span style="color: #BA2121">&#39;2f4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>, <span style="color: #BA2121">&#39;albert&#39;</span>, <span style="color: #BA2121">&#39;einstein&#39;</span>);
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span><span style="color:#fff;font-weight:bold">INSERT</span> <span style="color:#fff;font-weight:bold">INTO</span> contact (contactid, firstname, lastname) <span style="color:#fff;font-weight:bold">OUTPUT</span> inserted.accountnumber <span style="color:#fff;font-weight:bold">VALUES</span> (<span style="color:#0ff;font-weight:bold">&#39;2f4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>, <span style="color:#0ff;font-weight:bold">&#39;albert&#39;</span>, <span style="color:#0ff;font-weight:bold">&#39;einstein&#39;</span>);</code></pre>
+</div>
 
 <p>And we know that this actually equates to 2 seperate RequestMessages, a CreateRequest and a RetrieveRequest. We then also need to do an Update and a then a Delete. So this equates to:</p>
 
@@ -266,13 +289,10 @@ In this post, I will explore what kinds of things can be achieved using the SDK&
 
 <p>Now consider this one:</p>
 
-<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1
-2
-3</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">INSERT</span> <span style="color: #008000; font-weight: bold">INTO</span> contact (firstname, lastname) <span style="color: #008000; font-weight: bold">OUTPUT</span> inserted.accountnumber <span style="color: #008000; font-weight: bold">VALUES</span> (<span style="color: #BA2121">&#39;albert&#39;</span>, <span style="color: #BA2121">&#39;einstein&#39;</span>);
-<span style="color: #008000; font-weight: bold">GO</span>
-<span style="color: #008000; font-weight: bold">DELETE</span> <span style="color: #008000; font-weight: bold">FROM</span> contact <span style="color: #008000; font-weight: bold">WHERE</span> contactid <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span><span style="color:#fff;font-weight:bold">INSERT</span> <span style="color:#fff;font-weight:bold">INTO</span> contact (firstname, lastname) <span style="color:#fff;font-weight:bold">OUTPUT</span> inserted.accountnumber <span style="color:#fff;font-weight:bold">VALUES</span> (<span style="color:#0ff;font-weight:bold">&#39;albert&#39;</span>, <span style="color:#0ff;font-weight:bold">&#39;einstein&#39;</span>);
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">2</span><span style="color:#fff;font-weight:bold">GO</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">3</span><span style="color:#fff;font-weight:bold">DELETE</span> <span style="color:#fff;font-weight:bold">FROM</span> contact <span style="color:#fff;font-weight:bold">WHERE</span> contactid = <span style="color:#0ff;font-weight:bold">&#39;6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span></code></pre>
+</div>
 
 <p>What this says is:</p>
 
@@ -326,35 +346,24 @@ In this post, I will explore what kinds of things can be achieved using the SDK&
 
 <p>Consider the following T-SQL:</p>
 
-<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1
-2
-3
-4
-5
-6</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">INSERT</span> <span style="color: #008000; font-weight: bold">INTO</span> contact (firstname, lastname) <span style="color: #008000; font-weight: bold">VALUES</span> (<span style="color: #BA2121">&#39;albert&#39;</span>, <span style="color: #BA2121">&#39;einstein&#39;</span>);
-<span style="color: #008000; font-weight: bold">GO</span>
-<span style="color: #008000; font-weight: bold">DELETE</span> <span style="color: #008000; font-weight: bold">FROM</span> contact <span style="color: #008000; font-weight: bold">WHERE</span> contactid <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>;
-<span style="color: #008000; font-weight: bold">GO</span>
-<span style="color: #008000; font-weight: bold">UPDATE</span> contact <span style="color: #008000; font-weight: bold">SET</span> firstname <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;bob&#39;</span> <span style="color: #008000; font-weight: bold">WHERE</span> lastname <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;Hoskins&#39;</span>;
-<span style="color: #008000; font-weight: bold">GO</span>
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span><span style="color:#fff;font-weight:bold">INSERT</span> <span style="color:#fff;font-weight:bold">INTO</span> contact (firstname, lastname) <span style="color:#fff;font-weight:bold">VALUES</span> (<span style="color:#0ff;font-weight:bold">&#39;albert&#39;</span>, <span style="color:#0ff;font-weight:bold">&#39;einstein&#39;</span>);
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">2</span><span style="color:#fff;font-weight:bold">GO</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">3</span><span style="color:#fff;font-weight:bold">DELETE</span> <span style="color:#fff;font-weight:bold">FROM</span> contact <span style="color:#fff;font-weight:bold">WHERE</span> contactid = <span style="color:#0ff;font-weight:bold">&#39;6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">4</span><span style="color:#fff;font-weight:bold">GO</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">5</span><span style="color:#fff;font-weight:bold">UPDATE</span> contact <span style="color:#fff;font-weight:bold">SET</span> firstname = <span style="color:#0ff;font-weight:bold">&#39;bob&#39;</span> <span style="color:#fff;font-weight:bold">WHERE</span> lastname = <span style="color:#0ff;font-weight:bold">&#39;Hoskins&#39;</span>;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">6</span><span style="color:#fff;font-weight:bold">GO</span></code></pre>
+</div>
 
 <p>In this scenario - each batch of commands contains only a single command. What this means is that you can construct an ExecuteMultipleRequest with &lsquo;ContinueOnError&rsquo; set to true, and there will be no danger that a particular command in a batch will error, and that the rest of the commands in that batch will execute regardless - because there is only a single command in each batch!</p>
 
 <p>For an example of the danger I am referring to here, consider this:</p>
 
-<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1
-2
-3
-4
-5</pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">DELETE</span> <span style="color: #008000; font-weight: bold">FROM</span> contact <span style="color: #008000; font-weight: bold">WHERE</span> contactid <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>;
-<span style="color: #008000; font-weight: bold">DELETE</span> <span style="color: #008000; font-weight: bold">FROM</span> account <span style="color: #008000; font-weight: bold">WHERE</span> primarycontactid <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>;
-<span style="color: #008000; font-weight: bold">GO</span>
-<span style="color: #008000; font-weight: bold">UPDATE</span> contact <span style="color: #008000; font-weight: bold">SET</span> firstname <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;bob&#39;</span> <span style="color: #008000; font-weight: bold">WHERE</span> lastname <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;Hoskins&#39;</span>;
-<span style="color: #008000; font-weight: bold">GO</span>
-</pre></div>
-</td></tr></table>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span><span style="color:#fff;font-weight:bold">DELETE</span> <span style="color:#fff;font-weight:bold">FROM</span> contact <span style="color:#fff;font-weight:bold">WHERE</span> contactid = <span style="color:#0ff;font-weight:bold">&#39;6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">2</span><span style="color:#fff;font-weight:bold">DELETE</span> <span style="color:#fff;font-weight:bold">FROM</span> account <span style="color:#fff;font-weight:bold">WHERE</span> primarycontactid = <span style="color:#0ff;font-weight:bold">&#39;6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42&#39;</span>;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">3</span><span style="color:#fff;font-weight:bold">GO</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">4</span><span style="color:#fff;font-weight:bold">UPDATE</span> contact <span style="color:#fff;font-weight:bold">SET</span> firstname = <span style="color:#0ff;font-weight:bold">&#39;bob&#39;</span> <span style="color:#fff;font-weight:bold">WHERE</span> lastname = <span style="color:#0ff;font-weight:bold">&#39;Hoskins&#39;</span>;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">5</span><span style="color:#fff;font-weight:bold">GO</span></code></pre>
+</div>
 
 <p>The first batch above, contains 2 operations. The second batch contains 1.</p>
 
@@ -366,42 +375,43 @@ Well in that scenario, because the first batch actually contains 2 operations, t
 <p>If you would like to send a batch of commands to the CRM server in one go, the good news is you can. The bad news is, it&rsquo;s not perfect, there are limitations, and hopefully I have shown you just about how far you can stretch things.</p>
 
 <p>If you need to send multiple batches of commands to the CRM server in one go, the good news is you can if each batch contains only a single request message (i.e Create, Retreive, Delete, Update etc) - the bad news is, if thats not the case, then you will need to send each batch as an individual ExecuteMultipleRequest, and implement your own &ldquo;ContinueOnError&rdquo; behaviour clientside such that should one ExecuteMultipleRequest fail to be processed it doesn&rsquo;t halt subsequent batches (ExecuteMultipleRequests) from being processed.</p>
-	</article>
-</main>
+            </div>
 
- <div class="share">
-        
-            <a class="icon-twitter" href="https://twitter.com/share?text=How%20far%20does%20the%20XRM%20SDK%27s%20ExecuteMultipleRequest%20get%20you%3f&url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f02%2f26%2fhow-far-does-the-xrm-sdk-s-executemultiplerequest-get-you%2f"
-                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                <i class="fa fa-twitter"></i>
-                <span class="hidden">Twitter</span>
-            </a>
-        
-
-        
-
-        
-            <a class="icon-google-plus" href="https://plus.google.com/share?url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f02%2f26%2fhow-far-does-the-xrm-sdk-s-executemultiplerequest-get-you%2f"
-              onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-              <i class="fa fa-google-plus"></i>
-                <span class="hidden">Google+</span>
-            </a>
-        
-        
-            <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&title=How%20far%20does%20the%20XRM%20SDK%27s%20ExecuteMultipleRequest%20get%20you%3f&url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f02%2f26%2fhow-far-does-the-xrm-sdk-s-executemultiplerequest-get-you%2f&summary="
-               onclick="window.open(this.href, 'linkedin-share', 'width=554,height=481');return false;">
-               <i class="fa fa-linkedin"></i>
-               <span class="hidden">LinkedIn</span>
-            </a>
-        
-    </div>
-
-<div id="bottom-nav" class="text-center center-block">
-	<a href=" http://darrelltunnell.net/" class="btn btn-default"><i class="fa fa-home"></i> Home</a>
+            <div class="tweet-footer">
+<a href="http://twitter.com/share?url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f02%2f26%2fhow-far-does-the-xrm-sdk-s-executemultiplerequest-get-you%2f&text=How%20far%20does%20the%20XRM%20SDK%27s%20ExecuteMultipleRequest%20get%20you%3f" target="_blank" title="Twitter" >
+<span class="tweet-botton">
+    	<i class="fa fa-twitter" aria-hidden="true"></i>
+    	   Compose new Tweet 
+    </span>
+    </a>
 </div>
 
+<footer class="article-footer">
 
-  <div id="disqus_thread"></div>
+    
+    
+
+    <a href="http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you//#disqus_thread" class="article-comment-link">
+        
+    </a>
+    
+</footer>
+
+        </div>
+
+        
+
+
+  <script type="text/javascript">
+   talaria.init({REPOSITORY_NAME: 'syui.gitlab.io-comment',
+                 GITHUB_USERNAME: 'mba-hack'});
+  </script>
+    </article>
+
+    <section id="comments">
+
+        <div id="disqus_thread">
+            <div id="disqus_thread"></div>
 <script>
     var disqus_config = function () {
     
@@ -419,44 +429,46 @@ Well in that scenario, because the first batch actually contains 2 operations, t
         (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
+    </section>
+</section>
 
+    <aside id="sidebar">
+    <div class="widget-wrap">
+<input id="search" type="text" placeholder="search">
+<ul id="results">
+</ul>
+<script type="text/javascript" src="http://darrelltunnell.net/js/search.js"></script>
+<script type="text/javascript" src="http://darrelltunnell.net/bower_components/lunr.js/lunr.min.js"></script>
+</div>
 
-						</div>
-					</div>
-				</div>
-			</div>
-    </div>
-  
- 
-  
-  <script type="text/javascript">
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'code-here', 'auto');
-    ga('send', 'pageview');
-    window.baseURL = "http:\/\/darrelltunnell.net\/";
-  </script>
-  
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
-  
-  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
-  
-  
-  <script src="http://darrelltunnell.net//js/App.js"></script>
-  
-  <script type="text/javascript">   
-  $(document).ready(function () {
-	$( ".highlighttable" ).wrap("<div class='table-responsive'></div>");
-  $( "img" ).addClass("img-responsive");
-});
-</script>
     
+
+
+    
+
+    
+
+    
+</aside>
+
+</div>
+</div>
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+	<footer id="footer-left">
+	    &copy; 2017 <a href="https://github.com/syui">syui</a>. <br>
+	    
+	</footer>
+	    <footer id="footer-center"> <a href="#"><span class="icon-phoenix_logo"></span></a>  </footer>
+	   <footer id="footer-right"> <a href="">Reference</a> <a href="">Keybind</a> <a href="">Command</a> <a href="">API</a>  </footer>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>

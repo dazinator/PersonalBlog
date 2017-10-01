@@ -35,15 +35,17 @@ paginate = 5
     shareFacebook = false
     shareGooglePlus = true
     shareLinkedIn = true
+	# wave params
+	date_format = "2006-01-02"
 
     # Header Title for the main page
-	# header = "Radiating Awesomeness, One Blog Post at a Time."
+    header = "Posts"
 	
 	# Sidebar profile picture
 	profilepic = "img/profile.jpg"	
 	
     title = "Darrell Tunnell"
-	subtitle = "Developer Extraordinaire"
+	subtitle = "Radiating Awesomeness, One Blog Post at a Time."
 
 	# Social buttons for sidebar
 	# Each of these are optional
@@ -55,14 +57,14 @@ paginate = 5
 	url = "https://twitter.com/dazinate"
 	[[params.socialbuttons]]
 	faicon = "linkedin"
-	url = "https://uk.linkedin.com/in/darrell-tunnell-33845331"
-	#[[params.socialbuttons]]
-	#faicon = "google-plus"
-	#url = "https://plus.google.com/+YourID"
+	url = "https://uk.linkedin.com/in/darrell-tunnell-33845331"	
+    [[params.socialbuttons]]
+	faicon = "rss-square"
+	url = "/index.xml"	
 
     # Nav links below the profile picture	
 	[[params.navlinks]]
-	name = "Blog"
+	name = "Home"
 	url = ""
     
 	#[[params.navlinks]]
@@ -78,6 +80,8 @@ paginate = 5
 	url = "tutorial/"
 
 	# BEGIN HUGOGEO PARAMS Render the rotating globe in the sidebar
+
+	
 		
 	
 
