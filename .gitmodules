@@ -4,3 +4,8 @@
 [submodule "themes/hugo-geo"]
 	path = themes/hugo-geo
 	url = https://github.com/dazinator/hugo-geo.git
+[submodule "themes/ghostwriter"]
+	path = themes/ghostwriter
+	url = https://github.com/dazinator/ghostwriter.git
+
+
