@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-4/</loc>
+    <lastmod>2017-10-01T22:31:00+01:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-3/</loc>
     <lastmod>2017-08-24T06:20:44+01:00</lastmod>
   </url>
@@ -110,13 +115,13 @@
   
   <url>
     <loc>http://darrelltunnell.net/tags/asp.net-core/</loc>
-    <lastmod>2017-08-24T06:20:44+01:00</lastmod>
+    <lastmod>2017-10-01T22:31:00+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://darrelltunnell.net/tags/aspnetcore/</loc>
-    <lastmod>2017-08-24T06:20:44+01:00</lastmod>
+    <lastmod>2017-10-01T22:31:00+01:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -145,13 +150,13 @@
   
   <url>
     <loc>http://darrelltunnell.net/</loc>
-    <lastmod>2017-08-24T06:20:44+01:00</lastmod>
+    <lastmod>2017-10-01T22:31:00+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://darrelltunnell.net/categories/development/</loc>
-    <lastmod>2017-08-24T06:20:44+01:00</lastmod>
+    <lastmod>2017-10-01T22:31:00+01:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -175,7 +180,7 @@
   
   <url>
     <loc>http://darrelltunnell.net/tags/dotnettency/</loc>
-    <lastmod>2017-08-24T06:20:44+01:00</lastmod>
+    <lastmod>2017-10-01T22:31:00+01:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -198,8 +203,14 @@
   </url>
   
   <url>
+    <loc>http://darrelltunnell.net/tags/middleware/</loc>
+    <lastmod>2017-10-01T22:31:00+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://darrelltunnell.net/tags/multitenancy/</loc>
-    <lastmod>2017-08-24T06:20:44+01:00</lastmod>
+    <lastmod>2017-10-01T22:31:00+01:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -235,7 +246,7 @@
   
   <url>
     <loc>http://darrelltunnell.net/tutorial/</loc>
-    <lastmod>2017-08-24T06:20:44+01:00</lastmod>
+    <lastmod>2017-10-01T22:31:00+01:00</lastmod>
     <priority>0</priority>
   </url>
   

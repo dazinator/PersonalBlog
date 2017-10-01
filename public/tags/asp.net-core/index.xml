@@ -6,10 +6,25 @@
     <description>Recent content in Asp.net Core on Darrell Tunnell</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 24 Aug 2017 06:20:44 +0100</lastBuildDate>
+    <lastBuildDate>Sun, 01 Oct 2017 22:31:00 +0100</lastBuildDate>
     
 	<atom:link href="http://darrelltunnell.net/tags/asp.net-core/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Modular, Multi-tenant, ASP.NET Core Applications with Dotnettency - Part 4</title>
+      <link>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-4/</link>
+      <pubDate>Sun, 01 Oct 2017 22:31:00 +0100</pubDate>
+      
+      <guid>http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-4/</guid>
+      <description>&lt;p&gt;In &lt;a href=&#34;http://darrelltunnell.net/tags/dotnettency/&#34;&gt;previous tutorials&lt;/a&gt; we have seen how to configure an asp.net core application for multiple tenants, which included setting up the &lt;code&gt;Moogle&lt;/code&gt; and &lt;code&gt;Gicrosoft&lt;/code&gt; tenants.
+In this tutorial, we will allow each tenant to have it&amp;rsquo;s own middleware pipeline. This allows us to precisely control which middlware runs for which tenants!
+This feature is sometimes referred to as &lt;code&gt;Per Tenant Middleware&lt;/code&gt; in ASP.NET Core.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;This is part of a series. &lt;a href=&#34;http://darrelltunnell.net/tags/dotnettency/&#34;&gt;You can find the other parts here&lt;/a&gt;&lt;/em&gt;
+&lt;em&gt;You can find the sample code for this post &lt;a href=&#34;https://github.com/dazinator/Dotnettency.Samples&#34;&gt;here&lt;/a&gt;&lt;/em&gt;
+&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Modular, Multi-tenant, ASP.NET Core Applications with Dotnettency - Part 3</title>
