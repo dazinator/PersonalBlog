@@ -49,7 +49,7 @@ In the previous part of the this tutorial we saw how we could do some very basic
     
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
     
-    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">
+    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">    
     
     <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
     
@@ -164,105 +164,193 @@ In the previous part of the this tutorial we saw how we could do some very basic
 
 <p>First, derive from <code>HttpContextTenantDistinguisherFactory&lt;TTenant&gt;</code> and override <code>GetTenantDistinguisher</code>:</p>
 
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span>    public class CookieTenantDistinguisherFactory : HttpContextTenantDistinguisherFactory&lt;Tenant&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>    {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>        public CookieTenantDistinguisherFactory(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>        }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>        protected override TenantDistinguisher GetTenantDistinguisher(HttpContext context)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>            // We will return the request uri by default to identify the tenant,
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>            // unless a tenant cookie is available, in which case we will return a URI with a custom scheme.
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">11</span>            var uri = context.Request.GetUri();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">12</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">13</span>            var cookie = context.Request.Cookies[&#34;tenant&#34;];
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">14</span>            if (!string.IsNullOrWhiteSpace(cookie))
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">15</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">16</span>                switch (cookie)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">17</span>                {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">18</span>                    case &#34;Moogle&#34;:
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">19</span>                        return new TenantDistinguisher(new Uri(&#34;tenant://Moogle&#34;));
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">20</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">21</span>                    case &#34;Gicrosoft&#34;:
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">22</span>                        return new TenantDistinguisher(new Uri(&#34;tenant://Gicrosoft&#34;));
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">23</span>                }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">24</span>            }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">25</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">26</span>            return uri;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">27</span>        }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">28</span>    }</code></pre>
-</div>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>    <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">CookieTenantDistinguisherFactory</span> : HttpContextTenantDistinguisherFactory&lt;Tenant&gt;
+    {
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #0000FF">CookieTenantDistinguisherFactory</span>(IHttpContextAccessor httpContextAccessor) : <span style="color: #008000; font-weight: bold">base</span>(httpContextAccessor)
+        {
+        }
+
+        <span style="color: #008000; font-weight: bold">protected</span> <span style="color: #008000; font-weight: bold">override</span> TenantDistinguisher <span style="color: #0000FF">GetTenantDistinguisher</span>(HttpContext context)
+        {
+            <span style="color: #408080; font-style: italic">// We will return the request uri by default to identify the tenant,</span>
+            <span style="color: #408080; font-style: italic">// unless a tenant cookie is available, in which case we will return a URI with a custom scheme.</span>
+            <span style="color: #B00040">var</span> uri = context.Request.GetUri();
+
+            <span style="color: #B00040">var</span> cookie = context.Request.Cookies[<span style="color: #BA2121">&quot;tenant&quot;</span>];
+            <span style="color: #008000; font-weight: bold">if</span> (!<span style="color: #B00040">string</span>.IsNullOrWhiteSpace(cookie))
+            {
+                <span style="color: #008000; font-weight: bold">switch</span> (cookie)
+                {
+                    <span style="color: #008000; font-weight: bold">case</span> <span style="color: #BA2121">&quot;Moogle&quot;</span>:
+                        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000; font-weight: bold">new</span> <span style="color: #0000FF">TenantDistinguisher</span>(<span style="color: #008000; font-weight: bold">new</span> Uri(<span style="color: #BA2121">&quot;tenant://Moogle&quot;</span>));
+
+                    <span style="color: #008000; font-weight: bold">case</span> <span style="color: #BA2121">&quot;Gicrosoft&quot;</span>:
+                        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000; font-weight: bold">new</span> <span style="color: #0000FF">TenantDistinguisher</span>(<span style="color: #008000; font-weight: bold">new</span> Uri(<span style="color: #BA2121">&quot;tenant://Gicrosoft&quot;</span>));
+                }
+            }
+
+            <span style="color: #008000; font-weight: bold">return</span> uri;
+        }
+    }
+</code></pre></div>
+</td></tr></table>
 
 <p>Notice how, when a cookie is present, we return a <code>URI</code> with our own custom scheme - i.e <code>tenant://</code> and with a hostname that indicates the tenant specified by the cookie.</p>
 
 <p>Next, get <code>dotnettency</code> use our new implementation, in <code>startup.cs</code>:</p>
 
-<p><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span>            services.AddMultiTenancy&lt;Tenant&gt;((multiTenancyOptions) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">2</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">3</span>                multiTenancyOptions
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">4</span>                    .DistinguishTenantsWith&lt;CookieTenantDistinguisherFactory&gt;()
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">5</span>                    .InitialiseTenant&lt;TenantShellFactory&gt;();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">6</span>            });</code></pre>
-</div></p>
+<p><table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp">1
+2
+3
+4
+5
+6</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>            services.AddMultiTenancy&lt;Tenant&gt;((multiTenancyOptions) =&gt;
+            {
+                multiTenancyOptions
+                    .DistinguishTenantsWith&lt;CookieTenantDistinguisherFactory&gt;()
+                    .InitialiseTenant&lt;TenantShellFactory&gt;();
+            });
+</code></pre></div>
+</td></tr></table></p>
 
 <p>Now lastly, we need to adjust our <code>TenantShellFactory</code> to handle our custom <code>URI</code>&rsquo;s:</p>
 
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span>    public class TenantShellFactory : ITenantShellFactory&lt;Tenant&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>    {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>        public Task&lt;TenantShell&lt;Tenant&gt;&gt; Get(TenantDistinguisher distinguisher)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>            // If cookie was present, then scheme will be our own custom one.         
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>            if (distinguisher.Uri.Scheme == &#34;tenant&#34;)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>                var tenant = distinguisher.Uri.Host.ToLowerInvariant();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>                switch (tenant)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>                {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">11</span>                    case &#34;moogle&#34;:
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">12</span>                        return CreateMoogleTenant();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">13</span>                    case &#34;gicrosoft&#34;:
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">14</span>                        return CreateGicrosoftTenant();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">15</span>                }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">16</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">17</span>            }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">18</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">19</span>            // Otherwise, just pick tenant based on port as before.
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">20</span>            if (distinguisher.Uri.Port == 5000 || distinguisher.Uri.Port == 5001)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">21</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">22</span>                return CreateMoogleTenant();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">23</span>            }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">24</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">25</span>            if (distinguisher.Uri.Port == 5002)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">26</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">27</span>                return CreateGicrosoftTenant();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">28</span>            }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">29</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">30</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">31</span>            throw new NotImplementedException(&#34;Please make request on ports 5000 - 5003 to see various behaviour.&#34;);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">32</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">33</span>        }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">34</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">35</span>        private Task&lt;TenantShell&lt;Tenant&gt;&gt; CreateGicrosoftTenant()
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">36</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">37</span>            Guid tenantId = Guid.Parse(&#34;b17fcd22-0db1-47c0-9fef-1aa1cb09605e&#34;);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">38</span>            var tenant = new Tenant(tenantId, &#34;Gicrosoft&#34;);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">39</span>            var result = new TenantShell&lt;Tenant&gt;(tenant);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">40</span>            return Task.FromResult(result);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">41</span>        }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">42</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">43</span>        private Task&lt;TenantShell&lt;Tenant&gt;&gt; CreateMoogleTenant()
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">44</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">45</span>            Guid tenantId = Guid.Parse(&#34;049c8cc4-3660-41c7-92f0-85430452be22&#34;);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">46</span>            var tenant = new Tenant(tenantId, &#34;Moogle&#34;);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">47</span>            // Also adding any additional Uri&#39;s that should be mapped to this same tenant.
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">48</span>            var result = new TenantShell&lt;Tenant&gt;(tenant, new Uri(&#34;http://localhost:5000&#34;),
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">49</span>                                                         new Uri(&#34;http://localhost:5001&#34;));
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">50</span>            return Task.FromResult(result);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">51</span>        }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">52</span>    }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">53</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">54</span> </code></pre>
-</div>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>    <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">TenantShellFactory</span> : ITenantShellFactory&lt;Tenant&gt;
+    {
+        <span style="color: #008000; font-weight: bold">public</span> Task&lt;TenantShell&lt;Tenant&gt;&gt; Get(TenantDistinguisher distinguisher)
+        {
+            <span style="color: #408080; font-style: italic">// If cookie was present, then scheme will be our own custom one.         </span>
+            <span style="color: #008000; font-weight: bold">if</span> (distinguisher.Uri.Scheme == <span style="color: #BA2121">&quot;tenant&quot;</span>)
+            {
+                <span style="color: #B00040">var</span> tenant = distinguisher.Uri.Host.ToLowerInvariant();
+                <span style="color: #008000; font-weight: bold">switch</span> (tenant)
+                {
+                    <span style="color: #008000; font-weight: bold">case</span> <span style="color: #BA2121">&quot;moogle&quot;</span>:
+                        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #0000FF">CreateMoogleTenant</span>();
+                    <span style="color: #008000; font-weight: bold">case</span> <span style="color: #BA2121">&quot;gicrosoft&quot;</span>:
+                        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #0000FF">CreateGicrosoftTenant</span>();
+                }
+
+            }
+
+            <span style="color: #408080; font-style: italic">// Otherwise, just pick tenant based on port as before.</span>
+            <span style="color: #008000; font-weight: bold">if</span> (distinguisher.Uri.Port == <span style="color: #666666">5000</span> || distinguisher.Uri.Port == <span style="color: #666666">5001</span>)
+            {
+                <span style="color: #008000; font-weight: bold">return</span> <span style="color: #0000FF">CreateMoogleTenant</span>();
+            }
+
+            <span style="color: #008000; font-weight: bold">if</span> (distinguisher.Uri.Port == <span style="color: #666666">5002</span>)
+            {
+                <span style="color: #008000; font-weight: bold">return</span> <span style="color: #0000FF">CreateGicrosoftTenant</span>();
+            }
+
+
+            <span style="color: #008000; font-weight: bold">throw</span> <span style="color: #008000; font-weight: bold">new</span> <span style="color: #0000FF">NotImplementedException</span>(<span style="color: #BA2121">&quot;Please make request on ports 5000 - 5003 to see various behaviour.&quot;</span>);
+
+        }
+
+        <span style="color: #008000; font-weight: bold">private</span> Task&lt;TenantShell&lt;Tenant&gt;&gt; CreateGicrosoftTenant()
+        {
+            Guid tenantId = Guid.Parse(<span style="color: #BA2121">&quot;b17fcd22-0db1-47c0-9fef-1aa1cb09605e&quot;</span>);
+            <span style="color: #B00040">var</span> tenant = <span style="color: #008000; font-weight: bold">new</span> Tenant(tenantId, <span style="color: #BA2121">&quot;Gicrosoft&quot;</span>);
+            <span style="color: #B00040">var</span> result = <span style="color: #008000; font-weight: bold">new</span> TenantShell&lt;Tenant&gt;(tenant);
+            <span style="color: #008000; font-weight: bold">return</span> Task.FromResult(result);
+        }
+
+        <span style="color: #008000; font-weight: bold">private</span> Task&lt;TenantShell&lt;Tenant&gt;&gt; CreateMoogleTenant()
+        {
+            Guid tenantId = Guid.Parse(<span style="color: #BA2121">&quot;049c8cc4-3660-41c7-92f0-85430452be22&quot;</span>);
+            <span style="color: #B00040">var</span> tenant = <span style="color: #008000; font-weight: bold">new</span> Tenant(tenantId, <span style="color: #BA2121">&quot;Moogle&quot;</span>);
+            <span style="color: #408080; font-style: italic">// Also adding any additional Uri&#39;s that should be mapped to this same tenant.</span>
+            <span style="color: #B00040">var</span> result = <span style="color: #008000; font-weight: bold">new</span> TenantShell&lt;Tenant&gt;(tenant, <span style="color: #008000; font-weight: bold">new</span> Uri(<span style="color: #BA2121">&quot;http://localhost:5000&quot;</span>),
+                                                         <span style="color: #008000; font-weight: bold">new</span> <span style="color: #0000FF">Uri</span>(<span style="color: #BA2121">&quot;http://localhost:5001&quot;</span>));
+            <span style="color: #008000; font-weight: bold">return</span> Task.FromResult(result);
+        }
+    }
+
+ 
+</code></pre></div>
+</td></tr></table>
 
 <h2 id="seeing-it-in-action">Seeing it in action</h2>
 

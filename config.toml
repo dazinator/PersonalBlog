@@ -7,9 +7,13 @@ contentdir = "content"
 layoutdir = "layouts"
 publishdir = "public"
 pygmentsCodeFences = true
-pygmentsStyle = "monokai"
+
 canonifyurls = true
 relativeURLs = false
+pygmentsUseClassic=true
+#pygmentsUseClasses=true
+pygmentsCodefences=true
+pygmentsOptions="style=default,linenos=true"
 # number of posts to show on home/category/tag pages (Default: 10)
 paginate = 5
 

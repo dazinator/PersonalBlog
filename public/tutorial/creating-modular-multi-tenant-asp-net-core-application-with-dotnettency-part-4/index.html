@@ -51,7 +51,7 @@ You can find the sample code for this post here
     
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
     
-    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">
+    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">    
     
     <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
     
@@ -182,43 +182,76 @@ the <code>IApplicationBuilder</code> we call this on will be for the <code>Moogl
 <li>Ensure you have a <code>Package Reference</code> to <a href="https://www.nuget.org/packages/Dotnettency.MiddlewarePipeline/">Dotnettency.MiddlewarePipeline</a> nuget package,</li>
 
 <li><p>In <code>startup.cs</code> in <code>ConfigureServices()</code> - find your call to <code>AddMultiTenancy()</code> as per the below:
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span>        // This method gets called by the runtime. Use this method to add services to the container.
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>        public IServiceProvider ConfigureServices(IServiceCollection services)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>            return services.AddMultiTenancy&lt;Tenant&gt;((multiTenancyOptions) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>                multiTenancyOptions
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>                    .InitialiseTenant&lt;TenantShellFactory&gt;()
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>                    .ConfigureTenantContainers((containerBuilder)=&gt; {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>                        containerBuilder.WithStructureMap((tenant, tenantServices) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">11</span>                        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">12</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">13</span>                        });
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">14</span>                    })
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">15</span>                    .ConfigureTenantMiddleware((tenantsMiddlewareBuilder) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">16</span>                    {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">17</span>                        tenantsMiddlewareBuilder.OnInitialiseTenantPipeline((context, appBuilder) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">18</span>                        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">19</span>                           
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">20</span>                        });
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">21</span>                    });
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">22</span>            });
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">23</span>        }</code></pre>
-</div></p></li>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>        <span style="color: #408080; font-style: italic">// This method gets called by the runtime. Use this method to add services to the container.</span>
+        <span style="color: #408080; font-style: italic">// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940</span>
+        <span style="color: #008000; font-weight: bold">public</span> IServiceProvider <span style="color: #0000FF">ConfigureServices</span>(IServiceCollection services)
+        {
+            <span style="color: #008000; font-weight: bold">return</span> services.AddMultiTenancy&lt;Tenant&gt;((multiTenancyOptions) =&gt;
+            {
+                multiTenancyOptions
+                    .InitialiseTenant&lt;TenantShellFactory&gt;()
+                    .ConfigureTenantContainers((containerBuilder)=&gt; {
+                        containerBuilder.WithStructureMap((tenant, tenantServices) =&gt;
+                        {
+
+                        });
+                    })
+                    .ConfigureTenantMiddleware((tenantsMiddlewareBuilder) =&gt;
+                    {
+                        tenantsMiddlewareBuilder.OnInitialiseTenantPipeline((context, appBuilder) =&gt;
+                        {
+                           
+                        });
+                    });
+            });
+        }
+</code></pre></div>
+</td></tr></table></p></li>
 
 <li><p>Inside <code>ConfigureTenantMiddleware</code> is where we can add any tenant specific middleware. If the above seems unfamiliar to you, please refer to the <a href="http://darrelltunnell.net/tags/dotnettency/">previous tutorials</a>. Let&rsquo;s add the <code>WelcomePage</code> middleware for the <code>Moogle</code> tenant:
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span>                    .ConfigureTenantMiddleware((tenantsMiddlewareBuilder) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>                    {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>                        tenantsMiddlewareBuilder.OnInitialiseTenantPipeline((context, appBuilder) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>                        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>                            if (context.Tenant.Name == &#34;Moogle&#34;)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>                            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>                                appBuilder.UseWelcomePage();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>                            }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>                        });
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>                    });                            </code></pre>
-</div></p></li>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>                    .ConfigureTenantMiddleware((tenantsMiddlewareBuilder) =&gt;
+                    {
+                        tenantsMiddlewareBuilder.OnInitialiseTenantPipeline((context, appBuilder) =&gt;
+                        {
+                            <span style="color: #008000; font-weight: bold">if</span> (context.Tenant.Name == <span style="color: #BA2121">&quot;Moogle&quot;</span>)
+                            {
+                                appBuilder.UseWelcomePage();
+                            }
+                        });
+                    });                            
+</code></pre></div>
+</td></tr></table></p></li>
 </ol>
 
 <p>I won&rsquo;t cover the <code>TenantShellFactory</code> in this tutorial as it has already been <a href="http://darrelltunnell.net/tags/dotnettency/">covered previously</a>. Suffice it to say that

@@ -49,7 +49,7 @@ Before starting this tutortial, you may wish to read to the introduction althoug
     
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
     
-    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">
+    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">    
     
     <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
     
@@ -170,64 +170,113 @@ Before starting this tutortial, you may wish to <a href="http://darrelltunnell.n
 
 <p>In <code>Program.cs</code> allow kestrel to listen / bind to multiple ports.</p>
 
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span>        public static void Main(string[] args)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>            var host = new WebHostBuilder()
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>                .UseKestrel()
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>                .UseContentRoot(Directory.GetCurrentDirectory())
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>                .UseIISIntegration()
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>                .UseStartup&lt;Startup&gt;()
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>                .UseUrls(&#34;http://*:5000&#34;, &#34;http://*:5001&#34;, &#34;http://*:5002&#34;, &#34;http://*:5003&#34;)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>                .Build();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">11</span>            host.Run();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">12</span>        }</code></pre>
-</div>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">static</span> <span style="color: #008000; font-weight: bold">void</span> <span style="color: #0000FF">Main</span>(<span style="color: #B00040">string</span>[] args)
+        {
+            <span style="color: #B00040">var</span> host = <span style="color: #008000; font-weight: bold">new</span> WebHostBuilder()
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
+                .UseStartup&lt;Startup&gt;()
+                .UseUrls(<span style="color: #BA2121">&quot;http://*:5000&quot;</span>, <span style="color: #BA2121">&quot;http://*:5001&quot;</span>, <span style="color: #BA2121">&quot;http://*:5002&quot;</span>, <span style="color: #BA2121">&quot;http://*:5003&quot;</span>)
+                .Build();
+
+            host.Run();
+        }
+</code></pre></div>
+</td></tr></table>
 
 <p>Create a class to represent the <code>Tenant</code>. It can have whatever properties you feel are useful:</p>
 
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span>    public class Tenant
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>    {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>        public Tenant(Guid tenantGuid, string name)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>            TenantGuid = tenantGuid;   
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>            Name = name;                 
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>        }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>      
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>        public Guid TenantGuid { get; set; }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>        public string Name { get; set; }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">11</span>    }</code></pre>
-</div>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>    <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Tenant</span>
+    {
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #0000FF">Tenant</span>(Guid tenantGuid, <span style="color: #B00040">string</span> name)
+        {
+            TenantGuid = tenantGuid;   
+            Name = name;                 
+        }
+      
+        <span style="color: #008000; font-weight: bold">public</span> Guid TenantGuid { <span style="color: #008000; font-weight: bold">get</span>; <span style="color: #008000; font-weight: bold">set</span>; }
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #B00040">string</span> Name { <span style="color: #008000; font-weight: bold">get</span>; <span style="color: #008000; font-weight: bold">set</span>; }
+    }
+</code></pre></div>
+</td></tr></table>
 
 <p>Now that we have our tenant, we need to create a class that <code>dotnettency</code> will use when it needs to load our tenant. Create a class that implements <code>ITenantShellFactory&lt;TTenant&gt;</code>:</p>
 
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span>    public class TenantShellFactory : ITenantShellFactory&lt;Tenant&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>    {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>        public Task&lt;TenantShell&lt;Tenant&gt;&gt; Get(TenantDistinguisher distinguisher)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>            if (distinguisher.Uri.Port == 5000 || distinguisher.Uri.Port == 5001)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>                Guid tenantId = Guid.Parse(&#34;049c8cc4-3660-41c7-92f0-85430452be22&#34;);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>                var tenant = new Tenant(tenantId, &#34;Moogle&#34;);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>                // Also adding any additional Uri&#39;s that should be mapped to this same tenant.
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>                var result = new TenantShell&lt;Tenant&gt;(tenant, new Uri(&#34;http://localhost:5000&#34;),
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">11</span>                                                             new Uri(&#34;http://localhost:5001&#34;));
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">12</span>                return Task.FromResult(result);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">13</span>            }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">14</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">15</span>            if (distinguisher.Uri.Port == 5002)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">16</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">17</span>                Guid tenantId = Guid.Parse(&#34;b17fcd22-0db1-47c0-9fef-1aa1cb09605e&#34;);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">18</span>                var tenant = new Tenant(tenantId, &#34;Gicrosoft&#34;);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">19</span>                var result = new TenantShell&lt;Tenant&gt;(tenant);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">20</span>                return Task.FromResult(result);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">21</span>            }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">22</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">23</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">24</span>            throw new NotImplementedException(&#34;Please make request on ports 5000 - 5003 to see various behaviour.&#34;);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">25</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">26</span>        }</code></pre>
-</div>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>    <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">TenantShellFactory</span> : ITenantShellFactory&lt;Tenant&gt;
+    {
+        <span style="color: #008000; font-weight: bold">public</span> Task&lt;TenantShell&lt;Tenant&gt;&gt; Get(TenantDistinguisher distinguisher)
+        {
+            <span style="color: #008000; font-weight: bold">if</span> (distinguisher.Uri.Port == <span style="color: #666666">5000</span> || distinguisher.Uri.Port == <span style="color: #666666">5001</span>)
+            {
+                Guid tenantId = Guid.Parse(<span style="color: #BA2121">&quot;049c8cc4-3660-41c7-92f0-85430452be22&quot;</span>);
+                <span style="color: #B00040">var</span> tenant = <span style="color: #008000; font-weight: bold">new</span> Tenant(tenantId, <span style="color: #BA2121">&quot;Moogle&quot;</span>);
+                <span style="color: #408080; font-style: italic">// Also adding any additional Uri&#39;s that should be mapped to this same tenant.</span>
+                <span style="color: #B00040">var</span> result = <span style="color: #008000; font-weight: bold">new</span> TenantShell&lt;Tenant&gt;(tenant, <span style="color: #008000; font-weight: bold">new</span> Uri(<span style="color: #BA2121">&quot;http://localhost:5000&quot;</span>),
+                                                             <span style="color: #008000; font-weight: bold">new</span> <span style="color: #0000FF">Uri</span>(<span style="color: #BA2121">&quot;http://localhost:5001&quot;</span>));
+                <span style="color: #008000; font-weight: bold">return</span> Task.FromResult(result);
+            }
+
+            <span style="color: #008000; font-weight: bold">if</span> (distinguisher.Uri.Port == <span style="color: #666666">5002</span>)
+            {
+                Guid tenantId = Guid.Parse(<span style="color: #BA2121">&quot;b17fcd22-0db1-47c0-9fef-1aa1cb09605e&quot;</span>);
+                <span style="color: #B00040">var</span> tenant = <span style="color: #008000; font-weight: bold">new</span> Tenant(tenantId, <span style="color: #BA2121">&quot;Gicrosoft&quot;</span>);
+                <span style="color: #B00040">var</span> result = <span style="color: #008000; font-weight: bold">new</span> TenantShell&lt;Tenant&gt;(tenant);
+                <span style="color: #008000; font-weight: bold">return</span> Task.FromResult(result);
+            }
+
+
+            <span style="color: #008000; font-weight: bold">throw</span> <span style="color: #008000; font-weight: bold">new</span> <span style="color: #0000FF">NotImplementedException</span>(<span style="color: #BA2121">&quot;Please make request on ports 5000 - 5003 to see various behaviour.&quot;</span>);
+
+        }
+</code></pre></div>
+</td></tr></table>
 
 <p>In our implementation above, we return <code>Moogle</code> when accessed on ports <code>5000</code> or <code>5001</code>, and <code>Gicrosoft</code> when accessed on port <code>5002</code>. If we are accessed under anything else (e.g port 5003) then we throw an exception for the time being. We will see in a future a couple of different options for handling unknown tenants.</p>
 
@@ -237,43 +286,71 @@ Before starting this tutortial, you may wish to <a href="http://darrelltunnell.n
 
 <p>In Startup.cs, add a using statement for <code>dotnettency</code>:</p>
 
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span>using Dotnettency;</code></pre>
-</div>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp">1</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span><span style="color: #008000; font-weight: bold">using</span> <span style="color: #0000FF; font-weight: bold">Dotnettency</span>;
+</code></pre></div>
+</td></tr></table>
 
 <p>In <code>ConfigureServices</code>:</p>
 
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span>        public void ConfigureServices(IServiceCollection services)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">2</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">3</span>            services.AddMultiTenancy&lt;Tenant&gt;((multiTenancyOptions) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">4</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">5</span>                multiTenancyOptions
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">6</span>                    .InitialiseTenant&lt;TenantShellFactory&gt;();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">7</span>            });
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">8</span>        }</code></pre>
-</div>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp">1
+2
+3
+4
+5
+6
+7
+8</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">void</span> <span style="color: #0000FF">ConfigureServices</span>(IServiceCollection services)
+        {
+            services.AddMultiTenancy&lt;Tenant&gt;((multiTenancyOptions) =&gt;
+            {
+                multiTenancyOptions
+                    .InitialiseTenant&lt;TenantShellFactory&gt;();
+            });
+        }
+</code></pre></div>
+</td></tr></table>
 
 <p>In <code>Configure</code> we want to <code>UseMultitenancy</code> to add the <code>dotnettency</code> middleware:</p>
 
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span>        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>            loggerFactory.AddConsole();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>            if (env.IsDevelopment())
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>                app.UseDeveloperExceptionPage();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>            }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>            app.UseMultitenancy&lt;Tenant&gt;((options) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">11</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">12</span>                
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">13</span>            });
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">14</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">15</span>            app.Run(async (context) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">16</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">17</span>                await context.Response.WriteAsync(&#34;Hello World!&#34;);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">18</span>            });
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">19</span>        }</code></pre>
-</div>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">void</span> <span style="color: #0000FF">Configure</span>(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddConsole();
+
+            <span style="color: #008000; font-weight: bold">if</span> (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseMultitenancy&lt;Tenant&gt;((options) =&gt;
+            {
+                
+            });
+
+            app.Run(<span style="color: #008000; font-weight: bold">async</span> (context) =&gt;
+            {
+                <span style="color: #008000; font-weight: bold">await</span> context.Response.WriteAsync(<span style="color: #BA2121">&quot;Hello World!&quot;</span>);
+            });
+        }
+</code></pre></div>
+</td></tr></table>
 
 <p>Now we are all setup, we can have fun actually injecting our <code>Tenant</code>.</p>
 
@@ -281,14 +358,21 @@ Before starting this tutortial, you may wish to <a href="http://darrelltunnell.n
 
 <p>Change the <code>app.Run()</code> in <code>startup.cs</code> to this:</p>
 
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span>            app.Run(async (context) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">2</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">3</span>                var tenantTask = context.RequestServices.GetRequiredService&lt;Task&lt;Tenant&gt;&gt;();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">4</span>                var tenant = await tenantTask;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">5</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">6</span>                await context.Response.WriteAsync(&#34;Hello: &#34; + tenant.Name);
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">7</span>            });</code></pre>
-</div>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp">1
+2
+3
+4
+5
+6
+7</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>            app.Run(<span style="color: #008000; font-weight: bold">async</span> (context) =&gt;
+            {
+                <span style="color: #B00040">var</span> tenantTask = context.RequestServices.GetRequiredService&lt;Task&lt;Tenant&gt;&gt;();
+                <span style="color: #B00040">var</span> tenant = <span style="color: #008000; font-weight: bold">await</span> tenantTask;
+
+                <span style="color: #008000; font-weight: bold">await</span> context.Response.WriteAsync(<span style="color: #BA2121">&quot;Hello: &quot;</span> + tenant.Name);
+            });
+</code></pre></div>
+</td></tr></table>
 
 <p>Now start the project, but before you do, double check you are runing under kestreal, if it says IISExpress then switch it:</p>
 

@@ -48,7 +48,7 @@ In this part of the tutorial, we will cover Per Tenant DI Containers in ASP.NET 
     
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
     
-    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">
+    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">    
     
     <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
     
@@ -162,82 +162,147 @@ In this part of the tutorial, we will cover Per Tenant DI Containers in ASP.NET 
 
 <p>In <code>startup.cs</code></p>
 
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span>        public IServiceProvider ConfigureServices(IServiceCollection services)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>            return services.AddMultiTenancy&lt;Tenant&gt;((multiTenancyOptions) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>                multiTenancyOptions
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>                    .InitialiseTenant&lt;TenantShellFactory&gt;()
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>                    .ConfigureTenantContainers((containerBuilder) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>                    {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>                        containerBuilder.WithStructureMap((tenant, tenantServices) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>                        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">11</span>                            if (tenant.Name == &#34;Moogle&#34;)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">12</span>                            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">13</span>                                tenantServices.AddSingleton&lt;GreetingService&gt;(new GreetingService(true));
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">14</span>                            }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">15</span>                            else
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">16</span>                            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">17</span>                                tenantServices.AddSingleton&lt;GreetingService&gt;(new GreetingService(false));
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">18</span>                            }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">19</span>                        });
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">20</span>                    });
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">21</span>            });</code></pre>
-</div>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>        <span style="color: #008000; font-weight: bold">public</span> IServiceProvider <span style="color: #0000FF">ConfigureServices</span>(IServiceCollection services)
+        {
+            <span style="color: #008000; font-weight: bold">return</span> services.AddMultiTenancy&lt;Tenant&gt;((multiTenancyOptions) =&gt;
+            {
+                multiTenancyOptions
+                    .InitialiseTenant&lt;TenantShellFactory&gt;()
+                    .ConfigureTenantContainers((containerBuilder) =&gt;
+                    {
+                        containerBuilder.WithStructureMap((tenant, tenantServices) =&gt;
+                        {
+                            <span style="color: #008000; font-weight: bold">if</span> (tenant.Name == <span style="color: #BA2121">&quot;Moogle&quot;</span>)
+                            {
+                                tenantServices.AddSingleton&lt;GreetingService&gt;(<span style="color: #008000; font-weight: bold">new</span> GreetingService(<span style="color: #008000; font-weight: bold">true</span>));
+                            }
+                            <span style="color: #008000; font-weight: bold">else</span>
+                            {
+                                tenantServices.AddSingleton&lt;GreetingService&gt;(<span style="color: #008000; font-weight: bold">new</span> GreetingService(<span style="color: #008000; font-weight: bold">false</span>));
+                            }
+                        });
+                    });
+            });
+</code></pre></div>
+</td></tr></table>
 
 <p>We are registering the <code>GreetingService</code> differently for the <code>Moogle</code> tenant than the other tenants.</p>
 
 <p>The <code>GreetingService</code> looks like this:</p>
 
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span>    public class GreetingService
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>    {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>        private readonly bool _isVisitorWelcome;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>        public GreetingService(bool isVisitorWelcome)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>            _isVisitorWelcome = isVisitorWelcome;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>        }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>        public string Greet()
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">11</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">12</span>            if (_isVisitorWelcome)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">13</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">14</span>                return &#34;WILL YOU GO AWAY ALREADY!!&#34;;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">15</span>            }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">16</span>            else
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">17</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">18</span>                return &#34;Pleased to meet you.&#34;;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">19</span>            }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">20</span>        }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">21</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">22</span>    }</code></pre>
-</div>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>    <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">GreetingService</span>
+    {
+        <span style="color: #008000; font-weight: bold">private</span> <span style="color: #008000; font-weight: bold">readonly</span> <span style="color: #B00040">bool</span> _isVisitorWelcome;
+
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #0000FF">GreetingService</span>(<span style="color: #B00040">bool</span> isVisitorWelcome)
+        {
+            _isVisitorWelcome = isVisitorWelcome;
+        }
+
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #B00040">string</span> <span style="color: #0000FF">Greet</span>()
+        {
+            <span style="color: #008000; font-weight: bold">if</span> (_isVisitorWelcome)
+            {
+                <span style="color: #008000; font-weight: bold">return</span> <span style="color: #BA2121">&quot;WILL YOU GO AWAY ALREADY!!&quot;</span>;
+            }
+            <span style="color: #008000; font-weight: bold">else</span>
+            {
+                <span style="color: #008000; font-weight: bold">return</span> <span style="color: #BA2121">&quot;Pleased to meet you.&quot;</span>;
+            }
+        }
+
+    }
+</code></pre></div>
+</td></tr></table>
 
 <p>Next, we need to include the <code>dotnettency middleware</code> by adding a call to <code>options.UsePerTenantContainers();</code> and also we will resolve the <code>GreetingService</code> and write it&rsquo;s message in the response:</p>
 
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span>         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>            loggerFactory.AddConsole();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>            if (env.IsDevelopment())
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>                app.UseDeveloperExceptionPage();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>            }
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">11</span>            app.UseMultitenancy&lt;Tenant&gt;((options) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">12</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">13</span>                options.UsePerTenantContainers();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">14</span>            });
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">15</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">16</span>            app.Run(async (context) =&gt;
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">17</span>            {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">18</span>                var greetingService = context.RequestServices.GetRequiredService&lt;GreetingService&gt;();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">19</span>                await context.Response.WriteAsync(greetingService.Greet());
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">20</span>            });
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">21</span>
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">22</span>        }</code></pre>
-</div>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>         <span style="color: #408080; font-style: italic">// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.</span>
+        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">void</span> <span style="color: #0000FF">Configure</span>(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddConsole();
+
+            <span style="color: #008000; font-weight: bold">if</span> (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseMultitenancy&lt;Tenant&gt;((options) =&gt;
+            {
+                options.UsePerTenantContainers();
+            });
+
+            app.Run(<span style="color: #008000; font-weight: bold">async</span> (context) =&gt;
+            {
+                <span style="color: #B00040">var</span> greetingService = context.RequestServices.GetRequiredService&lt;GreetingService&gt;();
+                <span style="color: #008000; font-weight: bold">await</span> context.Response.WriteAsync(greetingService.Greet());
+            });
+
+        }
+</code></pre></div>
+</td></tr></table>
 
 <p>Now browse to the site for each Tenant. See the previous tutorial if you would like to recap on that. Let&rsquo;s see the greeting for the <code>Moogle</code> tenant:</p>
 
@@ -257,11 +322,15 @@ In this part of the tutorial, we will cover Per Tenant DI Containers in ASP.NET 
 
 <p>ASP.NET Core applications allow you to configure the main application container on startup, in <code>ConfigureServices()</code>:</p>
 
-<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span>        public void ConfigureServices(IServiceCollection services)
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">2</span>        {
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">3</span>             services.AddTransient&lt;FooService&gt;();
-<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">4</span>        }</code></pre>
-</div>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp">1
+2
+3
+4</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>        <span style="color: #008000; font-weight: bold">public</span> <span style="color: #008000; font-weight: bold">void</span> <span style="color: #0000FF">ConfigureServices</span>(IServiceCollection services)
+        {
+             services.AddTransient&lt;FooService&gt;();
+        }
+</code></pre></div>
+</td></tr></table>
 
 <p>When a request arrives, there is some middleware that sits at the entry point of the pipeline, which creates a nested / scoped version of the container for the request, which is stored in <code>HttpContext.RequestServices</code>. This nested / scoped version of the application container is disposed of at the end of the request.</p>
 

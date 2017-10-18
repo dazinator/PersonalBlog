@@ -1,6 +1,6 @@
 ---
 title: "Unit Testing Dynamics CRM Plugins"
-slug: "unit-testing-dynamics-crm-plugins"
+slug: "unit-testing-crm-plugins"
 description: ""
 tags: [
     "Dynamics CRM", "Unit Testing"   
@@ -13,7 +13,7 @@ menu: "main"
 published: true
 comments: true
 thumbnail: "img/profile.png"
-highlight: true
+highlight: false
 ---
 
 ### There is no ~~Spoon~~ CRM
@@ -33,52 +33,47 @@ Firstly, let's look at a plugin that we will call the `ReclaimCreditPlugin`. Her
 
 ### Developer Jon Doe
 
-Jon Doe immediately gets to work on writing the plugin for those requirements. He produces the following plugin:
+Jon Doe immediately gets to work on writing the plugin for those requirements. He produces the following plugin
 
-{{< highlight csharp "linenos=true,style=default" >}}
 
-    public class ReclaimCreditPlugin : IPlugin
+```csharp
+public class ReclaimCreditPlugin : IPlugin
+{
+    public void Execute(IServiceProvider serviceProvider)
     {
+        var executionContext = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
 
-        public void Execute(IServiceProvider serviceProvider)
+        // 1. We must run only within a transaction
+        if (!executionContext.IsInTransaction)
         {
-
-            var executionContext = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
-
-            // 1. We must run only within a transaction
-            if (!executionContext.IsInTransaction)
-            {
-                throw new InvalidPluginExecutionException("The plugin detected that it was not running within a database transaction. The plugin requires a database transaction.");
-            }
-
-            // 2. Get the contact, check its parent account.
-            if (executionContext.InputParameters.Contains("Target") && executionContext.InputParameters["Target"] is Entity)
-            {
-                // Obtain the target entity from the input parameters.
-                var contactEntity = (Entity)executionContext.InputParameters["Target"];
-                // Get the parent account id.
-                var parentAccountId = (EntityReference)contactEntity["parentaccountid"];
-
-                // Get the parent account entity.
-                var orgServiceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
-                var orgService = orgServiceFactory.CreateOrganizationService(executionContext.UserId);
-                var parentAccountEntity = orgService.Retrieve("account", parentAccountId.Id, new ColumnSet("creditonhold"));
-
-                var accountOnHold = (bool)parentAccountEntity["creditonhold"];
-
-                if (accountOnHold)
-                {
-                    contactEntity["taketheirshoes"] = true;
-                    var tracingService = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-                    tracingService.Trace("Have indicated that we should take the shoes from contact: {0}", contactEntity.Id.ToString());
-                }
-
-            }
-
+            throw new InvalidPluginExecutionException("The plugin detected that it was not running within a database transaction. The plugin requires a database transaction.");
         }
 
+        // 2. Get the contact, check its parent account.
+        if (executionContext.InputParameters.Contains("Target") && executionContext.InputParameters["Target"] is Entity)
+        {
+            // Obtain the target entity from the input parameters.
+            var contactEntity = (Entity)executionContext.InputParameters["Target"];
+            // Get the parent account id.
+            var parentAccountId = (EntityReference)contactEntity["parentaccountid"];
+
+            // Get the parent account entity.
+            var orgServiceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
+            var orgService = orgServiceFactory.CreateOrganizationService(executionContext.UserId);
+            var parentAccountEntity = orgService.Retrieve("account", parentAccountId.Id, new ColumnSet("creditonhold"));
+
+            var accountOnHold = (bool)parentAccountEntity["creditonhold"];
+
+            if (accountOnHold)
+            {
+                contactEntity["taketheirshoes"] = true;
+                var tracingService = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+                tracingService.Trace("Have indicated that we should take the shoes from contact: {0}", contactEntity.Id.ToString());
+            }
+        }
     }
-{{< / highlight >}}
+}
+```
     
 #### Good Job?
 Take a moment to peer review the above code. Would you vindicate Jon Doe's effort? It seems it has all the required logic in all the required places. It appears he has covered the list of requirements. Although Jon doesn't check to make sure the current entity being updated is definately a contact entity.. But within the confines of this blog post we will assume that there is no possible danger that the plugin could ever be registered against the wrong entity. 
