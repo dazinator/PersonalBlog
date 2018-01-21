@@ -1,7 +1,7 @@
----
+﻿---
 published: true
 title: "DotNetNuke - Streamlining Module Development Workflow"
-slug: "automating-dotnetnuke-deployments-with-octopus-deploy"
+slug: "dotnetnuke-streamlining-module-development"
 date: 2015-06-13
 comments: true
 categories: 
