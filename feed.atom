@@ -1,0 +1,2110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<link rel="self" href="http://darrelltunnell.net/" />
+	<id>http://darrelltunnell.net/</id>
+	<title>Darrell's Blog</title>
+	<rights>2018</rights>
+	<updated>2018-08-05T19:54:51Z</updated>
+	<subtitle>Welcome!</subtitle>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2017/01/24/csla-and-asp.net-core" />
+		<id>http://darrelltunnell.net/blog/2017/01/24/csla-and-asp.net-core</id>
+		<title>CSLA and ASP.NET Core</title>
+		<updated>2017-01-24T17:50:00Z</updated>
+		<content>&lt;p&gt;I am a fan of CSLA and I recently came accross a need to make a shiny CSLA business layer work nicely within the context of an ASP.NET Core application.
+This post is aimed at CSLA developers with a similar need.
+As of the &lt;a href="https://www.nuget.org/packages/CSLA-Core/4.6.500"&gt;current release&lt;/a&gt;, there are a few things that you will need to take care of in order to get CSLA working smoothly, and I will cover those in this post.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;h3 id="csla.applicationcontext"&gt;Csla.ApplicationContext&lt;/h3&gt;
+&lt;p&gt;CSLA developers should be familiar with &lt;code&gt;Csla.ApplicationContext&lt;/code&gt; which provides the means to access useful context, as well as the current &lt;code&gt;User&lt;/code&gt; / &lt;code&gt;IPrinciple&lt;/code&gt;.
+However when running under ASP.NET Core, &lt;code&gt;Csla.ApplicationContext&lt;/code&gt; doesn't work correctly - as CSLA decides that your application is not a web application (as &lt;code&gt;HttpContext.Current&lt;/code&gt; is null under ASP.NET Core) and so
+it ends up storing things that should be stored in &lt;code&gt;HttpContext&lt;/code&gt; on the current &lt;code&gt;Thread&lt;/code&gt; instead.&lt;/p&gt;
+&lt;p&gt;To overcome this, however, is pretty straight forward. You just need to implement an extensibility point that Rocky has provided, called an &lt;code&gt;IContextManager&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id="icontextmanager-for-asp.net-core"&gt;IContextManager for ASP.NET Core.&lt;/h3&gt;
+&lt;p&gt;Here is an implementation of an &lt;code&gt;IContextManager&lt;/code&gt; that resolves the &lt;code&gt;HttpContext&lt;/code&gt; using the &lt;code&gt;IHttpContextAccessor&lt;/code&gt; instead:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="csharp"&gt;
+
+    /// &lt;summary&gt;
+    /// Application context manager that uses HttpContextAccessor whenr esolving HttpContext
+    /// to store context values.
+    /// &lt;/summary&gt;
+    public class HttpContextAccessorContextMananger : IContextManager
+    {
+
+        private const string _localContextName = "Csla.LocalContext";
+        private const string _clientContextName = "Csla.ClientContext";
+        private const string _globalContextName = "Csla.GlobalContext";
+
+        private readonly IServiceProvider _serviceProvider;
+
+        public HttpContextAccessorContextMananger(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+      
+
+        protected virtual HttpContext GetHttpContext()
+        {
+            var httpContextAccessor = (IHttpContextAccessor)_serviceProvider.GetService(typeof(IHttpContextAccessor));
+            if (httpContextAccessor != null)
+            {
+                if (httpContextAccessor.HttpContext == null)
+                {
+                    //   Debugger.Break();
+                }
+                return httpContextAccessor.HttpContext;
+            }
+
+            // Debugger.Break();
+            return null;
+        }
+
+
+        /// &lt;summary&gt;
+        /// Gets a value indicating whether this
+        /// context manager is valid for use in
+        /// the current environment.
+        /// &lt;/summary&gt;
+        public bool IsValid
+        {
+            get
+            {
+                return GetHttpContext() != null;
+            }
+        }
+
+        /// &lt;summary&gt;
+        /// Gets the current principal.
+        /// &lt;/summary&gt;
+        public System.Security.Principal.IPrincipal GetUser()
+        {
+            return GetHttpContext()?.User;
+        }
+
+        /// &lt;summary&gt;
+        /// Sets the current principal.
+        /// &lt;/summary&gt;
+        /// &lt;param name="principal"&gt;Principal object.&lt;/param&gt;
+        public void SetUser(System.Security.Principal.IPrincipal principal)
+        {
+            var context = GetHttpContext();
+            if (context != null)
+            {
+                context.User = (ClaimsPrincipal)principal;
+            }
+            else
+            {
+                //  Debugger.Break();
+            }
+           
+        }
+
+        /// &lt;summary&gt;
+        /// Gets the local context.
+        /// &lt;/summary&gt;
+        public ContextDictionary GetLocalContext()
+        {
+            return (ContextDictionary)GetHttpContext()?.Items[_localContextName];
+        }
+
+        /// &lt;summary&gt;
+        /// Sets the local context.
+        /// &lt;/summary&gt;
+        /// &lt;param name="localContext"&gt;Local context.&lt;/param&gt;
+        public void SetLocalContext(ContextDictionary localContext)
+        {
+            var context = GetHttpContext();
+            if (context != null)
+            {
+                context.Items[_localContextName] = localContext;
+            }
+            else
+            {
+              //  Debugger.Break();
+            }
+        }
+
+        /// &lt;summary&gt;
+        /// Gets the client context.
+        /// &lt;/summary&gt;
+        public ContextDictionary GetClientContext()
+        {
+            return (ContextDictionary)GetHttpContext()?.Items[_clientContextName];
+        }
+
+        /// &lt;summary&gt;
+        /// Sets the client context.
+        /// &lt;/summary&gt;
+        /// &lt;param name="clientContext"&gt;Client context.&lt;/param&gt;
+        public void SetClientContext(ContextDictionary clientContext)
+        {
+            var context = GetHttpContext();
+            if (context != null)
+            {
+                context.Items[_clientContextName] = clientContext;
+            }
+            else
+            {
+              //  Debugger.Break();
+            }
+        }
+
+        /// &lt;summary&gt;
+        /// Gets the global context.
+        /// &lt;/summary&gt;
+        public ContextDictionary GetGlobalContext()
+        {
+            return (ContextDictionary)GetHttpContext()?.Items[_globalContextName];
+        }
+
+        /// &lt;summary&gt;
+        /// Sets the global context.
+        /// &lt;/summary&gt;
+        /// &lt;param name="globalContext"&gt;Global context.&lt;/param&gt;
+        public void SetGlobalContext(ContextDictionary globalContext)
+        {
+            var context = GetHttpContext();
+            if (context != null)
+            {
+                context.Items[_globalContextName] = globalContext;
+            }
+            else
+            {
+              //  Debugger.Break();
+            }
+        }
+    }
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="configuring-csla"&gt;Configuring CSLA&lt;/h3&gt;
+&lt;p&gt;Now that you have this implementation, you need to tell CSLA to use it. In the ASP.NET Core world, we are used to nice extension methods that we can use in our
+&lt;code&gt;startup.cs&lt;/code&gt; classes, in order to configure things fluently.&lt;/p&gt;
+&lt;p&gt;CSLA doesn't provide one of these just yet, but we can create one fairly easily:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;
+    public static class CslaConfiguration
+    {
+        public static IServiceCollection ConfigureCsla(this IServiceCollection services, Action&amp;lt;CslaOptions, IServiceProvider&amp;gt; setupAction = null)
+        {
+            services.AddSingleton&amp;lt;CslaOptions&amp;gt;((sp) =&amp;gt;
+            {
+                var options = new CslaOptions();
+                setupAction?.Invoke(options, sp);
+                return options;
+            });
+
+            return services;
+        }
+
+        public static IApplicationBuilder UseCsla(this IApplicationBuilder appBuilder)
+        {
+            // grab the options
+            var options = appBuilder.ApplicationServices.GetRequiredService&amp;lt;CslaOptions&amp;gt;();
+
+            // configure csla according to options.
+            Csla.Server.FactoryDataPortal.FactoryLoader = options.ObjectFactoryLoader;
+            Csla.ApplicationContext.WebContextManager = options.WebContextManager ?? new HttpContextAccessorContextMananger(appBuilder.ApplicationServices);
+            
+            return appBuilder;
+        }
+
+        public class CslaOptions
+        {
+            public IObjectFactoryLoader ObjectFactoryLoader { get; set; }
+
+            public IContextManager WebContextManager { get; set; }           
+
+        }
+    }
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So we can now configure CSLA in our &lt;code&gt;startup.cs&lt;/code&gt; like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;
+    public class Startup
+    {              
+       
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            // Configure Csla
+           services.ConfigureCsla((options, sp) =&amp;gt; {               
+                // could configure other CSLA hooks / options here in future.
+            });
+
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
+                LoginPath = new PathString(&amp;quot;/Account/Login&amp;quot;)
+            });
+           app.UseCsla();      
+        }        
+    }
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;CSLA &lt;code&gt;ApplicationContext&lt;/code&gt; should now behave correctly thanks to the custom &lt;code&gt;IContextManager&lt;/code&gt; for ASP.NET Core.&lt;/p&gt;
+&lt;h3 id="conclusion"&gt;Conclusion&lt;/h3&gt;
+&lt;p&gt;I also went a few steps further in my particular application, to enable DI to flow from my ASP.NET Core &lt;code&gt;IServiceProvider&lt;/code&gt; into my CSLA business tier, but that's a topic for another article.&lt;/p&gt;
+&lt;p&gt;I suspect that Rocky will release improved support for ASP.NET Core in the future, so that this post becomes obsolete.
+Until then, Bon Appétit!&lt;/p&gt;
+</content>
+		<summary>&lt;p&gt;I am a fan of CSLA and I recently came accross a need to make a shiny CSLA business layer work nicely within the context of an ASP.NET Core application.
+This post is aimed at CSLA developers with a similar need.
+As of the &lt;a href="https://www.nuget.org/packages/CSLA-Core/4.6.500"&gt;current release&lt;/a&gt;, there are a few things that you will need to take care of in order to get CSLA working smoothly, and I will cover those in this post.&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelper-s-a-better-addtaghelper-type-resolver" />
+		<id>http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelper-s-a-better-addtaghelper-type-resolver</id>
+		<title>ASPNET Core TagHelper's - A Better @addTagHelper type resolver</title>
+		<updated>2016-07-25T18:50:00Z</updated>
+		<content>&lt;h3 id="whats-this-about"&gt;What's this about?&lt;/h3&gt;
+&lt;p&gt;This is about TagHelper's in ASP.NET Core, and how to get more flexible &lt;code&gt;&amp;#64;addTagHelper&lt;/code&gt; directives.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;p&gt;Suppose your application loads some assemblies dynamically - for example, from a plugins folder, and those assemblies contain &lt;code&gt;TagHelper&lt;/code&gt;'s.&lt;/p&gt;
+&lt;p&gt;In startup.cs you would have something like this to register your assemblies with the MVC parts system:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;
+ var assy = Assembly.LoadFile(&amp;quot;C:\\SomePath\Plugin.Authentication.dll&amp;quot;);
+ mvcBuilder.AddApplicationPart(assy);
+
+ var assy = Assembly.LoadFile(&amp;quot;C:\\SomePath\Plugin.Markdown.dll&amp;quot;);
+ mvcBuilder.AddApplicationPart(assy);
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now suppose you have a Razor View with some markup that can be targeted by those tag helpers:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-html"&gt;
+ &amp;lt;plugin-authentication /&amp;gt;
+ &amp;lt;plugin-markdown visible=&amp;quot;true&amp;quot;/&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you run your application, those TagHelper's won't work.
+This is because you don't have any &lt;code&gt;&amp;#64;addTagHelper&lt;/code&gt; directive yet in your razor view, and so razor doesn't know it should be using them. This is where things get a bit interesting!&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h3 id="lets-add-an-addtaghelper-directive"&gt;Let's add an &lt;code&gt;addTagHelper&lt;/code&gt; directive&lt;/h3&gt;
+&lt;p&gt;So we add the directive to our __ViewImports.cshtml file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bat"&gt;&amp;#64;addTagHelper &amp;quot;*, Plugin.Markdown&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now when we start our application, BOOM:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bat"&gt;
+An error occurred during the compilation of a resource required to process this request. Please review the following specific error details and modify your source code appropriately.
+
+/Views/_ViewImports.cshtml
+
+Cannot resolve TagHelper containing assembly 'Plugin.Markdown'. Error: Could not load file or assembly 'Plugin.Markdown' or one of its dependencies. The system cannot find the file specified.
+&amp;#64;addTagHelper &amp;quot;*, Plugin.Markdown&amp;quot;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is because by defualt MVC does not resolve &lt;code&gt;TagHelper&lt;/code&gt; assemblies registered with the parts system (atleast this is true as of RTM 1.0.0) so it complains when it processes that directive, saying it can't find such an assembly - because it can only see assemblies that are in the bin folder by default. So it can't see your plugin assembly.&lt;/p&gt;
+&lt;h3 id="how-do-we-solve"&gt;How do we solve?&lt;/h3&gt;
+&lt;p&gt;Well if you add this line:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;
+mvcBuilder.AddTagHelpersAsServices();
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That will register some replacement services that will check the application parts system when trying to resolve the tag helper assemblies based on the name provided by the addTagHelper directive.&lt;/p&gt;
+&lt;p&gt;However - this now works but it's still not ideal because we still have to add a directive for each &lt;code&gt;plugin&lt;/code&gt; before it will work on our page/s. So when someone develops a new plugin, it won't work until we modify our &lt;code&gt;_ViewImports.cshtml&lt;/code&gt; file and add another line:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;&amp;#64;addTagHelper &amp;quot;*, Plugin.Markdown&amp;quot;
+&amp;#64;addTagHelper &amp;quot;*, Plugin.Another&amp;quot;
+&amp;#64;addTagHelper &amp;quot;*, Plugin.YetAnother&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This can be incredibly frustrating because if you are wanting an extensibile system where plugins can be installed on the fly, then they should just work without constant modifications to source code.&lt;/p&gt;
+&lt;h3 id="so-can-we-do-better"&gt;So Can We Do Better?&lt;/h3&gt;
+&lt;p&gt;Yup. So here is my solution to this issue, and that is to allow &lt;code&gt;globbing&lt;/code&gt; to be supported in the &lt;code&gt;addTagHelper&lt;/code&gt; directive for the assembly name, just like it is for the TypeName portion.&lt;/p&gt;
+&lt;p&gt;So this is how you do that.&lt;/p&gt;
+&lt;h3 id="itaghelpertyperesolver"&gt;ITagHelperTypeResolver&lt;/h3&gt;
+&lt;p&gt;We need to create an &lt;code&gt;ITagHelperTypeResolver&lt;/code&gt; and implement it's &lt;code&gt;Resolve&lt;/code&gt; method. This method takes the string provided by in the &lt;code&gt;addTagHelper&lt;/code&gt; directive and returns all &lt;code&gt;TagHelper&lt;/code&gt; type's that are matches to that string. We will make our implementation support globbing on the assembly name so it can match &lt;code&gt;TagHelper&lt;/code&gt; types accross multiple assemblies registered with the &lt;code&gt;Application Parts&lt;/code&gt; system, instead of just from a single one.&lt;/p&gt;
+&lt;p&gt;Here is my quick and dirty implementation, where I took a lot of the code from the microsoft implementation, and just added a few tweaks for globbing:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;
+    public class AssemblyNameGlobbingTagHelperTypeResolver : ITagHelperTypeResolver
+    {
+       
+        private static readonly System.Reflection.TypeInfo ITagHelperTypeInfo = typeof(ITagHelper).GetTypeInfo();
+
+        protected TagHelperFeature Feature { get; }
+
+        public AssemblyNameGlobbingTagHelperTypeResolver(ApplicationPartManager manager)
+        {
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+
+            Feature = new TagHelperFeature();
+            manager.PopulateFeature(Feature);
+
+            // _manager = manager;
+
+        }
+
+        /// &amp;lt;inheritdoc /&amp;gt;
+        public IEnumerable&amp;lt;Type&amp;gt; Resolve(
+            string name,
+            SourceLocation documentLocation,
+            ErrorSink errorSink)
+        {
+            if (errorSink == null)
+            {
+                throw new ArgumentNullException(nameof(errorSink));
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+                var errorLength = name == null ? 1 : Math.Max(name.Length, 1);
+                errorSink.OnError(
+                    documentLocation,
+                    &amp;quot;Tag Helper Assembly Name Cannot Be Empty Or Null&amp;quot;,
+                    errorLength);
+
+                return Type.EmptyTypes;
+            }
+
+
+            IEnumerable&amp;lt;TypeInfo&amp;gt; libraryTypes;
+            try
+            {
+                libraryTypes = GetExportedTypes(name);
+            }
+            catch (Exception ex)
+            {
+                errorSink.OnError(
+                    documentLocation,
+                    $&amp;quot;Cannot Resolve Tag Helper Assembly: {name}, {ex.Message}&amp;quot;,
+                    name.Length);
+
+                return Type.EmptyTypes;
+            }
+
+            return libraryTypes;
+
+        }
+
+
+        /// &amp;lt;inheritdoc /&amp;gt;
+        protected IEnumerable&amp;lt;System.Reflection.TypeInfo&amp;gt; GetExportedTypes(string assemblyNamePattern)
+        {
+            if (assemblyNamePattern == null)
+            {
+                throw new ArgumentNullException(nameof(assemblyNamePattern));
+            }
+
+            var results = new List&amp;lt;System.Reflection.TypeInfo&amp;gt;();
+
+            for (var i = 0; i &amp;lt; Feature.TagHelpers.Count; i++)
+            {
+                var tagHelperAssemblyName = Feature.TagHelpers[i].Assembly.GetName();
+
+                if (assemblyNamePattern.Contains(&amp;quot;*&amp;quot;)) // is it actually a pattern?
+                {
+                    if (tagHelperAssemblyName.Name.Like(assemblyNamePattern))
+                    {
+                        results.Add(Feature.TagHelpers[i]);
+                        continue;
+                    }
+                }
+
+                // not a pattern so treat as normal assembly name.
+                var assyName = new AssemblyName(assemblyNamePattern);
+                if (AssemblyNameComparer.OrdinalIgnoreCase.Equals(tagHelperAssemblyName, assyName))
+                {
+                    results.Add(Feature.TagHelpers[i]);
+                    continue;
+                }
+            }
+
+            return results;
+        }
+
+        private class AssemblyNameComparer : IEqualityComparer&amp;lt;AssemblyName&amp;gt;
+        {
+            public static readonly IEqualityComparer&amp;lt;AssemblyName&amp;gt; OrdinalIgnoreCase = new AssemblyNameComparer();
+
+            private AssemblyNameComparer()
+            {
+            }
+
+            public bool Equals(AssemblyName x, AssemblyName y)
+            {
+                // Ignore case because that's what Assembly.Load does.
+                return string.Equals(x.Name, y.Name, StringComparison.OrdinalIgnoreCase) &amp;amp;&amp;amp;
+                       string.Equals(x.CultureName ?? string.Empty, y.CultureName ?? string.Empty, StringComparison.Ordinal);
+            }
+
+            public int GetHashCode(AssemblyName obj)
+            {
+                var hashCode = 0;
+                if (obj.Name != null)
+                {
+                    hashCode ^= obj.Name.GetHashCode();
+                }
+
+                hashCode ^= (obj.CultureName ?? string.Empty).GetHashCode();
+                return hashCode;
+            }
+        }
+
+
+    }
+
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we just register this on startup, after we have registered &lt;code&gt;MVC&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;
+  services.AddSingleton&amp;lt;ITagHelperTypeResolver, AssemblyNameGlobbingTagHelperTypeResolver&amp;gt;();
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we can just add one directive to our __ViewImports.cshtml file, like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;&amp;#64;addTagHelper &amp;quot;*, Plugin.*&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that will include all TagHelpers that live in assemblies matching that glob. We can drop new plugins in and their tag helpers will light up automatically.&lt;/p&gt;
+&lt;p&gt;You are welcome.&lt;/p&gt;
+</content>
+		<summary>&lt;p&gt;This is about TagHelper's in ASP.NET Core, and how to get more flexible &lt;code&gt;@addTagHelper&lt;/code&gt; directives.&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2016/03/19/dnnpackager-v2-0-6" />
+		<id>http://darrelltunnell.net/blog/2016/03/19/dnnpackager-v2-0-6</id>
+		<title>DnnPackager - v2.0.6</title>
+		<updated>2016-03-19T17:50:00Z</updated>
+		<content>&lt;h3 id="dnnpackager-release-v2.0.6"&gt;DnnPackager Release -v2.0.6&lt;/h3&gt;
+&lt;p&gt;A short post to announce that a new minor release of DnnPackager is out.&lt;/p&gt;
+&lt;p&gt;You can find the release notes here explaining what's new: &lt;a href="https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2"&gt;https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;For an introduction to DnnPackager in general &lt;a href="http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/"&gt;see here&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Special thanks to &lt;a href="https://github.com/nvisionative"&gt;&amp;#64;nvisionative&lt;/a&gt; for requesting this feature.&lt;/p&gt;
+&lt;!--more--&gt;
+</content>
+		<summary>&lt;p&gt;A short post to announce that a new minor release of DnnPackager is out.&lt;/p&gt;
+&lt;p&gt;You can find the release notes here explaining what's new: &lt;a href="https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2"&gt;https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;For an introduction to DnnPackager in general &lt;a href="http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/"&gt;see here&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Special thanks to &lt;a href="https://github.com/nvisionative"&gt;@nvisionative&lt;/a&gt; for requesting this feature.&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2016/03/19/dnn-extensions-sources-packages-what-are-they" />
+		<id>http://darrelltunnell.net/blog/2016/03/19/dnn-extensions-sources-packages-what-are-they</id>
+		<title>Dnn Extensions - Sources Packages?</title>
+		<updated>2016-03-19T17:50:00Z</updated>
+		<content>&lt;p&gt;I have been doing some work on DnnPackager recently, and I've come accross the concept of &amp;quot;Source&amp;quot; packages. I have to admit I am not entirely new to these, but I've never personally used them for my projects in the past.&lt;/p&gt;
+&lt;p&gt;Source packages are basically identical to the ordinary install zip's for your dnn module / extension, i.e you &amp;quot;install&amp;quot; them into your Dnn site like any other install package, except that they also include &amp;quot;source code&amp;quot; files within them, like .cs, .vb files etc.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;h3 id="why-would-you-want-to-include-source-code-in-your-install-zip"&gt;Why would you want to include source code in your install zip?&lt;/h3&gt;
+&lt;p&gt;Well this is where things get a little interesting.&lt;/p&gt;
+&lt;p&gt;The two main reasons I can fathom why you would want to include source code in an install zip are that:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Your module uses dynamic compilation, and so unless you include source files with the module installation, then it just won't work.&lt;/li&gt;
+&lt;li&gt;You want to distribute your source code, so that developer's (who pay for it?) can open it up in VS and own it / make changes (improvements?). Usually you'd charge for this option, but it's faesible you are just an extremely generous developer (like me) who gives stuff away for free.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Number 1 is a necessity really to cater for modules that use dynamic compilation.&lt;/p&gt;
+&lt;p&gt;Number 2 is an optional thing about you as a developer (or commercial entity), distributing your solution source code in a format that thrid parties can &amp;quot;own&amp;quot; it - irrespective of whether you have used dynamic compilation or not.&lt;/p&gt;
+&lt;p&gt;Note: If you are using Dynamic compilation for your module, then people allready have the ability to make changes to the code by simply going into the website directory after the module has been installed, and modifying the code files. But you already knew that right!! Whether they are legally entitled to do so ofcourse, would be down to the licence agreement.&lt;/p&gt;
+&lt;p&gt;Number 1 and 2 are different.&lt;/p&gt;
+&lt;h3 id="why-are-they-different"&gt;Why are they different?&lt;/h3&gt;
+&lt;p&gt;Because in the first scenario, you are giving IIS the files it needs to compile and run your code within a Dnn website instance. In the second scenario, you are giving &lt;strong&gt;developers&lt;/strong&gt; the files they need, to open up your project / solution and &lt;strong&gt;build&lt;/strong&gt;, and compile your code, in a manner that spits out everything needed by scenario 1. In other words, the build and compilation that developers do, produces the output that's needed within the website for the compilation that IIS does.&lt;/p&gt;
+&lt;h3 id="why-was-that-last-bit-important"&gt;Why was that last bit important&lt;/h3&gt;
+&lt;p&gt;Because files related to the build that developers do - i,e the ones that prodice the output that actually needs to be installed to the dnn site, arguable have no business being installed into a Dnn website. Key files, project files, solution files etc etc - there are all completely unrelated to the working / running of your module within Dnn, and have nothing to do with IIS dynamic compilation or anything. They shouldn't be installed in a website period (imho).&lt;/p&gt;
+&lt;h3 id="dual-purpose"&gt;Dual purpose&lt;/h3&gt;
+&lt;p&gt;There seems to be a dual purpose for the sources package that doesn't sit right with me.
+Using it to install source code into the website to support dynamic compilation seems like what it is meant for imho - it is a Dnn installation zip after all.&lt;/p&gt;
+&lt;p&gt;Using it to provide a third party with your VS solution / project files so that they can open up the solution in an IDE, build and compile the code is a completely different scenario, and I can't see how that second scenario can work reliably just by including a .csproj in a dnn sources install zip - except for in the most simplisitic and basic of scenarios, which rarely happen in the real world.&lt;/p&gt;
+&lt;h3 id="example-of-some-issues-with-including-sln-csproj-in-a-sources-zip-package"&gt;Example of some issues with including Sln / Csproj in a sources zip package.&lt;/h3&gt;
+&lt;p&gt;Currently, if you use widely available project templates to produce &amp;quot;sources&amp;quot; packages, they will by default, produce a sources &amp;quot;zip&amp;quot; file for each of the module projects in your solution, and this will contain source code files copied form your project, as well as the csproj, and sln file. (I think the sln will only get included if it lives within the project directory).&lt;/p&gt;
+&lt;p&gt;Already we hit an issue, as if you have multiple projects in your solution, and the sln file lives in a parent directory of those projects like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+solution/mysln.sln
+solution/projectA/projectA.csproj
+solution/projectB/projectB.csproj
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;(which is fairly normal) then the sln file usually won't be included in the sources packages for any of your particular modules as it doesn't live directly within a project directory.&lt;/p&gt;
+&lt;p&gt;Secondly, if ProjectA has a project reference to ProjectB, and someone downloads the sources package for your projectA module, and opens up the csproj file that you have included in that sources package - the project is going to have a missing project reference to projectB so it won't compile.&lt;/p&gt;
+&lt;p&gt;There are yet more problems. If your .csproj files reference assemblies from some lib directory within your checkout directory somewhere, as this lib directory won't be included in the sources package (because it doesn't live within the project dir), anyone opening the project file in VS will see missing assembly references, they will have to manually correct them - otherwise the solution won't compile.&lt;/p&gt;
+&lt;p&gt;If your project files include some custom build targets that live on your machine, or within your checkout directory somewhere, etc etc - you guessed it the person opening the .csproj file is going to have issues because they won't be included in the same location within the sources package.&lt;/p&gt;
+&lt;h3 id="alternatives"&gt;Alternatives?&lt;/h3&gt;
+&lt;p&gt;If you want to give away your VS solution (or sell the source) to a third party, there are better / easier ways to provide access to it without shoehorning it in to the dnn install zip imho!&lt;/p&gt;
+&lt;p&gt;The easiest may be to just zip up your entire solution (checkout directory), and allow that to be downloaded from some protected location. This does not have to be in a &amp;quot;dnn&amp;quot; install package format, just a simple zip file that the person recieving can extract and then open up the VS sln file. You want it to be like they just checked out the solution from source control and are now opening up the VS sln file - just like you do right?&lt;/p&gt;
+&lt;p&gt;If there are some pre-requisites to being able to open and build the solution, add a readme to the zip that explains what a developer must do before attempting to open the solution. This is usually handy to have in your source control anyway - in case you ever need to checkout and open the solution on a new machine one day that doesn't have your dependencies set up. These should be the same steps that any developer new to the company has to go through (including you) when checking out the code for the first time and wanting to open it.&lt;/p&gt;
+&lt;h3 id="how-does-this-all-tie-in-with-dnnpackager"&gt;How does this all tie in with DnnPackager?&lt;/h3&gt;
+&lt;p&gt;Well, for the next realease of DnnPacakger, I have added rudimentary support for Sources packages (thanks to &lt;a href="https://github.com/nvisionative"&gt;&amp;#64;nvisionative&lt;/a&gt; for requesting this feature) - so that it will now produce &amp;quot;sources&amp;quot; packages alongside the standard install zip. However this is currently for the purposes of supporting modules that need to include source files in their installation process into Dnn, which I suspect will mainly just be ones that use dynamic compilation.&lt;/p&gt;
+&lt;p&gt;It won't include .csproj files or .sln files because at this point in time, I can't see how including them would lead to a reliable experience for the developer opening these up at the other end.&lt;/p&gt;
+&lt;p&gt;Disagree? Leave some comments below, I'd love to be convinced - or to just hear your views!&lt;/p&gt;
+</content>
+		<summary>&lt;p&gt;I have been doing some work on DnnPackager recently, and I've come accross the concept of "Source" packages. I have to admit I am not entirely new to these, but I've never personally used them for my projects in the past.&lt;/p&gt;
+&lt;p&gt;Source packages are basically identical to the ordinary install zip's for your dnn module / extension, i.e you "install" them into your Dnn site like any other install package, except that they also include "source code" files within them, like .cs, .vb files etc.&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2" />
+		<id>http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2</id>
+		<title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</title>
+		<updated>2016-01-24T17:50:00Z</updated>
+		<content>&lt;p&gt;&lt;strong&gt;This post is part two of a series. For part one see &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/"&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id="part-2-replacing-bower-with-jspm"&gt;Part 2 - Replacing Bower with JSPM&lt;/h3&gt;
+&lt;p&gt;In &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc"&gt;part 1 of this series&lt;/a&gt; we created a shiny new ASP.NET 5 project, and I introduced some fundamentals.&lt;/p&gt;
+&lt;p&gt;For reasons discussed in &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc"&gt;part 1&lt;/a&gt;, let's now go ahead with our first task, which is to ditch Bower in favour of JSPM as our javascript package manager.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;h3 id="uninstall-bower"&gt;Uninstall Bower&lt;/h3&gt;
+&lt;p&gt;You will notice that your ASP.NET 5 application has a number of bower packages included by default:&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/bowerpackages.PNG" class="img-fluid" alt="bowerpackages.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;First, let's uninstall Bower. In your project is a &lt;code&gt;Bower.json&lt;/code&gt; file. Delete it! (If you can't see it in Solution Explorer, you might need to 'show all files'&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/bowerjson.PNG" class="img-fluid" alt="bowerjson.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;When you install &lt;code&gt;Bower&lt;/code&gt; packages, they are installed under the &amp;quot;lib&amp;quot; folder within your &lt;code&gt;wwwroot&lt;/code&gt; directory. So, let's now delete this lib folder which will delete all of these packages.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/wwwrootlibfolder.PNG" class="img-fluid" alt="wwwrootlibfolder.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;After those changes, your project should look something like this:&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/projectremovedbower.PNG" class="img-fluid" alt="projectremovedbower.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;With Bower gone and those javascript / css packages deleted, what happens if we run the application now? Let's run it and find out..&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/runappbowerremoved.PNG" class="img-fluid" alt="runappbowerremoved.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;As you can see, there are now errors displayed in the browser, and our site looks awful. This makes sense - our application is referencing javascript and css files that used to live in the lib folder, and now they are no longer found because we deleted them.&lt;/p&gt;
+&lt;p&gt;To fix this situation we'll need to add these packages back to our application, using &lt;code&gt;JSPM&lt;/code&gt;, and then fix up the way our application is &lt;code&gt;loading&lt;/code&gt; these dependencies (javascript, css files) at runtime.&lt;/p&gt;
+&lt;h3 id="install-jspm"&gt;Install JSPM&lt;/h3&gt;
+&lt;p&gt;JSPM can be installed as a local &lt;code&gt;NPM&lt;/code&gt; package.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Open &lt;code&gt;Package.json&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Add &lt;code&gt;JSPM&lt;/code&gt; and whatever the latest version is:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src="/img/addjspmnodejspackage.PNG" class="img-fluid" alt="addjspmnodejspackage.PNG" /&gt;&lt;/p&gt;
+&lt;ol start="3"&gt;
+&lt;li&gt;Save the file.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The &lt;code&gt;NPM&lt;/code&gt; package for &lt;code&gt;JSPM&lt;/code&gt; should now be downloaded and installed into your project. You will see that the package is installed into the &amp;quot;node_modules&amp;quot; folder within your project.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/nodemodulesfolderjspm.PNG" class="img-fluid" alt="nodemodulesfolderjspm.PNG" /&gt;&lt;/p&gt;
+&lt;h3 id="configure-jspm"&gt;Configure JSPM&lt;/h3&gt;
+&lt;p&gt;Now that the &lt;code&gt;JSPM&lt;/code&gt; package has been installed, we need to configure &lt;code&gt;JSPM&lt;/code&gt;.
+The way to do this, is a little bit fiddely, as you have to drop to the command line - there is no fancy support for &lt;code&gt;JSPM&lt;/code&gt; in Visual Studio at the moment like there is for &lt;code&gt;Bower&lt;/code&gt;.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Open a &lt;code&gt;command prompt&lt;/code&gt; window, and &lt;code&gt;CD&lt;/code&gt; to your project directory&lt;/li&gt;
+&lt;li&gt;Type &lt;code&gt;jspm init&lt;/code&gt; and hit enter.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src="/img/commandlinejspminit.PNG" class="img-fluid" alt="commandlinejspminit.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;You will now be asked a series of questions. At the end of answering these questions, the relevent &lt;code&gt;config&lt;/code&gt; will be produced within the project.&lt;/p&gt;
+&lt;p&gt;Here are the answers. Some of them you can just hit enter without typing anything, and the default value will be used.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/jspminit.PNG" class="img-fluid" alt="jspminit.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;I'll quickly run through each option briefly.. But you should defer to the &lt;code&gt;JSPM&lt;/code&gt; documentation site for further clarifications.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&amp;quot;&lt;strong&gt;Would you like jspm to prefix the jspm package.json properties under jspm?&lt;/strong&gt;&amp;quot;
+We answer yes to this (the default) and this just means that JSPM will store its project configuration within a &amp;quot;jspm&amp;quot; section in our existing &lt;code&gt;package.json&lt;/code&gt; file.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&amp;quot;&lt;strong&gt;Enter server baseURL (public folder path)&lt;/strong&gt;&amp;quot;
+The word URL is a bit confusing here. This is the relative path to your &amp;quot;public&amp;quot; folder within the project. By public folder, we mean the folder that will serve up static files and is therefore accessible to a browser. We need to set this to the path to our &lt;code&gt;wwwroot&lt;/code&gt; directory. So the value we set for this question is &lt;code&gt;./wwwroot&lt;/code&gt; as the value is relative to the current (project) directory.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&amp;quot;&lt;strong&gt;Enter jspm packages folder [wwwroot\jspm_packages]&lt;/strong&gt;&amp;quot;
+We accept the default value for this question. Previously, our Bower packages were installed under &lt;code&gt;wwwroot\lib&lt;/code&gt; folder, so if you want to keep this consistent you could change this value to &lt;code&gt;wwwroot\lib&lt;/code&gt;. I however am happy to keep the default.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&amp;quot;&lt;strong&gt;Enter config file path [wwwroot\config.js]&lt;/strong&gt;&amp;quot;
+This is the path to where you would like the config javascript file to be placed. Remember, &lt;code&gt;JSPM&lt;/code&gt; is not just a package manager in a the sense of allowing you to adopt packages at &lt;code&gt;design time&lt;/code&gt;. It also has features that are used your application when it runs. This means it has a &lt;code&gt;config&lt;/code&gt; file (a javascript file) that your application will actually need to reference at runtime. This config file must therefore be placed in a directory that can be served up. We accept the default value (wwwroot\config.js)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&amp;quot;&lt;strong&gt;Configuration file wwwroot\config.js doesn't exist, create it? [yes]&lt;/strong&gt;&amp;quot;
+We accept the default which is &lt;code&gt;yes&lt;/code&gt; as we want it to create this config file for us.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&amp;quot;&lt;strong&gt;Enter client baseURL (public folder URL) [/]&lt;/strong&gt;&amp;quot;
+This is the URL or path that the browser uses to browse to the public folder (wwwroot). We accept the default value, because our public folder (wwwroot) is served up as the root path (&amp;quot;/&amp;quot;).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&amp;quot;&lt;strong&gt;Do you wish to use a transpiler? [yes]&lt;/strong&gt;&amp;quot;
+We accept the default answer of &amp;quot;yes&amp;quot; because transpilers are awesome. They allow us to write javascript using the latest language specifications, and then they &amp;quot;transpile&amp;quot; that javascript so that it can run in browsers that don't support the latest language specifications yet.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&amp;quot;&lt;strong&gt;Which ES6 transpiler would you like to use, Babel, Typescript, or Traceur? [babel]&lt;/strong&gt;&amp;quot;
+For the purposes of this blog, I am accepting the default of &amp;quot;Babel&amp;quot;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The transpiler will just allow us to write javascript using ES6 language features, and this will be transpiled to run in browsers that don't support ES6 yet.&lt;/p&gt;
+&lt;h3 id="installing-jspm-packages"&gt;Installing JSPM Packages&lt;/h3&gt;
+&lt;p&gt;Now that we have &lt;code&gt;JSPM&lt;/code&gt; configured, it's time to install those packages that we previously had installed via &lt;code&gt;Bower&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Back in the &lt;code&gt;command prompt&lt;/code&gt; run the following commands:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;jspm install jquery&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jspm install jquery-validation&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jspm install github:aspnet/jquery-validation-unobtrusive&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jspm install bootstrap&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Once that is done, those packages will now be installed under your &lt;code&gt;wwwroot\jspm_packages&lt;/code&gt; folder:&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/jspmpackages.PNG" class="img-fluid" alt="jspmpackages.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;The next step is to fix up our MVC application so that it loads our javascript and css using the &lt;code&gt;module loader&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id="transitioning-to-modules"&gt;Transitioning to Modules.&lt;/h3&gt;
+&lt;p&gt;The changes we have been making up until now, have been about managing our packages in our project at design time. This next step is about making changes to our application so that rather than including javascript and css files directly into particular pages, we instead, write &amp;quot;modular&amp;quot; javascript, that declares any dependencies it has, and then allow a &lt;code&gt;module loader&lt;/code&gt; (&lt;code&gt;SystemJS&lt;/code&gt;) to satisfy those dependencies for us at runtime by loading any needed javascript / css dependencies that our module requires.&lt;/p&gt;
+&lt;p&gt;If this sounds overwhelming, don't worry, it's simple once you get your head around the basic concept. Hopefully things will become more clear as we continue.&lt;/p&gt;
+&lt;p&gt;First, we need to include the module loader itself, and it's configuration file, into our application.&lt;/p&gt;
+&lt;p&gt;If you open &lt;code&gt;_Layout.cshtml&lt;/code&gt; you will see a section like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-xml"&gt; &amp;lt;environment names=&amp;quot;Development&amp;quot;&amp;gt;
+            &amp;lt;script src=&amp;quot;~/lib/jquery/dist/jquery.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+            &amp;lt;script src=&amp;quot;~/lib/bootstrap/dist/js/bootstrap.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+            &amp;lt;script src=&amp;quot;~/js/site.js&amp;quot; asp-append-version=&amp;quot;true&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+        &amp;lt;/environment&amp;gt;
+        &amp;lt;environment names=&amp;quot;Staging,Production&amp;quot;&amp;gt;
+            &amp;lt;script src=&amp;quot;https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js&amp;quot;
+                    asp-fallback-src=&amp;quot;~/lib/jquery/dist/jquery.min.js&amp;quot;
+                    asp-fallback-test=&amp;quot;window.jQuery&amp;quot;&amp;gt;
+            &amp;lt;/script&amp;gt;
+            &amp;lt;script src=&amp;quot;https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js&amp;quot;
+                    asp-fallback-src=&amp;quot;~/lib/bootstrap/dist/js/bootstrap.min.js&amp;quot;
+                    asp-fallback-test=&amp;quot;window.jQuery &amp;amp;&amp;amp; window.jQuery.fn &amp;amp;&amp;amp; window.jQuery.fn.modal&amp;quot;&amp;gt;
+            &amp;lt;/script&amp;gt;
+            &amp;lt;script src=&amp;quot;~/js/site.min.js&amp;quot; asp-append-version=&amp;quot;true&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+        &amp;lt;/environment&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let's comment out that whole section and replace it with this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-xml"&gt;
+&amp;lt;script src=&amp;quot;~/jspm_packages/system.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src=&amp;quot;~/config.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script&amp;gt;System.import(&amp;quot;js/site&amp;quot;);&amp;lt;/script&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;At this point, let's run the application!&lt;/p&gt;
+&lt;p&gt;You should now be able to see that we no longer get any errors about failing to load  javascript files &lt;code&gt;jquery.js&lt;/code&gt; and &lt;code&gt;bootstrap.js&lt;/code&gt;. In fact, &lt;strong&gt;those javascript files are not being loaded anymore.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/jspmmissingcss.PNG" class="img-fluid" alt="jspmmissingcss.PNG" /&gt;&lt;/p&gt;
+&lt;h4 id="why-arent-we-loading-jquery-and-bootstrap-anymore"&gt;Why aren't we loading JQuery and Bootstrap anymore?&lt;/h4&gt;
+&lt;p&gt;We are no longer directly including the &lt;code&gt;bootstrap&lt;/code&gt; and &lt;code&gt;jquery&lt;/code&gt; scripts into our &lt;code&gt;_Layout.cshtml&lt;/code&gt; file, so they aren't being loaded! So we aren't seeing any 404's anymore within the browser console window - which is good, but don't we need those files for our site to function?&lt;/p&gt;
+&lt;p&gt;This is the nature of &lt;code&gt;modular&lt;/code&gt; javascript. What we are in the process of transitioning to now, is a Modular concept, where &lt;code&gt;bootstrap&lt;/code&gt; and &lt;code&gt;jquery&lt;/code&gt; are modules that will only be loaded, if some other module that we are loading via the module loader, requires them as dependencies.&lt;/p&gt;
+&lt;p&gt;With that in mind, let's look at the module we are currently loading via the module loader. It's one called &lt;code&gt;js/site&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-js"&gt;&amp;lt;script&amp;gt;System.import(&amp;quot;js/site&amp;quot;);&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This resolves (thanks to the &lt;code&gt;config.js&lt;/code&gt; file) to the &lt;code&gt;js/site.js&lt;/code&gt; file in our &lt;code&gt;wwwroot&lt;/code&gt; directory. This file is currently empty, meaning it also has no dependencies declared in it for any other modules. This is why the module loader no longer bothers to load &lt;code&gt;JQuery&lt;/code&gt; or &lt;code&gt;Bootstrap&lt;/code&gt; anymore.&lt;/p&gt;
+&lt;p&gt;This is good, because we are not including any javascript or css by default anymore, until its actually required by something (with the exception of the module loader, and config.js file iteself).&lt;/p&gt;
+&lt;p&gt;Therefore, as our &lt;code&gt;js/site&lt;/code&gt; module is being loaded in our &lt;code&gt;_Layout.cshtml&lt;/code&gt; file - which means it's going to be loaded on &lt;strong&gt;every page&lt;/strong&gt;, we can &amp;quot;force&amp;quot; JQuery and Bootstrap to be loaded on every page, by decalring them as depencies for our module. This could be viewed as a bit of a cheat as really we don't want to load dependencies just for the sake of it, we only want to load them if they are actually used.&lt;/p&gt;
+&lt;p&gt;So, let's now assume that we are willing to load &lt;code&gt;JQuery&lt;/code&gt;, and &lt;code&gt;Bootstrap&lt;/code&gt; as a dependency for every page:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Open &lt;code&gt;site.js&lt;/code&gt; and insert the following code, then save it an re-run the application:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class="language-js"&gt;import $ from 'jquery';
+import bootstrap from 'bootstrap';
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is &lt;code&gt;ES6&lt;/code&gt; syntax for declaring a module dependency.&lt;/p&gt;
+&lt;p&gt;You should now see that &lt;code&gt;JQuery&lt;/code&gt; and &lt;code&gt;Bootstrap&lt;/code&gt; are loaded on every page:&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/jspmjqueryandbootstrapdependency.PNG" class="img-fluid" alt="jspmjqueryandbootstrapdependency.PNG" /&gt;&lt;/p&gt;
+&lt;h3 id="what-about-css"&gt;What about CSS&lt;/h3&gt;
+&lt;p&gt;Now that we have got our javascript files loading again, we are still left with 404's for the bootstrap.css file.&lt;/p&gt;
+&lt;p&gt;Well we can use JSPM for CSS too, but we need to install the &lt;code&gt;CSS&lt;/code&gt; plugin.&lt;/p&gt;
+&lt;h4 id="installing-the-css-plugin-for-jspm"&gt;Installing the CSS plugin for JSPM&lt;/h4&gt;
+&lt;p&gt;Back in the &lt;code&gt;command prompt&lt;/code&gt; in your project directory, run the following&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bat"&gt;jspm install css
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now go back to your &lt;code&gt;site.js&lt;/code&gt; file, and add an import for the bootstrap.css. It should now look like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-js"&gt;import $ from 'jquery';
+import bootstrap from 'bootstrap';
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Lastly, in &lt;code&gt;_Layout.cshtml&lt;/code&gt;, comment out the link to the old - non existent, bootstrap.css file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-xml"&gt;
+ &amp;lt;environment names=&amp;quot;Development&amp;quot;&amp;gt;
+        &amp;#64;*&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;~/lib/bootstrap/dist/css/bootstrap.css&amp;quot; /&amp;gt;*&amp;#64;
+        &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;~/css/site.css&amp;quot; /&amp;gt;
+    &amp;lt;/environment&amp;gt;
+    &amp;lt;environment names=&amp;quot;Staging,Production&amp;quot;&amp;gt;
+        &amp;#64;*&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css&amp;quot;
+            asp-fallback-href=&amp;quot;~/lib/bootstrap/dist/css/bootstrap.min.css&amp;quot;*&amp;#64;
+        asp-fallback-test-class=&amp;quot;sr-only&amp;quot; asp-fallback-test-property=&amp;quot;position&amp;quot; asp-fallback-test-value=&amp;quot;absolute&amp;quot; /&amp;gt;
+        &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;~/css/site.min.css&amp;quot; asp-append-version=&amp;quot;true&amp;quot; /&amp;gt;
+    &amp;lt;/environment&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now run your application!&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/jspmnoerrors.PNG" class="img-fluid" alt="jspmnoerrors.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;Wahoo! We now have no errors in the console window, our javascript and css is being loaded - and our application looks ok again.&lt;/p&gt;
+&lt;h4 id="flash-of-unstyled-content"&gt;Flash of unstyled content&lt;/h4&gt;
+&lt;p&gt;You may notice that using the CSS plugin, your page is displayed in an unstyled form for a brief moment, whilst the CSS file is loaded asynchronosuly. This is known as a &lt;a href="http://www.techrepublic.com/blog/web-designer/how-to-prevent-flash-of-unstyled-content-on-your-websites/"&gt;Flash of Unstyled Content&lt;/a&gt; and is a problem with using the CSS plugin at present - &lt;a href="https://github.com/systemjs/plugin-css/issues/57"&gt;see here&lt;/a&gt;. Hopefully this will be addressed in the future, but in the meantime, feel free not to use the CSS Plugin if this is an issue, you can instead just directly reference the &lt;code&gt;Bootstrap.css&lt;/code&gt; file in the &lt;code&gt;_Layout.cshtml&lt;/code&gt; file as before, but from its new location under the &lt;code&gt;jspm_packages&lt;/code&gt; directory.&lt;/p&gt;
+&lt;h3 id="finishing-touches_validationscripspartial.cshtml"&gt;Finishing Touches - &lt;code&gt;_ValidationScripsPartial.cshtml&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;Our application is running again, but you may notice a few of the pages have errors.&lt;/p&gt;
+&lt;p&gt;If you click on &amp;quot;Register&amp;quot; link for example you will see these errors in the browser console window:&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/jspmregisterpageproblems.PNG" class="img-fluid" alt="jspmregisterpageproblems.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;This is because many of the views within our MVC application are rendering a partial called &lt;code&gt;_ValidationScriptsPartial.cshtml&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;For example, if you look at the bottom of &lt;code&gt;Register.cshtml&lt;/code&gt;, you will see the following:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;
+&amp;#64;section Scripts {
+    &amp;#64;{ await Html.RenderPartialAsync(&amp;quot;_ValidationScriptsPartial&amp;quot;); }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you look at the contents of &lt;code&gt;_ValidationScriptsPartial&lt;/code&gt; we can see that it is actually including additional scripts onto the page:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-xml"&gt;&amp;lt;environment names=&amp;quot;Development&amp;quot;&amp;gt;
+    &amp;lt;script src=&amp;quot;~/lib/jquery-validation/dist/jquery.validate.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script src=&amp;quot;~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;/environment&amp;gt;
+&amp;lt;environment names=&amp;quot;Staging,Production&amp;quot;&amp;gt;
+    &amp;lt;script src=&amp;quot;https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js&amp;quot;
+            asp-fallback-src=&amp;quot;~/lib/jquery-validation/dist/jquery.validate.min.js&amp;quot;
+            asp-fallback-test=&amp;quot;window.jQuery &amp;amp;&amp;amp; window.jQuery.validator&amp;quot;&amp;gt;
+    &amp;lt;/script&amp;gt;
+    &amp;lt;script src=&amp;quot;https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js&amp;quot;
+            asp-fallback-src=&amp;quot;~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js&amp;quot;
+            asp-fallback-test=&amp;quot;window.jQuery &amp;amp;&amp;amp; window.jQuery.validator &amp;amp;&amp;amp; window.jQuery.validator.unobtrusive&amp;quot;&amp;gt;
+    &amp;lt;/script&amp;gt;
+&amp;lt;/environment&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As you can see, depending upon the environment that ASP.NET determines your application is running on, this renders some script includes to particular js files, used for forms validation. These were previoulsy located within &lt;code&gt;Bower&lt;/code&gt; packages, that we have deleted.&lt;/p&gt;
+&lt;p&gt;To correct this, we'll just need to instruct the module loader to load the &lt;code&gt;jquery.validate.unobtrusive&lt;/code&gt; module instead. Notice that you don't need to also instruct the module loader to load the &lt;code&gt;jquery.validate&lt;/code&gt; module, because &lt;code&gt;jquery.validate&lt;/code&gt; is a dependency of &lt;code&gt;jquery.validate.unobtrusive&lt;/code&gt; so the module loader will resolve it automatically.&lt;/p&gt;
+&lt;p&gt;So change the contents of &lt;code&gt;_ValidationScriptsPartial.cshtml&lt;/code&gt; to this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-js"&gt;&amp;lt;script&amp;gt;System.import(&amp;quot;aspnet/jquery-validation-unobtrusive&amp;quot;);&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And now - everything is working!&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/jspmallworking.PNG" class="img-fluid" alt="jspmallworking.PNG" /&gt;&lt;/p&gt;
+&lt;h3 id="recap"&gt;Recap&lt;/h3&gt;
+&lt;p&gt;In this blog post, we took an out of the box ASP.NET 5 MVC application that we created in &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/"&gt;part 1&lt;/a&gt;, and replaced &lt;code&gt;Bower&lt;/code&gt; with &lt;code&gt;JSPM&lt;/code&gt;. We changed the way our application resolves it's javascript and css files, to use a &lt;code&gt;module loader&lt;/code&gt; instead.&lt;/p&gt;
+&lt;p&gt;We also saw that using the module loader to load CSS currently results in a &amp;quot;flash of unstyled content&amp;quot; issue, and so if that's an issue for your application then it's probably best to stick to directly linking to your css files as before, for the time being. That's a decision for you to make!&lt;/p&gt;
+&lt;p&gt;In the next blog post/s in this series, I will attempt to cover:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Creating a basic Aurelia application on the Home page.&lt;/li&gt;
+&lt;li&gt;Introducing Linting, Bundling, and Minification into the build process, using Gulp.&lt;/li&gt;
+&lt;li&gt;Implementing &amp;quot;Automatic Browser Refresh&amp;quot; so our page refreshes as we make changes to javascript and css files.&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+		<summary>&lt;p&gt;&lt;strong&gt;This post is part two of a series. For part one see &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/"&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc"&gt;part 1 of this series&lt;/a&gt; we created a shiny new ASP.NET 5 project, and I introduced some fundamentals.&lt;/p&gt;
+&lt;p&gt;For reasons discussed in &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc"&gt;part 1&lt;/a&gt;, let's now go ahead with our first task, which is to ditch Bower in favour of JSPM as our javascript package manager.&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio" />
+		<id>http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio</id>
+		<title>Imagining a DotNetNuke Project Type for Visual Studio</title>
+		<updated>2016-01-17T17:50:00Z</updated>
+		<content>&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;When developing DotNetNuke extensions, we typically use one of the existing Visual Studio Project Type's, for example - an ASP.NET Web Application project.&lt;/p&gt;
+&lt;p&gt;Even when using a Project Template such as Christoc's, the project template is still based upon one of the standard Visual Studio project types - usually an ASP.NET Web Application project.&lt;/p&gt;
+&lt;p&gt;However these Project Types do not &amp;quot;gel&amp;quot; well with DotNetNuke development in a number of areas, the main ones being:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Running the project in VS (clicking play) - wants to run the extensions as a Web Application, but this makes no sense for a Dnn extension - which has to be hosted by the DotNetNuke website.&lt;/li&gt;
+&lt;li&gt;Deploying the extension - there is no support for that in the project system - you have to manually deploy your extensions to the Dnn instance.&lt;/li&gt;
+&lt;li&gt;Debugging the extension - you have to manually attach to process.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;So.. what if there was a new Project Type, one that was purpose built for DotNetNuke development? What would that look like?&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;h3 id="introducing-the-dotnetnuke-project-type"&gt;Introducing the &amp;quot;DotNetNuke&amp;quot; Project Type&lt;/h3&gt;
+&lt;p&gt;I am currently developing a new VS Project Type explicitly for DotNetNuke development. The rest of this blog post will describe my vision for how this will work.&lt;/p&gt;
+&lt;h4 id="installing-the-project-type"&gt;Installing the Project Type&lt;/h4&gt;
+&lt;p&gt;You would start by installing the VSIX package from the VS gallery. This will install the DotNetNuke project type, and make this project type available to you when you create new projects in VS.&lt;/p&gt;
+&lt;h4 id="create-a-new-project"&gt;Create a New Project&lt;/h4&gt;
+&lt;p&gt;You can now create a new &amp;quot;DotNetNuke&amp;quot; project using Visual Studio.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/new%20dnn%20project.PNG" class="img-fluid" alt="new dnn project.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;This creates your new project. It also imports the &amp;quot;DnnPackager&amp;quot; NuGet package automatically - &lt;a href="http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/"&gt;something I have blogged about seperately.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/adding%20DnnPackager.PNG" class="img-fluid" alt="adding DnnPackager.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;Your new project, has it's own &amp;quot;.dnnproj&amp;quot; file. This is a new project type and that's why it has its own file extension &amp;quot;.dnnproj&amp;quot;.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/SolutionExplorer1.PNG" class="img-fluid" alt="SolutionExplorer1.PNG" /&gt;&lt;/p&gt;
+&lt;h4 id="adding-content"&gt;Adding Content&lt;/h4&gt;
+&lt;p&gt;You can now add items to your project. If you &amp;quot;Add new item&amp;quot; - you will be able select from a number of standard DotNetNuke item templates. For example a &amp;quot;Module View&amp;quot;.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/AddModuleView.png" class="img-fluid" alt="AddModuleView.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Initially, I will just show Dnn 7 compatible item templates, but eventually I'd also like to add a seperate group for Dnn 8 item templates, which would include item templates for the new MVC and SPA stuff.&lt;/p&gt;
+&lt;p&gt;When you add the new item, not only do the source code files get added to your project, but any required dependencies also get brought in by the magical power of NuGet:&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/AddingDotNetNukeCoreNuget.PNG" class="img-fluid" alt="AddingDotNetNukeCoreNuget.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;So for example, adding a Module View for Dnn 7, will automatically bring in the DotNetNuke.Core NuGet package for Dnn7 as depicted above.&lt;/p&gt;
+&lt;p&gt;In other words, you don't need to worry about adding any Dnn assembly references for the most part, as they will be bought in for you as you add items to your project. Ofcourse, you are still free to add references to other dependencies you might have as normal.&lt;/p&gt;
+&lt;h4 id="running-and-debugging"&gt;Running and Debugging&lt;/h4&gt;
+&lt;p&gt;When you want to run and debug your extension, for those of you that have read my previous blog about DnnPackager, you may recall that this could be accomplished via a command that you could enter in the Package Manager Console window and DnnPackager would handle the deployment and attaching the debugger.&lt;/p&gt;
+&lt;p&gt;Well that approach was only ever necessary because there was not any first class support within VS itself. Something I am going to rectify with the DotNetNuke project type.&lt;/p&gt;
+&lt;p&gt;In VS, I am going to extend the debugging toolbar (where the &amp;quot;play&amp;quot; button is)&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/debug%20toolbar.PNG" class="img-fluid" alt="debug toolbar.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;You can see in the screenshot there is an empty dropdown at present, but this will list your DotNetNuke websites that you have on your local IIS. The first one in that list will be selected by default.&lt;/p&gt;
+&lt;p&gt;You may also notice there a new Debugger selected in that screenshot called &amp;quot;Local Dnn Website&amp;quot;. That's my own custom debugger that's available only for this project type.&lt;/p&gt;
+&lt;p&gt;All you need to do is click &amp;quot;Play&amp;quot; and it will:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Build your project to output the deployment zip.&lt;/li&gt;
+&lt;li&gt;Deploy your install zip to the Dnn website selected in the dropdown.&lt;/li&gt;
+&lt;li&gt;Attach the debugger to Dnn website's worker process that is selected in the dropwdown.&lt;/li&gt;
+&lt;li&gt;Launch a new browser window, navigated to that dnn websites home page.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Therefore, to use a different Dnn website as the host for running and debugging your module, you would just select that website in the drop down instead, before you click the &amp;quot;play&amp;quot; button.&lt;/p&gt;
+&lt;p&gt;This is going to wayyyy better than previous workflows for Dnn development.&lt;/p&gt;
+&lt;h3 id="what-now"&gt;What Now?&lt;/h3&gt;
+&lt;p&gt;Well.. I am pretty far into the development of this at the moment, which is why I have been able to include some screenshots. However it is a steep learning curve, and I am continuosly hitting hurdles with &lt;a href="https://github.com/Microsoft/VSProjectSystem"&gt;Microsoft's new Project System (CPS)&lt;/a&gt;. This is my first attempt at developing a VS project type and I don't have any in roads with microsoft or any support. So all of this means, I am &amp;quot;hoping&amp;quot; I can pull this off, and the signs are promising, but I'm not through the woods yet. The (very) dark, mystical woods, of VS project type development.&lt;/p&gt;
+&lt;p&gt;Still, I'd love to hear what others think of this - even though I appreciate it's very premature. Would you use such a system? Any ideas for improvements? I'll release a new blog post when things are looking a bit more finalised, and perhaps again when I have something for beta release.&lt;/p&gt;
+&lt;p&gt;Lastly, if there are any guru's out there who have expertise with &lt;a href="https://github.com/Microsoft/VSProjectSystem"&gt;CPS&lt;/a&gt; - I can always use a hand ;)&lt;/p&gt;
+</content>
+		<summary>&lt;p&gt;When developing DotNetNuke extensions, we typically use one of the existing Visual Studio Project Type's, for example - an ASP.NET Web Application project.&lt;/p&gt;
+&lt;p&gt;Even when using a Project Template such as Christoc's, the project template is still based upon one of the standard Visual Studio project types - usually an ASP.NET Web Application project.&lt;/p&gt;
+&lt;p&gt;However these Project Types do not "gel" well with DotNetNuke development in a number of areas, the main ones being:&lt;/p&gt;
+
+&lt;p&gt;So.. what if there was a new Project Type, one that was purpose built for DotNetNuke development? What would that look like?&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started" />
+		<id>http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started</id>
+		<title>DnnPackager Getting Started</title>
+		<updated>2015-12-01T17:50:00Z</updated>
+		<content>&lt;h3 id="dnn-packager-super-smooth-module-development"&gt;Dnn Packager - Super Smooth Module Development&lt;/h3&gt;
+&lt;p&gt;In this post, I am going to show you how to get up and running with DnnPackager for your DotNetNuke module / extension development.&lt;/p&gt;
+&lt;h3 id="tools-of-the-trade"&gt;Tools of the Trade&lt;/h3&gt;
+&lt;p&gt;I am using VS2015 Community Edition, but this should work equally well with previous versions.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;h3 id="installing-dotnetnuke-locally"&gt;Installing DotNetNuke Locally&lt;/h3&gt;
+&lt;p&gt;You will need a local instance of DotNetNuke website installed so that you have somewhere to deploy / run and debug your modules. There are plenty of tutorials out there that cover how to install a Dnn website so I am not going to cover this here. If you think this would be useful, leave a comment below and I might consider it! Once you have a working Dnn Website installed under your local IIS - please read on!&lt;/p&gt;
+&lt;h3 id="create-a-project"&gt;Create a Project&lt;/h3&gt;
+&lt;p&gt;Open Visual Studio, and Create a New &amp;quot;ASP.NET Empty Web Application&amp;quot; project. Make sure you select &amp;quot;.NET 4&amp;quot; from the drop down at the top.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/NewAspNetProject.PNG" class="img-fluid" alt="New Project" /&gt;&lt;/p&gt;
+&lt;p&gt;Note: Create your project wherever you like - where you put your source code - that's your business!&lt;/p&gt;
+&lt;h3 id="tweak-web-project"&gt;Tweak Web Project&lt;/h3&gt;
+&lt;p&gt;The reason we choose to create a web project in the previous step, rather than say - a library project, is just so that we have appropriate context menu options in visual studio for doing things like adding javascript and ascx files etc. This is generally handy for Dnn module development. However our project can not actually run as a &amp;quot;standalone website&amp;quot; - as we are developing a Dnn module - which can only run within the context of the Dnn website that is hosting it. The approach described in this blog should work equally well if you prefer to create other types of projects - but then you might not have those familiar menu options available, so you may have to add things like javascript files to your project by hand.&lt;/p&gt;
+&lt;p&gt;Select the project in Solution Explorer window, then in the properties window, change &amp;quot;Always Start When Debugging&amp;quot; to false.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/alwaysstartwhendebuggingfalse.PNG" class="img-fluid" alt="alwaysstartwhendebuggingfalse.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;This will help later as it will prevent Visual Studio from needlessly trying to host your module project as its own website whenever you try and debug your module - which will be running in your local Dnn website instead.&lt;/p&gt;
+&lt;h3 id="add-dnnpackager-nuget-package"&gt;Add DnnPackager NuGet Package&lt;/h3&gt;
+&lt;p&gt;Open the Package Manager Console (Tools --&amp;gt; NuGet Package Manager) and (With your project selected in the &amp;quot;Default Project&amp;quot; dropdown, type into it the following command and hit enter to install the DnnPackager NuGet package:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-powershell"&gt;
+Install-Package DnnPackager
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src="/img/NuGetConsoleAddDnnPackagerNuGet.PNG" class="img-fluid" alt="NuGetConsoleAddDnnPackagerNuGet.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;This will add some new items to your project, and to your solution. I will cover what these are for later.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/ProjectAfterAddingDnnPackager.PNG" class="img-fluid" alt="ProjectAfterAddingDnnPackager.PNG" /&gt;&lt;/p&gt;
+&lt;h3 id="dnn-sdk-assemblies"&gt;Dnn Sdk Assemblies&lt;/h3&gt;
+&lt;p&gt;In order to proceed with Dnn development, we will actually need to add references to the Dnn assemblies. Depending on the version of DotNetNuke you want your extension to be compatible with will often determine what version of the Dnn assemblies you will need to reference.&lt;/p&gt;
+&lt;p&gt;For the sake of this blog post I am going to assume that you are going to target the latest version of Dnn (at the time of writing this is Dnn 7)&lt;/p&gt;
+&lt;p&gt;Using the Package Manager Console again:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-powershell"&gt;
+Install-Package DotNetNuke.Core
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This should add a reference to the DotNetNuke assembly to your project's references:&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/ReferencesAfterAddingDnnCore.PNG" class="img-fluid" alt="ReferencesAfterAddingDnnCore.PNG" /&gt;&lt;/p&gt;
+&lt;h3 id="lets-develop-a-module"&gt;Let's Develop a Module!&lt;/h3&gt;
+&lt;p&gt;Now we have got most of the setup out of the way, it's time to get cracking on our module!&lt;/p&gt;
+&lt;p&gt;First add a new User Control to the project. This is going to be the default UI for our super cool DNN module.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/AddUserControl.PNG" class="img-fluid" alt="AddUserControl.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;We then need to change our new User Control to make it inherit from &lt;code&gt;PortalModuleBase&lt;/code&gt; rather than &lt;code&gt;System.Web.UI.UserControl&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;So change this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;
+namespace MySuperModule
+{
+    public partial class Default : System.Web.UI.UserControl
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;using DotNetNuke.Entities.Modules;
+
+namespace MySuperModule
+{
+    public partial class Default : PortalModuleBase
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;** Don't forget to add the 'using' statement depicted above! **&lt;/p&gt;
+&lt;h3 id="making-an-awesome-module"&gt;Making an awesome module&lt;/h3&gt;
+&lt;p&gt;Further development of this super awesome module is beyond the scope of this post, so I am just going to make it display something really simple for the time being. There are &lt;a href="http://www.dnnsoftware.com/community-blog/cid/141749/dotnetnuke-module-development-101-5--hello-world-3-using-visual-studio-to-create-a-module"&gt;plenty of other resources&lt;/a&gt; out there for learning about Dnn module development. For now let's  make it display some text.&lt;/p&gt;
+&lt;p&gt;Add the following h1 content to your markup for the user control:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-html"&gt;
+&amp;lt;%&amp;#64; Control Language=&amp;quot;C#&amp;quot; AutoEventWireup=&amp;quot;true&amp;quot; CodeBehind=&amp;quot;Default.ascx.cs&amp;quot; Inherits=&amp;quot;MySuperModule.Default&amp;quot; %&amp;gt;
+
+&amp;lt;h1&amp;gt;I came, I read a blog, I conquered!&amp;lt;/h1&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="module-manifest"&gt;Module Manifest&lt;/h3&gt;
+&lt;p&gt;Now that we have this incredible... work of art, naturally we want to run it and test it out. In order to do this though, we first need to make sure our module is going to identify itself with DotNetNuke correctly. This means it should have a manifest.&lt;/p&gt;
+&lt;p&gt;One of the files that was automatically added to your project when you added the DnnPackager NuGet package was: manifest.dnn&lt;/p&gt;
+&lt;p&gt;Open up manifest.dnn and replace the values in square brackets with appropriate values. You only need to do this once.&lt;/p&gt;
+&lt;p&gt;For example, you will see something that looks like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-xml"&gt;
+&amp;lt;dotnetnuke type=&amp;quot;Package&amp;quot; version=&amp;quot;6.0&amp;quot;&amp;gt;
+  &amp;lt;packages&amp;gt;    
+    &amp;lt;package name=&amp;quot;[YourPackageName]&amp;quot; type=&amp;quot;Module&amp;quot; version=&amp;quot;0.0.0&amp;quot;&amp;gt;
+      &amp;lt;friendlyName&amp;gt;[FriendlyPackageName]&amp;lt;/friendlyName&amp;gt;
+      &amp;lt;description&amp;gt;&amp;lt;/description&amp;gt;
+      &amp;lt;owner&amp;gt;
+        &amp;lt;name&amp;gt;[OwnerName]&amp;lt;/name&amp;gt;
+        &amp;lt;organization&amp;gt;[OrganizationName]&amp;lt;/organization&amp;gt;
+        &amp;lt;url&amp;gt;http://www.someurl.com&amp;lt;/url&amp;gt;
+        &amp;lt;email&amp;gt;&amp;lt;![CDATA[&amp;lt;a href=&amp;quot;mailto:support&amp;#64;someorg.com&amp;quot;&amp;gt;support&amp;#64;someorg.com&amp;lt;/a&amp;gt;]]&amp;gt;&amp;lt;/email&amp;gt;
+      &amp;lt;/owner&amp;gt;
+      &amp;lt;license src=&amp;quot;License.lic&amp;quot;&amp;gt;
+      &amp;lt;/license&amp;gt;
+      &amp;lt;releaseNotes src=&amp;quot;ReleaseNotes.txt&amp;quot;&amp;gt;
+      &amp;lt;/releaseNotes&amp;gt;
+      &amp;lt;dependencies&amp;gt;      
+      &amp;lt;/dependencies&amp;gt;
+      &amp;lt;components&amp;gt;
+        &amp;lt;component type=&amp;quot;Module&amp;quot;&amp;gt;
+          &amp;lt;desktopModule&amp;gt;
+            &amp;lt;moduleName&amp;gt;[YourModuleName]&amp;lt;/moduleName&amp;gt;
+            &amp;lt;foldername&amp;gt;[FolderName]&amp;lt;/foldername&amp;gt;
+            &amp;lt;businessControllerClass /&amp;gt;
+            &amp;lt;supportedFeatures /&amp;gt;
+            &amp;lt;moduleDefinitions&amp;gt;
+              &amp;lt;moduleDefinition&amp;gt;
+                &amp;lt;friendlyName&amp;gt;[Friendly Module Name]&amp;lt;/friendlyName&amp;gt;
+                &amp;lt;defaultCacheTime&amp;gt;60&amp;lt;/defaultCacheTime&amp;gt;
+                &amp;lt;moduleControls&amp;gt;
+                  &amp;lt;moduleControl&amp;gt;
+                    &amp;lt;controlKey&amp;gt;
+                    &amp;lt;/controlKey&amp;gt;
+                    &amp;lt;controlSrc&amp;gt;[YourControllerOrPathToView]/[YourViewFileName].[YourViewFileExtension]&amp;lt;/controlSrc&amp;gt;
+                    &amp;lt;supportsPartialRendering&amp;gt;False&amp;lt;/supportsPartialRendering&amp;gt;
+                    &amp;lt;controlTitle&amp;gt;[Default title when added to page]&amp;lt;/controlTitle&amp;gt;
+                    &amp;lt;controlType&amp;gt;View&amp;lt;/controlType&amp;gt;
+                    &amp;lt;helpUrl&amp;gt;
+                    &amp;lt;/helpUrl&amp;gt;
+                  &amp;lt;/moduleControl&amp;gt;
+                  &amp;lt;moduleControl&amp;gt;
+                    &amp;lt;controlKey&amp;gt;settings&amp;lt;/controlKey&amp;gt;
+                    &amp;lt;controlSrc&amp;gt;[YourControllerOrPathToSettings]/[YourSettingsFileName].[YourSettingsFileExtension]&amp;lt;/controlSrc&amp;gt;
+                    &amp;lt;supportsPartialRendering&amp;gt;False&amp;lt;/supportsPartialRendering&amp;gt;
+                    &amp;lt;controlTitle&amp;gt;[Default settings title]&amp;lt;/controlTitle&amp;gt;
+                    &amp;lt;controlType&amp;gt;View&amp;lt;/controlType&amp;gt;
+                    &amp;lt;helpUrl&amp;gt;
+                    &amp;lt;/helpUrl&amp;gt;
+                  &amp;lt;/moduleControl&amp;gt;
+                &amp;lt;/moduleControls&amp;gt;
+                &amp;lt;permissions&amp;gt;
+                &amp;lt;/permissions&amp;gt;
+              &amp;lt;/moduleDefinition&amp;gt;
+            &amp;lt;/moduleDefinitions&amp;gt;
+          &amp;lt;/desktopModule&amp;gt;
+        &amp;lt;/component&amp;gt;
+        &amp;lt;component type=&amp;quot;Assembly&amp;quot;&amp;gt;
+          &amp;lt;assemblies&amp;gt;
+            &amp;lt;assembly&amp;gt;
+              &amp;lt;path&amp;gt;bin&amp;lt;/path&amp;gt;
+              &amp;lt;name&amp;gt;[YourAssembly.dll]&amp;lt;/name&amp;gt;
+            &amp;lt;/assembly&amp;gt;
+          &amp;lt;/assemblies&amp;gt;
+        &amp;lt;/component&amp;gt;
+        &amp;lt;component type=&amp;quot;ResourceFile&amp;quot;&amp;gt;
+          &amp;lt;resourceFiles&amp;gt;
+            &amp;lt;basePath&amp;gt;DesktopModules/[FolderName]&amp;lt;/basePath&amp;gt;
+            &amp;lt;resourceFile&amp;gt;
+              &amp;lt;name&amp;gt;Resources.zip&amp;lt;/name&amp;gt;
+            &amp;lt;/resourceFile&amp;gt;
+          &amp;lt;/resourceFiles&amp;gt;
+        &amp;lt;/component&amp;gt;
+      &amp;lt;/components&amp;gt;
+    &amp;lt;/package&amp;gt;   
+  &amp;lt;/packages&amp;gt;
+&amp;lt;/dotnetnuke&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Fill it in so it looks more like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-xml"&gt;
+&amp;lt;dotnetnuke type=&amp;quot;Package&amp;quot; version=&amp;quot;6.0&amp;quot;&amp;gt;
+  &amp;lt;packages&amp;gt;    
+    &amp;lt;package name=&amp;quot;MySuperModule&amp;quot; type=&amp;quot;Module&amp;quot; version=&amp;quot;0.0.1&amp;quot;&amp;gt;
+      &amp;lt;friendlyName&amp;gt;MySuperModule&amp;lt;/friendlyName&amp;gt;
+      &amp;lt;description&amp;gt;Makes the internet work&amp;lt;/description&amp;gt;
+      &amp;lt;owner&amp;gt;
+        &amp;lt;name&amp;gt;Darrell Tunnell&amp;lt;/name&amp;gt;
+        &amp;lt;organization&amp;gt;Dazinator&amp;lt;/organization&amp;gt;
+        &amp;lt;url&amp;gt;http://darrelltunnell.net&amp;lt;/url&amp;gt;
+        &amp;lt;email&amp;gt;&amp;lt;![CDATA[&amp;lt;a href=&amp;quot;mailto:support&amp;#64;someorg.com&amp;quot;&amp;gt;support&amp;#64;someorg.com&amp;lt;/a&amp;gt;]]&amp;gt;&amp;lt;/email&amp;gt;
+      &amp;lt;/owner&amp;gt;
+      &amp;lt;license src=&amp;quot;License.lic&amp;quot;&amp;gt;
+      &amp;lt;/license&amp;gt;
+      &amp;lt;releaseNotes src=&amp;quot;ReleaseNotes.txt&amp;quot;&amp;gt;
+      &amp;lt;/releaseNotes&amp;gt;
+      &amp;lt;dependencies&amp;gt;      
+      &amp;lt;/dependencies&amp;gt;
+      &amp;lt;components&amp;gt;
+        &amp;lt;component type=&amp;quot;Module&amp;quot;&amp;gt;
+          &amp;lt;desktopModule&amp;gt;
+            &amp;lt;moduleName&amp;gt;MySuperModule&amp;lt;/moduleName&amp;gt;
+            &amp;lt;foldername&amp;gt;MySuperModule&amp;lt;/foldername&amp;gt;
+            &amp;lt;businessControllerClass /&amp;gt;
+            &amp;lt;supportedFeatures /&amp;gt;
+            &amp;lt;moduleDefinitions&amp;gt;
+              &amp;lt;moduleDefinition&amp;gt;
+                &amp;lt;friendlyName&amp;gt;MySuperModule&amp;lt;/friendlyName&amp;gt;
+                &amp;lt;defaultCacheTime&amp;gt;-1&amp;lt;/defaultCacheTime&amp;gt;
+                &amp;lt;moduleControls&amp;gt;
+                  &amp;lt;moduleControl&amp;gt;
+                    &amp;lt;controlKey&amp;gt;
+                    &amp;lt;/controlKey&amp;gt;
+                    &amp;lt;controlSrc&amp;gt;DesktopModules/MySuperModule/Default.ascx&amp;lt;/controlSrc&amp;gt;
+                    &amp;lt;supportsPartialRendering&amp;gt;False&amp;lt;/supportsPartialRendering&amp;gt;
+                    &amp;lt;controlTitle&amp;gt;Hello&amp;lt;/controlTitle&amp;gt;
+                    &amp;lt;controlType&amp;gt;View&amp;lt;/controlType&amp;gt;
+                    &amp;lt;helpUrl&amp;gt;
+                    &amp;lt;/helpUrl&amp;gt;
+                  &amp;lt;/moduleControl&amp;gt;                 
+                &amp;lt;/moduleControls&amp;gt;
+                &amp;lt;permissions&amp;gt;
+                &amp;lt;/permissions&amp;gt;
+              &amp;lt;/moduleDefinition&amp;gt;
+            &amp;lt;/moduleDefinitions&amp;gt;
+          &amp;lt;/desktopModule&amp;gt;
+        &amp;lt;/component&amp;gt;
+        &amp;lt;component type=&amp;quot;Assembly&amp;quot;&amp;gt;
+          &amp;lt;assemblies&amp;gt;
+            &amp;lt;assembly&amp;gt;
+              &amp;lt;path&amp;gt;bin&amp;lt;/path&amp;gt;
+              &amp;lt;name&amp;gt;MySuperModule.dll&amp;lt;/name&amp;gt;
+            &amp;lt;/assembly&amp;gt;
+          &amp;lt;/assemblies&amp;gt;
+        &amp;lt;/component&amp;gt;
+        &amp;lt;component type=&amp;quot;ResourceFile&amp;quot;&amp;gt;
+          &amp;lt;resourceFiles&amp;gt;
+            &amp;lt;basePath&amp;gt;DesktopModules/MySuperModule&amp;lt;/basePath&amp;gt;
+            &amp;lt;resourceFile&amp;gt;
+              &amp;lt;name&amp;gt;Resources.zip&amp;lt;/name&amp;gt;
+            &amp;lt;/resourceFile&amp;gt;
+          &amp;lt;/resourceFiles&amp;gt;
+        &amp;lt;/component&amp;gt;
+      &amp;lt;/components&amp;gt;
+    &amp;lt;/package&amp;gt;   
+  &amp;lt;/packages&amp;gt;
+&amp;lt;/dotnetnuke&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note: I removed the entry for the &amp;quot;settings&amp;quot; for our module as we don't have a settings screen in this example. I also changed the default cache time to -1, which disables caching.. just because I have a feeling this module is going to one day become a lot more dynamic and I don't want outdated content causing confusion :-)&lt;/p&gt;
+&lt;p&gt;Important: I also set the version number to 0.0.1. Version numbers are important in that Dnn will not let you install an older version of a module over the top of a newer version. The version number in the manifest would have to be equal to, or greater than the currently installed version for it to install over the top.&lt;/p&gt;
+&lt;h3 id="ready-to-roll"&gt;Ready to roll&lt;/h3&gt;
+&lt;p&gt;Sense that tension in the air? The excitement is building.. The entire blog post has been leading to this one, perfect, moment.&lt;/p&gt;
+&lt;p&gt;We are now going to deploy our module to our local Dnn website, and debug it.&lt;/p&gt;
+&lt;h3 id="automating-deployment"&gt;Automating Deployment&lt;/h3&gt;
+&lt;p&gt;In VS, go to the &amp;quot;Package Manager Console&amp;quot; window, and make sure your project is selected from the projects dropdown.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Type: &lt;code&gt;Install-Module [name of your website in IIS]&lt;/code&gt; and hit enter.&lt;/li&gt;
+&lt;li&gt;Watch as your module project is built, packaged up as a zip, and then the zip is deployed to your local Dnn website!&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;For example, on my IIS, the name of my Dnn website is &amp;quot;DotNetNuke&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/IISDnnWebsite.PNG" class="img-fluid" alt="IISDnnWebsite.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;So I type into the Package Manager Console &lt;code&gt;Install-Module DotNetNuke&lt;/code&gt; and hit enter.&lt;/p&gt;
+&lt;p&gt;After that completes, you can Login to your DotNetNuke website as host, and go to the Host--&amp;gt;Extensions page, and you should see that your module is now listed as an installed extension! Pretty cool!&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/hostextensionsmodules.PNG" class="img-fluid" alt="hostextensionsmodules.PNG" /&gt;&lt;/p&gt;
+&lt;h3 id="setting-up-a-page-to-host-it"&gt;Setting up a Page to Host it&lt;/h3&gt;
+&lt;p&gt;Although our module has been installed onto our site, it won't display anywhere - because we need to tell DotNetNuke where it should be displayed!&lt;/p&gt;
+&lt;p&gt;This is a quick one time task, of simply creating a page in DotNetNuke to display our module.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Login as Host&lt;/li&gt;
+&lt;li&gt;Pages --&amp;gt; Add New Page&lt;/li&gt;
+&lt;li&gt;Fill out page details and create it.&lt;/li&gt;
+&lt;li&gt;Modules --&amp;gt; Add New Module&lt;/li&gt;
+&lt;li&gt;Add your new module on to the page.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;You should see:&lt;/p&gt;
+&lt;img class="img-responsive" src="/img/AddedModule.PNG"&gt;
+&lt;h3 id="debugging-it-testing-changes"&gt;Debugging it &amp;amp; Testing Changes&lt;/h3&gt;
+&lt;p&gt;Let's make some changes. Add some more content:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-html"&gt;
+&amp;lt;h1&amp;gt;I came, I read a blog, I conquered!&amp;lt;/h1&amp;gt;
+&amp;lt;p&amp;gt;Everyday I'm shuffling!&amp;lt;/p&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Add some code in your code behind, and set a breakpoint on it:&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/codebehindbreakpoint.PNG" class="img-fluid" alt="codebehindbreakpoint.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;Now deploy this very simply by placing your cursor in the Package Manager Console window, and hitting &amp;quot;up&amp;quot; arrow on your keyboard. This will bring up the last command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-powershell"&gt;
+Install-Module DotNetNuke
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;hit enter.&lt;/p&gt;
+&lt;p&gt;Once that completes, refresh the page displaying your module:&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/redeployedmodulewithchanges.PNG" class="img-fluid" alt="redeployedmodulewithchanges.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;Simples!&lt;/p&gt;
+&lt;h3 id="but-wait-my-breakpoint-wasnt-hit"&gt;But wait - my breakpoint wasn't hit!&lt;/h3&gt;
+&lt;p&gt;That's because your module is being executed within the process running your DotNetNuke website. So what you need to do is &amp;quot;attach&amp;quot; the debugger to that process.&lt;/p&gt;
+&lt;p&gt;You can do this manually, or you can let DnnPackager do it for you. To let DnnPackager handle this, go back to the package manager console, and amend that command you are using, by adding on a couple of arguments:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-powershell"&gt;
+Install-Module DotNetNuke Debug Attach
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So do that, and hit enter. You should see it deploy your module as before but this time it will also attach your debugger!&lt;/p&gt;
+&lt;p&gt;So.. refresh your page.. and BAM! Breakpoint is hit!&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/breakpointhit.PNG" class="img-fluid" alt="breakpointhit.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;You need to be running Visual Studio as an Administrator before you can attach to the w3p process.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The full syntax of the command is (values in braces are optional):&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Install-Module [name of your website in IIS] {Build Configuration} {Attach}&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;However, if for some strange reason you'd prefer to attach to process in some other way, you absolutely can do that - no one is &amp;quot;forcing&amp;quot; you to use the above command. There are VS extensions you can get to make attaching to IIS processes trivial. Otherwise, within VS, a quick way to do it is do this:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Hit ctrl + alt + p&lt;/li&gt;
+&lt;li&gt;Tick show all processes (if it's not allready)&lt;/li&gt;
+&lt;li&gt;Select any process in the list, then hit &amp;quot;w&amp;quot; on your keyboard - this should scroll you to the &amp;quot;w3wp.exe&amp;quot; process.&lt;/li&gt;
+&lt;li&gt;Click &amp;quot;attach&amp;quot;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src="/img/attachtoprocess.PNG" class="img-fluid" alt="attachtoprocess.PNG" /&gt;&lt;/p&gt;
+&lt;h3 id="what-about-if-i-just-want-my-zip-file"&gt;What about if I just want my Zip file&lt;/h3&gt;
+&lt;p&gt;If you just want your installation zip for some reason, perhaps you want to upload it to the Dnn store etc, just build your project as normal and check in your projects output directory.&lt;/p&gt;
+&lt;h3 id="issues"&gt;Issues?&lt;/h3&gt;
+&lt;p&gt;DnnPackager is open source on GitHub. Feel free to &lt;a href="https://github.com/dazinator/DnnPackager"&gt;raise an issue&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id="in-summary"&gt;In Summary&lt;/h3&gt;
+&lt;p&gt;DnnPackager is an automation tool that I built to help streamline the Dnn module develop workflow. Feel free to drop me a comment - does this tool help? Or have I missed my mark? Where could it be better? I'd love to hear suggestions.&lt;/p&gt;
+</content>
+		<summary>&lt;p&gt;In this post, I am going to show you how to get up and running with DnnPackager for your DotNetNuke module / extension development.&lt;/p&gt;
+
+&lt;p&gt;I am using VS2015 Community Edition, but this should work equally well with previous versions.&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2015/11/04/automating-android-unit-test-apps-xamarin-like-a-pro" />
+		<id>http://darrelltunnell.net/blog/2015/11/04/automating-android-unit-test-apps-xamarin-like-a-pro</id>
+		<title>Automating Xamarin Android Unit Test Apps - Like a Pro</title>
+		<updated>2015-11-04T17:50:00Z</updated>
+		<content>&lt;h3 id="first-off"&gt;First Off..&lt;/h3&gt;
+&lt;p&gt;This article is for those of you out there who use Xamarin to write Android applications and want to automate the process of running your tests on an Android device. I'll show you how you can set this up with relative ease.&lt;/p&gt;
+&lt;p&gt;Here is the process we want:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CI Build Begins&lt;/li&gt;
+&lt;li&gt;Produces the APK file containing my tests.&lt;/li&gt;
+&lt;li&gt;Starts up an Emulator and boots an AVD&lt;/li&gt;
+&lt;li&gt;Installs the tests APK onto the Android Device (Emulated)&lt;/li&gt;
+&lt;li&gt;Kicks of the tests&lt;/li&gt;
+&lt;li&gt;Reports back the test results.&lt;/li&gt;
+&lt;li&gt;If using Team City the test all appear nicely in the UI - otherwise the results are in STDOUT.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!--more--&gt;
+&lt;h3 id="unit-test-app-android-and-its-shortcomings"&gt;Unit Test App (Android) - and it's shortcomings.&lt;/h3&gt;
+&lt;p&gt;It all begins with adding the unit tests project itself.
+Xamarin have provided a project type in Visual Studio called a &amp;quot;Unit Test App&amp;quot;. Add one of those projects to your Solution and define some tests.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/New%20Android%20Unit%20Test%20Project.PNG" class="img-fluid" alt="New Android Unit Test Project.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;Here are some tests:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;    [TestFixture]
+    public class TestsSample
+    {
+
+        [SetUp]
+        public void Setup() { }
+
+
+        [TearDown]
+        public void Tear() { }
+
+        [Test]
+        public void Pass()
+        {
+            Console.WriteLine(&amp;quot;test1&amp;quot;);
+            Assert.True(true);
+        }
+
+        [Test]
+        public void Fail()
+        {
+            Assert.False(true);
+        }
+
+        [Test]
+        [Ignore(&amp;quot;another time&amp;quot;)]
+        public void Ignore()
+        {
+            Assert.True(false);
+        }
+
+        [Test]
+        public void Inconclusive()
+        {
+            Assert.Inconclusive(&amp;quot;Inconclusive&amp;quot;);
+        }
+    }
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="shortcomings-of-running-these-tests"&gt;Shortcomings of Running these tests&lt;/h3&gt;
+&lt;p&gt;Naturally, you may be thinking how do you now run these tests? Well by default you have to manually run them. This is an app. Starting the tests project in VSis like starting any other Android application - it should deploy the APK to your Android device, and launch the app, which then shows a UI, and you must click various buttons on said UI to run the various tests that you want to run MANUALLY.&lt;/p&gt;
+&lt;h3 id="an-enormous-pain-in-the-ass"&gt;An enormous pain in the ass..&lt;/h3&gt;
+&lt;p&gt;This ofcourse, is a rediculous way forward and we need to get these automated ASAP!&lt;/p&gt;
+&lt;h3 id="the-short-answer"&gt;The short answer&lt;/h3&gt;
+&lt;p&gt;The short answer, is that we need to take a few steps to get these tests automated.. Read on..&lt;/p&gt;
+&lt;h3 id="step-1-the-nuget-package"&gt;Step 1 - The NuGet Package&lt;/h3&gt;
+&lt;p&gt;I created a NuGet package called &lt;a href="https://www.nuget.org/packages/Xamarin.TestyDroid/"&gt;TestyDroid&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In order to write this tool, it's fair to say it has taken a fair bit of research and testing!&lt;/p&gt;
+&lt;p&gt;So - &lt;a href="https://www.nuget.org/packages/Xamarin.TestyDroid/"&gt;Install the NuGet package to your tests project&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;It contains two things. Firstly, it contains a command line executable in it's tools folder, called TestyDroid.exe. This little command line will handle spinning up an emulator, installing your tests apk, and running all of your tests and reporting the results, and lastly terminating the emulator once done.&lt;/p&gt;
+&lt;p&gt;Secondly, it contains an Android library that is added to your Android tests project as a reference. This library includes an improved base class that you will derive form instead of the default Xamrin one. We will cover this in the next step.&lt;/p&gt;
+&lt;h3 id="step-2"&gt;Step 2&lt;/h3&gt;
+&lt;p&gt;After that is installed, we need to address how these tests get &amp;quot;launched&amp;quot; in the first place.&lt;/p&gt;
+&lt;p&gt;Android has the concept of &amp;quot;Instrumentation&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Instrumentation&lt;/code&gt; are basically special types, that can be launched via an intent, and can run tests.&lt;/p&gt;
+&lt;p&gt;So, in order to &amp;quot;start&amp;quot; the tests running on the Android device (after the APK) has been installed, we need to create this &amp;quot;Instrumentation&amp;quot; class in our tests project.&lt;/p&gt;
+&lt;p&gt;Add the following class to your Tests project:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;namespace Xamarin.TestyDroid.TestTests
+{
+    [Instrumentation(Name = &amp;quot;xamarin.testydroid.testtests.TestInstrumentation&amp;quot;)]
+    public class TestInstrumentation : TestyDroid.Android.TestyDroidTestSuiteInstrumentation
+    {   
+
+        public TestInstrumentation(IntPtr handle, JniHandleOwnership transfer) : base(handle, transfer)
+        {
+        }
+
+        protected override void AddTests()
+        {
+            AddTest(Assembly.GetExecutingAssembly());
+        }
+    }
+
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Imortant to note (adjust the Namespace appropriately) - the Instrumentation Attribute above the class has a &amp;quot;Name&amp;quot; property. THIS IS VERY IMPORTANT. Make sure it matches yoru namespace + class name, but with the namespace in lower case.&lt;/p&gt;
+&lt;p&gt;So if you changed the namespace of this class to MyCoolApp.Tests
+And you changed the Class Name of this class to MyCoolTestInstrumentation
+Then the Attribute above the MyCoolTestInstrumentation class should look like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt; [Instrumentation(Name = &amp;quot;mycoolapp.tests.MyCoolTestInstrumentation&amp;quot;)]
+    public class MyCoolTestInstrumentation : TestyDroid.Android.TestyDroidTestSuiteInstrumentation
+    {   
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="step-3-jot-things-down"&gt;Step 3 - Jot things down&lt;/h3&gt;
+&lt;p&gt;We now need to make a note of a few variables that we will need in order to call &lt;code&gt;TestyDroid.exe&lt;/code&gt; to run our tests.&lt;/p&gt;
+&lt;p&gt;The first thing we need is the &amp;quot;class path&amp;quot; of your tests Instrumentation. This is &amp;quot;Name&amp;quot; value of the [Instrumentation] attribute in the previous step. For example:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;xamarin.testydroid.testtests.TestInstrumentation&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The next thing we need is the Package name of your tests package. This you can grab from the &lt;code&gt;AndroidManifest.xml&lt;/code&gt; file.&lt;/p&gt;
+&lt;p&gt;Here is mine:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-xml"&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
+&amp;lt;manifest xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot; package=&amp;quot;Xamarin.TestyDroid.TestTests&amp;quot; android:versionCode=&amp;quot;1&amp;quot; android:versionName=&amp;quot;1.0&amp;quot;&amp;gt;
+	&amp;lt;uses-sdk /&amp;gt;
+	&amp;lt;application android:label=&amp;quot;Xamarin.TestyDroid.TestTests&amp;quot; android:icon=&amp;quot;&amp;#64;drawable/Icon&amp;quot;&amp;gt;&amp;lt;/application&amp;gt;
+&amp;lt;/manifest&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So the package name for my tests app is &lt;code&gt;Xamarin.TestyDroid.TestTests&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;You will also need to know some more general paramaters about where things are on our environment:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The path to &lt;code&gt;Adb.exe&lt;/code&gt; (this is in your android-sdk\platform-tools directory)&lt;/li&gt;
+&lt;li&gt;The path to &lt;code&gt;Emulator.exe&lt;/code&gt; (this is in your android-sdk\tools directory)&lt;/li&gt;
+&lt;li&gt;The path to your Tests APK file (I will give you a clue - it will probably be in your bin/release/ folder of your tests project!)&lt;/li&gt;
+&lt;li&gt;The name of the AVD that you would like to be launched in the emulator and used to run the tests on.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Once you have these things, you are ready to give TestyDroid.exe a whirl!&lt;/p&gt;
+&lt;h3 id="step-4-running-things-locally"&gt;Step 4 - Running things locally.&lt;/h3&gt;
+&lt;p&gt;Armed with the information in the previous step:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Open up a command prompt.&lt;/li&gt;
+&lt;li&gt;CD to the tools directory of the Xamarin.TestyDroid nuget package you added to your  earlier. It should be something like &amp;quot;..path to you solution/packages/Xamarin.TestyDroid.x.x.x/tools/&amp;quot;&lt;/li&gt;
+&lt;li&gt;Run &lt;code&gt;Xamarin.TestyDroid.exe&lt;/code&gt; with the arguments it needs! Look here for a breakdown of all the arguments: &lt;a href="https://github.com/dazinator/Xamarin.TestyDroid"&gt;https://github.com/dazinator/Xamarin.TestyDroid&lt;/a&gt; - or just execute it with the &lt;code&gt;--help&lt;/code&gt; argument to see the help screen.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Here is an example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bat"&gt;Xamarin.TestyDroid.exe -e &amp;quot;C:\Program Files (x86)\Android\android-sdk\tools\emulator.exe&amp;quot; -d &amp;quot;C:\Program Files (x86)\Android\android-sdk\platform-tools\adb.exe&amp;quot; -f &amp;quot;src\MyTests\bin\Release\MyTests.apk-Signed.apk&amp;quot; -i &amp;quot;AVD_GalaxyNexus_ToolsForApacheCordova&amp;quot; -n &amp;quot;MyTests&amp;quot; -c &amp;quot;mytests.TestInstrumentation&amp;quot; -w 120
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Substitute the argument values accordingly.&lt;/p&gt;
+&lt;p&gt;You should see output similar to the following:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bat"&gt;Starting emulator: D:\android-sdk\tools\emulator.exe -avd Xamarin_Android_API_15 -port 5554 -no-boot-anim -prop emu.uuid=013b8394-db8d-4224-a36f-889ce164f74e
+
+Waiting until: 04/11/2015 19:21:29 for device to complete boot up..
+
+INSTRUMENTATION_RESULT: passed=1
+
+INSTRUMENTATION_RESULT: skipped=1
+
+INSTRUMENTATION_RESULT: inconclusive=1
+
+INSTRUMENTATION_RESULT: failed=1
+
+INSTRUMENTATION_CODE: 0
+
+Killing device: emulator-5554
+Sending kill command.
+OK: killing emulator, bye bye
+
+Emulator killed.
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="step-5-running-on-team-city"&gt;Step 5 - Running On Team City&lt;/h3&gt;
+&lt;p&gt;Once you have verified you can automate the tests locally, the next step is to set up your build system to run them during your build!&lt;/p&gt;
+&lt;p&gt;TestyDroid additionally supports reporting Test results in a TeamCity format so that they show up as test results in the TeamCity ui - if that's your build system.&lt;/p&gt;
+&lt;p&gt;To configure TeamCity it's a case of:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;An MSBUILD step to build your Tests project (csproj file) such that it outputs the APK (remember to use the target &lt;code&gt;SignAndroidPackage&lt;/code&gt; to have the APK produced)&lt;/li&gt;
+&lt;li&gt;A command line step that calls out to Xamarin.TestyDroid.exe with the necessary arguments.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The first step is easy, but the important thing to remember is to set the target to SignAndroidPackage&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/tc%20commandlineparams%20testydroid.PNG" class="img-fluid" alt="tc commandlineparams testydroid.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;That will now take care of producing the APK in the output directory for your project during your team city build.&lt;/p&gt;
+&lt;p&gt;The second step to create is the one that actually runs the tests using TestyDroid!
+The follwing screenshot shows setting up a Command line step to do this:
+&lt;img src="/img/tc%20testydroid%20commandlinestep.PNG" class="img-fluid" alt="tc testydroid commandlinestep.PNG" /&gt;&lt;/p&gt;
+&lt;h3 id="step-6-admire-your-tests-in-team-city"&gt;Step 6 - Admire your tests in Team City.&lt;/h3&gt;
+&lt;p&gt;Now you can run a build - and if all is well - you should see your tests results added to a tests tab in Team City.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/tc%20Tests%20Tab.PNG" class="img-fluid" alt="tc Tests Tab.PNG" /&gt;&lt;/p&gt;
+&lt;h3 id="any-questions"&gt;Any Questions?&lt;/h3&gt;
+&lt;p&gt;I have been someone limited by time so this was fairly rushed together! If there is anything you would like me to elaborate on, please leave a comment below.&lt;/p&gt;
+&lt;p&gt;Also you can read more information about TestyDroid on Github: &lt;a href="https://github.com/dazinator/Xamarin.TestyDroid/wiki/Getting-Started"&gt;https://github.com/dazinator/Xamarin.TestyDroid/wiki/Getting-Started&lt;/a&gt;&lt;/p&gt;
+</content>
+		<summary>&lt;p&gt;This article is for those of you out there who use Xamarin to write Android applications and want to automate the process of running your tests on an Android device. I'll show you how you can set this up with relative ease.&lt;/p&gt;
+&lt;p&gt;Here is the process we want:&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2015/08/29/ssh-on-windows" />
+		<id>http://darrelltunnell.net/blog/2015/08/29/ssh-on-windows</id>
+		<title>SSH access to bitbucket on Windows</title>
+		<updated>2015-08-29T18:50:00Z</updated>
+		<content>&lt;h3 id="getting-ssh-set-up-on-windows"&gt;Getting SSH set up on Windows&lt;/h3&gt;
+&lt;p&gt;Follow this: &lt;a href="http://blog.muhammada.li/setting-up-ssh-access-to-bitbucket-on-windows#comment-53292"&gt;http://blog.muhammada.li/setting-up-ssh-access-to-bitbucket-on-windows#comment-53292&lt;/a&gt;&lt;/p&gt;
+</content>
+		<summary>&lt;p&gt;Follow this: &lt;a href="http://blog.muhammada.li/setting-up-ssh-access-to-bitbucket-on-windows#comment-53292"&gt;http://blog.muhammada.li/setting-up-ssh-access-to-bitbucket-on-windows#comment-53292&lt;/a&gt;&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc" />
+		<id>http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc</id>
+		<title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia</title>
+		<updated>2015-08-16T18:50:00Z</updated>
+		<content>&lt;p&gt;&lt;strong&gt;This post is part 1 of a series. Part 2 is &lt;a href="http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/"&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id="asp-a-sea-of-packages.net-5"&gt;ASP (A Sea of Packages).NET 5&lt;/h3&gt;
+&lt;p&gt;When you create a new ASP.NET 5 project, you will see all sorts of new-ness. I am going to guide you, the uninitiated ASP.NET 5 web developer, through creating your first ASP.NET 5 MVC application, but we won't stop there. In the next post of this series, we will then enhance the project with a number of features:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Bundling and Minification.&lt;/li&gt;
+&lt;li&gt;Auto browser refresh (as you make changes to files during development)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;In addition, I will touch upon important tooling that you need to be aware of:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;NPM&lt;/li&gt;
+&lt;li&gt;Bower and why we are going to replace it with Jspm&lt;/li&gt;
+&lt;li&gt;Gulp - and why is it useful&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;To be able to do all of this, we will be creating an ASP.NET MVC 5 project, and then we will be using &lt;a href="http://aurelia.io/"&gt;Aurelia&lt;/a&gt; to run an Aurelia application on Home page (Index.cshtml)&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;h3 id="new-project"&gt;New Project&lt;/h3&gt;
+&lt;p&gt;The first step on our quest is simply to create a new ASP.NET application. I am sure you know the drill:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;In VS 2015, File --&amp;gt; New Project&lt;/li&gt;
+&lt;li&gt;&amp;quot;ASP.NET Web Application&amp;quot;
+&lt;img src="/img/new%20aspnet%20project.PNG" class="img-fluid" alt="new aspnet project.PNG" /&gt;&lt;/li&gt;
+&lt;li&gt;&amp;quot;Web Application&amp;quot;
+&lt;img src="/img/new%20aspnet%20project%202.PNG" class="img-fluid" alt="new aspnet project 2.PNG" /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="project-structure"&gt;Project Structure&lt;/h3&gt;
+&lt;p&gt;At this point, with the project created, let's stop and appreciate some noteworthy files in our new project.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/asp%20net%20project%20sol%20explorer.PNG" class="img-fluid" alt="asp net project sol explorer.PNG" /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;project.json&lt;/code&gt; - this is the new form of the project file. It replaces for example the older &lt;code&gt;.csproj&lt;/code&gt; and &lt;code&gt;.vbproj&lt;/code&gt; files.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;package.json&lt;/code&gt; - this file is managed by &lt;a href="https://docs.npmjs.com/"&gt;NPM&lt;/a&gt;. It records the dependencies that your application has on NPM packages. More on NPM later.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;bower.json&lt;/code&gt; - this file is managed by &lt;a href="http://bower.io/"&gt;Bower&lt;/a&gt;. It records the dependencies that your application has on Bower packages. More on Bower later.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;gulpfile.js&lt;/code&gt; - this file contains &lt;code&gt;tasks&lt;/code&gt; that can be executed by &lt;a href="http://gulpjs.com/"&gt;Gulp&lt;/a&gt; as part of your development workflow, for example, whenever the project is built, cleaned etc. More on this later.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Startup.cs&lt;/code&gt; this is the entry point for your application. For the purposes of this article, the default code is fine and we won't be amending anything in this file. It contains bootstrapping code such as setting up and registering services such as authentication.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="npm-its-an-important-citizen"&gt;NPM - it's an important citizen&lt;/h4&gt;
+&lt;p&gt;&lt;a href="https://docs.npmjs.com/"&gt;NPM&lt;/a&gt; is now a first class citizen of an ASP.NET 5 project. This is why you have a &lt;code&gt;package.json&lt;/code&gt; file in your project.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/packages%20json%20file.PNG" class="img-fluid" alt="packages json file.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;NPM is a package manager - the Node Package Manager to be precise. Think &lt;code&gt;NuGet&lt;/code&gt; but for NodeJs packages. You could be forgiven for thinking it stands for &amp;quot;Not another Package Manager&amp;quot; - it doesn't, I checked.&lt;/p&gt;
+&lt;p&gt;If you aren't yet familiar with NPM, stop here and do yourself a favour - go &lt;a href="https://docs.npmjs.com/"&gt;get familiar&lt;/a&gt;, you will be seeing a lot of it in your ASP.NET 5 projects in the days to come!&lt;/p&gt;
+&lt;h4 id="hold-on-another-package-manager-but-we-allready-have-nuget"&gt;Hold on, another Package Manager? But we allready have NuGet?&lt;/h4&gt;
+&lt;p&gt;NuGet is for .NET libraries like log4net silly. Npm has a vast array of packages not available through NuGet. Why wouldn't you want to tap into those also?&lt;/p&gt;
+&lt;h4 id="bower"&gt;Bower&lt;/h4&gt;
+&lt;p&gt;Here is where things get a tiny bit confusing. Bower is a package, that is also another package manager. I am tempted to move on.. but I'll explain.&lt;/p&gt;
+&lt;p&gt;Bower is a NodeJs program, and is therefore distributed as a NodeJs package, via &lt;code&gt;NPM&lt;/code&gt;. However it's purpose in life is to be a package manager, but specifically for client (website) dependencies such as javascript or css. Think Jquery. If you want to add Jquery, or Bootstrap, or any other client side library to your project, then Bower would be the package manager to use to achieve that. Not NPM (&lt;a href="https://www.npmjs.com/package/jquery"&gt;although you could&lt;/a&gt;), and not NuGet (&lt;a href="https://www.nuget.org/packages/jQuery/"&gt;although you could&lt;/a&gt;). The ASP.NET team thinks &lt;code&gt;Bower&lt;/code&gt; is the package manager to use as Bower specialises for client dependencies - so the ASP.NET 5 project is set up by default to use Bower and you may allready see some Bower packages downloaded into your &lt;code&gt;bower_components&lt;/code&gt; folder within your project. The &lt;code&gt;bower.json&lt;/code&gt; file keeps track of your bower dependencies.&lt;/p&gt;
+&lt;p&gt;However, in this walkthrough, we shall be scrapping &lt;code&gt;Bower&lt;/code&gt; and using a different package manager for our JQueries and our Bootstraps. One called &lt;a href="http://jspm.io/"&gt;Jspm&lt;/a&gt;. Jspm is recomended for it's additional capabilities, mainly that it provides not just package management features (at dev time) but package loading features, that your application uses at runtime.&lt;/p&gt;
+&lt;h4 id="gulp"&gt;Gulp&lt;/h4&gt;
+&lt;p&gt;&lt;a href="http://gulpjs.com/"&gt;Gulp&lt;/a&gt; is what all the cool kids are using to automate their development workflows.&lt;/p&gt;
+&lt;p&gt;Gulp basically lets you define &lt;code&gt;tasks&lt;/code&gt; in a javascript file (gulpfile.js) that can then be run at an appropirate point. VS 2015 has a &lt;code&gt;Task Runner Explorer&lt;/code&gt; window in which you can pick which Gulp tasks (the ones defined in your gulpfile.js) that you would like to run and when. For example, you can have your gulp task executed whenever the project is built, or cleaned etc. You can also execute your gulp task via the command line (see the Gulp docs)&lt;/p&gt;
+&lt;p&gt;We are going to write some Gulp tasks in gulpfile.js, and have them executed as part of the our project's build process. These tasks are going to automatically handle bundling and minification of our javascript files for us.&lt;/p&gt;
+&lt;p&gt;Our web application is going to reference the &amp;quot;bundle&amp;quot; of javascript that gulp outputs, rather than the individual javascript files that we download using jspm. Which means our application is going to be nice and optimised as the browser will have to do less roundtrips with the server (network requests) to load the required javascript.&lt;/p&gt;
+&lt;h4 id="but-wont-bundling-and-minification-lead-to-a-poor-debugging-experience"&gt;But won't bundling and minification lead to a poor debugging experience?&lt;/h4&gt;
+&lt;p&gt;Not if sourcemaps are enabled. I will show you how to enable this. This will mean the browser will be requesting and running the optimised bundle of javascript - but you the developer, will be stepping through and reading the original source code in your browser's dev tools, thanks to the magical power of source maps.&lt;/p&gt;
+&lt;p&gt;However, I will also show you what to do if you just don't want to bundle / minify your javascript during development (not all browsers will support source maps yet). If bundling and minification is something you only want to do at the time of a release build - which is pretty sensible - then I'll cover that too.&lt;/p&gt;
+&lt;h3 id="stay-tuned"&gt;Stay tuned&lt;/h3&gt;
+&lt;p&gt;In the next post/s, we will begin modifying our ASP.NET 5 project to do the things I have discussed:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/"&gt;Replace Bower with JSPM&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Bring in Aurelia&lt;/li&gt;
+&lt;li&gt;Get an Aurelia application working on the Index.cshtml page&lt;/li&gt;
+&lt;li&gt;Enable bundling and minification via a Gulp task&lt;/li&gt;
+&lt;li&gt;Enable automatic browser refresh&lt;/li&gt;
+&lt;li&gt;Disable bundling when our application is running in development (to maintain an easy debugging experience should your browser not support source maps)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;If there is anything else you would like me to cover in this series, drop me a comment below!&lt;/p&gt;
+</content>
+		<summary>&lt;p&gt;&lt;strong&gt;This post is part 1 of a series. Part 2 is &lt;a href="http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/"&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;When you create a new ASP.NET 5 project, you will see all sorts of new-ness. I am going to guide you, the uninitiated ASP.NET 5 web developer, through creating your first ASP.NET 5 MVC application, but we won't stop there. In the next post of this series, we will then enhance the project with a number of features:&lt;/p&gt;
+
+&lt;p&gt;In addition, I will touch upon important tooling that you need to be aware of:&lt;/p&gt;
+
+&lt;p&gt;To be able to do all of this, we will be creating an ASP.NET MVC 5 project, and then we will be using &lt;a href="http://aurelia.io/"&gt;Aurelia&lt;/a&gt; to run an Aurelia application on Home page (Index.cshtml)&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2015/06/13/dotnetnuke-streamlining-module-development" />
+		<id>http://darrelltunnell.net/blog/2015/06/13/dotnetnuke-streamlining-module-development</id>
+		<title>DotNetNuke - Streamlining Module Development Workflow</title>
+		<updated>2015-06-13T18:50:00Z</updated>
+		<content>&lt;h3 id="module-debugging-two-approaches"&gt;Module Debugging - Two Approaches&lt;/h3&gt;
+&lt;p&gt;When developing DotNetNuke modules people take many different approaches but they boil down to two alternatives in terms of workflow:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Placing / checking out your source code directly into the \DesktopModules folder of a DotNetNuke website, and having your module dll's output to directly into the DotNetNuke website's \bin folder.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Checking out and working on your code wherever you like, but having to deploy your module (content and assemblies) to a local DNN website when you are ready to run it.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Both approaches require that you &amp;quot;attach to process&amp;quot; from within Visual Studio in order to debug your module.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;h4 id="i-hate-approach-1"&gt;I hate approach #1&lt;/h4&gt;
+&lt;p&gt;I have all sorts of issues with approach #1. Yes it’s technically possible, but it’s also nasty in my view (not very clean) - I have elaborated on that elsewhere so won’t do so again here in depth, aside to say that I believe #2 is the &amp;quot;cleanest&amp;quot; approach and that many forms of debugging use #2 as the approach, not #1. For example, xamarin devs, when they debug an android app, you will see that xamarin actually deploys their project to the device / emulator, and then attaches the debugger to the remote process that's running on the device / emulator. The result is that they click &amp;quot;Play&amp;quot; in VS, and a shortwhile later they are attached and stepping through their code.. It may not be obvious that a deployment took place - but it did. Lastly. i'll point out that #1 creates a coupling between how you structure your source code, and where it needs to be when it's actually deployed.&lt;/p&gt;
+&lt;h4 id="but-approach-2-is-lacking"&gt;But approach #2 is lacking&lt;/h4&gt;
+&lt;p&gt;So deciding to take approach #2, having to manually copy / deploy your module content  to the DotNetNuke website each time you want to test your module, is just not an efficient use of your time!&lt;/p&gt;
+&lt;p&gt;What's needed is some nice visual studio integration so that when you are ready to &amp;quot;Run / Debug&amp;quot; your module, you click one button and bam! chrome opens up, displaying your module, with the debugger attached so you can step through code.&lt;/p&gt;
+&lt;h4 id="can-anything-be-done"&gt;Can anything be done?&lt;/h4&gt;
+&lt;p&gt;I have allready made strides to address the inefficiences of #2 so that it's now a lot more streamlined: &lt;a href="https://github.com/dazinator/DnnPackager"&gt;https://github.com/dazinator/DnnPackager&lt;/a&gt; - it's a NuGet package that you add to any VS project, and it will produce the Dnn module installation zip for you when you build the project. It then also extends the package manager console window in VS with an additional command you can run, that will deploy the module project to a local DNN website. So this is the workflow I currently use for module debugging:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Make a change to the code&lt;/li&gt;
+&lt;li&gt;Hit “up” arrow and then hit “enter” in package manager console (this runs the previous command which is the DnnPackager one I spoke of, that builds and deploys my module project to my local dnn website)&lt;/li&gt;
+&lt;li&gt;Refresh my browser page, and attach Visual Studio (ctrl + alt + p) to the w3w process.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This is a bit more streamlined! This makes approach #2 workable in my opinion.&lt;/p&gt;
+&lt;h4 id="room-for-improvements"&gt;Room for Improvements!&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;What if I don’t have a DNN website already installed - for example I am new to Dnn development and just want to get up and running as quickly as possible.&lt;/li&gt;
+&lt;li&gt;What if I am curious to know if my module runs in DNN 6.5.1 and I only have DNN7 installed?&lt;/li&gt;
+&lt;li&gt;What if this is the first time I am testing this particular module - I have to make sure I go to DotNetNuke website, Create a page and add my module to that page right?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;These things are all tedious. Most developers (new to DNN) expect to be able to click Debug and immediately be debugging their code - they don’t expect to have to jump through these additional hurdles / barriers.&lt;/p&gt;
+&lt;p&gt;This is why DotNetNuke development can be a bit of a culture shock for many developers.&lt;/p&gt;
+&lt;h4 id="next-feature"&gt;Next Feature!&lt;/h4&gt;
+&lt;p&gt;So the next feature I am thinking of adding to DnnPackager is one that addresses those concerns mentioned above. I’d be really greatful if anyone with such a curiousity wouldn't mind reading it and offering their feedback on this proposed awesome feature &lt;a href="https://github.com/dazinator/DnnPackager/issues/14"&gt;https://github.com/dazinator/DnnPackager/issues/14&lt;/a&gt; - just so I can get a feel for whether there is much demand for such a capability.&lt;/p&gt;
+&lt;h4 id="feedback"&gt;Feedback?&lt;/h4&gt;
+&lt;p&gt;Do you disagree?
+Would this new feature &lt;a href="https://github.com/dazinator/DnnPackager/issues/14"&gt;https://github.com/dazinator/DnnPackager/issues/14&lt;/a&gt; help you?&lt;/p&gt;
+&lt;p&gt;Darrell Tunnell
+&lt;a href="http://darrelltunnell.net"&gt;http://darrelltunnell.net&lt;/a&gt;&lt;/p&gt;
+</content>
+		<summary>&lt;p&gt;When developing DotNetNuke modules people take many different approaches but they boil down to two alternatives in terms of workflow:&lt;/p&gt;
+
+&lt;p&gt;Both approaches require that you "attach to process" from within Visual Studio in order to debug your module.&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2015/04/29/automating-dotnetnuke-deployments-with-octopus-deploy" />
+		<id>http://darrelltunnell.net/blog/2015/04/29/automating-dotnetnuke-deployments-with-octopus-deploy</id>
+		<title>Automating DotNetNuke deployments with Octopus Deploy</title>
+		<updated>2015-04-29T18:50:00Z</updated>
+		<content>&lt;h3 id="automating-dotnetnuke-deployments-using-octopus-deploy"&gt;Automating DotNetNuke Deployments using Octopus Deploy&lt;/h3&gt;
+&lt;p&gt;Because I am an awesome dude, i'll share with you how I automate dotnetnuke delivery / deployments. This works. It takes some effort to get this set up though, but it will be well worth it in the end.&lt;/p&gt;
+&lt;p&gt;First i'll explain the process for automating the deployment of the DotNetNuke website itself. Then I'll explain how you can automate the deployment of modules / extensions on a continous basis.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;h3 id="preparation-work"&gt;Preparation work&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Set up a brand new DotNetNuke website, and go through the install wizard until you are greeted with an empty default dotnetnuke website.&lt;/li&gt;
+&lt;li&gt;Stop the website. Create a NuGet package containing the website folder.&lt;/li&gt;
+&lt;li&gt;Put that on your internal NuGet feed.&lt;/li&gt;
+&lt;li&gt;Go to the dotnetnuke database, and generate the create scripts (with data).&lt;/li&gt;
+&lt;li&gt;Create a new console application that uses &lt;a href="http://dbup.github.io/"&gt;dbup&lt;/a&gt; to run the above sql scripts when it is executed (as described &lt;a href="http://dbup.github.io/"&gt;here&lt;/a&gt;). Remember to replace things like server name etc in the sql scripts with appropriate &lt;span class="math"&gt;variablename&lt;/span&gt;. Dbup can substitute &lt;span class="math"&gt;variablename&lt;/span&gt; in the sql scripts with their actual values (which you can pass through from Octopus) before it executes them.&lt;/li&gt;
+&lt;li&gt;Add &lt;a href="http://docs.octopusdeploy.com/display/OD/Using+OctoPack"&gt;OctoPack&lt;/a&gt; to your Console Application so that it is packaged up into a NuGet package. Put this NuGet package on your internal NuGet feed.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;You should now be in this position:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;You have a NuGet package on your feed containing the DotNetNuke website content&lt;/li&gt;
+&lt;li&gt;You have a NuGet package on your feed containing your wonderful console application (DbUp) which will run the database scripts.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Next Step - to Octopus!&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Create a project in Octopus to deploy a &amp;quot;DotNetNuke&amp;quot; website. For the deployment process you will need the NuGet packages prepared previously. The deployment process should:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;Create a website in IIS using the website NuGet package.&lt;/li&gt;
+&lt;li&gt;Create the database by executing the executable within the Database NuGet package.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There are lot's of things to remember when deploying dotnetnuke. I won't go into detail but things like:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Granting full permission to the app pool identity that the website runs under to the website folder.&lt;/li&gt;
+&lt;li&gt;Updating the portalalias table with appropriate access url.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;... and other things. The Dnn install process has been covered elsewhere so I won't go into any further detail here.&lt;/p&gt;
+&lt;h3 id="congratulations-partly"&gt;Congratulations (partly)&lt;/h3&gt;
+&lt;p&gt;You should now be in a postion where you can roll out a DotNetNuke website via Octopus.. BUT WHAT ABOUT THE MODULES I'M DEVELOPING!! - I hear you exclaim.&lt;/p&gt;
+&lt;h3 id="automating-module-deployments"&gt;Automating Module Deployments&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;When you build your module projects (via build server etc) you want them packaged as DotNetNuke install packages, inside a NuGet deployment package, which is then published to your NuGet feed. You can use &lt;a href="https://github.com/dazinator/DnnPackager"&gt;DnnPackager&lt;/a&gt; for this (which is something I created).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You'd need something that can copy a set of zip files to the &amp;quot;Install/Module&amp;quot; folder of a DotNetNuke website, and then monitor that folder, whilst calling the DotNetNuke url to install packages (&lt;a href="http://www.dotnetnuke.com/install/install.aspx?mode=installresources"&gt;www.dotnetnuke.com/install/install.aspx?mode=installresources&lt;/a&gt;). I wrote a quick console application to do this. It repeats calls to that URL all the time the number of zips in the install folder decrements (dotnetnuke deletes them after they are installed). If after x calls, there are the same number of zips left in the directory, it assumes they cannot be installed and reports a failure (return code).
+You should package this tool up into a NuGet package and, you guessed it, stick it on your internal feed.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;3.Create a project in Octopus for &amp;quot;Module&amp;quot; deployment. You want the deployment process to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Dowload the NuGet package containing your module zips.&lt;/li&gt;
+&lt;li&gt;Download the NuGet package containing your module deployment utility (that console app i spoke of)&lt;/li&gt;
+&lt;li&gt;Invoke your deployment tool exe, passing in arguments for where the module zip files were placed, what the website url is, and potentially the path to the Install/Modules folder on disk (although my own tool interrogated IIS based on the website URL to find the website directory)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="full-congratulations"&gt;Full Congratulations&lt;/h2&gt;
+&lt;p&gt;You will now find that you can create a release of your module project in Octopus and deploy all your lates modules to any DotNetNuke website at the push of a button.&lt;/p&gt;
+</content>
+		<summary>&lt;p&gt;Because I am an awesome dude, i'll share with you how I automate dotnetnuke delivery / deployments. This works. It takes some effort to get this set up though, but it will be well worth it in the end.&lt;/p&gt;
+&lt;p&gt;First i'll explain the process for automating the deployment of the DotNetNuke website itself. Then I'll explain how you can automate the deployment of modules / extensions on a continous basis.&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you" />
+		<id>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you</id>
+		<title>How far does the XRM SDK's ExecuteMultipleRequest get you?</title>
+		<updated>2015-02-26T17:50:00Z</updated>
+		<content>&lt;h3 id="executemultiplerequest-lets-take-it-to-the-max"&gt;ExecuteMultipleRequest - Let's take it to the max&lt;/h3&gt;
+&lt;p&gt;In this post, I will explore what kinds of things can be achieved using the SDK's ExecuteMultipleRequest, by starting of with a simple SQL command, and implementing a semantically equivalent ExecuteMultipleRequest, and then slowly introducing some additional complexity - so that, we can see some areas where the SDK starts to fall short!&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;h3 id="starting-simple"&gt;Starting Simple&lt;/h3&gt;
+&lt;p&gt;Consider this SQL:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-sql"&gt;INSERT INTO contact (firstname, lastname) VALUES ('albert', 'einstein');
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Well you hardly need a ExecuteMultipleRequest for this, but if you really wanted to you could create one no problem. I am going to assume you are already familiar with the code to create a ExecuteMultipleRequest - if not it's described &lt;a href="https://msdn.microsoft.com/en-gb/library/jj863631.aspx"&gt;here.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;This equates to the following:&lt;/p&gt;
+&lt;p&gt;Either:-&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A single CreateRequestMessage.&lt;/li&gt;
+&lt;li&gt;An ExecuteMultipleRequest containing a single CreateRequestMessage.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I hope you are with me so far..&lt;/p&gt;
+&lt;h3 id="take-it-up-a-notch"&gt;Take It Up A Notch&lt;/h3&gt;
+&lt;p&gt;Let's now imagine that when a contact is INSERTED, an &lt;code&gt;accountnumber&lt;/code&gt; is generated on the server, and that we want to grab this value using a single roundtrip with the server.&lt;/p&gt;
+&lt;p&gt;Here's it is in T-SQL:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-sql"&gt;INSERT INTO contact (firstname, lastname) OUTPUT inserted.accountnumber VALUES ('albert', 'einstein');
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This equates to the following using the SDK:-&lt;/p&gt;
+&lt;p&gt;SORRRY DAVE. YOU CAN'T DO THAT.&lt;/p&gt;
+&lt;p&gt;The problem being, is that to do this in one roundtrip with the CRM server means building an ExecuteMultipleRequest that contains:-&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A CreateRequestMessage (to insert / create the contact)&lt;/li&gt;
+&lt;li&gt;A RetrieveRequestMessage (to retrieve the accountnumber of the inserted contact)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;However in order to construct the appropriate RetrieveRequestMessage we need to know the ID of what the inserted contact will be in advance. If you look at the SQL query - we are not specifying an ID in advance - therefore we cannot perform the equivalent to this query.&lt;/p&gt;
+&lt;h3 id="a-bit-further"&gt;A bit further..&lt;/h3&gt;
+&lt;p&gt;With the previous example in mind, consider the following SQL&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-sql"&gt;INSERT INTO contact (contactid, firstname, lastname) OUTPUT inserted.accountnumber VALUES ('2f4941ec-2f6f-4c7f-8adc-c6f4fb002d42', 'albert', 'einstein');
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you are quick, you've already cottoned on that this one is possible, and it equates to:-&lt;/p&gt;
+&lt;p&gt;An ExecuteMultipleRequest (ContinueOnError = false) containing:-&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A CreateRequestMessage (to insert / create the contact)&lt;/li&gt;
+&lt;li&gt;A RetrieveRequestMessage - to retrieve the &amp;quot;accountnumber&amp;quot; of the created entity)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="lets-start-to-push-the-boat-out-a-little"&gt;Let's start to push the boat out a little.&lt;/h3&gt;
+&lt;p&gt;Here is a batch of T-SQL commands:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-sql"&gt;INSERT INTO contact (firstname, lastname) VALUES ('albert', 'einstein');
+UPDATE contact SET lastname = 'Johnson' WHERE contactid = '3a4941ec-2f6f-4c7f-8adc-c6f4fb002d42';
+DELETE FROM contact WHERE contactid = '4b4941ec-2f6f-4c7f-8adc-c6f4fb002d42'
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, we know that SQL Server would execute that SQL, by executing each sql command within that batch in sequence, and if there were any errors it will not continue to process the rest of the commands in the same batch. It would also not execute that batch within a transaction, so it would not roll back should errors occur half way through etc.&lt;/p&gt;
+&lt;p&gt;This equates to:&lt;/p&gt;
+&lt;p&gt;An ExecuteMultipleRequest (ContinueOnError = false) - containing the following messages:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A CreateRequestMessage (to insert / create the contact)&lt;/li&gt;
+&lt;li&gt;An UpdateRequestMessage(to update the contact)&lt;/li&gt;
+&lt;li&gt;A DeleteRequestMessage&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;It seems like this is a good fit between the SQL and an ExecuteMultipleRequest.&lt;/p&gt;
+&lt;h3 id="the-boat-is-now-heading-towards-the-open-ocean"&gt;The boat is now heading towards the open ocean&lt;/h3&gt;
+&lt;p&gt;Let's add a bit of complexity to the previous T-SQL - consider this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-sql"&gt;INSERT INTO contact (contactid, firstname, lastname) OUTPUT inserted.accountnumber VALUES ('2f4941ec-2f6f-4c7f-8adc-c6f4fb002d42', 'albert', 'einstein');
+UPDATE contact SET lastname = 'Johnson' WHERE contactid = '3a4941ec-2f6f-4c7f-8adc-c6f4fb002d42';
+DELETE FROM contact WHERE contactid = '4b4941ec-2f6f-4c7f-8adc-c6f4fb002d42'
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The first command in that batch of SQL commands is this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-sql"&gt;INSERT INTO contact (contactid, firstname, lastname) OUTPUT inserted.accountnumber VALUES ('2f4941ec-2f6f-4c7f-8adc-c6f4fb002d42', 'albert', 'einstein');
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And we know that this actually equates to 2 seperate RequestMessages, a CreateRequest and a RetrieveRequest. We then also need to do an Update and a then a Delete. So this equates to:&lt;/p&gt;
+&lt;p&gt;An ExecuteMultipleRequest (ContinueOnError = false)&lt;/p&gt;
+&lt;p&gt;Containing:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A CreateRequestMessage (to insert / create the contact)&lt;/li&gt;
+&lt;li&gt;A RetrieveRequestMessage - to retrieve the &amp;quot;accountnumber&amp;quot; of the created entity.&lt;/li&gt;
+&lt;li&gt;An UpdateRequestMessage&lt;/li&gt;
+&lt;li&gt;A DeleteRequestMessage&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Ok good so far!&lt;/p&gt;
+&lt;h3 id="should-look-at-boat-breakdown-cover"&gt;Should look at Boat Breakdown cover&lt;/h3&gt;
+&lt;p&gt;Now consider this one:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-sql"&gt;INSERT INTO contact (firstname, lastname) OUTPUT inserted.accountnumber VALUES ('albert', 'einstein');
+GO
+DELETE FROM contact WHERE contactid = '6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42'
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;What this says is:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;We want to Insert a Contact, output its account number.&lt;/li&gt;
+&lt;li&gt;Then in a second &amp;quot;batch&amp;quot; of sql statements - we want to Delete a contact. The second batch needs to execute regardless of any problem or outcome from the first batch - (The GO keyword is used as a batch seperator in T-SQL)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;What this translates into is:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;A CreateRequest that allways needs to be executed.&lt;/li&gt;
+&lt;li&gt;A RetreiveRequest (to retrieve the &amp;quot;accountnumber&amp;quot;) which should only be executed if the preceeding CreateRequest succeeds.&lt;/li&gt;
+&lt;li&gt;A DeleteRequest that allways needs to be executed.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Can we construct the equivalent ExecuteMultipleRequest to do that?&lt;/p&gt;
+&lt;p&gt;Well.. the answer is.. we can semantically construct an appropriate ExecuteMultipleRequest, but it won't be supported by CRM - because you are not allowed to nest ExecuteMultipleRequest - if you do the CRM server will throw an error when you send it such a request.&lt;/p&gt;
+&lt;p&gt;Here is what that looks like though (if only it was supported by the server!)&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;An ExecuteMultipleRequest (ContinueOnError = true) Containing:
+&lt;ol&gt;
+&lt;li&gt;An ExecuteMultipleRequest (ContinueOnError = false) Containing:
+&lt;ol&gt;
+&lt;li&gt;A CreateRequest to create the contact&lt;/li&gt;
+&lt;li&gt;A RetrieveRequestMessage - to retrieve the &amp;quot;accountnumber&amp;quot; of created entity&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;A DeleteRequestMessage&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;As I say, constructing such a Request is possible, but the CRM server won't process it due to current runtime limitations that are imposed about not allowing nested ExecuteMultipleRequests.&lt;/p&gt;
+&lt;p&gt;So - unfortunately we have hit a CRM limitation here.&lt;/p&gt;
+&lt;p&gt;But what you could do, is, on the client side, split that SQL statement on the &lt;code&gt;GO&lt;/code&gt; keyword, to get each &lt;code&gt;batch&lt;/code&gt; of T-SQL commands. Then for each batch, construct and send an appropriate ExecuteMultipleRequest for the statements in that batch.&lt;/p&gt;
+&lt;h3 id="what-have-we-learned-so-far"&gt;What have we learned so far&lt;/h3&gt;
+&lt;p&gt;The ExecuteMultipleRequest provides the ability to send a single &amp;quot;batch&amp;quot; of commands to the server. Thinking from a SQL perspective, this is akin to sending all the statements upto a &amp;quot;GO&amp;quot; keyword (batch seperator). To get the same behaviour as SQL though, you should set &lt;code&gt;ContinueOnError&lt;/code&gt; to false - so that processing halts if any request in the batch errors.&lt;/p&gt;
+&lt;p&gt;The ExecuteMultipleRequest is not a good fit for sending multiple individual &lt;code&gt;batches&lt;/code&gt; of operations to the CRM server, as there is no way to group the Requests within a ExecuteMultipleRequest into their batches. For this reason it's probably best to think of ExecuteMultipleRequest as a single SQL batch and to always use &lt;code&gt;ContinueOnError&lt;/code&gt; = false if you want to mirror the behaviour of SQL as closely as possible.&lt;/p&gt;
+&lt;h2 id="a-weird-scenario-can-send-multiple-batches-in-one-go-as-long-as-each-batch-contains-1-requestmessage-only"&gt;A weird scenario - can send multiple batches in one go - as long as each batch contains 1 RequestMessage only.&lt;/h2&gt;
+&lt;p&gt;Consider the following T-SQL:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-sql"&gt;INSERT INTO contact (firstname, lastname) VALUES ('albert', 'einstein');
+GO
+DELETE FROM contact WHERE contactid = '6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42';
+GO
+UPDATE contact SET firstname = 'bob' WHERE lastname = 'Hoskins';
+GO
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In this scenario - each batch of commands contains only a single command. What this means is that you can construct an ExecuteMultipleRequest with 'ContinueOnError' set to true, and there will be no danger that a particular command in a batch will error, and that the rest of the commands in that batch will execute regardless - because there is only a single command in each batch!&lt;/p&gt;
+&lt;p&gt;For an example of the danger I am referring to here, consider this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-sql"&gt;DELETE FROM contact WHERE contactid = '6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42';
+DELETE FROM account WHERE primarycontactid = '6f4941ec-2f6f-4c7f-8adc-c6f4fb002d42';
+GO
+UPDATE contact SET firstname = 'bob' WHERE lastname = 'Hoskins';
+GO
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The first batch above, contains 2 operations. The second batch contains 1.&lt;/p&gt;
+&lt;p&gt;Now imagine, that for the above - we constructed an ExecuteMultipleRequest, and set 'ContinueOnError' to true (to enable the server to process both batches regardless of whether the first batch fails.)
+Well in that scenario, because the first batch actually contains 2 operations, the 'ContinueOnError' = true would actually apply to each operation within that batch as well. So you could hit a scenario where the first Delete in that first batch errored, but then CRM continued on regardless to execute the second DELETE etc. This is not what the semantics of the above SQL query conveys - i.e the equivalent CRM beahviour for the above SQL query would be for it to stop processing a particular batch as soon as it hits an error. The only way this can be satisfied at present is if each batch only contains a single RequestMessage.&lt;/p&gt;
+&lt;h3 id="conclusion"&gt;Conclusion&lt;/h3&gt;
+&lt;p&gt;If you would like to send a batch of commands to the CRM server in one go, the good news is you can. The bad news is, it's not perfect, there are limitations, and hopefully I have shown you just about how far you can stretch things.&lt;/p&gt;
+&lt;p&gt;If you need to send multiple batches of commands to the CRM server in one go, the good news is you can if each batch contains only a single request message (i.e Create, Retreive, Delete, Update etc) - the bad news is, if thats not the case, then you will need to send each batch as an individual ExecuteMultipleRequest, and implement your own &amp;quot;ContinueOnError&amp;quot; behaviour clientside such that should one ExecuteMultipleRequest fail to be processed it doesn't halt subsequent batches (ExecuteMultipleRequests) from being processed.&lt;/p&gt;
+</content>
+		<summary>&lt;p&gt;In this post, I will explore what kinds of things can be achieved using the SDK's ExecuteMultipleRequest, by starting of with a simple SQL command, and implementing a semantically equivalent ExecuteMultipleRequest, and then slowly introducing some additional complexity - so that, we can see some areas where the SDK starts to fall short!&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2015/01/18/asp-net-5-vnext-projects-why-your-nuget-package-may-fail-to-install" />
+		<id>http://darrelltunnell.net/blog/2015/01/18/asp-net-5-vnext-projects-why-your-nuget-package-may-fail-to-install</id>
+		<title>ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</title>
+		<updated>2015-01-18T17:50:00Z</updated>
+		<content>&lt;h3 id="dont-assume-nuget-packages-that-you-have-authored-will-continue-to-work-with-asp.net-5-vnext-projects"&gt;Don't assume NuGet Packages that you have authored will continue to work with ASP.NET 5 (vNext) projects.&lt;/h3&gt;
+&lt;p&gt;Over the past year or so, I have authored &lt;a href="https://www.nuget.org/packages?q=darrell.tunnell"&gt;a number of NuGet packages&lt;/a&gt; - because, well... I am just an all around great guy.&lt;/p&gt;
+&lt;p&gt;Recently, &lt;a href="http://stackoverflow.com/questions/27762659/error-while-adding-nuget-package-to-asp-net-vnext-project#comment44383264_27762659"&gt;I was contacted by someone&lt;/a&gt; who was trying to use one of my NuGet packages with an ASP.NET vNext project (Preview release). Not something I have tried before - and this is where things get a little interesting.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;h3 id="when-nuget-packages-are-installed-into-an-asp.net-vnext-project-powershell-scripts-included-in-the-package-are-not-run"&gt;When NuGet packages are installed into an ASP.NET vNext project - powershell scripts included in the package, are not run.&lt;/h3&gt;
+&lt;p&gt;As most NuGet package authors will already know, it's a &lt;a href="http://docs.nuget.org/docs/creating-packages/creating-and-publishing-a-package#Automatically_Running_PowerShell_Scripts_During_Package_Installation_and_Removal"&gt;standard feature of NuGet&lt;/a&gt; that you can include powershell scripts within your NuGet package, that will then be executed when your package is installed (or uninstalled) into a visual studio project / solution.&lt;/p&gt;
+&lt;p&gt;Many NuGet packages out there currently rely on this feature - else they will not work.&lt;/p&gt;
+&lt;p&gt;Well, the issue with my NuGet package failing to install into an ASP.NET vNext project  was eventually posted on the asp.net forums, and &lt;a href="http://forums.asp.net/members/davidfowl.aspx"&gt;David Fowler&lt;/a&gt; (who's on the ASP.NET team) - kindly responded with some insight into the matter. He seems to suggest that &lt;a href="http://forums.asp.net/t/2027698.aspx?Error+while+adding+NuGet+package+to+ASP+NET+vNext+project"&gt;ASP.NET v5 does not support running the packages powershell scripts when you install a NuGet package into an ASP.NET v5 project.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I wanted to confirm that with him a second time - because &lt;strong&gt;that's a huge problem for some of my NuGet packages&lt;/strong&gt;, but as you will see from that thread, I am still awaiting a secondary confirmation of this - although his first answer seems pretty clear cut.&lt;/p&gt;
+&lt;h3 id="surely-this-is-documented-somewhere-or-perhaps-asp.net-5-offers-an-alternative-mechanism-for-running-tasks-on-installation-uninstallation-of-a-nuget-package"&gt;Surely this is documented somewhere - or perhaps ASP.NET 5 offers an alternative mechanism for running tasks on installation / uninstallation of a NuGet package?&lt;/h3&gt;
+&lt;p&gt;I have tried to look for more information. At the moment all I have to go on is David Fowlers response. Perhaps this is because there is still work in progress in this area, who knows. All I can suggest is that if your NuGet package currently requires custom tasks to be performed and you are using an &lt;code&gt;init&lt;/code&gt;, &lt;code&gt;install&lt;/code&gt; or &lt;code&gt;uninstall&lt;/code&gt; ps1 script - then be prepared for the fact that it may not work with ASP.NET 5 projects - and also be prepared for the fact that there may not be any workaround either. I seriously hope this is false speculation on my part - but if this does turn out the be true after ASP.NET 5 is released, I'll be left with a slightly bitter taste in my mouth.&lt;/p&gt;
+&lt;h3 id="so-where-from-here"&gt;So where from here?&lt;/h3&gt;
+&lt;p&gt;I am generally really excited about ASP.NET 5. I love what the team are doing. However I beleive that the ASP.NET team really should put some guidance out there to the NuGet community, so that NuGet package authors can gain an understanding of how their packages might have to change to work in the context of ASP.NET 5 projects.&lt;/p&gt;
+&lt;p&gt;At a minimum, if ASP.NET 5 will indeed no longer support the running of these powershell scripts, then it should atleast warn you that the package contains such scripts and that they will not be executed - which means the package may not beahve as desired.&lt;/p&gt;
+&lt;p&gt;My hope is that David Fowler or someone from the ASP.NET team will offer a clarification, insight, or workaround for this issue that makes it a non issue. Fingers crossed.&lt;/p&gt;
+</content>
+		<summary>&lt;p&gt;Over the past year or so, I have authored &lt;a href="https://www.nuget.org/packages?q=darrell.tunnell"&gt;a number of NuGet packages&lt;/a&gt; - because, well... I am just an all around great guy.&lt;/p&gt;
+&lt;p&gt;Recently, &lt;a href="http://stackoverflow.com/questions/27762659/error-while-adding-nuget-package-to-asp-net-vnext-project#comment44383264_27762659"&gt;I was contacted by someone&lt;/a&gt; who was trying to use one of my NuGet packages with an ASP.NET vNext project (Preview release). Not something I have tried before - and this is where things get a little interesting.&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2014/12/22/crm-plugin-generated-values-and-reducing-roundtrips" />
+		<id>http://darrelltunnell.net/blog/2014/12/22/crm-plugin-generated-values-and-reducing-roundtrips</id>
+		<title>CRM / Plugin Generated Values - and Reducing Roundtrips!</title>
+		<updated>2014-12-22T17:50:00Z</updated>
+		<content>&lt;h3 id="setting-the-scene"&gt;Setting the Scene&lt;/h3&gt;
+&lt;p&gt;Imagine we have an application that uses the CRM SDK. It needs to:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Create a new &lt;code&gt;account&lt;/code&gt; entity in crm.&lt;/li&gt;
+&lt;li&gt;Get some value that was just generated as a result of a synchronous plugin that fires on the create. For example, suppose there is a plugin that generates an account reference number.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="the-i-dont-care-about-network-latency-method"&gt;The &amp;quot;I don't care about network latency method!&amp;quot;&lt;/h3&gt;
+&lt;p&gt;The 'I don't care about network latency' way of dealing with this is to just do 2 seperate Requests (roundtrips) with the CRM server.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Create the new &lt;code&gt;account&lt;/code&gt; which returns you the ID.&lt;/li&gt;
+&lt;li&gt;Retrieve the &lt;code&gt;account&lt;/code&gt; using that ID, along with the values that you need.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This approach is sub optimal where network latency is a concern, as it incurs the penalty of making two roundtrips accross the network with the server, where 1 is possible.&lt;/p&gt;
+&lt;p&gt;Let's now have a look at the &amp;quot;I'm running on a 56k modem method&amp;quot; of doing the same thing!&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;h3 id="the-im-running-on-a-56k-modem-method-this-weeks-pro-tip"&gt;The &amp;quot;I'm running on a 56k modem method&amp;quot; - this weeks pro tip!&lt;/h3&gt;
+&lt;p&gt;For quite some time now - as of &lt;code&gt;CRM 2011 Update Rollup 12 - (SDK 5.0.13)&lt;/code&gt; you can utilise the &lt;a href="http://msdn.microsoft.com/en-gb/library/jj863604.aspx"&gt;Execute Multiple&lt;/a&gt; request to do this kind of thing in one roundtrip with the CRM server.&lt;/p&gt;
+&lt;p&gt;Here is an example of creating an account, and retrieiving it in a single round trip:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt; 				 // Create an ExecuteMultipleRequest object.
+                var multipleRequests = new ExecuteMultipleRequest()
+                {
+                    // Assign settings that define execution behavior: continue on error, return responses. 
+                    Settings = new ExecuteMultipleSettings()
+                    {
+                        ContinueOnError = false,
+                        ReturnResponses = true
+                    },
+                    // Create an empty organization request collection.
+                    Requests = new OrganizationRequestCollection()
+                };
+
+                var entity = new Entity(&amp;quot;account&amp;quot;);
+                entity.Id = Guid.NewGuid();
+                entity[&amp;quot;name&amp;quot;] = &amp;quot;experimental test&amp;quot;;
+
+                CreateRequest createRequest = new CreateRequest
+                {
+                    Target = entity
+                };
+
+                RetrieveRequest retrieveRequest = new RetrieveRequest
+                {
+                    Target = new EntityReference(entity.LogicalName, entity.Id),
+                    ColumnSet = new ColumnSet(&amp;quot;createdon&amp;quot;) // list the fields that you want here
+                };
+
+                multipleRequests.Requests.Add(createRequest);
+                multipleRequests.Requests.Add(retrieveRequest);
+
+                // Execute all the requests in the request collection using a single web method call.
+                ExecuteMultipleResponse responseWithResults = (ExecuteMultipleResponse)orgService.Execute(multipleRequests);
+                             
+                var createResponseItem = responseWithResults.Responses[0];
+                CreateResponse createResponse = null;
+                if (createResponseItem.Response != null)
+                {
+                    createResponse = (CreateResponse)createResponseItem.Response;
+                }
+
+                var retrieveResponseItem = responseWithResults.Responses[1];
+
+                RetrieveResponse retrieveResponse = null;
+                if (retrieveResponseItem.Response != null)
+                {
+                    retrieveResponse = (RetrieveResponse)retrieveResponseItem.Response;
+                }
+
+                Console.Write(retrieveResponse.Entity[&amp;quot;createdon&amp;quot;]); // yup - we got the value we needed!
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="what-happened"&gt;What happened?&lt;/h3&gt;
+&lt;p&gt;Both the CreateRequest, and the RetrieveRequest (for the created entity) are batched up into a single Request and shipped off to the CRM server for processing.&lt;/p&gt;
+&lt;p&gt;CRM processed them in that order, collated the responses together, and returned them in a single batch.&lt;/p&gt;
+&lt;h3 id="caveats"&gt;Caveats&lt;/h3&gt;
+&lt;p&gt;One caveat of this approach is that, if you intend to grab the generated values for an entity that is being created, then you need to know in advance what the ID will be.&lt;/p&gt;
+&lt;p&gt;This means you have to specify the ID of the entity when you create it yourself - you can't let CRM auto create the new ID.&lt;/p&gt;
+&lt;p&gt;For updates / deletes this is a non issue, as the ID is allready known.&lt;/p&gt;
+&lt;h3 id="last-thoughts-sql-optimisation"&gt;Last thoughts - SQL Optimisation&lt;/h3&gt;
+&lt;p&gt;I speculate that specifying your own ID's &lt;em&gt;might be a bad thing&lt;/em&gt; if you don't use Sequential Guid's.&lt;/p&gt;
+&lt;p&gt;When CRM generates Id's for you, it generates them sequentially, and I beleive there may be SQL performance benefits to this in terms of index optimisation etc. So if using Guid.NewGuid() to create your new Id's you may want to check with a SQL guru first to understand any impact of using random Guid's as Id's on performance of the CRM tables! That said - Microsoft do support this, so it can't be too bad..&lt;/p&gt;
+</content>
+		<summary>&lt;p&gt;Imagine we have an application that uses the CRM SDK. It needs to:&lt;/p&gt;
+
+
+&lt;p&gt;The 'I don't care about network latency' way of dealing with this is to just do 2 seperate Requests (roundtrips) with the CRM server.&lt;/p&gt;
+
+&lt;p&gt;This approach is sub optimal where network latency is a concern, as it incurs the penalty of making two roundtrips accross the network with the server, where 1 is possible.&lt;/p&gt;
+&lt;p&gt;Let's now have a look at the "I'm running on a 56k modem method" of doing the same thing!&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2014/12/14/unit-testing-crm-plugins" />
+		<id>http://darrelltunnell.net/blog/2014/12/14/unit-testing-crm-plugins</id>
+		<title>Unit Testing Dynamics CRM Plugins</title>
+		<updated>2014-12-14T17:50:00Z</updated>
+		<content>&lt;h3 id="there-is-no-spoon-crm"&gt;There is no &lt;del&gt;Spoon&lt;/del&gt; CRM&lt;/h3&gt;
+&lt;p&gt;The purpose of this post will be to look at the code for a fairly typical looking crm plugin, and examine how to implement a unit test with the least possible effort. Reduced Effort == Reduced Person Hours == Reduced Cost.&lt;/p&gt;
+&lt;p&gt;Remember, this is Unit Testing, not Integration testing - so at test time - there is no CRM!&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;h3 id="a-plugin-and-its-requirements"&gt;A plugin - and it's requirements&lt;/h3&gt;
+&lt;p&gt;Firstly, let's look at a plugin that we will call the &lt;code&gt;ReclaimCreditPlugin&lt;/code&gt;. Here are the requirements:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;It must run only within a transaction with the database.&lt;/li&gt;
+&lt;li&gt;When a Contact entity is Updated, if the contact has a parent account, and that parent account is &amp;quot;on hold&amp;quot; then set the &amp;quot;taketheirshoes&amp;quot; flag on the contact record to true.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="developer-jon-doe"&gt;Developer Jon Doe&lt;/h3&gt;
+&lt;p&gt;Jon Doe immediately gets to work on writing the plugin for those requirements. He produces the following plugin&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;public class ReclaimCreditPlugin : IPlugin
+{
+    public void Execute(IServiceProvider serviceProvider)
+    {
+        var executionContext = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+
+        // 1. We must run only within a transaction
+        if (!executionContext.IsInTransaction)
+        {
+            throw new InvalidPluginExecutionException(&amp;quot;The plugin detected that it was not running within a database transaction. The plugin requires a database transaction.&amp;quot;);
+        }
+
+        // 2. Get the contact, check its parent account.
+        if (executionContext.InputParameters.Contains(&amp;quot;Target&amp;quot;) &amp;amp;&amp;amp; executionContext.InputParameters[&amp;quot;Target&amp;quot;] is Entity)
+        {
+            // Obtain the target entity from the input parameters.
+            var contactEntity = (Entity)executionContext.InputParameters[&amp;quot;Target&amp;quot;];
+            // Get the parent account id.
+            var parentAccountId = (EntityReference)contactEntity[&amp;quot;parentaccountid&amp;quot;];
+
+            // Get the parent account entity.
+            var orgServiceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
+            var orgService = orgServiceFactory.CreateOrganizationService(executionContext.UserId);
+            var parentAccountEntity = orgService.Retrieve(&amp;quot;account&amp;quot;, parentAccountId.Id, new ColumnSet(&amp;quot;creditonhold&amp;quot;));
+
+            var accountOnHold = (bool)parentAccountEntity[&amp;quot;creditonhold&amp;quot;];
+
+            if (accountOnHold)
+            {
+                contactEntity[&amp;quot;taketheirshoes&amp;quot;] = true;
+                var tracingService = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+                tracingService.Trace(&amp;quot;Have indicated that we should take the shoes from contact: {0}&amp;quot;, contactEntity.Id.ToString());
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id="good-job"&gt;Good Job?&lt;/h4&gt;
+&lt;p&gt;Take a moment to peer review the above code. Would you vindicate Jon Doe's effort? It seems it has all the required logic in all the required places. It appears he has covered the list of requirements. Although Jon doesn't check to make sure the current entity being updated is definately a contact entity.. But within the confines of this blog post we will assume that there is no possible danger that the plugin could ever be registered against the wrong entity.&lt;/p&gt;
+&lt;p&gt;So.. does it actually work?&lt;/p&gt;
+&lt;h3 id="does-it-work"&gt;Does it work?&lt;/h3&gt;
+&lt;p&gt;Assuming you want to start haemorrhaging people's time accross the organisation, one way to find out if this code works is to immediately go through the process of deploying it to a QA environment, getting someone to test it manually, and then repeating that cycle of Dev --&amp;gt; Deployment --&amp;gt; QA as often as necessary, until the tester gives the thumbs up.&lt;/p&gt;
+&lt;p&gt;If you want to go that route, feel free to skip the rest of this article. Otherwise read on, where sanity awaits!&lt;/p&gt;
+&lt;h3 id="show-me-a-unit-test-already"&gt;Show me a Unit Test Already!&lt;/h3&gt;
+&lt;p&gt;Bad news for you. I could.. but I won't.&lt;/p&gt;
+&lt;h3 id="why-wont-you-show-me-a-unit-test"&gt;Why won't you show me a unit test?&lt;/h3&gt;
+&lt;p&gt;In short, because I value my time. Just look at that code again for crying out loud! It's littered with dependencies on things that are only provided at runtime by Dynamics CRM - things like:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;IServiceProvider&lt;/li&gt;
+&lt;li&gt;IPluginExecutionContext&lt;/li&gt;
+&lt;li&gt;IOrganizationServiceFactory&lt;/li&gt;
+&lt;li&gt;IOrganizationService&lt;/li&gt;
+&lt;li&gt;ITracingService&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;WHAT THE HELL ARE ANY OF THESE THINGS TO DO WITH THE ACTUAL REQUIREMENTS THAT I &lt;em&gt;NEED&lt;/em&gt; TO TEST???&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Listen.. I read those requirements for this plugin. I read them atleast one thousand times. And I wrote them in fact. Here they are again:&lt;/p&gt;
+&lt;blockquote class="blockquote"&gt;
+&lt;ul&gt;
+&lt;li&gt;It must run only within a transaction with the database.&lt;/li&gt;
+&lt;li&gt;When a Contact entity is Updated, if the contact has a parent account, and that parent account is &amp;quot;on hold&amp;quot; then set the &amp;quot;taketheirshoes&amp;quot; flag on the contact record to true.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;So with that in mind, can you please show me the requirement dictating: When a contact is updated, it is of upmost importance to us as a business that it looks at the &lt;code&gt;IPluginExecutionContext&lt;/code&gt; and grabs the &lt;code&gt;IOrganizationServiceFactory.&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Or please show me where the requirements state: When a contact is updated, the plugin absolutely must interact with the &lt;code&gt;IServiceProvider&lt;/code&gt; because otherwise you know.. Our business just won't function anymore.&lt;/p&gt;
+&lt;p&gt;No my friends. The requirements do not say &lt;em&gt;any of that&lt;/em&gt;. I am in the business of testing against the requirements.&lt;/p&gt;
+&lt;h4 id="why-is-that-a-problem"&gt;Why is that a problem?&lt;/h4&gt;
+&lt;p&gt;The problem is not obvious at first glance. It is definately technically possible to mock / fake all of those services at unit test time. You can use something like RhinoMocks or another Mocking library to mock out &lt;code&gt;IServiceProvider&lt;/code&gt; for the purposes of your test. You would then have to mock out all the calls to &lt;code&gt;IServiceProvider&lt;/code&gt; that are made, so that it returns your other 'mocked' services like a mock 'IPluginExecutionContext' etc etc - and down the rabbit hole you go.&lt;/p&gt;
+&lt;p&gt;The problem, is about &lt;em&gt;effort&lt;/em&gt;. This approach, although technically possible, requires significant &lt;em&gt;effort&lt;/em&gt;. You would have to mock a tonne of runtime services and interactions. We have to ask ourselves, is all that effort really necessary? Sometimes it may be, but most of the time, it isn't. In this instance it definately isn't and I will explain why.&lt;/p&gt;
+&lt;h3 id="lets-use-the-requirements-to-write-the-plugin-in-pseudo-code"&gt;Let's use the requirements to write the plugin, in pseudo code.&lt;/h3&gt;
+&lt;p&gt;With those requirements - forget everything you know about Dynamics Crm and write your ideal pseudo code that would implement those requirements. This is the actual logic we care about testing.&lt;/p&gt;
+&lt;p&gt;PSEUDO CODE:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;if (!IsRunningInTransaction)
+{
+	Throw &amp;quot;Plugin requires a transaction.&amp;quot;
+}
+
+If (IsUpdateOf(&amp;quot;contact&amp;quot;))
+{
+
+var contact = GetTargetEntity();
+var account = GetAccountForContact(contact);
+
+var isOnHold = (bool)account[&amp;quot;creditonhold&amp;quot;];
+if(isOnHold)
+{
+ 	contact[&amp;quot;taketheirshoes&amp;quot;] = true;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="look-at-that-pseudo-code-do-you-see-any-runtime-services"&gt;Look at that Pseudo Code -  Do you see &lt;em&gt;any&lt;/em&gt; runtime services?&lt;/h3&gt;
+&lt;p&gt;Notice how it contains only the logic we really care about testing - the logic as described by the requirements. It doesn't contain needless fluff. No &lt;code&gt;IServiceProvider&lt;/code&gt;, No &lt;code&gt;IPluginExecutionContext&lt;/code&gt;. It looks very simple, very basic. If we could actually write a CRM plugin like this, it would be about 1.5 million times easier to test. Well we can.&lt;/p&gt;
+&lt;h3 id="isolating-out-dependencies-is-the-key-to-unit-testing"&gt;Isolating out dependencies is the key to unit testing.&lt;/h3&gt;
+&lt;p&gt;Yes it's true folks you heard it here first. The less dependencies you utilise directly in your methods, the easier they are to unit test.&lt;/p&gt;
+&lt;p&gt;With this principle in mind, let's revisit our plugin and refactor it to remove some dependencies.&lt;/p&gt;
+&lt;h3 id="new-and-improved-plugin"&gt;New and Improved Plugin&lt;/h3&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;    public class ReclaimCreditPlugin2 : IPlugin
+    {
+
+        private IServiceProvider _ServiceProvider;
+
+        public void Execute(IServiceProvider serviceProvider)
+        {
+            _ServiceProvider = serviceProvider;
+            Execute();
+        }
+
+        /// &amp;lt;summary&amp;gt;
+        /// This is the method containing the business logic that we want to be able to assert at unit test time.
+        /// &amp;lt;/summary&amp;gt;
+        public void Execute()
+        {
+            // 1. We must run only within a transaction
+            if (IsInTransaction())
+            {
+                throw new InvalidPluginExecutionException(&amp;quot;The plugin detected that it was not running within a database transaction. The plugin requires a database transaction.&amp;quot;);
+            }
+
+            // 2. Get the contact
+            var contact = GetTargetEntity();
+
+            // 3. Get the Parent Account for the contact.
+            var parentAccount = GetAccountEntity(contact);
+            if (parentAccount == null)
+            {
+                return;
+            }
+
+            // 4. If credit on hold, set taketheirshoes.
+            var accountOnHold = (bool)parentAccount[&amp;quot;creditonhold&amp;quot;];
+            if (accountOnHold)
+            {
+                contact[&amp;quot;taketheirshoes&amp;quot;] = true;
+            }
+
+        }
+
+        /// &amp;lt;summary&amp;gt;
+        /// Returns the parent account entity for the contact.
+        /// &amp;lt;/summary&amp;gt;
+        /// &amp;lt;param name=&amp;quot;contact&amp;quot;&amp;gt;&amp;lt;/param&amp;gt;
+        /// &amp;lt;returns&amp;gt;&amp;lt;/returns&amp;gt;
+        protected virtual Entity GetAccountEntity(Entity contact)
+        {
+            // Get the p[arent account id.
+            var parentAccountId = (EntityReference)contact[&amp;quot;parentaccountid&amp;quot;];
+
+            // Get an instance of the IOrganisationService.
+            var orgServiceFactory = (IOrganizationServiceFactory)_ServiceProvider.GetService(typeof(IOrganizationServiceFactory));
+            var executionContext = (IPluginExecutionContext)_ServiceProvider.GetService(typeof(IPluginExecutionContext));
+            var orgService = orgServiceFactory.CreateOrganizationService(executionContext.UserId);
+            
+            // Get the account entity, with only the column / attribute that we need.
+            var parentAccountEntity = orgService.Retrieve(&amp;quot;account&amp;quot;, parentAccountId.Id, new ColumnSet(&amp;quot;creditonhold&amp;quot;));
+            return parentAccountEntity;
+        }
+
+        /// &amp;lt;summary&amp;gt;
+        /// Returns the current &amp;quot;Target&amp;quot; entity that the plugin is executing against.
+        /// &amp;lt;/summary&amp;gt;
+        /// &amp;lt;returns&amp;gt;&amp;lt;/returns&amp;gt;
+        protected virtual Entity GetTargetEntity()
+        {
+            var context = (IPluginExecutionContext)_ServiceProvider.GetService(typeof(IPluginExecutionContext));
+            if (context.InputParameters.Contains(&amp;quot;Target&amp;quot;) &amp;amp;&amp;amp; context.InputParameters[&amp;quot;Target&amp;quot;] is Entity)
+            {
+                var contactEntity = (Entity)context.InputParameters[&amp;quot;Target&amp;quot;];
+                return contactEntity;
+            }
+
+            return null;
+        }
+
+        /// &amp;lt;summary&amp;gt;
+        /// Returns whether the plugin is currently enrolled within a database transaction.
+        /// &amp;lt;/summary&amp;gt;
+        /// &amp;lt;returns&amp;gt;&amp;lt;/returns&amp;gt;
+        protected virtual bool IsInTransaction()
+        {
+            var context = (IPluginExecutionContext)_ServiceProvider.GetService(typeof(IPluginExecutionContext));
+            return context.IsInTransaction;
+        }
+
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="what-just-happened"&gt;What just happened?&lt;/h3&gt;
+&lt;p&gt;I applied a technique called the &lt;a href="http://taswar.zeytinsoft.com/2009/03/08/extract-and-override-refactoring-technique/"&gt;Extract and Override&lt;/a&gt; technique, to remove the concrete references to all of those CRM runtime only services from within the Execute method, and instead they are now referenced within virtual methods which can be overriden at unit test time.&lt;/p&gt;
+&lt;p&gt;For example rather than having the following code directly within the execute method:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;
+    var executionContext = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+
+    // 1. We must run only within a transaction
+    if (!executionContext.IsInTransaction)
+    {
+        // shortened for brevity
+    }
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It has been replaced by a call to virtual method:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;  	if (IsInTransaction())
+    {
+            
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Because the interactions with the various CRM runtime Services now occur within Virtual methods, we no longer need to mock them up at unit test time. Say goodbye to having to mockup &lt;code&gt;IPluginExecutionContext&lt;/code&gt;, &lt;code&gt;IServiceProvider&lt;/code&gt; or &lt;em&gt;any&lt;/em&gt; of the Crm runtime services. All we need to do now is just override the various virtual methods that our Execute() method calls, and return appropriate values at test time.&lt;/p&gt;
+&lt;h3 id="ok-so-now-will-you-show-me-a-unit-test"&gt;Ok so - Now will you show me a Unit Test??&lt;/h3&gt;
+&lt;p&gt;Certainly Sir / Madame. Now that I can write one within a few minutes as opposed to a few hours, your wish is my command:-&lt;/p&gt;
+&lt;p&gt;For the purpose of our unit tests all we do, is create a class that derives from our original plugin class, but overrides the various virtual methods to provide different values at test time.&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;    public class UnitTestableReclaimCreditPlugin : ReclaimCreditPlugin2
+    {
+
+        public UnitTestableReclaimCreditPlugin()
+        {
+            AccountIsOnHold = false;
+            IsRunningInTransaction = false;
+            ContactEntity = new Entity(&amp;quot;contact&amp;quot;);
+        }
+
+        protected override Entity GetTargetEntity()
+        {
+            ContactEntity[&amp;quot;parentaccountid&amp;quot;] = new EntityReference(&amp;quot;account&amp;quot;, Guid.NewGuid());
+            return ContactEntity;
+        }
+
+        protected override Entity GetAccountEntity(Entity contact)
+        {
+            var accountEntity = new Entity(&amp;quot;account&amp;quot;);
+            accountEntity[&amp;quot;creditonhold&amp;quot;] = AccountIsOnHold;
+            return accountEntity;
+        }
+
+        protected override bool IsInTransaction()
+        {
+            return IsRunningInTransaction;
+        }
+
+        public bool AccountIsOnHold { get; set; }
+
+        public bool IsRunningInTransaction { get; set; }
+
+        public Entity ContactEntity { get; set; }
+
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="and-here-are-the-unit-tests"&gt;And here are the Unit Tests&lt;/h3&gt;
+&lt;pre&gt;&lt;code class="language-csharp"&gt;
+    [TestFixture]
+    public class ReclaimCreditPluginUnitTests
+    {
+        public ReclaimCreditPluginUnitTests()
+        {
+
+        }
+
+        [ExpectedException(typeof(InvalidPluginExecutionException),
+            ExpectedMessage = &amp;quot;The plugin detected that it was not running within a database transaction&amp;quot;,
+            MatchType = MessageMatch.Contains)]
+        public void Should_Only_Run_Within_Transaction()
+        {
+            // arrange
+            var sut = new UnitTestableReclaimCreditPlugin();
+            sut.IsRunningInTransaction = false;
+
+            // act 
+            sut.Execute();
+
+        }
+
+
+        public void Should_Take_Shoes_When_Credit_On_Hold()
+        {
+            // arrange
+            var sut = new UnitTestableReclaimCreditPlugin();
+            sut.IsRunningInTransaction = true;
+            sut.AccountIsOnHold = true;
+
+            // act 
+            sut.Execute();
+
+            //assert
+            Assert.That(sut.ContactEntity[&amp;quot;taketheirshoes&amp;quot;], Is.EqualTo(true));
+
+        }
+
+        public void Should_Not_Take_Shoes_When_Credit_Not_On_Hold()
+        {
+            // arrange
+            var sut = new UnitTestableReclaimCreditPlugin();
+            sut.IsRunningInTransaction = true;
+            sut.AccountIsOnHold = false;
+
+            // act 
+            sut.Execute();
+
+            //assert
+            Assert.That(sut.ContactEntity[&amp;quot;taketheirshoes&amp;quot;], Is.Not.EqualTo(true));
+
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="wrapping-up"&gt;Wrapping Up&lt;/h3&gt;
+&lt;p&gt;I hope I have demonstrated a simple plugin, with a simple set of unit tests. More importantly, I hope I have demonstrated that although it may be technically possible to write a unit test for an exising plugin,  by mocking up every CRM runtime service and interaction that the plugin makes,just because such a thing is possible, doesn't mean you should just do it. First the work has to be justified. To justify what is necessary, examine the requirements, examine the plugin code, and be absolutely clear on what it is you want to cover in your unit tests. With that in mind, refactor the plugin code to eliminate fluff (extraneoues concrete references to dependencies that are surplus to the requirements that you want to test). Use techniques like the &lt;code&gt;Extract and Override&lt;/code&gt; technique to allow you to substitute these dependencies easily at test time. When you do this, you may be surprised at how much simpler it becomes to write unit tests. I would aslo reccommend reading a book on unit testing, I found &lt;a href="http://artofunittesting.com/"&gt;The Art of Unit Testing&lt;/a&gt; very educational on this topic.&lt;/p&gt;
+</content>
+		<summary>&lt;p&gt;The purpose of this post will be to look at the code for a fairly typical looking crm plugin, and examine how to implement a unit test with the least possible effort. Reduced Effort == Reduced Person Hours == Reduced Cost.&lt;/p&gt;
+&lt;p&gt;Remember, this is Unit Testing, not Integration testing - so at test time - there is no CRM!&lt;/p&gt;</summary>
+	</entry>
+	<entry>
+		<link href="http://darrelltunnell.net/blog/2014/11/16/a-proclamation" />
+		<id>http://darrelltunnell.net/blog/2014/11/16/a-proclamation</id>
+		<title>A Proclamation</title>
+		<updated>2014-11-16T00:00:00Z</updated>
+		<content>&lt;p&gt;On this day the 16th November 2014, let it be known that Darrell's blog was rendered forth unto the internet.&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;p&gt;Let the knowledge and manner of its creation also be recorded, lest it be lost from mortal ken. Thus humanity, need not be stricken in ignorance and awe, and need not refer to my blogging website as &amp;quot;Witchcraft&amp;quot; or &amp;quot;Devilry&amp;quot;.&lt;/p&gt;
+&lt;h3 id="the-mechanism-of-creation"&gt;The Mechanism of Creation&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Inspiration taken from JakeGinnivan's blog which is powered by OctoPress: &lt;a href="http://jake.ginnivan.net/"&gt;http://jake.ginnivan.net/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Purchased a domain name: darrelltunnell.net&lt;/li&gt;
+&lt;li&gt;Followed this OctoPress documentation: &lt;a href="http://octopress.org/docs/setup/"&gt;http://octopress.org/docs/setup/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Hosted on &lt;a href="https://github.com/"&gt;https://github.com/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="a-revelation"&gt;A revelation&lt;/h3&gt;
+&lt;p&gt;And so it came to pass that Darrell Tunnell's blog was incredibly useful to others. Darrell's blog is currently read by 3.1 million people. Web browser requests for Darrell's blog constitute approximately 85.2% of all browser requests made, worldwide. NetFlix was eventually absorbed into Darrell's Blog at the end of 2014, through internet osmosis.&lt;/p&gt;
+</content>
+		<summary>&lt;p&gt;On this day the 16th November 2014, let it be known that Darrell's blog was rendered forth unto the internet.&lt;/p&gt;</summary>
+	</entry>
+</feed>

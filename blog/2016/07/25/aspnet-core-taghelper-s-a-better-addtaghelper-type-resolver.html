@@ -1,0 +1,426 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+
+        <title>Darrell&#x27;s Blog - ASPNET Core TagHelper&#x27;s - A Better @addTagHelper type resolver</title>
+        <meta name="description" content="Welcome!" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">        
+
+        <link type="application/rss+xml" rel="alternate" title="Darrell&#x27;s Blog" href="/feed.rss" />
+                <link type="application/atom+xml" rel="alternate" title="Darrell&#x27;s Blog" href="/feed.atom" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+        <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/assets/css/highlight.css" rel="stylesheet">
+        <link href="/assets/css/clean-blog.css" rel="stylesheet" />
+        <link href="/assets/css/master.css" rel="stylesheet" />
+        <link href="/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="/assets/css/override.css" rel="stylesheet" />
+
+
+        <meta name="application-name" content="Darrell&#x27;s Blog" />
+        <meta name="msapplication-tooltip" content="Darrell&#x27;s Blog" />
+        <meta name="msapplication-starturl" content="/" />
+
+        <meta property="og:title" content="Darrell&#x27;s Blog - ASPNET Core TagHelper&#x27;s - A Better @addTagHelper type resolver" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelper-s-a-better-addtaghelper-type-resolver" />
+        <!-- TODO: More social graph meta tags -->
+
+        <script src="/assets/js/jquery.min.js"></script>
+        <script src="/assets/js/bootstrap.min.js"></script>     
+        <script src="/assets/js/highlight.pack.js"></script>   
+        <script src="/assets/js/clean-blog.js"></script>
+        <script src="/assets/js/d3.v3.min.js"></script>
+        <script src="/assets/js/trianglify.min.js"></script>
+        <script src="/assets/js/Please-compressed.js"></script>
+        <script src="/assets/js/background-check.min.js"></script>
+                
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+                <script src="/assets/js/html5shiv.js"></script>
+                <script src="/assets/js/respond.min.js"></script>
+        <![endif]-->
+        
+        <style>
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+}
+
+.title {
+  color: grey;
+  font-size: 18px;
+}
+
+button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+a {
+  text-decoration: none;
+  font-size: 22px;
+  color: black;
+}
+
+button:hover, a:hover {
+  opacity: 0.7;
+}
+</style>
+
+        </head>
+        <body>
+                
+                <!-- Navigation -->
+                <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+                        <div class="container-fluid">
+                                <!-- Brand and toggle get grouped for better mobile display -->
+                                <div class="navbar-header page-scroll">
+                                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                                        <span class="sr-only">Toggle navigation</span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        </button>
+                                        <a class="navbar-brand" href="/">Darrell&#x27;s Blog</a>
+                                </div>
+                        
+                                <!-- Collect the nav links, forms, and other content for toggling -->
+                                <div class="collapse navbar-collapse" id="navbar-collapse">
+                                        <ul class="nav navbar-nav navbar-right">
+                                                        <li><a href="/posts">Archive</a></li>
+        <li><a href="/tags">Tags</a></li>
+        <li><a href="/about">About Me</a></li>
+        <li><a href="/tutorials/Index">Tutorials</a></li>
+    <!-- <li><a href="/Tutorials">Tutorials</a></li> -->
+ 
+                                        </ul>
+                                </div>
+                                <!-- /.navbar-collapse -->
+                        </div>
+                        <!-- /.container -->
+                </nav>
+                
+                <!-- Page Header -->
+                <header class="intro-header" id="intro-header">
+                        <div class="container">
+                                <div class="row">
+                                        <div class="col-md-12">
+
+    
+<div class="post-heading">
+    <h1>ASPNET Core TagHelper&#x27;s - A Better @addTagHelper type resolver</h1>
+    <div class="meta">        
+Published on 25 July 2016<br>    </div>
+        <div class="tags">
+                    <a role="button" href="/tags/ASPNET-CORE" class="btn btn-default btn-xs">ASP.NET CORE</a>
+        </div>     
+</div>
+                                        </div>
+                                </div>
+                        </div>
+                </header>
+                
+                <!-- Main Content -->
+                <div class="container">
+                        <div class="row">
+                                <div id="content" class="col-md-12">
+                                        
+
+<h3 id="whats-this-about">What's this about?</h3>
+<p>This is about TagHelper's in ASP.NET Core, and how to get more flexible <code>&#64;addTagHelper</code> directives.</p>
+<!--more-->
+<p>Suppose your application loads some assemblies dynamically - for example, from a plugins folder, and those assemblies contain <code>TagHelper</code>'s.</p>
+<p>In startup.cs you would have something like this to register your assemblies with the MVC parts system:</p>
+<pre><code class="language-csharp">
+ var assy = Assembly.LoadFile(&quot;C:\\SomePath\Plugin.Authentication.dll&quot;);
+ mvcBuilder.AddApplicationPart(assy);
+
+ var assy = Assembly.LoadFile(&quot;C:\\SomePath\Plugin.Markdown.dll&quot;);
+ mvcBuilder.AddApplicationPart(assy);
+
+</code></pre>
+<p>Now suppose you have a Razor View with some markup that can be targeted by those tag helpers:</p>
+<pre><code class="language-html">
+ &lt;plugin-authentication /&gt;
+ &lt;plugin-markdown visible=&quot;true&quot;/&gt;
+
+</code></pre>
+<p>If you run your application, those TagHelper's won't work.
+This is because you don't have any <code>&#64;addTagHelper</code> directive yet in your razor view, and so razor doesn't know it should be using them. This is where things get a bit interesting!</p>
+<!-- more -->
+<h3 id="lets-add-an-addtaghelper-directive">Let's add an <code>addTagHelper</code> directive</h3>
+<p>So we add the directive to our __ViewImports.cshtml file:</p>
+<pre><code class="language-bat">&#64;addTagHelper &quot;*, Plugin.Markdown&quot;
+</code></pre>
+<p>Now when we start our application, BOOM:</p>
+<pre><code class="language-bat">
+An error occurred during the compilation of a resource required to process this request. Please review the following specific error details and modify your source code appropriately.
+
+/Views/_ViewImports.cshtml
+
+Cannot resolve TagHelper containing assembly 'Plugin.Markdown'. Error: Could not load file or assembly 'Plugin.Markdown' or one of its dependencies. The system cannot find the file specified.
+&#64;addTagHelper &quot;*, Plugin.Markdown&quot;
+
+</code></pre>
+<p>This is because by defualt MVC does not resolve <code>TagHelper</code> assemblies registered with the parts system (atleast this is true as of RTM 1.0.0) so it complains when it processes that directive, saying it can't find such an assembly - because it can only see assemblies that are in the bin folder by default. So it can't see your plugin assembly.</p>
+<h3 id="how-do-we-solve">How do we solve?</h3>
+<p>Well if you add this line:</p>
+<pre><code class="language-csharp">
+mvcBuilder.AddTagHelpersAsServices();
+
+</code></pre>
+<p>That will register some replacement services that will check the application parts system when trying to resolve the tag helper assemblies based on the name provided by the addTagHelper directive.</p>
+<p>However - this now works but it's still not ideal because we still have to add a directive for each <code>plugin</code> before it will work on our page/s. So when someone develops a new plugin, it won't work until we modify our <code>_ViewImports.cshtml</code> file and add another line:</p>
+<pre><code class="language-csharp">&#64;addTagHelper &quot;*, Plugin.Markdown&quot;
+&#64;addTagHelper &quot;*, Plugin.Another&quot;
+&#64;addTagHelper &quot;*, Plugin.YetAnother&quot;
+</code></pre>
+<p>This can be incredibly frustrating because if you are wanting an extensibile system where plugins can be installed on the fly, then they should just work without constant modifications to source code.</p>
+<h3 id="so-can-we-do-better">So Can We Do Better?</h3>
+<p>Yup. So here is my solution to this issue, and that is to allow <code>globbing</code> to be supported in the <code>addTagHelper</code> directive for the assembly name, just like it is for the TypeName portion.</p>
+<p>So this is how you do that.</p>
+<h3 id="itaghelpertyperesolver">ITagHelperTypeResolver</h3>
+<p>We need to create an <code>ITagHelperTypeResolver</code> and implement it's <code>Resolve</code> method. This method takes the string provided by in the <code>addTagHelper</code> directive and returns all <code>TagHelper</code> type's that are matches to that string. We will make our implementation support globbing on the assembly name so it can match <code>TagHelper</code> types accross multiple assemblies registered with the <code>Application Parts</code> system, instead of just from a single one.</p>
+<p>Here is my quick and dirty implementation, where I took a lot of the code from the microsoft implementation, and just added a few tweaks for globbing:</p>
+<pre><code class="language-csharp">
+    public class AssemblyNameGlobbingTagHelperTypeResolver : ITagHelperTypeResolver
+    {
+       
+        private static readonly System.Reflection.TypeInfo ITagHelperTypeInfo = typeof(ITagHelper).GetTypeInfo();
+
+        protected TagHelperFeature Feature { get; }
+
+        public AssemblyNameGlobbingTagHelperTypeResolver(ApplicationPartManager manager)
+        {
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+
+            Feature = new TagHelperFeature();
+            manager.PopulateFeature(Feature);
+
+            // _manager = manager;
+
+        }
+
+        /// &lt;inheritdoc /&gt;
+        public IEnumerable&lt;Type&gt; Resolve(
+            string name,
+            SourceLocation documentLocation,
+            ErrorSink errorSink)
+        {
+            if (errorSink == null)
+            {
+                throw new ArgumentNullException(nameof(errorSink));
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+                var errorLength = name == null ? 1 : Math.Max(name.Length, 1);
+                errorSink.OnError(
+                    documentLocation,
+                    &quot;Tag Helper Assembly Name Cannot Be Empty Or Null&quot;,
+                    errorLength);
+
+                return Type.EmptyTypes;
+            }
+
+
+            IEnumerable&lt;TypeInfo&gt; libraryTypes;
+            try
+            {
+                libraryTypes = GetExportedTypes(name);
+            }
+            catch (Exception ex)
+            {
+                errorSink.OnError(
+                    documentLocation,
+                    $&quot;Cannot Resolve Tag Helper Assembly: {name}, {ex.Message}&quot;,
+                    name.Length);
+
+                return Type.EmptyTypes;
+            }
+
+            return libraryTypes;
+
+        }
+
+
+        /// &lt;inheritdoc /&gt;
+        protected IEnumerable&lt;System.Reflection.TypeInfo&gt; GetExportedTypes(string assemblyNamePattern)
+        {
+            if (assemblyNamePattern == null)
+            {
+                throw new ArgumentNullException(nameof(assemblyNamePattern));
+            }
+
+            var results = new List&lt;System.Reflection.TypeInfo&gt;();
+
+            for (var i = 0; i &lt; Feature.TagHelpers.Count; i++)
+            {
+                var tagHelperAssemblyName = Feature.TagHelpers[i].Assembly.GetName();
+
+                if (assemblyNamePattern.Contains(&quot;*&quot;)) // is it actually a pattern?
+                {
+                    if (tagHelperAssemblyName.Name.Like(assemblyNamePattern))
+                    {
+                        results.Add(Feature.TagHelpers[i]);
+                        continue;
+                    }
+                }
+
+                // not a pattern so treat as normal assembly name.
+                var assyName = new AssemblyName(assemblyNamePattern);
+                if (AssemblyNameComparer.OrdinalIgnoreCase.Equals(tagHelperAssemblyName, assyName))
+                {
+                    results.Add(Feature.TagHelpers[i]);
+                    continue;
+                }
+            }
+
+            return results;
+        }
+
+        private class AssemblyNameComparer : IEqualityComparer&lt;AssemblyName&gt;
+        {
+            public static readonly IEqualityComparer&lt;AssemblyName&gt; OrdinalIgnoreCase = new AssemblyNameComparer();
+
+            private AssemblyNameComparer()
+            {
+            }
+
+            public bool Equals(AssemblyName x, AssemblyName y)
+            {
+                // Ignore case because that's what Assembly.Load does.
+                return string.Equals(x.Name, y.Name, StringComparison.OrdinalIgnoreCase) &amp;&amp;
+                       string.Equals(x.CultureName ?? string.Empty, y.CultureName ?? string.Empty, StringComparison.Ordinal);
+            }
+
+            public int GetHashCode(AssemblyName obj)
+            {
+                var hashCode = 0;
+                if (obj.Name != null)
+                {
+                    hashCode ^= obj.Name.GetHashCode();
+                }
+
+                hashCode ^= (obj.CultureName ?? string.Empty).GetHashCode();
+                return hashCode;
+            }
+        }
+
+
+    }
+
+
+</code></pre>
+<p>Now we just register this on startup, after we have registered <code>MVC</code>:</p>
+<pre><code class="language-csharp">
+  services.AddSingleton&lt;ITagHelperTypeResolver, AssemblyNameGlobbingTagHelperTypeResolver&gt;();
+
+</code></pre>
+<p>Now we can just add one directive to our __ViewImports.cshtml file, like this:</p>
+<pre><code class="language-csharp">&#64;addTagHelper &quot;*, Plugin.*&quot;
+</code></pre>
+<p>Now that will include all TagHelpers that live in assemblies matching that glob. We can drop new plugins in and their tag helpers will light up automatically.</p>
+<p>You are welcome.</p>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'darrelltunnellsblog'; // required: replace example with your forum shortname
+    var disqus_identifier = 'aspnet-core-taghelper-s-a-better-addtaghelper-type-resolver';
+    var disqus_title = 'ASPNET Core TagHelper&#x27;s - A Better @addTagHelper type resolver';
+    var disqus_url = 'http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelper-s-a-better-addtaghelper-type-resolver';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+                                </div>
+                        </div>
+                </div>
+                
+                <hr>
+                
+                <!-- Footer -->
+                <footer>
+                        <div class="container">
+        <div class="row">
+                <div class="col-md-12 text-center">
+                    <p class="copyright text-muted">
+                        Copyright © 2018
+                        <br />
+                            <a href="/feed.rss"><i class="fa fa-rss"></i> RSS Feed</a>
+                        |
+                            <a href="/feed.atom"><i class="fa fa-rss"></i> Atom Feed</a>
+                        <br />
+                        <strong><a href="https://wyam.io">Generated by Wyam</a></strong>
+                    </p>
+                </div>
+        </div>
+</div>
+
+                </footer> 
+
+                
+                <script>hljs.initHighlightingOnLoad();</script>
+
+                        <script type="text/javascript">                
+                                // Header background                        
+                                var colors = Please.make_color({
+                                        colors_returned: 3,
+                                        saturation: .6
+                                });
+                                var t = new Trianglify({
+                                        x_gradient: colors,
+                                        y_gradient: ["#FFFFFF"]
+                                });
+                                var header = document.getElementById("intro-header");
+                                var pattern = t.generate(header.clientWidth, header.clientHeight);
+                                header.setAttribute('style', 'background-image: ' + pattern.dataUrl);                        
+                        </script>
+
+                <script>
+                        BackgroundCheck.init({
+                                targets: '.intro-header,.navbar',
+                                images: '.intro-header'
+                        });
+                </script>
+        </body>
+</html>
+
