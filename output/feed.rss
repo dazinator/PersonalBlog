@@ -5,8 +5,8 @@
 		<link>http://darrelltunnell.net/</link>
 		<description>Welcome!</description>
 		<copyright>2018</copyright>
-		<pubDate>Sun, 05 Aug 2018 21:18:54 GMT</pubDate>
-		<lastBuildDate>Sun, 05 Aug 2018 21:18:54 GMT</lastBuildDate>
+		<pubDate>Sun, 05 Aug 2018 21:24:01 GMT</pubDate>
+		<lastBuildDate>Sun, 05 Aug 2018 21:24:01 GMT</lastBuildDate>
 		<item>
 			<title>CSLA and ASP.NET Core</title>
 			<link>http://darrelltunnell.net/blog/2017/01/24/csla-and-asp.net-core</link>
@@ -464,6 +464,23 @@ mvcBuilder.AddTagHelpersAsServices();
 </content:encoded>
 		</item>
 		<item>
+			<title>DnnPackager - v2.0.6</title>
+			<link>http://darrelltunnell.net/blog/2016/03/19/dnnpackager-v2-0-6</link>
+			<description>&lt;p&gt;A short post to announce that a new minor release of DnnPackager is out.&lt;/p&gt;
+&lt;p&gt;You can find the release notes here explaining what's new: &lt;a href="https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2"&gt;https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;For an introduction to DnnPackager in general &lt;a href="http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/"&gt;see here&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Special thanks to &lt;a href="https://github.com/nvisionative"&gt;@nvisionative&lt;/a&gt; for requesting this feature.&lt;/p&gt;</description>
+			<guid>http://darrelltunnell.net/blog/2016/03/19/dnnpackager-v2-0-6</guid>
+			<pubDate>Sat, 19 Mar 2016 17:50:00 GMT</pubDate>
+			<content:encoded>&lt;h3 id="dnnpackager-release-v2.0.6"&gt;DnnPackager Release -v2.0.6&lt;/h3&gt;
+&lt;p&gt;A short post to announce that a new minor release of DnnPackager is out.&lt;/p&gt;
+&lt;p&gt;You can find the release notes here explaining what's new: &lt;a href="https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2"&gt;https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;For an introduction to DnnPackager in general &lt;a href="http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/"&gt;see here&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Special thanks to &lt;a href="https://github.com/nvisionative"&gt;&amp;#64;nvisionative&lt;/a&gt; for requesting this feature.&lt;/p&gt;
+&lt;!--more--&gt;
+</content:encoded>
+		</item>
+		<item>
 			<title>Dnn Extensions - Sources Packages?</title>
 			<link>http://darrelltunnell.net/blog/2016/03/19/dnn-extensions-sources-packages-what-are-they</link>
 			<description>&lt;p&gt;I have been doing some work on DnnPackager recently, and I've come accross the concept of "Source" packages. I have to admit I am not entirely new to these, but I've never personally used them for my projects in the past.&lt;/p&gt;
@@ -513,23 +530,6 @@ solution/projectB/projectB.csproj
 &lt;p&gt;Well, for the next realease of DnnPacakger, I have added rudimentary support for Sources packages (thanks to &lt;a href="https://github.com/nvisionative"&gt;&amp;#64;nvisionative&lt;/a&gt; for requesting this feature) - so that it will now produce &amp;quot;sources&amp;quot; packages alongside the standard install zip. However this is currently for the purposes of supporting modules that need to include source files in their installation process into Dnn, which I suspect will mainly just be ones that use dynamic compilation.&lt;/p&gt;
 &lt;p&gt;It won't include .csproj files or .sln files because at this point in time, I can't see how including them would lead to a reliable experience for the developer opening these up at the other end.&lt;/p&gt;
 &lt;p&gt;Disagree? Leave some comments below, I'd love to be convinced - or to just hear your views!&lt;/p&gt;
-</content:encoded>
-		</item>
-		<item>
-			<title>DnnPackager - v2.0.6</title>
-			<link>http://darrelltunnell.net/blog/2016/03/19/dnnpackager-v2-0-6</link>
-			<description>&lt;p&gt;A short post to announce that a new minor release of DnnPackager is out.&lt;/p&gt;
-&lt;p&gt;You can find the release notes here explaining what's new: &lt;a href="https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2"&gt;https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;For an introduction to DnnPackager in general &lt;a href="http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/"&gt;see here&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Special thanks to &lt;a href="https://github.com/nvisionative"&gt;@nvisionative&lt;/a&gt; for requesting this feature.&lt;/p&gt;</description>
-			<guid>http://darrelltunnell.net/blog/2016/03/19/dnnpackager-v2-0-6</guid>
-			<pubDate>Sat, 19 Mar 2016 17:50:00 GMT</pubDate>
-			<content:encoded>&lt;h3 id="dnnpackager-release-v2.0.6"&gt;DnnPackager Release -v2.0.6&lt;/h3&gt;
-&lt;p&gt;A short post to announce that a new minor release of DnnPackager is out.&lt;/p&gt;
-&lt;p&gt;You can find the release notes here explaining what's new: &lt;a href="https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2"&gt;https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;For an introduction to DnnPackager in general &lt;a href="http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/"&gt;see here&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Special thanks to &lt;a href="https://github.com/nvisionative"&gt;&amp;#64;nvisionative&lt;/a&gt; for requesting this feature.&lt;/p&gt;
-&lt;!--more--&gt;
 </content:encoded>
 		</item>
 		<item>
