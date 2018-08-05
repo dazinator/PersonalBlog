@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# website: http://ogp.me/ns/website#">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="description" content="">
+    <meta property="og:title" content="Modular Multi-tenant ASP.NET Core Application with Dotnettency">
+    
+
+  
+  
+  <meta name="twitter:title" content="Modular Multi-tenant ASP.NET Core Application with Dotnettency"/>
+  <meta name="twitter:description" content="This is part of a series. You can find the other parts here
+
+Multitenancy who?
+
+Just in case you need a quick recap, a muti-tenant web application is one that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a tenant. To to all intense and purposes, each tenant is just a collection of users who are using the application &ldquo;unaware&rdquo; of the other tenants who&rsquo;s users are also doing the same.
+
+A multi-tenant application is essentially an application that splits itself into multiple applications - one for each  tenant - so that one Tenant can have a completely different view of the world than another.
+
+Now that we are all caught up, let&rsquo;s get down to business!
+
+"/>
+  
+    <meta name="twitter:site" content="@dazinator"/>
+  
+  
+  
+
+    
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2017-08-03">
+    
+    <meta property="og:description" content="">
+    <meta property="og:url" content="http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency/">
+    <meta property="og:site_name" content="Darrell Tunnell">
+    
+    <meta property="og:tags" content="dotnettency">
+    
+    <meta property="og:tags" content="asp.net core">
+    
+    <meta property="og:tags" content="multitenancy">
+    
+    <meta property="og:tags" content="aspnetcore">
+    
+    <meta name="generator" content="Hugo 0.29" />
+    <title>Modular Multi-tenant ASP.NET Core Application with Dotnettency &middot; Darrell Tunnell</title>
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">    
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
+    
+    
+    <link rel="icon" href="http://darrelltunnell.net/favicon.ico" />
+    
+    <style>
+     
+.highlight pre {
+    word-wrap: normal;
+}
+
+.highlight pre code {
+    white-space: pre;
+}
+
+    </style>
+
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top visible-xs">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			
+				<a class="navbar-brand" href="http://darrelltunnell.net/">Darrell Tunnell</a>
+			
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				
+				
+					<li><a href="http://darrelltunnell.net/">Home</a></li>
+				
+					<li><a href="http://darrelltunnell.net/post/">Posts</a></li>
+				
+					<li><a href="http://darrelltunnell.net/tutorial/">Tutorials</a></li>
+				
+			</ul>
+		</div>
+	</div>
+</nav>
+<div class="container-fluid">
+	<div class="row">
+		<div id="menu" class="hidden-xs col-sm-4 col-md-3">
+	<div id="menu-content" class="vertical-align">
+		
+			<h1 class="text-center"><a href="http://darrelltunnell.net/">Darrell Tunnell</a></h1>
+		
+		
+		
+			<small class="text-center center-block">Radiating Awesomeness, One Blog Post at a Time.</small>
+		
+		
+		
+			<img id="profile-pic" src="http://darrelltunnell.net//img/profile.jpg" alt="My Picture" class="img-circle center-block">
+		
+		<div id="social" class="text-center">
+			
+				<a href="https://github.com/dazinator"><i class="fa fa-github fa-2x"></i></a>
+			
+				<a href="https://twitter.com/dazinate"><i class="fa fa-twitter fa-2x"></i></a>
+			
+				<a href="https://uk.linkedin.com/in/darrell-tunnell-33845331"><i class="fa fa-linkedin fa-2x"></i></a>
+			
+				<a href="http://darrelltunnell.net/index.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+			
+
+			<a href="mailto:darrelltunnell@gmail.com"><i class="fa fa-envelope-o fa-2x"></i></a>
+		</div>
+		<div id="links" class="text-center">
+			
+			
+				<a href="http://darrelltunnell.net/">Home</a>
+			
+				<a href="http://darrelltunnell.net/post/">Posts</a>
+			
+				<a href="http://darrelltunnell.net/tutorial/">Tutorials</a>
+			
+		</div>
+	</div>
+</div>
+
+		<div id="content" class="col-xs-12 col-sm-8 col-md-9">
+			<div class="row">
+				<div id="post" class="col-sm-offset-1 col-sm-10 col-md-10 col-lg-8">
+
+<main>
+	<header>
+		<h1>Modular Multi-tenant ASP.NET Core Application with Dotnettency</h1>
+	</header>
+
+	<article>
+		<p><em>This is part of a series. <a href="http://darrelltunnell.net/tags/dotnettency/">You can find the other parts here</a></em></p>
+
+<h2 id="multitenancy-who">Multitenancy who?</h2>
+
+<p>Just in case you need a quick recap, a muti-tenant web application is one that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a <code>tenant</code>. To to all intense and purposes, each tenant is just a collection of users who are using the application &ldquo;unaware&rdquo; of the other tenants who&rsquo;s users are also doing the same.</p>
+
+<p>A multi-tenant application is essentially an application that splits itself into multiple applications - one for each  tenant - so that one Tenant can have a completely different <code>view of the world</code> than another.</p>
+
+<p>Now that we are all caught up, let&rsquo;s get down to business!</p>
+
+<p></p>
+
+<h2 id="but-wait-why-would-i-want-this">But wait.. Why would I want this?</h2>
+
+<p>Some indicators as to why you might want multi-tenancy are that, for certain audiences, you might want to:</p>
+
+<ol>
+<li>Display a different branding / appearance.</li>
+<li>Have different functionality enabled or disabled.</li>
+<li>Have different content or files accessible.</li>
+</ol>
+
+<p>For example one tenant could look like this:</p>
+
+<p><div style="width:100%;height:0;padding-bottom:75%;position:relative;"><iframe src="https://giphy.com/embed/3oKIPwoeGErMmaI43S" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/culture--run-3oKIPwoeGErMmaI43S">via GIPHY</a></p></p>
+
+<p>Whilst the other is simultaneously looking like this:</p>
+
+<p><div style="width:100%;height:0;padding-bottom:84%;position:relative;"><iframe src="https://giphy.com/embed/JltOMwYmi0VrO" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/JltOMwYmi0VrO">via GIPHY</a></p></p>
+
+<p>For the sake of this series we will be using a couple of ficticious tenants:
+ - Gicrosoft
+ - Moogle</p>
+
+<h2 id="what-are-we-going-to-cover">What are we going to cover?</h2>
+
+<p>During this series, I will take you through the following, starting with basic stuff like tenant resolution, and slowly adding more advanced features. However it would help if you already have a good understanding of:</p>
+
+<pre><code> 1. The Middleware Pipeline.
+ 2. DI Containers.
+</code></pre>
+
+<p>For a high level view of the sort of architecture we will be exploring, here is a quick diagram of he type of architecture that <code>dotnettency</code> allows you to easily setup within your application:</p>
+
+<p><img src="http://darrelltunnell.net/img/dotnettencyhighlevel.png" alt="dotnettencyhighlevel.PNG" /></p>
+
+<p>Notice that you can achieve multiple layers of isloation (all of which are ofcourse optional) depending upon your needs. You can isolate things both at a tenant level, and at an individual module level, whilst ensuring that your host application will always behave a certain way by default.</p>
+
+<h2 id="isolation-isolation-isolation-but-optional">Isolation, Isolation, Isolation - but optional.</h2>
+
+<p>Dotnettency&rsquo;s approach as a multi-tenancy library is to allow you to use as much, or as little isolation as you require. For example you can choose to do any of these:</p>
+
+<ol>
+<li>Isolate each tenant from other tenants (you dont have to)</li>
+<li>Isolate modules from other modules. (you don&rsquo;t have to, and could do this with some modules and not others)</li>
+<li>Isolate a tenants view of the host file system, from other tenants (i.e so one tenants files can not conflict with another tenants files - even though they might use the same paths. )</li>
+</ol>
+
+<p>Before I go any further I would like to mention Ben Foster&rsquo;s wonderful <code>saaskit</code> library which was a big inspiration for many of the features in <code>dotnettency</code> and I would highly recommend <a href="http://benfoster.io/blog/saaskit-multi-tenancy-made-easy">you read Ben&rsquo;s blog</a> - after mine, ofcourse ;-)</p>
+
+<h2 id="ok-so-what-is-this-tutorial-series-going-to-look-like">Ok so what is this tutorial series going to look like?</h2>
+
+<p>We will be creating a basic asp.net core website (from the starting template) and then enhancing with one multi-tenancy feature at a time, provided by <code>dotnettency</code>, so that our site:</p>
+
+<ul>
+<li>Has multiple tenants (Gicrosoft and Moogle) and we can distguish between them.</li>
+<li>Has a null (default) tenant enabled (or disabled - thats up to you)</li>
+<li>Allows each Tenant to have it&rsquo;s own isolated <code>DI Contaainer</code> so <code>Gicrosoft</code>&rsquo;s services can be isolated from <code>Moogle</code> services. Think of this if you want each tenant to be able to configure which <code>IPaymentProvider</code> they will use or something similar.</li>
+<li>Allows each Tenant to have it&rsquo;s own Middleware Pipeline - so <code>Gicrosoft</code>&rsquo;s can have <code>Welcome Page</code> middleware enabled for example, where as <code>Moogle</code> will have no such middleware enabled.</li>
+<li>We will allow each Tenant to have its own <code>View of the world</code> in terms of file access. (i.e so that <code>Gicrosoft</code> and <code>Moogle</code> can&rsquo;t interfere with each other files, or overwrite system level files (but could optionally <code>override</code> the system level files with their own version of the file, keeping the same path)</li>
+<li>Modules. We will discuss <code>dotnettency</code>s concept of Modules. Modules can be enabled at the application or for particular tenants. Right now, these come in two flavours:
+
+<ul>
+<li>Shared (or Library) Modules: These provide services or middleware. They can be added at the application level (so will impact all tenants) or on a per tenant basis.</li>
+<li>Routed Modules: Modules that have their own isolated container that will be restored during the request when they are routed too. Routed Modules are so called because they must have routes registered with the asp.net core routing system. Dotnettency makes it really easy. If you are developing an extension for your application that has MVC Controllers, then this would be an example of a <code>Routed Module</code>. Dotnettency does not tie your module to a particular technology - you could have a mixture <code>MVC</code> and <code>Nancy</code> based modules running for a particular tenant.</li>
+</ul></li>
+</ul>
+
+<p>At the end of this tutorial, you will have a multi-tenant, modular &amp; extensible application to serve as a good basis for developing your next multi-tenant capable web application.</p>
+
+<p>If there is anything else you would like me to cover, please let me know in the comments.</p>
+
+<p>In the meantime, if you would like to check out <code>dotnettency</code> and run the samples etc, feel free! <a href="https://github.com/dazinator/Dotnettency">https://github.com/dazinator/Dotnettency</a></p>
+	</article>
+</main>
+
+ <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Modular%20Multi-tenant%20ASP.NET%20Core%20Application%20with%20Dotnettency&url=http%3a%2f%2fdarrelltunnell.net%2ftutorial%2fcreating-modular-multi-tenant-asp-net-core-application-with-dotnettency%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+
+        
+            <a class="icon-google-plus" href="https://plus.google.com/share?url=http%3a%2f%2fdarrelltunnell.net%2ftutorial%2fcreating-modular-multi-tenant-asp-net-core-application-with-dotnettency%2f"
+              onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+              <i class="fa fa-google-plus"></i>
+                <span class="hidden">Google+</span>
+            </a>
+        
+        
+            <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&title=Modular%20Multi-tenant%20ASP.NET%20Core%20Application%20with%20Dotnettency&url=http%3a%2f%2fdarrelltunnell.net%2ftutorial%2fcreating-modular-multi-tenant-asp-net-core-application-with-dotnettency%2f&summary="
+               onclick="window.open(this.href, 'linkedin-share', 'width=554,height=481');return false;">
+               <i class="fa fa-linkedin"></i>
+               <span class="hidden">LinkedIn</span>
+            </a>
+        
+    </div>
+
+<div id="bottom-nav" class="text-center center-block">
+	<a href=" http://darrelltunnell.net/" class="btn btn-default"><i class="fa fa-home"></i> Home</a>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "darrelltunnellsblog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+    </div>
+  
+ 
+  
+  <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'code-here', 'auto');
+    ga('send', 'pageview');
+    window.baseURL = "http:\/\/darrelltunnell.net\/";
+  </script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+  
+  
+  <script src="http://darrelltunnell.net//js/App.js"></script>
+  
+  <script type="text/javascript">   
+  $(document).ready(function () {
+	$( ".highlighttable" ).wrap("<div class='table-responsive'></div>");
+  $( "img" ).addClass("img-responsive");
+});
+</script>
+    
+</body>
+</html>

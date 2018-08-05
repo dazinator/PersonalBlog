@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Octopus on Darrell Tunnell</title>
+    <link>http://darrelltunnell.net/tags/octopus/</link>
+    <description>Recent content in Octopus on Darrell Tunnell</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Wed, 29 Apr 2015 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://darrelltunnell.net/tags/octopus/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Automating DotNetNuke deployments with Octopus Deploy</title>
+      <link>http://darrelltunnell.net/blog/2015/04/29/automating-dotnetnuke-deployments-with-octopus-deploy/</link>
+      <pubDate>Wed, 29 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2015/04/29/automating-dotnetnuke-deployments-with-octopus-deploy/</guid>
+      <description>&lt;h3 id=&#34;automating-dotnetnuke-deployments-using-octopus-deploy&#34;&gt;Automating DotNetNuke Deployments using Octopus Deploy&lt;/h3&gt;
+
+&lt;p&gt;Because I am an awesome dude, i&amp;rsquo;ll share with you how I automate dotnetnuke delivery / deployments. This works. It takes some effort to get this set up though, but it will be well worth it in the end.&lt;/p&gt;
+
+&lt;p&gt;First i&amp;rsquo;ll explain the process for automating the deployment of the DotNetNuke website itself. Then I&amp;rsquo;ll explain how you can automate the deployment of modules / extensions on a continous basis.
+&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
