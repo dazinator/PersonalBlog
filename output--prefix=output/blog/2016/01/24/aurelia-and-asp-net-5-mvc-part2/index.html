@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# website: http://ogp.me/ns/website#">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="description" content="">
+    <meta property="og:title" content="ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2">
+    
+
+  
+  
+  <meta name="twitter:title" content="ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2"/>
+  <meta name="twitter:description" content="This post is part two of a series. For part one see here
+
+Part 2 - Replacing Bower with JSPM
+
+In part 1 of this series we created a shiny new ASP.NET 5 project, and I introduced some fundamentals.
+
+For reasons discussed in part 1, let&rsquo;s now go ahead with our first task, which is to ditch Bower in favour of JSPM as our javascript package manager.
+"/>
+  
+    <meta name="twitter:site" content="@dazinator"/>
+  
+  
+  
+
+    
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2016-01-24">
+    
+    <meta property="og:description" content="">
+    <meta property="og:url" content="http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/">
+    <meta property="og:site_name" content="Darrell Tunnell">
+    
+    <meta property="og:tags" content="ASP.NET CORE">
+    
+    <meta property="og:tags" content="Aurelia">
+    
+    <meta property="og:tags" content="JSPM">
+    
+    <meta name="generator" content="Hugo 0.29" />
+    <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2 &middot; Darrell Tunnell</title>
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">    
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
+    
+    
+    <link rel="icon" href="http://darrelltunnell.net/favicon.ico" />
+    
+    <style>
+     
+.highlight pre {
+    word-wrap: normal;
+}
+
+.highlight pre code {
+    white-space: pre;
+}
+
+    </style>
+
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top visible-xs">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			
+				<a class="navbar-brand" href="http://darrelltunnell.net/">Darrell Tunnell</a>
+			
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				
+				
+					<li><a href="http://darrelltunnell.net/">Home</a></li>
+				
+					<li><a href="http://darrelltunnell.net/post/">Posts</a></li>
+				
+					<li><a href="http://darrelltunnell.net/tutorial/">Tutorials</a></li>
+				
+			</ul>
+		</div>
+	</div>
+</nav>
+<div class="container-fluid">
+	<div class="row">
+		<div id="menu" class="hidden-xs col-sm-4 col-md-3">
+	<div id="menu-content" class="vertical-align">
+		
+			<h1 class="text-center"><a href="http://darrelltunnell.net/">Darrell Tunnell</a></h1>
+		
+		
+		
+			<small class="text-center center-block">Radiating Awesomeness, One Blog Post at a Time.</small>
+		
+		
+		
+			<img id="profile-pic" src="http://darrelltunnell.net//img/profile.jpg" alt="My Picture" class="img-circle center-block">
+		
+		<div id="social" class="text-center">
+			
+				<a href="https://github.com/dazinator"><i class="fa fa-github fa-2x"></i></a>
+			
+				<a href="https://twitter.com/dazinate"><i class="fa fa-twitter fa-2x"></i></a>
+			
+				<a href="https://uk.linkedin.com/in/darrell-tunnell-33845331"><i class="fa fa-linkedin fa-2x"></i></a>
+			
+				<a href="http://darrelltunnell.net/index.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+			
+
+			<a href="mailto:darrelltunnell@gmail.com"><i class="fa fa-envelope-o fa-2x"></i></a>
+		</div>
+		<div id="links" class="text-center">
+			
+			
+				<a href="http://darrelltunnell.net/">Home</a>
+			
+				<a href="http://darrelltunnell.net/post/">Posts</a>
+			
+				<a href="http://darrelltunnell.net/tutorial/">Tutorials</a>
+			
+		</div>
+	</div>
+</div>
+
+		<div id="content" class="col-xs-12 col-sm-8 col-md-9">
+			<div class="row">
+				<div id="post" class="col-sm-offset-1 col-sm-10 col-md-10 col-lg-8">
+
+<main>
+	<header>
+		<h1>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</h1>
+	</header>
+
+	<article>
+		<p><strong>This post is part two of a series. For part one see <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/">here</a></strong></p>
+
+<h3 id="part-2-replacing-bower-with-jspm">Part 2 - Replacing Bower with JSPM</h3>
+
+<p>In <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc">part 1 of this series</a> we created a shiny new ASP.NET 5 project, and I introduced some fundamentals.</p>
+
+<p>For reasons discussed in <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc">part 1</a>, let&rsquo;s now go ahead with our first task, which is to ditch Bower in favour of JSPM as our javascript package manager.
+</p>
+
+<h3 id="uninstall-bower">Uninstall Bower</h3>
+
+<p>You will notice that your ASP.NET 5 application has a number of bower packages included by default:</p>
+
+<p><img src="http://darrelltunnell.net/img/bowerpackages.PNG" alt="bowerpackages.PNG" /></p>
+
+<p>First, let&rsquo;s uninstall Bower. In your project is a <code>Bower.json</code> file. Delete it! (If you can&rsquo;t see it in Solution Explorer, you might need to &lsquo;show all files&rsquo;</p>
+
+<p><img src="http://darrelltunnell.net/img/bowerjson.PNG" alt="bowerjson.PNG" /></p>
+
+<p>When you install <code>Bower</code> packages, they are installed under the &ldquo;lib&rdquo; folder within your <code>wwwroot</code> directory. So, let&rsquo;s now delete this lib folder which will delete all of these packages.</p>
+
+<p><img src="http://darrelltunnell.net/img/wwwrootlibfolder.PNG" alt="wwwrootlibfolder.PNG" /></p>
+
+<p>After those changes, your project should look something like this:</p>
+
+<p><img src="http://darrelltunnell.net/img/projectremovedbower.PNG" alt="projectremovedbower.PNG" /></p>
+
+<p>With Bower gone and those javascript / css packages deleted, what happens if we run the application now? Let&rsquo;s run it and find out..</p>
+
+<p><img src="http://darrelltunnell.net/img/runappbowerremoved.PNG" alt="runappbowerremoved.PNG" /></p>
+
+<p>As you can see, there are now errors displayed in the browser, and our site looks awful. This makes sense - our application is referencing javascript and css files that used to live in the lib folder, and now they are no longer found because we deleted them.</p>
+
+<p>To fix this situation we&rsquo;ll need to add these packages back to our application, using <code>JSPM</code>, and then fix up the way our application is <code>loading</code> these dependencies (javascript, css files) at runtime.</p>
+
+<h3 id="install-jspm">Install JSPM</h3>
+
+<p>JSPM can be installed as a local <code>NPM</code> package.</p>
+
+<ol>
+<li>Open <code>Package.json</code></li>
+<li>Add <code>JSPM</code> and whatever the latest version is:</li>
+</ol>
+
+<p><img src="http://darrelltunnell.net/img/addjspmnodejspackage.PNG" alt="addjspmnodejspackage.PNG" /></p>
+
+<ol>
+<li>Save the file.</li>
+</ol>
+
+<p>The <code>NPM</code> package for <code>JSPM</code> should now be downloaded and installed into your project. You will see that the package is installed into the &ldquo;node_modules&rdquo; folder within your project.</p>
+
+<p><img src="http://darrelltunnell.net/img/nodemodulesfolderjspm.PNG" alt="nodemodulesfolderjspm.PNG" /></p>
+
+<h3 id="configure-jspm">Configure JSPM</h3>
+
+<p>Now that the <code>JSPM</code> package has been installed, we need to configure <code>JSPM</code>.
+The way to do this, is a little bit fiddely, as you have to drop to the command line - there is no fancy support for <code>JSPM</code> in Visual Studio at the moment like there is for <code>Bower</code>.</p>
+
+<ol>
+<li>Open a <code>command prompt</code> window, and <code>CD</code> to your project directory</li>
+<li>Type <code>jspm init</code> and hit enter.</li>
+</ol>
+
+<p><img src="http://darrelltunnell.net/img/commandlinejspminit.PNG" alt="commandlinejspminit.PNG" /></p>
+
+<p>You will now be asked a series of questions. At the end of answering these questions, the relevent <code>config</code> will be produced within the project.</p>
+
+<p>Here are the answers. Some of them you can just hit enter without typing anything, and the default value will be used.</p>
+
+<p><img src="http://darrelltunnell.net/img/jspminit.PNG" alt="jspminit.PNG" /></p>
+
+<p>I&rsquo;ll quickly run through each option briefly.. But you should defer to the <code>JSPM</code> documentation site for further clarifications.</p>
+
+<ol>
+<li><p>&ldquo;<strong>Would you like jspm to prefix the jspm package.json properties under jspm?</strong>&ldquo;
+We answer yes to this (the default) and this just means that JSPM will store its project configuration within a &ldquo;jspm&rdquo; section in our existing <code>package.json</code> file.</p></li>
+
+<li><p>&ldquo;<strong>Enter server baseURL (public folder path)</strong>&ldquo;
+The word URL is a bit confusing here. This is the relative path to your &ldquo;public&rdquo; folder within the project. By public folder, we mean the folder that will serve up static files and is therefore accessible to a browser. We need to set this to the path to our <code>wwwroot</code> directory. So the value we set for this question is <code>./wwwroot</code> as the value is relative to the current (project) directory.</p></li>
+
+<li><p>&ldquo;<strong>Enter jspm packages folder [wwwroot\jspm_packages]</strong>&ldquo;
+We accept the default value for this question. Previously, our Bower packages were installed under <code>wwwroot\lib</code> folder, so if you want to keep this consistent you could change this value to <code>wwwroot\lib</code>. I however am happy to keep the default.</p></li>
+
+<li><p>&ldquo;<strong>Enter config file path [wwwroot\config.js]</strong>&ldquo;
+This is the path to where you would like the config javascript file to be placed. Remember, <code>JSPM</code> is not just a package manager in a the sense of allowing you to adopt packages at <code>design time</code>. It also has features that are used your application when it runs. This means it has a <code>config</code> file (a javascript file) that your application will actually need to reference at runtime. This config file must therefore be placed in a directory that can be served up. We accept the default value (wwwroot\config.js)</p></li>
+
+<li><p>&ldquo;<strong>Configuration file wwwroot\config.js doesn&rsquo;t exist, create it? [yes]</strong>&rdquo;
+We accept the default which is <code>yes</code> as we want it to create this config file for us.</p></li>
+
+<li><p>&ldquo;<strong>Enter client baseURL (public folder URL) [/]</strong>&ldquo;
+This is the URL or path that the browser uses to browse to the public folder (wwwroot). We accept the default value, because our public folder (wwwroot) is served up as the root path (&ldquo;/&rdquo;).</p></li>
+
+<li><p>&ldquo;<strong>Do you wish to use a transpiler? [yes]</strong>&ldquo;
+We accept the default answer of &ldquo;yes&rdquo; because transpilers are awesome. They allow us to write javascript using the latest language specifications, and then they &ldquo;transpile&rdquo; that javascript so that it can run in browsers that don&rsquo;t support the latest language specifications yet.</p></li>
+
+<li><p>&ldquo;<strong>Which ES6 transpiler would you like to use, Babel, Typescript, or Traceur? [babel]</strong>&ldquo;
+For the purposes of this blog, I am accepting the default of &ldquo;Babel&rdquo;.</p></li>
+</ol>
+
+<p>The transpiler will just allow us to write javascript using ES6 language features, and this will be transpiled to run in browsers that don&rsquo;t support ES6 yet.</p>
+
+<h3 id="installing-jspm-packages">Installing JSPM Packages</h3>
+
+<p>Now that we have <code>JSPM</code> configured, it&rsquo;s time to install those packages that we previously had installed via <code>Bower</code>.</p>
+
+<p>Back in the <code>command prompt</code> run the following commands:</p>
+
+<ol>
+<li><code>jspm install jquery</code></li>
+<li><code>jspm install jquery-validation</code></li>
+<li><code>jspm install github:aspnet/jquery-validation-unobtrusive</code></li>
+<li><code>jspm install bootstrap</code></li>
+</ol>
+
+<p>Once that is done, those packages will now be installed under your <code>wwwroot\jspm_packages</code> folder:</p>
+
+<p><img src="http://darrelltunnell.net/img/jspmpackages.PNG" alt="jspmpackages.PNG" /></p>
+
+<p>The next step is to fix up our MVC application so that it loads our javascript and css using the <code>module loader</code>.</p>
+
+<h3 id="transitioning-to-modules">Transitioning to Modules.</h3>
+
+<p>The changes we have been making up until now, have been about managing our packages in our project at design time. This next step is about making changes to our application so that rather than including javascript and css files directly into particular pages, we instead, write &ldquo;modular&rdquo; javascript, that declares any dependencies it has, and then allow a <code>module loader</code> (<code>SystemJS</code>) to satisfy those dependencies for us at runtime by loading any needed javascript / css dependencies that our module requires.</p>
+
+<p>If this sounds overwhelming, don&rsquo;t worry, it&rsquo;s simple once you get your head around the basic concept. Hopefully things will become more clear as we continue.</p>
+
+<p>First, we need to include the module loader itself, and it&rsquo;s configuration file, into our application.</p>
+
+<p>If you open <code>_Layout.cshtml</code> you will see a section like this:</p>
+
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-xml" data-lang="xml"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-xml" data-lang="xml"><span></span> <span style="color: #008000; font-weight: bold">&lt;environment</span> <span style="color: #7D9029">names=</span><span style="color: #BA2121">&quot;Development&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/lib/jquery/dist/jquery.js&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/lib/bootstrap/dist/js/bootstrap.js&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/js/site.js&quot;</span> <span style="color: #7D9029">asp-append-version=</span><span style="color: #BA2121">&quot;true&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/environment&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;environment</span> <span style="color: #7D9029">names=</span><span style="color: #BA2121">&quot;Staging,Production&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js&quot;</span>
+                    <span style="color: #7D9029">asp-fallback-src=</span><span style="color: #BA2121">&quot;~/lib/jquery/dist/jquery.min.js&quot;</span>
+                    <span style="color: #7D9029">asp-fallback-test=</span><span style="color: #BA2121">&quot;window.jQuery&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;/script&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js&quot;</span>
+                    <span style="color: #7D9029">asp-fallback-src=</span><span style="color: #BA2121">&quot;~/lib/bootstrap/dist/js/bootstrap.min.js&quot;</span>
+                    <span style="color: #7D9029">asp-fallback-test=</span><span style="color: #BA2121">&quot;window.jQuery &amp;&amp; window.jQuery.fn &amp;&amp; window.jQuery.fn.modal&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;/script&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/js/site.min.js&quot;</span> <span style="color: #7D9029">asp-append-version=</span><span style="color: #BA2121">&quot;true&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/environment&gt;</span>
+</code></pre></div>
+</td></tr></table>
+
+<p>Let&rsquo;s comment out that whole section and replace it with this:</p>
+
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-xml" data-lang="xml">1
+2
+3</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-xml" data-lang="xml"><span></span><span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/jspm_packages/system.js&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/config.js&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;script&gt;</span>System.import(&quot;js/site&quot;);<span style="color: #008000; font-weight: bold">&lt;/script&gt;</span>
+</code></pre></div>
+</td></tr></table>
+
+<p>At this point, let&rsquo;s run the application!</p>
+
+<p>You should now be able to see that we no longer get any errors about failing to load  javascript files <code>jquery.js</code> and <code>bootstrap.js</code>. In fact, <strong>those javascript files are not being loaded anymore.</strong></p>
+
+<p><img src="http://darrelltunnell.net/img/jspmmissingcss.PNG" alt="jspmmissingcss.PNG" /></p>
+
+<h4 id="why-aren-t-we-loading-jquery-and-bootstrap-anymore">Why aren&rsquo;t we loading JQuery and Bootstrap anymore?</h4>
+
+<p>We are no longer directly including the <code>bootstrap</code> and <code>jquery</code> scripts into our <code>_Layout.cshtml</code> file, so they aren&rsquo;t being loaded! So we aren&rsquo;t seeing any 404&rsquo;s anymore within the browser console window - which is good, but don&rsquo;t we need those files for our site to function?</p>
+
+<p>This is the nature of <code>modular</code> javascript. What we are in the process of transitioning to now, is a Modular concept, where <code>bootstrap</code> and <code>jquery</code> are modules that will only be loaded, if some other module that we are loading via the module loader, requires them as dependencies.</p>
+
+<p>With that in mind, let&rsquo;s look at the module we are currently loading via the module loader. It&rsquo;s one called <code>js/site</code></p>
+
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-javascript" data-lang="javascript">1</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-javascript" data-lang="javascript"><span></span><span style="color: #666666">&lt;</span>script<span style="color: #666666">&gt;</span>System.<span style="color: #008000; font-weight: bold">import</span>(<span style="color: #BA2121">&quot;js/site&quot;</span>);<span style="color: #666666">&lt;</span><span style="border: 1px solid #FF0000">/script&gt;</span>
+</code></pre></div>
+</td></tr></table>
+
+<p>This resolves (thanks to the <code>config.js</code> file) to the <code>js/site.js</code> file in our <code>wwwroot</code> directory. This file is currently empty, meaning it also has no dependencies declared in it for any other modules. This is why the module loader no longer bothers to load <code>JQuery</code> or <code>Bootstrap</code> anymore.</p>
+
+<p>This is good, because we are not including any javascript or css by default anymore, until its actually required by something (with the exception of the module loader, and config.js file iteself).</p>
+
+<p>Therefore, as our <code>js/site</code> module is being loaded in our <code>_Layout.cshtml</code> file - which means it&rsquo;s going to be loaded on <strong>every page</strong>, we can &ldquo;force&rdquo; JQuery and Bootstrap to be loaded on every page, by decalring them as depencies for our module. This could be viewed as a bit of a cheat as really we don&rsquo;t want to load dependencies just for the sake of it, we only want to load them if they are actually used.</p>
+
+<p>So, let&rsquo;s now assume that we are willing to load <code>JQuery</code>, and <code>Bootstrap</code> as a dependency for every page:</p>
+
+<ol>
+<li>Open <code>site.js</code> and insert the following code, then save it an re-run the application:</li>
+</ol>
+
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-javascript" data-lang="javascript">1
+2</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-javascript" data-lang="javascript"><span></span><span style="color: #008000; font-weight: bold">import</span> $ from <span style="color: #BA2121">&#39;jquery&#39;</span>;
+<span style="color: #008000; font-weight: bold">import</span> bootstrap from <span style="color: #BA2121">&#39;bootstrap&#39;</span>;
+</code></pre></div>
+</td></tr></table>
+
+<p>This is <code>ES6</code> syntax for declaring a module dependency.</p>
+
+<p>You should now see that <code>JQuery</code> and <code>Bootstrap</code> are loaded on every page:</p>
+
+<p><img src="http://darrelltunnell.net/img/jspmjqueryandbootstrapdependency.PNG" alt="jspmjqueryandbootstrapdependency.PNG" /></p>
+
+<h3 id="what-about-css">What about CSS</h3>
+
+<p>Now that we have got our javascript files loading again, we are still left with 404&rsquo;s for the bootstrap.css file.</p>
+
+<p>Well we can use JSPM for CSS too, but we need to install the <code>CSS</code> plugin.</p>
+
+<h4 id="installing-the-css-plugin-for-jspm">Installing the CSS plugin for JSPM</h4>
+
+<p>Back in the <code>command prompt</code> in your project directory, run the following</p>
+
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-bat" data-lang="bat">1</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-bat" data-lang="bat"><span></span>jspm install css
+</code></pre></div>
+</td></tr></table>
+
+<p>Now go back to your <code>site.js</code> file, and add an import for the bootstrap.css. It should now look like this:</p>
+
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-javascript" data-lang="javascript">1
+2</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-javascript" data-lang="javascript"><span></span><span style="color: #008000; font-weight: bold">import</span> $ from <span style="color: #BA2121">&#39;jquery&#39;</span>;
+<span style="color: #008000; font-weight: bold">import</span> bootstrap from <span style="color: #BA2121">&#39;bootstrap&#39;</span>;
+</code></pre></div>
+</td></tr></table>
+
+<p>Lastly, in <code>_Layout.cshtml</code>, comment out the link to the old - non existent, bootstrap.css file:</p>
+
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-xml" data-lang="xml"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-xml" data-lang="xml"><span></span> <span style="color: #008000; font-weight: bold">&lt;environment</span> <span style="color: #7D9029">names=</span><span style="color: #BA2121">&quot;Development&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+        @*<span style="color: #008000; font-weight: bold">&lt;link</span> <span style="color: #7D9029">rel=</span><span style="color: #BA2121">&quot;stylesheet&quot;</span> <span style="color: #7D9029">href=</span><span style="color: #BA2121">&quot;~/lib/bootstrap/dist/css/bootstrap.css&quot;</span> <span style="color: #008000; font-weight: bold">/&gt;</span>*@
+        <span style="color: #008000; font-weight: bold">&lt;link</span> <span style="color: #7D9029">rel=</span><span style="color: #BA2121">&quot;stylesheet&quot;</span> <span style="color: #7D9029">href=</span><span style="color: #BA2121">&quot;~/css/site.css&quot;</span> <span style="color: #008000; font-weight: bold">/&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/environment&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;environment</span> <span style="color: #7D9029">names=</span><span style="color: #BA2121">&quot;Staging,Production&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+        @*<span style="color: #008000; font-weight: bold">&lt;link</span> <span style="color: #7D9029">rel=</span><span style="color: #BA2121">&quot;stylesheet&quot;</span> <span style="color: #7D9029">href=</span><span style="color: #BA2121">&quot;https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css&quot;</span>
+            <span style="color: #7D9029">asp-fallback-href=</span><span style="color: #BA2121">&quot;~/lib/bootstrap/dist/css/bootstrap.min.css&quot;</span><span style="border: 1px solid #FF0000">*@</span>
+        <span style="color: #7D9029">asp-fallback-test-class=</span><span style="color: #BA2121">&quot;sr-only&quot;</span> <span style="color: #7D9029">asp-fallback-test-property=</span><span style="color: #BA2121">&quot;position&quot;</span> <span style="color: #7D9029">asp-fallback-test-value=</span><span style="color: #BA2121">&quot;absolute&quot;</span> <span style="color: #008000; font-weight: bold">/&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;link</span> <span style="color: #7D9029">rel=</span><span style="color: #BA2121">&quot;stylesheet&quot;</span> <span style="color: #7D9029">href=</span><span style="color: #BA2121">&quot;~/css/site.min.css&quot;</span> <span style="color: #7D9029">asp-append-version=</span><span style="color: #BA2121">&quot;true&quot;</span> <span style="color: #008000; font-weight: bold">/&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/environment&gt;</span>
+</code></pre></div>
+</td></tr></table>
+
+<p>Now run your application!</p>
+
+<p><img src="http://darrelltunnell.net/img/jspmnoerrors.PNG" alt="jspmnoerrors.PNG" /></p>
+
+<p>Wahoo! We now have no errors in the console window, our javascript and css is being loaded - and our application looks ok again.</p>
+
+<h4 id="flash-of-unstyled-content">Flash of unstyled content</h4>
+
+<p>You may notice that using the CSS plugin, your page is displayed in an unstyled form for a brief moment, whilst the CSS file is loaded asynchronosuly. This is known as a <a href="http://www.techrepublic.com/blog/web-designer/how-to-prevent-flash-of-unstyled-content-on-your-websites/">Flash of Unstyled Content</a> and is a problem with using the CSS plugin at present - <a href="https://github.com/systemjs/plugin-css/issues/57">see here</a>. Hopefully this will be addressed in the future, but in the meantime, feel free not to use the CSS Plugin if this is an issue, you can instead just directly reference the <code>Bootstrap.css</code> file in the <code>_Layout.cshtml</code> file as before, but from its new location under the <code>jspm_packages</code> directory.</p>
+
+<h3 id="finishing-touches-validationscripspartial-cshtml">Finishing Touches - <code>_ValidationScripsPartial.cshtml</code></h3>
+
+<p>Our application is running again, but you may notice a few of the pages have errors.</p>
+
+<p>If you click on &ldquo;Register&rdquo; link for example you will see these errors in the browser console window:</p>
+
+<p><img src="http://darrelltunnell.net/img/jspmregisterpageproblems.PNG" alt="jspmregisterpageproblems.PNG" /></p>
+
+<p>This is because many of the views within our MVC application are rendering a partial called <code>_ValidationScriptsPartial.cshtml</code></p>
+
+<p>For example, if you look at the bottom of <code>Register.cshtml</code>, you will see the following:</p>
+
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp">1
+2
+3</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-csharp" data-lang="csharp"><span></span>@section Scripts {
+    <span style="border: 1px solid #FF0000">@</span>{ <span style="color: #008000; font-weight: bold">await</span> Html.RenderPartialAsync(<span style="color: #BA2121">&quot;_ValidationScriptsPartial&quot;</span>); }
+}
+</code></pre></div>
+</td></tr></table>
+
+<p>If you look at the contents of <code>_ValidationScriptsPartial</code> we can see that it is actually including additional scripts onto the page:</p>
+
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-xml" data-lang="xml"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-xml" data-lang="xml"><span></span><span style="color: #008000; font-weight: bold">&lt;environment</span> <span style="color: #7D9029">names=</span><span style="color: #BA2121">&quot;Development&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/lib/jquery-validation/dist/jquery.validate.js&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/script&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/environment&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;environment</span> <span style="color: #7D9029">names=</span><span style="color: #BA2121">&quot;Staging,Production&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js&quot;</span>
+            <span style="color: #7D9029">asp-fallback-src=</span><span style="color: #BA2121">&quot;~/lib/jquery-validation/dist/jquery.validate.min.js&quot;</span>
+            <span style="color: #7D9029">asp-fallback-test=</span><span style="color: #BA2121">&quot;window.jQuery &amp;&amp; window.jQuery.validator&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/script&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;script</span> <span style="color: #7D9029">src=</span><span style="color: #BA2121">&quot;https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js&quot;</span>
+            <span style="color: #7D9029">asp-fallback-src=</span><span style="color: #BA2121">&quot;~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js&quot;</span>
+            <span style="color: #7D9029">asp-fallback-test=</span><span style="color: #BA2121">&quot;window.jQuery &amp;&amp; window.jQuery.validator &amp;&amp; window.jQuery.validator.unobtrusive&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/script&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/environment&gt;</span>
+</code></pre></div>
+</td></tr></table>
+
+<p>As you can see, depending upon the environment that ASP.NET determines your application is running on, this renders some script includes to particular js files, used for forms validation. These were previoulsy located within <code>Bower</code> packages, that we have deleted.</p>
+
+<p>To correct this, we&rsquo;ll just need to instruct the module loader to load the <code>jquery.validate.unobtrusive</code> module instead. Notice that you don&rsquo;t need to also instruct the module loader to load the <code>jquery.validate</code> module, because <code>jquery.validate</code> is a dependency of <code>jquery.validate.unobtrusive</code> so the module loader will resolve it automatically.</p>
+
+<p>So change the contents of <code>_ValidationScriptsPartial.cshtml</code> to this:</p>
+
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"><code class="language-javascript" data-lang="javascript">1</code></pre></div></td><td class="code"><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><code class="language-javascript" data-lang="javascript"><span></span><span style="color: #666666">&lt;</span>script<span style="color: #666666">&gt;</span>System.<span style="color: #008000; font-weight: bold">import</span>(<span style="color: #BA2121">&quot;aspnet/jquery-validation-unobtrusive&quot;</span>);<span style="color: #666666">&lt;</span><span style="border: 1px solid #FF0000">/script&gt;</span>
+</code></pre></div>
+</td></tr></table>
+
+<p>And now - everything is working!</p>
+
+<p><img src="http://darrelltunnell.net/img/jspmallworking.PNG" alt="jspmallworking.PNG" /></p>
+
+<h3 id="recap">Recap</h3>
+
+<p>In this blog post, we took an out of the box ASP.NET 5 MVC application that we created in <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/">part 1</a>, and replaced <code>Bower</code> with <code>JSPM</code>. We changed the way our application resolves it&rsquo;s javascript and css files, to use a <code>module loader</code> instead.</p>
+
+<p>We also saw that using the module loader to load CSS currently results in a &ldquo;flash of unstyled content&rdquo; issue, and so if that&rsquo;s an issue for your application then it&rsquo;s probably best to stick to directly linking to your css files as before, for the time being. That&rsquo;s a decision for you to make!</p>
+
+<p>In the next blog post/s in this series, I will attempt to cover:</p>
+
+<ol>
+<li>Creating a basic Aurelia application on the Home page.</li>
+<li>Introducing Linting, Bundling, and Minification into the build process, using Gulp.</li>
+<li>Implementing &ldquo;Automatic Browser Refresh&rdquo; so our page refreshes as we make changes to javascript and css files.</li>
+</ol>
+	</article>
+</main>
+
+ <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=ASP.NET%205%20Projects%20-%20NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2&url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2016%2f01%2f24%2faurelia-and-asp-net-5-mvc-part2%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+
+        
+            <a class="icon-google-plus" href="https://plus.google.com/share?url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2016%2f01%2f24%2faurelia-and-asp-net-5-mvc-part2%2f"
+              onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+              <i class="fa fa-google-plus"></i>
+                <span class="hidden">Google+</span>
+            </a>
+        
+        
+            <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&title=ASP.NET%205%20Projects%20-%20NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2&url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2016%2f01%2f24%2faurelia-and-asp-net-5-mvc-part2%2f&summary="
+               onclick="window.open(this.href, 'linkedin-share', 'width=554,height=481');return false;">
+               <i class="fa fa-linkedin"></i>
+               <span class="hidden">LinkedIn</span>
+            </a>
+        
+    </div>
+
+<div id="bottom-nav" class="text-center center-block">
+	<a href=" http://darrelltunnell.net/" class="btn btn-default"><i class="fa fa-home"></i> Home</a>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "darrelltunnellsblog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+    </div>
+  
+ 
+  
+  <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'code-here', 'auto');
+    ga('send', 'pageview');
+    window.baseURL = "http:\/\/darrelltunnell.net\/";
+  </script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+  
+  
+  <script src="http://darrelltunnell.net//js/App.js"></script>
+  
+  <script type="text/javascript">   
+  $(document).ready(function () {
+	$( ".highlighttable" ).wrap("<div class='table-responsive'></div>");
+  $( "img" ).addClass("img-responsive");
+});
+</script>
+    
+</body>
+</html>
