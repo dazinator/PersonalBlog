@@ -39,11 +39,11 @@ You would start by installing the VSIX package from the VS gallery. This will in
 
 You can now create a new "DotNetNuke" project using Visual Studio.
 
-![new dnn project.PNG](/img/new dnn project.PNG)
+![new dnn project.PNG](/img/new%20dnn%20project.PNG)
 
 This creates your new project. It also imports the "DnnPackager" NuGet package automatically - [something I have blogged about seperately.](http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/)
 
-![adding DnnPackager.PNG](/img/adding DnnPackager.PNG)
+![adding DnnPackager.PNG](/img/adding%20DnnPackager.PNG)
 
 Your new project, has it's own ".dnnproj" file. This is a new project type and that's why it has its own file extension ".dnnproj".
 
@@ -73,7 +73,7 @@ Well that approach was only ever necessary because there was not any first class
 
 In VS, I am going to extend the debugging toolbar (where the "play" button is)
 
-![debug toolbar.PNG](/img/debug toolbar.PNG)
+![debug toolbar.PNG](/img/debug%20toolbar.PNG)
 
 You can see in the screenshot there is an empty dropdown at present, but this will list your DotNetNuke websites that you have on your local IIS. The first one in that list will be selected by default.
 

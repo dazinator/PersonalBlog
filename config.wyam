@@ -2,6 +2,7 @@
 #n Wyam.Html
 #n Wyam.Highlight
 #n Wyam.Markdown
+#n Wyam.Razor
 
 // Customize your settings and add new ones here
 Settings[Keys.Host] = "darrelltunnell.net";
@@ -13,7 +14,7 @@ Settings[BlogKeys.IndexFullPosts] = false;
 Settings[BlogKeys.ArchivePageSize] = 10;
 Settings[BlogKeys.ArchiveExcerpts] = true;
 Settings[BlogKeys.IncludeDateInPostPath] = true;
-
+Settings[BlogKeys.ValidateRelativeLinks] = true;
 
 
 // Add any pipeline customizations here
@@ -46,5 +47,3 @@ Pipelines["BlogPosts"].Append(
     return $"{newPostsPath.FullPath}/{publishedDate:yyyy}/{publishedDate:MM}/{publishedDate:dd}/{fileName}";
 
   })); 
-
-  

@@ -49,8 +49,43 @@
                 <script src="/assets/js/respond.min.js"></script>
         <![endif]-->
         
-        
+        <style>
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+}
 
+.title {
+  color: grey;
+  font-size: 18px;
+}
+
+button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+a {
+  text-decoration: none;
+  font-size: 22px;
+  color: black;
+}
+
+button:hover, a:hover {
+  opacity: 0.7;
+}
+</style>
 
         </head>
         <body>
@@ -128,9 +163,9 @@ Published on 17 January 2016<br>    </div>
 <p>You would start by installing the VSIX package from the VS gallery. This will install the DotNetNuke project type, and make this project type available to you when you create new projects in VS.</p>
 <h4 id="create-a-new-project">Create a New Project</h4>
 <p>You can now create a new &quot;DotNetNuke&quot; project using Visual Studio.</p>
-<p>![new dnn project.PNG](/img/new dnn project.PNG)</p>
+<p><img src="/img/new%20dnn%20project.PNG" class="img-fluid" alt="new dnn project.PNG" /></p>
 <p>This creates your new project. It also imports the &quot;DnnPackager&quot; NuGet package automatically - <a href="http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/">something I have blogged about seperately.</a></p>
-<p>![adding DnnPackager.PNG](/img/adding DnnPackager.PNG)</p>
+<p><img src="/img/adding%20DnnPackager.PNG" class="img-fluid" alt="adding DnnPackager.PNG" /></p>
 <p>Your new project, has it's own &quot;.dnnproj&quot; file. This is a new project type and that's why it has its own file extension &quot;.dnnproj&quot;.</p>
 <p><img src="/img/SolutionExplorer1.PNG" class="img-fluid" alt="SolutionExplorer1.PNG" /></p>
 <h4 id="adding-content">Adding Content</h4>
@@ -145,7 +180,7 @@ Published on 17 January 2016<br>    </div>
 <p>When you want to run and debug your extension, for those of you that have read my previous blog about DnnPackager, you may recall that this could be accomplished via a command that you could enter in the Package Manager Console window and DnnPackager would handle the deployment and attaching the debugger.</p>
 <p>Well that approach was only ever necessary because there was not any first class support within VS itself. Something I am going to rectify with the DotNetNuke project type.</p>
 <p>In VS, I am going to extend the debugging toolbar (where the &quot;play&quot; button is)</p>
-<p>![debug toolbar.PNG](/img/debug toolbar.PNG)</p>
+<p><img src="/img/debug%20toolbar.PNG" class="img-fluid" alt="debug toolbar.PNG" /></p>
 <p>You can see in the screenshot there is an empty dropdown at present, but this will list your DotNetNuke websites that you have on your local IIS. The first one in that list will be selected by default.</p>
 <p>You may also notice there a new Debugger selected in that screenshot called &quot;Local Dnn Website&quot;. That's my own custom debugger that's available only for this project type.</p>
 <p>All you need to do is click &quot;Play&quot; and it will:</p>
@@ -163,7 +198,30 @@ Published on 17 January 2016<br>    </div>
 <p>Lastly, if there are any guru's out there who have expertise with <a href="https://github.com/Microsoft/VSProjectSystem">CPS</a> - I can always use a hand ;)</p>
 
 
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'darrelltunnellsblog'; // required: replace example with your forum shortname
+    var disqus_identifier = 'imagining-a-dotnetnuke-project-type-for-visual-studio';
+    var disqus_title = 'Imagining a DotNetNuke Project Type for Visual Studio';
+    var disqus_url = 'http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio';
 
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
                                 </div>
                         </div>
                 </div>

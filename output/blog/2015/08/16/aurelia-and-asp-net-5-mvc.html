@@ -49,8 +49,43 @@
                 <script src="/assets/js/respond.min.js"></script>
         <![endif]-->
         
-        
+        <style>
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+}
 
+.title {
+  color: grey;
+  font-size: 18px;
+}
+
+button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+a {
+  text-decoration: none;
+  font-size: 22px;
+  color: black;
+}
+
+button:hover, a:hover {
+  opacity: 0.7;
+}
+</style>
 
         </head>
         <body>
@@ -130,13 +165,13 @@ Published on 16 August 2015<br>    </div>
 <ol>
 <li>In VS 2015, File --&gt; New Project</li>
 <li>&quot;ASP.NET Web Application&quot;
-![new aspnet project.PNG](/img/new aspnet project.PNG)</li>
+<img src="/img/new%20aspnet%20project.PNG" class="img-fluid" alt="new aspnet project.PNG" /></li>
 <li>&quot;Web Application&quot;
-![new aspnet project 2.PNG](/img/new aspnet project 2.PNG)</li>
+<img src="/img/new%20aspnet%20project%202.PNG" class="img-fluid" alt="new aspnet project 2.PNG" /></li>
 </ol>
 <h3 id="project-structure">Project Structure</h3>
 <p>At this point, with the project created, let's stop and appreciate some noteworthy files in our new project.</p>
-<p>![asp net project sol explorer.PNG](/img/asp net project sol explorer.PNG)</p>
+<p><img src="/img/asp%20net%20project%20sol%20explorer.PNG" class="img-fluid" alt="asp net project sol explorer.PNG" /></p>
 <ul>
 <li><code>project.json</code> - this is the new form of the project file. It replaces for example the older <code>.csproj</code> and <code>.vbproj</code> files.</li>
 <li><code>package.json</code> - this file is managed by <a href="https://docs.npmjs.com/">NPM</a>. It records the dependencies that your application has on NPM packages. More on NPM later.</li>
@@ -146,7 +181,7 @@ Published on 16 August 2015<br>    </div>
 </ul>
 <h4 id="npm-its-an-important-citizen">NPM - it's an important citizen</h4>
 <p><a href="https://docs.npmjs.com/">NPM</a> is now a first class citizen of an ASP.NET 5 project. This is why you have a <code>package.json</code> file in your project.</p>
-<p>![packages json file.PNG](/img/packages json file.PNG)</p>
+<p><img src="/img/packages%20json%20file.PNG" class="img-fluid" alt="packages json file.PNG" /></p>
 <p>NPM is a package manager - the Node Package Manager to be precise. Think <code>NuGet</code> but for NodeJs packages. You could be forgiven for thinking it stands for &quot;Not another Package Manager&quot; - it doesn't, I checked.</p>
 <p>If you aren't yet familiar with NPM, stop here and do yourself a favour - go <a href="https://docs.npmjs.com/">get familiar</a>, you will be seeing a lot of it in your ASP.NET 5 projects in the days to come!</p>
 <h4 id="hold-on-another-package-manager-but-we-allready-have-nuget">Hold on, another Package Manager? But we allready have NuGet?</h4>
@@ -176,7 +211,30 @@ Published on 16 August 2015<br>    </div>
 <p>If there is anything else you would like me to cover in this series, drop me a comment below!</p>
 
 
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'darrelltunnellsblog'; // required: replace example with your forum shortname
+    var disqus_identifier = 'aurelia-and-asp-net-5-mvc';
+    var disqus_title = 'ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia';
+    var disqus_url = 'http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc';
 
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
                                 </div>
                         </div>
                 </div>

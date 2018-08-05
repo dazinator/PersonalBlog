@@ -4,7 +4,7 @@
 	<id>http://darrelltunnell.net/</id>
 	<title>Darrell's Blog</title>
 	<rights>2018</rights>
-	<updated>2018-08-05T10:45:10Z</updated>
+	<updated>2018-08-05T16:35:07Z</updated>
 	<subtitle>Welcome!</subtitle>
 	<entry>
 		<link href="http://darrelltunnell.net/blog/2017/01/24/csla-and-asp.net-core" />
@@ -771,9 +771,9 @@ import bootstrap from 'bootstrap';
 &lt;p&gt;You would start by installing the VSIX package from the VS gallery. This will install the DotNetNuke project type, and make this project type available to you when you create new projects in VS.&lt;/p&gt;
 &lt;h4 id="create-a-new-project"&gt;Create a New Project&lt;/h4&gt;
 &lt;p&gt;You can now create a new &amp;quot;DotNetNuke&amp;quot; project using Visual Studio.&lt;/p&gt;
-&lt;p&gt;![new dnn project.PNG](/img/new dnn project.PNG)&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/new%20dnn%20project.PNG" class="img-fluid" alt="new dnn project.PNG" /&gt;&lt;/p&gt;
 &lt;p&gt;This creates your new project. It also imports the &amp;quot;DnnPackager&amp;quot; NuGet package automatically - &lt;a href="http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/"&gt;something I have blogged about seperately.&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;![adding DnnPackager.PNG](/img/adding DnnPackager.PNG)&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/adding%20DnnPackager.PNG" class="img-fluid" alt="adding DnnPackager.PNG" /&gt;&lt;/p&gt;
 &lt;p&gt;Your new project, has it's own &amp;quot;.dnnproj&amp;quot; file. This is a new project type and that's why it has its own file extension &amp;quot;.dnnproj&amp;quot;.&lt;/p&gt;
 &lt;p&gt;&lt;img src="/img/SolutionExplorer1.PNG" class="img-fluid" alt="SolutionExplorer1.PNG" /&gt;&lt;/p&gt;
 &lt;h4 id="adding-content"&gt;Adding Content&lt;/h4&gt;
@@ -788,7 +788,7 @@ import bootstrap from 'bootstrap';
 &lt;p&gt;When you want to run and debug your extension, for those of you that have read my previous blog about DnnPackager, you may recall that this could be accomplished via a command that you could enter in the Package Manager Console window and DnnPackager would handle the deployment and attaching the debugger.&lt;/p&gt;
 &lt;p&gt;Well that approach was only ever necessary because there was not any first class support within VS itself. Something I am going to rectify with the DotNetNuke project type.&lt;/p&gt;
 &lt;p&gt;In VS, I am going to extend the debugging toolbar (where the &amp;quot;play&amp;quot; button is)&lt;/p&gt;
-&lt;p&gt;![debug toolbar.PNG](/img/debug toolbar.PNG)&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/debug%20toolbar.PNG" class="img-fluid" alt="debug toolbar.PNG" /&gt;&lt;/p&gt;
 &lt;p&gt;You can see in the screenshot there is an empty dropdown at present, but this will list your DotNetNuke websites that you have on your local IIS. The first one in that list will be selected by default.&lt;/p&gt;
 &lt;p&gt;You may also notice there a new Debugger selected in that screenshot called &amp;quot;Local Dnn Website&amp;quot;. That's my own custom debugger that's available only for this project type.&lt;/p&gt;
 &lt;p&gt;All you need to do is click &amp;quot;Play&amp;quot; and it will:&lt;/p&gt;
@@ -1296,14 +1296,14 @@ Emulator killed.
 &lt;li&gt;A command line step that calls out to Xamarin.TestyDroid.exe with the necessary arguments.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;The first step is easy, but the important thing to remember is to set the target to SignAndroidPackage&lt;/p&gt;
-&lt;p&gt;![tc commandlineparams testydroid.PNG](/img/tc commandlineparams testydroid.PNG)&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/tc%20commandlineparams%20testydroid.PNG" class="img-fluid" alt="tc commandlineparams testydroid.PNG" /&gt;&lt;/p&gt;
 &lt;p&gt;That will now take care of producing the APK in the output directory for your project during your team city build.&lt;/p&gt;
 &lt;p&gt;The second step to create is the one that actually runs the tests using TestyDroid!
 The follwing screenshot shows setting up a Command line step to do this:
-![tc testydroid commandlinestep.PNG](/img/tc testydroid commandlinestep.PNG)&lt;/p&gt;
+&lt;img src="/img/tc%20testydroid%20commandlinestep.PNG" class="img-fluid" alt="tc testydroid commandlinestep.PNG" /&gt;&lt;/p&gt;
 &lt;h3 id="step-6-admire-your-tests-in-team-city"&gt;Step 6 - Admire your tests in Team City.&lt;/h3&gt;
 &lt;p&gt;Now you can run a build - and if all is well - you should see your tests results added to a tests tab in Team City.&lt;/p&gt;
-&lt;p&gt;![tc Tests Tab.PNG](/img/tc Tests Tab.PNG)&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/tc%20Tests%20Tab.PNG" class="img-fluid" alt="tc Tests Tab.PNG" /&gt;&lt;/p&gt;
 &lt;h3 id="any-questions"&gt;Any Questions?&lt;/h3&gt;
 &lt;p&gt;I have been someone limited by time so this was fairly rushed together! If there is anything you would like me to elaborate on, please leave a comment below.&lt;/p&gt;
 &lt;p&gt;Also you can read more information about TestyDroid on Github: &lt;a href="https://github.com/dazinator/Xamarin.TestyDroid/wiki/Getting-Started"&gt;https://github.com/dazinator/Xamarin.TestyDroid/wiki/Getting-Started&lt;/a&gt;&lt;/p&gt;
@@ -1346,13 +1346,13 @@ The follwing screenshot shows setting up a Command line step to do this:
 &lt;ol&gt;
 &lt;li&gt;In VS 2015, File --&amp;gt; New Project&lt;/li&gt;
 &lt;li&gt;&amp;quot;ASP.NET Web Application&amp;quot;
-![new aspnet project.PNG](/img/new aspnet project.PNG)&lt;/li&gt;
+&lt;img src="/img/new%20aspnet%20project.PNG" class="img-fluid" alt="new aspnet project.PNG" /&gt;&lt;/li&gt;
 &lt;li&gt;&amp;quot;Web Application&amp;quot;
-![new aspnet project 2.PNG](/img/new aspnet project 2.PNG)&lt;/li&gt;
+&lt;img src="/img/new%20aspnet%20project%202.PNG" class="img-fluid" alt="new aspnet project 2.PNG" /&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3 id="project-structure"&gt;Project Structure&lt;/h3&gt;
 &lt;p&gt;At this point, with the project created, let's stop and appreciate some noteworthy files in our new project.&lt;/p&gt;
-&lt;p&gt;![asp net project sol explorer.PNG](/img/asp net project sol explorer.PNG)&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/asp%20net%20project%20sol%20explorer.PNG" class="img-fluid" alt="asp net project sol explorer.PNG" /&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;project.json&lt;/code&gt; - this is the new form of the project file. It replaces for example the older &lt;code&gt;.csproj&lt;/code&gt; and &lt;code&gt;.vbproj&lt;/code&gt; files.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;package.json&lt;/code&gt; - this file is managed by &lt;a href="https://docs.npmjs.com/"&gt;NPM&lt;/a&gt;. It records the dependencies that your application has on NPM packages. More on NPM later.&lt;/li&gt;
@@ -1362,7 +1362,7 @@ The follwing screenshot shows setting up a Command line step to do this:
 &lt;/ul&gt;
 &lt;h4 id="npm-its-an-important-citizen"&gt;NPM - it's an important citizen&lt;/h4&gt;
 &lt;p&gt;&lt;a href="https://docs.npmjs.com/"&gt;NPM&lt;/a&gt; is now a first class citizen of an ASP.NET 5 project. This is why you have a &lt;code&gt;package.json&lt;/code&gt; file in your project.&lt;/p&gt;
-&lt;p&gt;![packages json file.PNG](/img/packages json file.PNG)&lt;/p&gt;
+&lt;p&gt;&lt;img src="/img/packages%20json%20file.PNG" class="img-fluid" alt="packages json file.PNG" /&gt;&lt;/p&gt;
 &lt;p&gt;NPM is a package manager - the Node Package Manager to be precise. Think &lt;code&gt;NuGet&lt;/code&gt; but for NodeJs packages. You could be forgiven for thinking it stands for &amp;quot;Not another Package Manager&amp;quot; - it doesn't, I checked.&lt;/p&gt;
 &lt;p&gt;If you aren't yet familiar with NPM, stop here and do yourself a favour - go &lt;a href="https://docs.npmjs.com/"&gt;get familiar&lt;/a&gt;, you will be seeing a lot of it in your ASP.NET 5 projects in the days to come!&lt;/p&gt;
 &lt;h4 id="hold-on-another-package-manager-but-we-allready-have-nuget"&gt;Hold on, another Package Manager? But we allready have NuGet?&lt;/h4&gt;
