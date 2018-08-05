@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spa on Darrell Tunnell</title>
+    <link>http://darrelltunnell.net/tags/spa/</link>
+    <description>Recent content in Spa on Darrell Tunnell</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Sun, 19 Apr 2015 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://darrelltunnell.net/tags/spa/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Understanding an ASP.NET SPA Project</title>
+      <link>http://darrelltunnell.net/blog/2015/04/19/understanding-an-asp.net-spa-project/</link>
+      <pubDate>Sun, 19 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2015/04/19/understanding-an-asp.net-spa-project/</guid>
+      <description>&lt;h3 id=&#34;understanding-an-asp-net-single-page-application-project&#34;&gt;Understanding an ASP.NET Single Page Application project&lt;/h3&gt;
+
+&lt;p&gt;Like me, you may have noticed that when creating a new ASP.NET project in Visual Studio - there is the option to create a single page application.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s see what that&amp;rsquo;s about!
+&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

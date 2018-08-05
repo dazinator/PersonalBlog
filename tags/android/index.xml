@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Android on Darrell Tunnell</title>
+    <link>http://darrelltunnell.net/tags/android/</link>
+    <description>Recent content in Android on Darrell Tunnell</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Wed, 04 Nov 2015 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://darrelltunnell.net/tags/android/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>automating-android-unit-test-apps-xamarin-like-a-pro</title>
+      <link>http://darrelltunnell.net/blog/2015/11/04/automating-android-unit-test-apps-xamarin-like-a-pro/</link>
+      <pubDate>Wed, 04 Nov 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2015/11/04/automating-android-unit-test-apps-xamarin-like-a-pro/</guid>
+      <description>&lt;h3 id=&#34;first-off&#34;&gt;First Off..&lt;/h3&gt;
+
+&lt;p&gt;This article is for those of you out there who use Xamarin to write Android applications and want to automate the process of running your tests on an Android device. I&amp;rsquo;ll show you how you can set this up with relative ease.&lt;/p&gt;
+
+&lt;p&gt;Here is the process we want:&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
