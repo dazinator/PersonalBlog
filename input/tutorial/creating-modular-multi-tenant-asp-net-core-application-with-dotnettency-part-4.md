@@ -18,7 +18,7 @@ Part: 4
 SourceCodeUrl: "https://github.com/dazinator/Dotnettency.Samples"
 ---
 
-In [the previous tutorials](/tutorials#creating-modular-multi-tenant-asp-net-core-application-with-dotnettency) we have seen how to configure an asp.net core application for multiple tenants, which included setting up the `Moogle` and `Gicrosoft` tenants.
+In [the previous tutorials](/tutorial#Building%20Modular%20Multi-tenant%20ASP.NET%20Core%20Applications%20with%20Dotnettency) we have seen how to configure an asp.net core application for multiple tenants, which included setting up the `Moogle` and `Gicrosoft` tenants.
 In this tutorial, we will allow each tenant to have it's own middleware pipeline. This allows us to precisely control which middlware runs for which tenants!
 This feature is sometimes referred to as `Per Tenant Middleware` in ASP.NET Core.
 <!--more--> 
@@ -69,7 +69,7 @@ the `IApplicationBuilder` we call this on will be for the `Moogle` Tenant. The `
 
 ```
 
-3. Inside `ConfigureTenantMiddleware` is where we can add any tenant specific middleware. If the above seems unfamiliar to you, please refer to the [the previous tutorials](/tutorials#creating-modular-multi-tenant-asp-net-core-application-with-dotnettency). Let's add the `WelcomePage` middleware for the `Moogle` tenant:
+3. Inside `ConfigureTenantMiddleware` is where we can add any tenant specific middleware. If the above seems unfamiliar to you, please refer to the [the previous tutorials](/tutorial#Building%20Modular%20Multi-tenant%20ASP.NET%20Core%20Applications%20with%20Dotnettency). Let's add the `WelcomePage` middleware for the `Moogle` tenant:
 ```csharp
 
                     .ConfigureTenantMiddleware((tenantsMiddlewareBuilder) =>
@@ -86,7 +86,7 @@ the `IApplicationBuilder` we call this on will be for the `Moogle` Tenant. The `
 ```
 
 
-I won't cover the `TenantShellFactory` in this tutorial as it has already been [covered previously](/tutorials#creating-modular-multi-tenant-asp-net-core-application-with-dotnettency). Suffice it to say that 
+I won't cover the `TenantShellFactory` in this tutorial as it has already been [covered previously](/tutorial#Building%20Modular%20Multi-tenant%20ASP.NET%20Core%20Applications%20with%20Dotnettency). Suffice it to say that 
 this class is responsible for identifying who the current Tenant is, based on the URL or any other accessible value. In our sample we have mapped 
 `localhost:5000` to the `Moogle` Tenant and `localhost:5002` to `Gicrosoft` Tenant.
 
