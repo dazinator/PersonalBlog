@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Csla on Darrell Tunnell</title>
+    <link>http://darrelltunnell.net/tags/csla/</link>
+    <description>Recent content in Csla on Darrell Tunnell</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Tue, 24 Jan 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://darrelltunnell.net/tags/csla/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>CSLA and ASP.NET Core</title>
+      <link>http://darrelltunnell.net/blog/2017/01/24/csla-and-asp.net-core/</link>
+      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2017/01/24/csla-and-asp.net-core/</guid>
+      <description>&lt;p&gt;I am a fan of CSLA and I recently came accross a need to make a shiny CSLA business layer work nicely within the context of an ASP.NET Core application.
+This post is aimed at CSLA developers with a similar need.
+As of the &lt;a href=&#34;https://www.nuget.org/packages/CSLA-Core/4.6.500&#34;&gt;current release&lt;/a&gt;, there are a few things that you will need to take care of in order to get CSLA working smoothly, and I will cover those in this post.
+&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
