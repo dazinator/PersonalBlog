@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
 
-        <title>Darrell&#x27;s Blog - SSH access to bitbucket on Windows</title>
+        <title>Darrell&#x27;s Blog - Modular, Multi-tenant, ASP.NET Core Applications with Dotnettency - Part 4</title>
         <meta name="description" content="Welcome!" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">        
 
@@ -28,9 +28,9 @@
         <meta name="msapplication-tooltip" content="Darrell&#x27;s Blog" />
         <meta name="msapplication-starturl" content="/" />
 
-        <meta property="og:title" content="Darrell&#x27;s Blog - SSH access to bitbucket on Windows" />
+        <meta property="og:title" content="Darrell&#x27;s Blog - Modular, Multi-tenant, ASP.NET Core Applications with Dotnettency - Part 4" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="http://darrelltunnell.net/blog/2015/08/29/ssh-on-windows" />
+        <meta property="og:url" content="http://darrelltunnell.net/tutorials/Creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-4.md" />
         <!-- TODO: More social graph meta tags -->
 
         <script src="/assets/js/jquery.min.js"></script>
@@ -127,14 +127,19 @@ button:hover, a:hover {
                                         <div class="col-md-12">
 
     
-<div class="post-heading">
-    <h1>SSH access to bitbucket on Windows</h1>
+<div class="post-heading">   
+    <h1>Tutorial: Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency</h1>
+    <h2 class="subheading">Part 4</h2>
+<p>
+   <span>This tutorial is part 4 </span> in <a href="/tutorials#Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency">this series.</a>
+</p>
+        
     <div class="meta">        
-Published on 29 August 2015<br>    </div>
-        <div class="tags">
-                    <a role="button" href="/tags/Git" class="btn btn-default btn-xs">Git</a>
-        </div>     
+Published on 01 October 2017<br>    </div>
+   
 </div>
+
+
                                         </div>
                                 </div>
                         </div>
@@ -146,17 +151,111 @@ Published on 29 August 2015<br>    </div>
                                 <div id="content" class="col-md-12">
                                         
 
-<h3 id="getting-ssh-set-up-on-windows">Getting SSH set up on Windows</h3>
-<p>Follow this: <a href="http://blog.muhammada.li/setting-up-ssh-access-to-bitbucket-on-windows#comment-53292">http://blog.muhammada.li/setting-up-ssh-access-to-bitbucket-on-windows#comment-53292</a></p>
+<p>In <a href="/tags/dotnettency">previous tutorials</a> we have seen how to configure an asp.net core application for multiple tenants, which included setting up the <code>Moogle</code> and <code>Gicrosoft</code> tenants.
+In this tutorial, we will allow each tenant to have it's own middleware pipeline. This allows us to precisely control which middlware runs for which tenants!
+This feature is sometimes referred to as <code>Per Tenant Middleware</code> in ASP.NET Core.</p>
+<p><em>This is part of a series. <a href="/tags/dotnettency">You can find the other parts here</a></em>
+<em>You can find the sample code for this post <a href="https://github.com/dazinator/Dotnettency.Samples">here</a></em></p>
+<!--more--> 
+<h2>Per Tenant Middleware you say?</h2>
+<p>Suppose you have some middleware, like:</p>
+<ul>
+<li><code>UseWelcomePage</code></li>
+<li><code>UseMvc</code></li>
+<li><code>UseBlah</code></li>
+</ul>
+<p>Great! But your application is also used by multiple Tenants. You would like to enable the welcome page middleware for one of those tenants but not for the others!
+Let's see how the <code>Dotnettency.MiddlewarePipeline</code> nuget package is your friend!</p>
+<h2>Welcome Moogle!</h2>
+<p>We are goiing to call the <code>UseWelcomePage()</code> on an <code>IApplicationBuilder</code> to add the <code>WelcomePage</code> middleware - nothing unusual here. The only difference is,
+the <code>IApplicationBuilder</code> we call this on will be for the <code>Moogle</code> Tenant. The <code>Gicrosoft</code> tenant will remain unaffected.</p>
+<ol>
+<li>Ensure you have a <code>Package Reference</code> to <a href="https://www.nuget.org/packages/Dotnettency.MiddlewarePipeline/">Dotnettency.MiddlewarePipeline</a> nuget package,</li>
+<li>In <code>startup.cs</code> in <code>ConfigureServices()</code> - find your call to <code>AddMultiTenancy()</code> as per the below:</li>
+</ol>
+<pre><code class="language-csharp">
+        // This method gets called by the runtime. Use this method to add services to the container.
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public IServiceProvider ConfigureServices(IServiceCollection services)
+        {
+            return services.AddMultiTenancy&lt;Tenant&gt;((multiTenancyOptions) =&gt;
+            {
+                multiTenancyOptions
+                    .InitialiseTenant&lt;TenantShellFactory&gt;()
+                    .ConfigureTenantContainers((containerBuilder)=&gt; {
+                        containerBuilder.WithStructureMap((tenant, tenantServices) =&gt;
+                        {
+
+                        });
+                    })
+                    .ConfigureTenantMiddleware((tenantsMiddlewareBuilder) =&gt;
+                    {
+                        tenantsMiddlewareBuilder.OnInitialiseTenantPipeline((context, appBuilder) =&gt;
+                        {
+                           
+                        });
+                    });
+            });
+        }
+
+</code></pre>
+<ol start="3">
+<li>Inside <code>ConfigureTenantMiddleware</code> is where we can add any tenant specific middleware. If the above seems unfamiliar to you, please refer to the <a href="/tags/dotnettency/">previous tutorials</a>. Let's add the <code>WelcomePage</code> middleware for the <code>Moogle</code> tenant:</li>
+</ol>
+<pre><code class="language-csharp">
+                    .ConfigureTenantMiddleware((tenantsMiddlewareBuilder) =&gt;
+                    {
+                        tenantsMiddlewareBuilder.OnInitialiseTenantPipeline((context, appBuilder) =&gt;
+                        {
+                            if (context.Tenant.Name == &quot;Moogle&quot;)
+                            {
+                                appBuilder.UseWelcomePage();
+                            }
+                        });
+                    });                            
+
+</code></pre>
+<p>I won't cover the <code>TenantShellFactory</code> in this tutorial as it has already been <a href="/tags/dotnettency/">covered previously</a>. Suffice it to say that
+this class is responsible for identifying who the current Tenant is, based on the URL or any other accessible value. In our sample we have mapped
+<code>localhost:5000</code> to the <code>Moogle</code> Tenant and <code>localhost:5002</code> to <code>Gicrosoft</code> Tenant.</p>
+<p>If we run the application, and browse on <code>localhost:5000</code> (i.e <code>Moogle</code>) we get:</p>
+<p><img src="/img/hellopagemiddleware.PNG" alt="hellopagemiddleware.PNG" /></p>
+<p>Success! That's a beautiful looking welcome page. Very blue.</p>
+<p>If we browse our application on <code>localhost:5002</code> we get:</p>
+<p><img src="/img/error500.PNG" alt="error500.PNG" /></p>
+<p>Hurray! This means our middleware is only running for the Tenant we wanted it to run for!</p>
+<p>Furthermore, this works with any existing asp.net core <code>Middleware</code> today. The middleware does not have to be written with multitenancy in mind in any way.</p>
+<h2>What's next?</h2>
+<p>Have any multitenant scenarios you want me to cover for asp.net core? Let me know!
+Stay tuned for:</p>
+<ol start="3">
+<li>Per Tenant <code>IHostingEnvironment</code> (each tenant has its own virtual file system)</li>
+<li>Modules (Shared and Routed)</li>
+</ol>
+<p>Don't forget to leave a comment if you find this stuff useful!</p>
+<p><em>This is part of a series. <a href="/tags/dotnettency">You can find the other parts here</a></em>
+<em>You can find the sample code for this post <a href="https://github.com/dazinator/Dotnettency.Samples">here</a></em></p>
+
+
+
+
+<div class="post-footer">       
+<p>
+<span style="text-align: right"><a href="/tutorials#Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency">See Tutorial Series</a></span>
+
+
+</p>        
+   
+</div>
 
 
 <div id="disqus_thread"></div>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname = 'darrelltunnellsblog'; // required: replace example with your forum shortname
-    var disqus_identifier = 'ssh-on-windows';
-    var disqus_title = 'SSH access to bitbucket on Windows';
-    var disqus_url = 'http://darrelltunnell.net/blog/2015/08/29/ssh-on-windows';
+    var disqus_identifier = 'Creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-4';
+    var disqus_title = 'Modular, Multi-tenant, ASP.NET Core Applications with Dotnettency - Part 4';
+    var disqus_url = 'http://darrelltunnell.net/tutorials/Creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-4.md';
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {

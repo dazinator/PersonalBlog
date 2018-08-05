@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
 
-        <title>Darrell&#x27;s Blog - SSH access to bitbucket on Windows</title>
+        <title>Darrell&#x27;s Blog - Modular Multi-tenant ASP.NET Core Application with Dotnettency</title>
         <meta name="description" content="Welcome!" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">        
 
@@ -28,9 +28,9 @@
         <meta name="msapplication-tooltip" content="Darrell&#x27;s Blog" />
         <meta name="msapplication-starturl" content="/" />
 
-        <meta property="og:title" content="Darrell&#x27;s Blog - SSH access to bitbucket on Windows" />
+        <meta property="og:title" content="Darrell&#x27;s Blog - Modular Multi-tenant ASP.NET Core Application with Dotnettency" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="http://darrelltunnell.net/blog/2015/08/29/ssh-on-windows" />
+        <meta property="og:url" content="http://darrelltunnell.net/tutorials/Creating-modular-multi-tenant-asp-net-core-application-with-dotnettency.md" />
         <!-- TODO: More social graph meta tags -->
 
         <script src="/assets/js/jquery.min.js"></script>
@@ -127,14 +127,19 @@ button:hover, a:hover {
                                         <div class="col-md-12">
 
     
-<div class="post-heading">
-    <h1>SSH access to bitbucket on Windows</h1>
+<div class="post-heading">   
+    <h1>Tutorial: Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency</h1>
+    <h2 class="subheading">Introduction</h2>
+<p>
+   <span>You can find the <a href="/tutorials#Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency">rest of the tutorial series here</a></span>
+</p>
+        
     <div class="meta">        
-Published on 29 August 2015<br>    </div>
-        <div class="tags">
-                    <a role="button" href="/tags/Git" class="btn btn-default btn-xs">Git</a>
-        </div>     
+Published on 03 August 2017<br>    </div>
+   
 </div>
+
+
                                         </div>
                                 </div>
                         </div>
@@ -146,17 +151,82 @@ Published on 29 August 2015<br>    </div>
                                 <div id="content" class="col-md-12">
                                         
 
-<h3 id="getting-ssh-set-up-on-windows">Getting SSH set up on Windows</h3>
-<p>Follow this: <a href="http://blog.muhammada.li/setting-up-ssh-access-to-bitbucket-on-windows#comment-53292">http://blog.muhammada.li/setting-up-ssh-access-to-bitbucket-on-windows#comment-53292</a></p>
+<h2>Multitenancy who?</h2>
+<p>Just in case you need a quick recap, a muti-tenant web application is one that can cater to multiple (but completely seperate) audiences, simultaneously. Each seperate audience is called a <code>tenant</code>. To to all intense and purposes, each tenant is just a collection of users who are using the application &quot;unaware&quot; of the other tenants who's users are also doing the same.</p>
+<p>A multi-tenant application is essentially an application that splits itself into multiple applications - one for each  tenant - so that one Tenant can have a completely different <code>view of the world</code> than another.</p>
+<p>Now that we are all caught up, let's get down to business!</p>
+<!--more--> 
+<h2>But wait.. Why would I want this?</h2>
+<p>Some indicators as to why you might want multi-tenancy are that, for certain audiences, you might want to:</p>
+<ol>
+<li>Display a different branding / appearance.</li>
+<li>Have different functionality enabled or disabled.</li>
+<li>Have different content or files accessible.</li>
+</ol>
+<p>For example one tenant could look like this:</p>
+<iframe src="https://giphy.com/embed/3oKIPwoeGErMmaI43S" width="480" height="361" frameBorder="0" class="giphy-embed img-responsive" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/culture--run-3oKIPwoeGErMmaI43S">via GIPHY</a></p>
+<p>Whilst the other is simultaneously looking like this:</p>
+<iframe src="https://giphy.com/embed/JltOMwYmi0VrO" width="480" height="403" frameBorder="0" class="giphy-embed img-responsive" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/JltOMwYmi0VrO">via GIPHY</a></p>
+<p>For the sake of this series we will be using a couple of ficticious tenants:</p>
+<ul>
+<li>Gicrosoft</li>
+<li>Moogle</li>
+</ul>
+<h2>What are we going to cover?</h2>
+<p>During this series, I will take you through the following, starting with basic stuff like tenant resolution, and slowly adding more advanced features. However it would help if you already have a good understanding of:</p>
+<pre><code> 1. The Middleware Pipeline.
+ 2. DI Containers.
+</code></pre>
+<p>For a high level view of the sort of architecture we will be exploring, here is a quick diagram of he type of architecture that <code>dotnettency</code> allows you to easily setup within your application:</p>
+<p><img src="/img/dotnettencyhighlevel.png" alt="dotnettencyhighlevel.PNG" /></p>
+<p>Notice that you can achieve multiple layers of isloation (all of which are ofcourse optional) depending upon your needs. You can isolate things both at a tenant level, and at an individual module level, whilst ensuring that your host application will always behave a certain way by default.</p>
+<h2>Isolation, Isolation, Isolation - but optional.</h2>
+<p>Dotnettency's approach as a multi-tenancy library is to allow you to use as much, or as little isolation as you require. For example you can choose to do any of these:</p>
+<ol>
+<li>Isolate each tenant from other tenants (you dont have to)</li>
+<li>Isolate modules from other modules. (you don't have to, and could do this with some modules and not others)</li>
+<li>Isolate a tenants view of the host file system, from other tenants (i.e so one tenants files can not conflict with another tenants files - even though they might use the same paths. )</li>
+</ol>
+<p>Before I go any further I would like to mention Ben Foster's wonderful <code>saaskit</code> library which was a big inspiration for many of the features in <code>dotnettency</code> and I would highly recommend <a href="http://benfoster.io/blog/saaskit-multi-tenancy-made-easy">you read Ben's blog</a> - after mine, ofcourse ;-)</p>
+<h2>Ok so what is this tutorial series going to look like?</h2>
+<p>We will be creating a basic asp.net core website (from the starting template) and then enhancing with one multi-tenancy feature at a time, provided by <code>dotnettency</code>, so that our site:</p>
+<ul>
+<li>Has multiple tenants (Gicrosoft and Moogle) and we can distguish between them.</li>
+<li>Has a null (default) tenant enabled (or disabled - thats up to you)</li>
+<li>Allows each Tenant to have it's own isolated <code>DI Contaainer</code> so <code>Gicrosoft</code>'s services can be isolated from <code>Moogle</code> services. Think of this if you want each tenant to be able to configure which <code>IPaymentProvider</code> they will use or something similar.</li>
+<li>Allows each Tenant to have it's own Middleware Pipeline - so <code>Gicrosoft</code>'s can have <code>Welcome Page</code> middleware enabled for example, where as <code>Moogle</code> will have no such middleware enabled.</li>
+<li>We will allow each Tenant to have its own <code>View of the world</code> in terms of file access. (i.e so that <code>Gicrosoft</code> and <code>Moogle</code> can't interfere with each other files, or overwrite system level files (but could optionally <code>override</code> the system level files with their own version of the file, keeping the same path)</li>
+<li>Modules. We will discuss <code>dotnettency</code>s concept of Modules. Modules can be enabled at the application or for particular tenants. Right now, these come in two flavours:
+<ul>
+<li>Shared (or Library) Modules: These provide services or middleware. They can be added at the application level (so will impact all tenants) or on a per tenant basis.</li>
+<li>Routed Modules: Modules that have their own isolated container that will be restored during the request when they are routed too. Routed Modules are so called because they must have routes registered with the asp.net core routing system. Dotnettency makes it really easy. If you are developing an extension for your application that has MVC Controllers, then this would be an example of a <code>Routed Module</code>. Dotnettency does not tie your module to a particular technology - you could have a mixture <code>MVC</code> and <code>Nancy</code> based modules running for a particular tenant.</li>
+</ul>
+</li>
+</ul>
+<p>At the end of this tutorial, you will have a multi-tenant, modular &amp; extensible application to serve as a good basis for developing your next multi-tenant capable web application.</p>
+<p>If there is anything else you would like me to cover, please let me know in the comments.</p>
+<p>In the meantime, if you would like to check out <code>dotnettency</code> and run the samples etc, feel free -it's on <a href="https://github.com/dazinator/Dotnettency">Github</a></p>
+
+
+
+
+<div class="post-footer">       
+<p>
+<span style="text-align: right"><a href="/tutorials#Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency">See Tutorial Series</a></span>
+
+
+</p>        
+   
+</div>
 
 
 <div id="disqus_thread"></div>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname = 'darrelltunnellsblog'; // required: replace example with your forum shortname
-    var disqus_identifier = 'ssh-on-windows';
-    var disqus_title = 'SSH access to bitbucket on Windows';
-    var disqus_url = 'http://darrelltunnell.net/blog/2015/08/29/ssh-on-windows';
+    var disqus_identifier = 'Creating-modular-multi-tenant-asp-net-core-application-with-dotnettency';
+    var disqus_title = 'Modular Multi-tenant ASP.NET Core Application with Dotnettency';
+    var disqus_url = 'http://darrelltunnell.net/tutorials/Creating-modular-multi-tenant-asp-net-core-application-with-dotnettency.md';
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {

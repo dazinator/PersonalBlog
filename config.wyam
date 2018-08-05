@@ -14,7 +14,11 @@ Settings[BlogKeys.IndexFullPosts] = false;
 Settings[BlogKeys.ArchivePageSize] = 10;
 Settings[BlogKeys.ArchiveExcerpts] = true;
 Settings[BlogKeys.IncludeDateInPostPath] = true;
-Settings[BlogKeys.ValidateRelativeLinks] = true;
+Settings["TutorialsPath"] = "tutorials";
+
+//Settings[BlogKeys.ValidateRelativeLinks] = true;
+// Settings[BlogKeys.IgnoreFolders] = "tutorials";
+
 
 
 // Add any pipeline customizations here
@@ -47,3 +51,12 @@ Pipelines["BlogPosts"].Append(
     return $"{newPostsPath.FullPath}/{publishedDate:yyyy}/{publishedDate:MM}/{publishedDate:dd}/{fileName}";
 
   })); 
+
+
+Pipelines.Add("Tutorials",
+  ReadFiles("tutorials/*.md"),
+  FrontMatter(Yaml()),
+  Markdown(),
+  Razor().IgnorePrefix(null).WithLayout("/_TutorialLayout.cshtml"),
+  WriteFiles(".html")
+);
