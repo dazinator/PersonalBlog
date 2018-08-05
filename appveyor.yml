@@ -11,4 +11,4 @@ on_success:
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
   - git config --global user.email "darrell.tunnell@googlemail.com"
   - git config --global user.name "dazinator"
-  - git subtree push --prefix=public https://github.com/dazinator/PersonalBlog.git gh-pages
+  - git subtree push --prefix=output https://github.com/dazinator/PersonalBlog.git gh-pages
