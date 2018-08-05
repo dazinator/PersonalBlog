@@ -1,203 +1,203 @@
+﻿
 <!DOCTYPE html>
-<html lang="en-gb">
-<head>
-    <title>Tutorials</title>
-    <meta name="generator" content="Hugo 0.29" />
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    
-    
+<html lang="en">
+        <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
 
-    <script src="http://darrelltunnell.net/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="http://darrelltunnell.net/bower_components/bootstrap/js/bootstrap.min.js"></script>
-    <script src="http://darrelltunnell.net/bower_components/bootstrap/js/dropdowns-enhancement.js"></script>
-    <script src="http://darrelltunnell.net/bower_components/bluebird/js/browser/bluebird.js"></script>
-    <script src="http://darrelltunnell.net//bower_components/talaria/dist/talaria.js"></script>
-    <script src="http://darrelltunnell.net/bower_components/d3/d3.min.js" charset="utf-8"></script>
-    <script src="http://darrelltunnell.net/bower_components/cal-heatmap/cal-heatmap.min.js"></script>
-    <script src="http://darrelltunnell.net/bower_components/highlightjs/highlight.pack.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']]}
-      });
-    </script>
+        <title>Darrell&#x27;s Blog - Tutorials</title>
+        <meta name="description" content="Welcome!" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">        
 
-    <link rel="icon" href="http://darrelltunnell.net/favicon.ico" />
-    <link rel="apple-touch-icon" href="http://darrelltunnell.net/apple-touch-icon.png" />
-    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/highlightjs/styles/monokai.css" />
-    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/bootstrap/css/dropdowns-enhancement.css" />
-    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/talaria/dist/talaria.css" />   
-    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/createjs/createjs.css" />
-    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/font-awesome/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/icomoon/css/icomoon.css" />
-    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css" />
-    <link rel="stylesheet" href="http://darrelltunnell.net/css/mobile.css" />
-    <link rel="stylesheet" href="http://darrelltunnell.net/bower_components/cal-heatmap/cal-heatmap.css" />
+        <link type="application/rss+xml" rel="alternate" title="Darrell&#x27;s Blog" href="/feed.rss" />
+                <link type="application/atom+xml" rel="alternate" title="Darrell&#x27;s Blog" href="/feed.atom" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
-    
-    <link rel="alternate" type="application/rss+xml" title="Darrell Tunnell" href="http://darrelltunnell.net/tutorials/index.xml"/>
-    <link rel="feed" type="application/rss+xml" title="Darrell Tunnell" href="http://darrelltunnell.net/tutorials/index.xml" />
-    
+        <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/assets/css/highlight.css" rel="stylesheet">
+        <link href="/assets/css/clean-blog.css" rel="stylesheet" />
+        <link href="/assets/css/master.css" rel="stylesheet" />
+        <link href="/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="/assets/css/override.css" rel="stylesheet" />
 
-    
-</head>
-<body>
-<div class="container">
+
+        <meta name="application-name" content="Darrell&#x27;s Blog" />
+        <meta name="msapplication-tooltip" content="Darrell&#x27;s Blog" />
+        <meta name="msapplication-starturl" content="/" />
+
+        <meta property="og:title" content="Darrell&#x27;s Blog - Tutorials" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="http://darrelltunnell.net/tutorials/Index" />
+        <!-- TODO: More social graph meta tags -->
+
+        <script src="/assets/js/jquery.min.js"></script>
+        <script src="/assets/js/bootstrap.min.js"></script>     
+        <script src="/assets/js/highlight.pack.js"></script>   
+        <script src="/assets/js/clean-blog.js"></script>
+        <script src="/assets/js/d3.v3.min.js"></script>
+        <script src="/assets/js/trianglify.min.js"></script>
+        <script src="/assets/js/Please-compressed.js"></script>
+        <script src="/assets/js/background-check.min.js"></script>
+                
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+                <script src="/assets/js/html5shiv.js"></script>
+                <script src="/assets/js/respond.min.js"></script>
+        <![endif]-->
+        
+        <style>
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+}
+
+.title {
+  color: grey;
+  font-size: 18px;
+}
+
+button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+a {
+  text-decoration: none;
+  font-size: 22px;
+  color: black;
+}
+
+button:hover, a:hover {
+  opacity: 0.7;
+}
+</style>
+
+        </head>
+        <body>
+                
+                <!-- Navigation -->
+                <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+                        <div class="container-fluid">
+                                <!-- Brand and toggle get grouped for better mobile display -->
+                                <div class="navbar-header page-scroll">
+                                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                                        <span class="sr-only">Toggle navigation</span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        </button>
+                                        <a class="navbar-brand" href="/">Darrell&#x27;s Blog</a>
+                                </div>
+                        
+                                <!-- Collect the nav links, forms, and other content for toggling -->
+                                <div class="collapse navbar-collapse" id="navbar-collapse">
+                                        <ul class="nav navbar-nav navbar-right">
+                                                        <li><a href="/posts">Archive</a></li>
+        <li><a href="/tags">Tags</a></li>
+        <li><a href="/about">About Me</a></li>
+        <li><a href="/tutorials/Index">Tutorials</a></li>
+    <!-- <li><a href="/Tutorials">Tutorials</a></li> -->
  
+                                        </ul>
+                                </div>
+                                <!-- /.navbar-collapse -->
+                        </div>
+                        <!-- /.container -->
+                </nav>
+                
+                <!-- Page Header -->
+                <header class="intro-header" id="intro-header">
+                        <div class="container">
+                                <div class="row">
+                                        <div class="col-md-12">
+<div class="site-heading">
+    <h1>Tutorials</h1>
+</div>                                            </div>
+                                </div>
+                        </div>
+                </header>
+                
+                <!-- Main Content -->
+                <div class="container">
+                        <div class="row">
+                                <div id="content" class="col-md-12">
+                                                <a name="Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency"></a>
+        <h2>Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency</h2>     
+       <ol>     
+       
+             <li><a href="/tutorials/Creating-modular-multi-tenant-asp-net-core-application-with-dotnettency">Introduction</a></li>
+             <li><a href="/tutorials/Creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-1">Part 1</a></li>
+             <li><a href="/tutorials/Creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-2">Part 2</a></li>
+             <li><a href="/tutorials/Creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-3">Part 3</a></li>
+             <li><a href="/tutorials/Creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-4">Part 4</a></li>
 
-<header id="header">
-  <div id="header-main" class="header-inner">
-    <div class="outer">
+          </ol>   
 
-	<nav class="navbar navbar-default">
-	  <div class="container-fluid">
-
-    	    <div class="navbar-header">
-      		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-      		  <span class="sr-only">Toggle navigation</span>
-      		  <span class="icon-bar"></span>
-      		  <span class="icon-bar"></span>
-      		  <span class="icon-bar"></span>
-      		</button>
-		    <h1>
-			    <a class="navbar-brand" href="http://darrelltunnell.net/">
-				    <span class="icon-phoenix_logo"></span>
-				    
-				    
-				    
-			    </a>
-		    </h1>
-	    </div>
-
-
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
-    
-        <li><a href="#">Home</a></li>
-        <li><a href="http://darrelltunnell.net/hugo-theme-wave/archive">Archives</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Wiki<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">User</a></li>
-            <li role="separator" class="divider"></li>
-            <li class="dropdown-submenu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Application</a>
-            <ul class="dropdown-menu">
-              <li><a href="#">List Application</a></li>
-                    <li role="separator" class="divider"></li>
-              <li><a href="#">Accessibility</a></li>
-              <li><a href="#">Application launchers</a></li>
-              <li class="dropdown-submenu">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Command shells</a>
-              <ul class="dropdown-menu">
-                <li class="dropdown-submenu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bash</a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">Invocation</a></li>
-                  <li><a href="#">Command line</a></li>
-                </ul>
-                </li>
-              </ul>
-              </li>
-            </ul>
-            </li>
-            <li><a href="#">Development</a></li>
-            <li><a href="#">Hardware</a></li>
-            <li><a href="#">Networking</a></li>
-            <li><a href="#">System administration</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">GitHub</a></li>
-          </ul>
-        </li>
-        <li><a href="#">Issue</a></li>
-
-    <li>
-	<a href="https://gitlab.com/">
-		<i class="fa fa-gitlab" aria-hidden="true"></i>
-	</a>
-</li>
-<li>
-	<a href="https://github.com/">
-		<i class="fa fa-github" aria-hidden="true"></i>
-	</a>
-</li>
-<li>
-	<a href="https://twitter.com/">
-		<i class="fa fa-twitter" aria-hidden="true"></i>
-	</a>
-
-</li>
-
-<li>
-	<a href="http://darrelltunnell.net/tutorials/index.xml">
-		 <i class="fa fa-rss-square" aria-hidden="true"></i>
-	</a>
-</li>
-
-    
-      </ul>
-    </div>
-
-  </div>
-</nav>
-
-</header>
-
-
-
-
-<div id="container">
-    <div class="outer">
-        <section id="main">
-            <section class="layout-wrap">
-                <div class="layout-title">
-                    <span>Tutorials</span>
+                                </div>
+                        </div>
                 </div>
-                <div class="layout-wrap-inner list-categories">
-                    <ul class="category-list">
-                         
-                    </ul>
+                
+                <hr>
+                
+                <!-- Footer -->
+                <footer>
+                        <div class="container">
+        <div class="row">
+                <div class="col-md-12 text-center">
+                    <p class="copyright text-muted">
+                        Copyright © 2018
+                        <br />
+                            <a href="/feed.rss"><i class="fa fa-rss"></i> RSS Feed</a>
+                        |
+                            <a href="/feed.atom"><i class="fa fa-rss"></i> Atom Feed</a>
+                        <br />
+                        <strong><a href="https://wyam.io">Generated by Wyam</a></strong>
+                    </p>
                 </div>
-            </section>
-        </section>
-        <aside id="sidebar">
-    <div class="widget-wrap">
-<input id="search" type="text" placeholder="search">
-<ul id="results">
-</ul>
-<script type="text/javascript" src="http://darrelltunnell.net/js/search.js"></script>
-<script type="text/javascript" src="http://darrelltunnell.net/bower_components/lunr.js/lunr.min.js"></script>
+        </div>
 </div>
 
-    
+                </footer> 
 
+                
+                <script>hljs.initHighlightingOnLoad();</script>
 
-    
+                        <script type="text/javascript">                
+                                // Header background                        
+                                var colors = Please.make_color({
+                                        colors_returned: 3,
+                                        saturation: .6
+                                });
+                                var t = new Trianglify({
+                                        x_gradient: colors,
+                                        y_gradient: ["#FFFFFF"]
+                                });
+                                var header = document.getElementById("intro-header");
+                                var pattern = t.generate(header.clientWidth, header.clientHeight);
+                                header.setAttribute('style', 'background-image: ' + pattern.dataUrl);                        
+                        </script>
 
-    
-
-    
-</aside>
-
-    </div>
-</div>
-
-<footer id="footer">
-  <div class="outer">
-    <div id="footer-info" class="inner">
-	<footer id="footer-left">
-	    &copy; 2017 <a href="https://github.com/syui">syui</a>. <br>
-	    
-	</footer>
-	    <footer id="footer-center"> <a href="#"><span class="icon-phoenix_logo"></span></a>  </footer>
-	   <footer id="footer-right"> <a href="">Reference</a> <a href="">Keybind</a> <a href="">Command</a> <a href="">API</a>  </footer>
-    </div>
-  </div>
-</footer>
-
-</body>
-
+                <script>
+                        BackgroundCheck.init({
+                                targets: '.intro-header,.navbar',
+                                images: '.intro-header'
+                        });
+                </script>
+        </body>
 </html>
+
