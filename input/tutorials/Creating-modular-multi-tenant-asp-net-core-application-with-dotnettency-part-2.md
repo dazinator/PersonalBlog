@@ -14,11 +14,8 @@ ShowInNavbar: false
 Tutorial: "Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency"
 Name: "Part 2"
 Part: 2
+SourceCodeUrl: "https://github.com/dazinator/Dotnettency.Samples"
 ---
-
-*This is part of a series. [You can find the other parts here](/tags/dotnettency)*
-
-*You can find the sample code for this post [here](https://github.com/dazinator/Dotnettency.Samples)*
 
 In the [previous part of the this tutorial](/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-1/) we saw how we could do some very basic `Tenant` resolution. We were identifying who the current `tenant` is based on values available in the `URL` such as port number etc. In this post, we will see how we can also use values not available in the `URL` such as a cookie value (or anything else), to identify the current tenant also. 
 

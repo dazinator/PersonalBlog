@@ -14,18 +14,15 @@ ShowInNavbar: false
 Tutorial: "Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency"
 Name: "Part 3"
 Part: 3
+SourceCodeUrl: "https://github.com/dazinator/Dotnettency.Samples"
 ---
-
-*This is part of a series. [You can find the other parts here](/tags/dotnettency)*
-
-*You can find the sample code for this post [here](https://github.com/dazinator/Dotnettency.Samples)*
 
 In this part of the tutorial, we will cover `Per Tenant DI Containers` in ASP.NET Core.
 <!--more--> 
 
 ## Per Tenant Containers - An Unfriendly Greeting
 
-Dotnettency allows you to configure `Per Tenant` DI Containers. The easiest way to understand this is to see it in action. Before proceeding you should ideally be familiar with basic tenant resolution [from the previous tutorials](/tags/dotnettency/)
+Dotnettency allows you to configure `Per Tenant` DI Containers. The easiest way to understand this is to see it in action. Before proceeding you should ideally be familiar with basic tenant resolution [from the previous tutorials](/tutorials#creating-modular-multi-tenant-asp-net-core-application-with-dotnettency)
 
 In `startup.cs`
 
@@ -166,9 +163,3 @@ Stay tuned for:
 2. Per Tenant `Middleware Pipeline`
 3. Per Tenant `IHostingEnvironment` (for sandboxing file access)
 4. Modules (Shared and Routed)
-
-Don't forget to leave a comment if you find this stuff useful!
-
-*This is part of a series. [You can find the other parts here](/tags/dotnettency)*
-
-*You can find the sample code for this post [here](https://github.com/dazinator/Dotnettency.Samples)*
