@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# website: http://ogp.me/ns/website#">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="description" content="">
+    <meta property="og:title" content="ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia">
+    
+
+  
+  
+  <meta name="twitter:title" content="ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia"/>
+  <meta name="twitter:description" content="This post is part 1 of a series. Part 2 is here
+
+ASP (A Sea of Packages).NET 5
+
+When you create a new ASP.NET 5 project, you will see all sorts of new-ness. I am going to guide you, the uninitiated ASP.NET 5 web developer, through creating your first ASP.NET 5 MVC application, but we won&rsquo;t stop there. In the next post of this series, we will then enhance the project with a number of features:
+
+
+Bundling and Minification.
+Auto browser refresh (as you make changes to files during development)
+
+
+In addition, I will touch upon important tooling that you need to be aware of:
+
+
+NPM
+Bower and why we are going to replace it with Jspm
+Gulp - and why is it useful
+
+
+To be able to do all of this, we will be creating an ASP.NET MVC 5 project, and then we will be using Aurelia to run an Aurelia application on Home page (Index.cshtml)
+"/>
+  
+    <meta name="twitter:site" content="@dazinator"/>
+  
+  
+  
+
+    
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2015-08-16">
+    
+    <meta property="og:description" content="">
+    <meta property="og:url" content="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/">
+    <meta property="og:site_name" content="Darrell Tunnell">
+    
+    <meta property="og:tags" content="ASP.NET CORE">
+    
+    <meta property="og:tags" content="Aurelia">
+    
+    <meta name="generator" content="Hugo 0.29" />
+    <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia &middot; Darrell Tunnell</title>
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">    
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
+    
+    
+    <link rel="icon" href="http://darrelltunnell.net/favicon.ico" />
+    
+    <style>
+     
+.highlight pre {
+    word-wrap: normal;
+}
+
+.highlight pre code {
+    white-space: pre;
+}
+
+    </style>
+
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top visible-xs">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			
+				<a class="navbar-brand" href="http://darrelltunnell.net/">Darrell Tunnell</a>
+			
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				
+				
+					<li><a href="http://darrelltunnell.net/">Home</a></li>
+				
+					<li><a href="http://darrelltunnell.net/post/">Posts</a></li>
+				
+					<li><a href="http://darrelltunnell.net/tutorial/">Tutorials</a></li>
+				
+			</ul>
+		</div>
+	</div>
+</nav>
+<div class="container-fluid">
+	<div class="row">
+		<div id="menu" class="hidden-xs col-sm-4 col-md-3">
+	<div id="menu-content" class="vertical-align">
+		
+			<h1 class="text-center"><a href="http://darrelltunnell.net/">Darrell Tunnell</a></h1>
+		
+		
+		
+			<small class="text-center center-block">Radiating Awesomeness, One Blog Post at a Time.</small>
+		
+		
+		
+			<img id="profile-pic" src="http://darrelltunnell.net//img/profile.jpg" alt="My Picture" class="img-circle center-block">
+		
+		<div id="social" class="text-center">
+			
+				<a href="https://github.com/dazinator"><i class="fa fa-github fa-2x"></i></a>
+			
+				<a href="https://twitter.com/dazinate"><i class="fa fa-twitter fa-2x"></i></a>
+			
+				<a href="https://uk.linkedin.com/in/darrell-tunnell-33845331"><i class="fa fa-linkedin fa-2x"></i></a>
+			
+				<a href="http://darrelltunnell.net/index.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+			
+
+			<a href="mailto:darrelltunnell@gmail.com"><i class="fa fa-envelope-o fa-2x"></i></a>
+		</div>
+		<div id="links" class="text-center">
+			
+			
+				<a href="http://darrelltunnell.net/">Home</a>
+			
+				<a href="http://darrelltunnell.net/post/">Posts</a>
+			
+				<a href="http://darrelltunnell.net/tutorial/">Tutorials</a>
+			
+		</div>
+	</div>
+</div>
+
+		<div id="content" class="col-xs-12 col-sm-8 col-md-9">
+			<div class="row">
+				<div id="post" class="col-sm-offset-1 col-sm-10 col-md-10 col-lg-8">
+
+<main>
+	<header>
+		<h1>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia</h1>
+	</header>
+
+	<article>
+		<p><strong>This post is part 1 of a series. Part 2 is <a href="http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/">here</a></strong></p>
+
+<h3 id="asp-a-sea-of-packages-net-5">ASP (A Sea of Packages).NET 5</h3>
+
+<p>When you create a new ASP.NET 5 project, you will see all sorts of new-ness. I am going to guide you, the uninitiated ASP.NET 5 web developer, through creating your first ASP.NET 5 MVC application, but we won&rsquo;t stop there. In the next post of this series, we will then enhance the project with a number of features:</p>
+
+<ol>
+<li>Bundling and Minification.</li>
+<li>Auto browser refresh (as you make changes to files during development)</li>
+</ol>
+
+<p>In addition, I will touch upon important tooling that you need to be aware of:</p>
+
+<ol>
+<li>NPM</li>
+<li>Bower and why we are going to replace it with Jspm</li>
+<li>Gulp - and why is it useful</li>
+</ol>
+
+<p>To be able to do all of this, we will be creating an ASP.NET MVC 5 project, and then we will be using <a href="http://aurelia.io/">Aurelia</a> to run an Aurelia application on Home page (Index.cshtml)
+</p>
+
+<h3 id="new-project">New Project</h3>
+
+<p>The first step on our quest is simply to create a new ASP.NET application. I am sure you know the drill:</p>
+
+<ol>
+<li>In VS 2015, File &ndash;&gt; New Project</li>
+<li>&ldquo;ASP.NET Web Application&rdquo;
+<img src="http://darrelltunnell.net/img/new aspnet project.PNG" alt="new aspnet project.PNG" /></li>
+<li>&ldquo;Web Application&rdquo;
+<img src="http://darrelltunnell.net/img/new aspnet project 2.PNG" alt="new aspnet project 2.PNG" /></li>
+</ol>
+
+<h3 id="project-structure">Project Structure</h3>
+
+<p>At this point, with the project created, let&rsquo;s stop and appreciate some noteworthy files in our new project.</p>
+
+<p><img src="http://darrelltunnell.net/img/asp net project sol explorer.PNG" alt="asp net project sol explorer.PNG" /></p>
+
+<ul>
+<li><code>project.json</code> - this is the new form of the project file. It replaces for example the older <code>.csproj</code> and <code>.vbproj</code> files.</li>
+<li><code>package.json</code> - this file is managed by <a href="https://docs.npmjs.com/">NPM</a>. It records the dependencies that your application has on NPM packages. More on NPM later.</li>
+<li><code>bower.json</code> - this file is managed by <a href="http://bower.io/">Bower</a>. It records the dependencies that your application has on Bower packages. More on Bower later.</li>
+<li><code>gulpfile.js</code> - this file contains <code>tasks</code> that can be executed by <a href="http://gulpjs.com/">Gulp</a> as part of your development workflow, for example, whenever the project is built, cleaned etc. More on this later.</li>
+<li><code>Startup.cs</code> this is the entry point for your application. For the purposes of this article, the default code is fine and we won&rsquo;t be amending anything in this file. It contains bootstrapping code such as setting up and registering services such as authentication.</li>
+</ul>
+
+<h4 id="npm-it-s-an-important-citizen">NPM - it&rsquo;s an important citizen</h4>
+
+<p><a href="https://docs.npmjs.com/">NPM</a> is now a first class citizen of an ASP.NET 5 project. This is why you have a <code>package.json</code> file in your project.</p>
+
+<p><img src="http://darrelltunnell.net/img/packages json file.PNG" alt="packages json file.PNG" /></p>
+
+<p>NPM is a package manager - the Node Package Manager to be precise. Think <code>NuGet</code> but for NodeJs packages. You could be forgiven for thinking it stands for &ldquo;Not another Package Manager&rdquo; - it doesn&rsquo;t, I checked.</p>
+
+<p>If you aren&rsquo;t yet familiar with NPM, stop here and do yourself a favour - go <a href="https://docs.npmjs.com/">get familiar</a>, you will be seeing a lot of it in your ASP.NET 5 projects in the days to come!</p>
+
+<h4 id="hold-on-another-package-manager-but-we-allready-have-nuget">Hold on, another Package Manager? But we allready have NuGet?</h4>
+
+<p>NuGet is for .NET libraries like log4net silly. Npm has a vast array of packages not available through NuGet. Why wouldn&rsquo;t you want to tap into those also?</p>
+
+<h4 id="bower">Bower</h4>
+
+<p>Here is where things get a tiny bit confusing. Bower is a package, that is also another package manager. I am tempted to move on.. but I&rsquo;ll explain.</p>
+
+<p>Bower is a NodeJs program, and is therefore distributed as a NodeJs package, via <code>NPM</code>. However it&rsquo;s purpose in life is to be a package manager, but specifically for client (website) dependencies such as javascript or css. Think Jquery. If you want to add Jquery, or Bootstrap, or any other client side library to your project, then Bower would be the package manager to use to achieve that. Not NPM (<a href="https://www.npmjs.com/package/jquery">although you could</a>), and not NuGet (<a href="https://www.nuget.org/packages/jQuery/">although you could</a>). The ASP.NET team thinks <code>Bower</code> is the package manager to use as Bower specialises for client dependencies - so the ASP.NET 5 project is set up by default to use Bower and you may allready see some Bower packages downloaded into your <code>bower_components</code> folder within your project. The <code>bower.json</code> file keeps track of your bower dependencies.</p>
+
+<p>However, in this walkthrough, we shall be scrapping <code>Bower</code> and using a different package manager for our JQueries and our Bootstraps. One called <a href="http://jspm.io/">Jspm</a>. Jspm is recomended for it&rsquo;s additional capabilities, mainly that it provides not just package management features (at dev time) but package loading features, that your application uses at runtime.</p>
+
+<h4 id="gulp">Gulp</h4>
+
+<p><a href="http://gulpjs.com/">Gulp</a> is what all the cool kids are using to automate their development workflows.</p>
+
+<p>Gulp basically lets you define <code>tasks</code> in a javascript file (gulpfile.js) that can then be run at an appropirate point. VS 2015 has a <code>Task Runner Explorer</code> window in which you can pick which Gulp tasks (the ones defined in your gulpfile.js) that you would like to run and when. For example, you can have your gulp task executed whenever the project is built, or cleaned etc. You can also execute your gulp task via the command line (see the Gulp docs)</p>
+
+<p>We are going to write some Gulp tasks in gulpfile.js, and have them executed as part of the our project&rsquo;s build process. These tasks are going to automatically handle bundling and minification of our javascript files for us.</p>
+
+<p>Our web application is going to reference the &ldquo;bundle&rdquo; of javascript that gulp outputs, rather than the individual javascript files that we download using jspm. Which means our application is going to be nice and optimised as the browser will have to do less roundtrips with the server (network requests) to load the required javascript.</p>
+
+<h4 id="but-won-t-bundling-and-minification-lead-to-a-poor-debugging-experience">But won&rsquo;t bundling and minification lead to a poor debugging experience?</h4>
+
+<p>Not if sourcemaps are enabled. I will show you how to enable this. This will mean the browser will be requesting and running the optimised bundle of javascript - but you the developer, will be stepping through and reading the original source code in your browser&rsquo;s dev tools, thanks to the magical power of source maps.</p>
+
+<p>However, I will also show you what to do if you just don&rsquo;t want to bundle / minify your javascript during development (not all browsers will support source maps yet). If bundling and minification is something you only want to do at the time of a release build - which is pretty sensible - then I&rsquo;ll cover that too.</p>
+
+<h3 id="stay-tuned">Stay tuned</h3>
+
+<p>In the next post/s, we will begin modifying our ASP.NET 5 project to do the things I have discussed:</p>
+
+<ol>
+<li><a href="http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/">Replace Bower with JSPM</a></li>
+<li>Bring in Aurelia</li>
+<li>Get an Aurelia application working on the Index.cshtml page</li>
+<li>Enable bundling and minification via a Gulp task</li>
+<li>Enable automatic browser refresh</li>
+<li>Disable bundling when our application is running in development (to maintain an easy debugging experience should your browser not support source maps)</li>
+</ol>
+
+<p>If there is anything else you would like me to cover in this series, drop me a comment below!</p>
+	</article>
+</main>
+
+ <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=ASP.NET%205%20Projects%20-%20NuGet-NPM-Gulp-Bower-Jspm-Aurelia&url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f08%2f16%2faurelia-and-asp-net-5-mvc%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+
+        
+            <a class="icon-google-plus" href="https://plus.google.com/share?url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f08%2f16%2faurelia-and-asp-net-5-mvc%2f"
+              onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+              <i class="fa fa-google-plus"></i>
+                <span class="hidden">Google+</span>
+            </a>
+        
+        
+            <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&title=ASP.NET%205%20Projects%20-%20NuGet-NPM-Gulp-Bower-Jspm-Aurelia&url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2015%2f08%2f16%2faurelia-and-asp-net-5-mvc%2f&summary="
+               onclick="window.open(this.href, 'linkedin-share', 'width=554,height=481');return false;">
+               <i class="fa fa-linkedin"></i>
+               <span class="hidden">LinkedIn</span>
+            </a>
+        
+    </div>
+
+<div id="bottom-nav" class="text-center center-block">
+	<a href=" http://darrelltunnell.net/" class="btn btn-default"><i class="fa fa-home"></i> Home</a>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "darrelltunnellsblog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+    </div>
+  
+ 
+  
+  <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'code-here', 'auto');
+    ga('send', 'pageview');
+    window.baseURL = "http:\/\/darrelltunnell.net\/";
+  </script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+  
+  
+  <script src="http://darrelltunnell.net//js/App.js"></script>
+  
+  <script type="text/javascript">   
+  $(document).ready(function () {
+	$( ".highlighttable" ).wrap("<div class='table-responsive'></div>");
+  $( "img" ).addClass("img-responsive");
+});
+</script>
+    
+</body>
+</html>

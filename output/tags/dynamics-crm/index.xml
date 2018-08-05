@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dynamics Crm on Darrell Tunnell</title>
+    <link>http://darrelltunnell.net/tags/dynamics-crm/</link>
+    <description>Recent content in Dynamics Crm on Darrell Tunnell</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Thu, 26 Feb 2015 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://darrelltunnell.net/tags/dynamics-crm/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>How far does the XRM SDK&#39;s ExecuteMultipleRequest get you?</title>
+      <link>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you/</link>
+      <pubDate>Thu, 26 Feb 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you/</guid>
+      <description>&lt;h3 id=&#34;executemultiplerequest-let-s-take-it-to-the-max&#34;&gt;ExecuteMultipleRequest - Let&amp;rsquo;s take it to the max&lt;/h3&gt;
+
+&lt;p&gt;In this post, I will explore what kinds of things can be achieved using the SDK&amp;rsquo;s ExecuteMultipleRequest, by starting of with a simple SQL command, and implementing a semantically equivalent ExecuteMultipleRequest, and then slowly introducing some additional complexity - so that, we can see some areas where the SDK starts to fall short!&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>CRM / Plugin Generated Values - and Reducing Roundtrips!</title>
+      <link>http://darrelltunnell.net/blog/2014/12/22/crm-plugin-generated-values-and-reducing-roundtrips/</link>
+      <pubDate>Mon, 22 Dec 2014 17:50:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2014/12/22/crm-plugin-generated-values-and-reducing-roundtrips/</guid>
+      <description>&lt;h3 id=&#34;setting-the-scene&#34;&gt;Setting the Scene&lt;/h3&gt;
+
+&lt;p&gt;Imagine we have an application that uses the CRM SDK. It needs to:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Create a new &lt;code&gt;account&lt;/code&gt; entity in crm.&lt;/li&gt;
+&lt;li&gt;Get some value that was just generated as a result of a synchronous plugin that fires on the create. For example, suppose there is a plugin that generates an account reference number.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;the-i-don-t-care-about-network-latency-method&#34;&gt;The &amp;ldquo;I don&amp;rsquo;t care about network latency method!&amp;rdquo;&lt;/h3&gt;
+
+&lt;p&gt;The &amp;lsquo;I don&amp;rsquo;t care about network latency&amp;rsquo; way of dealing with this is to just do 2 seperate Requests (roundtrips) with the CRM server.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Create the new &lt;code&gt;account&lt;/code&gt; which returns you the ID.&lt;/li&gt;
+&lt;li&gt;Retrieve the &lt;code&gt;account&lt;/code&gt; using that ID, along with the values that you need.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;This approach is sub optimal where network latency is a concern, as it incurs the penalty of making two roundtrips accross the network with the server, where 1 is possible.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s now have a look at the &amp;ldquo;I&amp;rsquo;m running on a 56k modem method&amp;rdquo; of doing the same thing!
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Unit Testing Dynamics CRM Plugins</title>
+      <link>http://darrelltunnell.net/blog/2014/12/14/unit-testing-crm-plugins/</link>
+      <pubDate>Sun, 14 Dec 2014 17:50:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2014/12/14/unit-testing-crm-plugins/</guid>
+      <description>&lt;h3 id=&#34;there-is-no-spoon-crm&#34;&gt;There is no &lt;del&gt;Spoon&lt;/del&gt; CRM&lt;/h3&gt;
+
+&lt;p&gt;The purpose of this post will be to look at the code for a fairly typical looking crm plugin, and examine how to implement a unit test with the least possible effort. Reduced Effort == Reduced Person Hours == Reduced Cost.&lt;/p&gt;
+
+&lt;p&gt;Remember, this is Unit Testing, not Integration testing - so at test time - there is no CRM!&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

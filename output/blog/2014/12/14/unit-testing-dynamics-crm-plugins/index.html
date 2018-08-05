@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# website: http://ogp.me/ns/website#">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="description" content="">
+    <meta property="og:title" content="Unit Testing Dynamics CRM Plugins">
+    
+
+  
+  
+  <meta name="twitter:title" content="Unit Testing Dynamics CRM Plugins"/>
+  <meta name="twitter:description" content="There is no Spoon CRM
+
+The purpose of this post will be to look at the code for a fairly typical looking crm plugin, and examine how to implement a unit test with the least possible effort. Reduced Effort == Reduced Person Hours == Reduced Cost.
+
+Remember, this is Unit Testing, not Integration testing - so at test time - there is no CRM!
+
+"/>
+  
+    <meta name="twitter:site" content="@dazinator"/>
+  
+  
+  
+
+    
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2014-12-14">
+    
+    <meta property="og:description" content="">
+    <meta property="og:url" content="http://darrelltunnell.net/blog/2014/12/14/unit-testing-dynamics-crm-plugins/">
+    <meta property="og:site_name" content="Darrell Tunnell">
+    
+    <meta property="og:tags" content="Dynamics CRM">
+    
+    <meta property="og:tags" content="Unit Testing">
+    
+    <meta name="generator" content="Hugo 0.29" />
+    <title>Unit Testing Dynamics CRM Plugins &middot; Darrell Tunnell</title>
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/styles/default.min.css">
+    
+    <link rel="stylesheet" href="http://darrelltunnell.net/css/style.css">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Darrell Tunnell" />
+    
+    
+    <link rel="icon" href="http://darrelltunnell.net/favicon.ico" />
+    
+    <style>
+     
+.highlight pre {
+    word-wrap: normal;
+}
+
+.highlight pre code {
+    white-space: pre;
+}
+
+    </style>
+
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top visible-xs">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			
+				<a class="navbar-brand" href="http://darrelltunnell.net/">Darrell Tunnell</a>
+			
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				
+				
+					<li><a href="http://darrelltunnell.net/">Home</a></li>
+				
+					<li><a href="http://darrelltunnell.net/post/">Posts</a></li>
+				
+					<li><a href="http://darrelltunnell.net/tutorial/">Tutorials</a></li>
+				
+			</ul>
+		</div>
+	</div>
+</nav>
+<div class="container-fluid">
+	<div class="row">
+		<div id="menu" class="hidden-xs col-sm-4 col-md-3">
+	<div id="menu-content" class="vertical-align">
+		
+			<h1 class="text-center"><a href="http://darrelltunnell.net/">Darrell Tunnell</a></h1>
+		
+		
+		
+			<small class="text-center center-block">Radiating Awesomeness, One Blog Post at a Time.</small>
+		
+		
+		
+			<img id="profile-pic" src="http://darrelltunnell.net//img/profile.jpg" alt="My Picture" class="img-circle center-block">
+		
+		<div id="social" class="text-center">
+			
+				<a href="https://github.com/dazinator"><i class="fa fa-github fa-2x"></i></a>
+			
+				<a href="https://twitter.com/dazinate"><i class="fa fa-twitter fa-2x"></i></a>
+			
+				<a href="https://uk.linkedin.com/in/darrell-tunnell-33845331"><i class="fa fa-linkedin fa-2x"></i></a>
+			
+				<a href="http://darrelltunnell.net/index.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+			
+
+			<a href="mailto:darrelltunnell@gmail.com"><i class="fa fa-envelope-o fa-2x"></i></a>
+		</div>
+		<div id="links" class="text-center">
+			
+			
+				<a href="http://darrelltunnell.net/">Home</a>
+			
+				<a href="http://darrelltunnell.net/post/">Posts</a>
+			
+				<a href="http://darrelltunnell.net/tutorial/">Tutorials</a>
+			
+		</div>
+	</div>
+</div>
+
+		<div id="content" class="col-xs-12 col-sm-8 col-md-9">
+			<div class="row">
+				<div id="post" class="col-sm-offset-1 col-sm-10 col-md-10 col-lg-8">
+
+<main>
+	<header>
+		<h1>Unit Testing Dynamics CRM Plugins</h1>
+	</header>
+
+	<article>
+		<h3 id="there-is-no-spoon-crm">There is no <del>Spoon</del> CRM</h3>
+
+<p>The purpose of this post will be to look at the code for a fairly typical looking crm plugin, and examine how to implement a unit test with the least possible effort. Reduced Effort == Reduced Person Hours == Reduced Cost.</p>
+
+<p>Remember, this is Unit Testing, not Integration testing - so at test time - there is no CRM!</p>
+
+<p></p>
+
+<h3 id="a-plugin-and-it-s-requirements">A plugin - and it&rsquo;s requirements</h3>
+
+<p>Firstly, let&rsquo;s look at a plugin that we will call the <code>ReclaimCreditPlugin</code>. Here are the requirements:</p>
+
+<ul>
+<li>It must run only within a transaction with the database.</li>
+<li>When a Contact entity is Updated, if the contact has a parent account, and that parent account is &ldquo;on hold&rdquo; then set the &ldquo;taketheirshoes&rdquo; flag on the contact record to true.</li>
+</ul>
+
+<h3 id="developer-jon-doe">Developer Jon Doe</h3>
+
+<p>Jon Doe immediately gets to work on writing the plugin for those requirements. He produces the following plugin:</p>
+
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span>    public class ReclaimCreditPlugin : IPlugin
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>    {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>        public void Execute(IServiceProvider serviceProvider)
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>        {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>            var executionContext = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>            // 1. We must run only within a transaction
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>            if (!executionContext.IsInTransaction)
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">11</span>            {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">12</span>                throw new InvalidPluginExecutionException(&#34;The plugin detected that it was not running within a database transaction. The plugin requires a database transaction.&#34;);
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">13</span>            }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">14</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">15</span>            // 2. Get the contact, check its parent account.
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">16</span>            if (executionContext.InputParameters.Contains(&#34;Target&#34;) &amp;&amp; executionContext.InputParameters[&#34;Target&#34;] is Entity)
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">17</span>            {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">18</span>                // Obtain the target entity from the input parameters.
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">19</span>                var contactEntity = (Entity)executionContext.InputParameters[&#34;Target&#34;];
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">20</span>                // Get the parent account id.
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">21</span>                var parentAccountId = (EntityReference)contactEntity[&#34;parentaccountid&#34;];
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">22</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">23</span>                // Get the parent account entity.
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">24</span>                var orgServiceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">25</span>                var orgService = orgServiceFactory.CreateOrganizationService(executionContext.UserId);
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">26</span>                var parentAccountEntity = orgService.Retrieve(&#34;account&#34;, parentAccountId.Id, new ColumnSet(&#34;creditonhold&#34;));
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">27</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">28</span>                var accountOnHold = (bool)parentAccountEntity[&#34;creditonhold&#34;];
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">29</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">30</span>                if (accountOnHold)
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">31</span>                {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">32</span>                    contactEntity[&#34;taketheirshoes&#34;] = true;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">33</span>                    var tracingService = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">34</span>                    tracingService.Trace(&#34;Have indicated that we should take the shoes from contact: {0}&#34;, contactEntity.Id.ToString());
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">35</span>                }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">36</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">37</span>            }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">38</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">39</span>        }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">40</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">41</span>    }</code></pre>
+</div>
+
+<h4 id="good-job">Good Job?</h4>
+
+<p>Take a moment to peer review the above code. Would you vindicate Jon Doe&rsquo;s effort? It seems it has all the required logic in all the required places. It appears he has covered the list of requirements. Although Jon doesn&rsquo;t check to make sure the current entity being updated is definately a contact entity.. But within the confines of this blog post we will assume that there is no possible danger that the plugin could ever be registered against the wrong entity.</p>
+
+<p>So.. does it actually work?</p>
+
+<h3 id="does-it-work">Does it work?</h3>
+
+<p>Assuming you want to start haemorrhaging people&rsquo;s time accross the organisation, one way to find out if this code works is to immediately go through the process of deploying it to a QA environment, getting someone to test it manually, and then repeating that cycle of Dev &ndash;&gt; Deployment &ndash;&gt; QA as often as necessary, until the tester gives the thumbs up.</p>
+
+<p>If you want to go that route, feel free to skip the rest of this article. Otherwise read on, where sanity awaits!</p>
+
+<h3 id="show-me-a-unit-test-already">Show me a Unit Test Already!</h3>
+
+<p>Bad news for you. I could.. but I won&rsquo;t.</p>
+
+<h3 id="why-won-t-you-show-me-a-unit-test">Why won&rsquo;t you show me a unit test?</h3>
+
+<p>In short, because I value my time. Just look at that code again for crying out loud! It&rsquo;s littered with dependencies on things that are only provided at runtime by Dynamics CRM - things like:</p>
+
+<ul>
+<li>IServiceProvider</li>
+<li>IPluginExecutionContext</li>
+<li>IOrganizationServiceFactory</li>
+<li>IOrganizationService</li>
+<li>ITracingService</li>
+</ul>
+
+<p><strong>WHAT THE HELL ARE ANY OF THESE THINGS TO DO WITH THE ACTUAL REQUIREMENTS THAT I <em>NEED</em> TO TEST???</strong></p>
+
+<p>Listen.. I read those requirements for this plugin. I read them atleast one thousand times. And I wrote them in fact. Here they are again:</p>
+
+<blockquote>
+<ul>
+<li>It must run only within a transaction with the database.</li>
+<li>When a Contact entity is Updated, if the contact has a parent account, and that parent account is &ldquo;on hold&rdquo; then set the &ldquo;taketheirshoes&rdquo; flag on the contact record to true.</li>
+</ul>
+</blockquote>
+
+<p>So with that in mind, can you please show me the requirement dictating: <code>When a contact is updated, it is of upmost importance to us as a business that it looks at the</code>IPluginExecutionContext<code>and grabs the</code>IOrganizationServiceFactory.`</p>
+
+<p>Or please show me where the requirements state: <code>When a contact is updated, the plugin absolutely must interact with the</code>IServiceProvider` because otherwise you know.. Our business just won&rsquo;t function anymore.</p>
+
+<p>No my friends. The requirements do not say <em>any of that</em>. I am in the business of testing against the requirements.</p>
+
+<h4 id="why-is-that-a-problem">Why is that a problem?</h4>
+
+<p>The problem is not obvious at first glance. It is definately technically possible to mock / fake all of those services at unit test time. You can use something like RhinoMocks or another Mocking library to mock out <code>IServiceProvider</code> for the purposes of your test. You would then have to mock out all the calls to <code>IServiceProvider</code> that are made, so that it returns your other &lsquo;mocked&rsquo; services like a mock &lsquo;IPluginExecutionContext&rsquo; etc etc - and down the rabbit hole you go.</p>
+
+<p>The problem, is about <em>effort</em>. This approach, although technically possible, requires significant <em>effort</em>. You would have to mock a tonne of runtime services and interactions. We have to ask ourselves, is all that effort really necessary? Sometimes it may be, but most of the time, it isn&rsquo;t. In this instance it definately isn&rsquo;t and I will explain why.</p>
+
+<h3 id="let-s-use-the-requirements-to-write-the-plugin-in-pseudo-code">Let&rsquo;s use the requirements to write the plugin, in pseudo code.</h3>
+
+<p>With those requirements - forget everything you know about Dynamics Crm and write your ideal pseudo code that would implement those requirements. This is the actual logic we care about testing.</p>
+
+<p>PSEUDO CODE:</p>
+
+<p><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span>if (!IsRunningInTransaction)
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>{
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>	Throw &#34;Plugin requires a transaction.&#34;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>}
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>If (IsUpdateOf(&#34;contact&#34;))
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>{
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>var contact = GetTargetEntity();
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>var account = GetAccountForContact(contact);
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">11</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">12</span>var isOnHold = (bool)account[&#34;creditonhold&#34;];
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">13</span>if(isOnHold)
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">14</span>{
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">15</span> 	contact[&#34;taketheirshoes&#34;] = true;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">16</span>}</code></pre>
+</div></p>
+
+<h3 id="look-at-that-pseudo-code-do-you-see-any-runtime-services">Look at that Pseudo Code -  Do you see <em>any</em> runtime services?</h3>
+
+<p>Notice how it contains only the logic we really care about testing - the logic as described by the requirements. It doesn&rsquo;t contain needless fluff. No <code>IServiceProvider</code>, No <code>IPluginExecutionContext</code>. It looks very simple, very basic. If we could actually write a CRM plugin like this, it would be about 1.5 million times easier to test. Well we can.</p>
+
+<h3 id="isolating-out-dependencies-is-the-key-to-unit-testing">Isolating out dependencies is the key to unit testing.</h3>
+
+<p>Yes it&rsquo;s true folks you heard it here first. The less dependencies you utilise directly in your methods, the easier they are to unit test.</p>
+
+<p>With this principle in mind, let&rsquo;s revisit our plugin and refactor it to remove some dependencies.</p>
+
+<h3 id="new-and-improved-plugin">New and Improved Plugin</h3>
+
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span> public class ReclaimCreditPlugin2 : IPlugin
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>    {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>        private IServiceProvider _ServiceProvider;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>        public void Execute(IServiceProvider serviceProvider)
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>        {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>            _ServiceProvider = serviceProvider;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>            Execute();
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>        }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">11</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">12</span>        /// &lt;summary&gt;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">13</span>        /// This is the method containing the business logic that we want to be able to assert at unit test time.
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">14</span>        /// &lt;/summary&gt;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">15</span>        public void Execute()
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">16</span>        {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">17</span>            // 1. We must run only within a transaction
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">18</span>            if (IsInTransaction())
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">19</span>            {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">20</span>                throw new InvalidPluginExecutionException(&#34;The plugin detected that it was not running within a database transaction. The plugin requires a database transaction.&#34;);
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">21</span>            }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">22</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">23</span>            // 2. Get the contact
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">24</span>            var contact = GetTargetEntity();
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">25</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">26</span>            // 3. Get the Parent Account for the contact.
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">27</span>            var parentAccount = GetAccountEntity(contact);
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">28</span>            if (parentAccount == null)
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">29</span>            {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">30</span>                return;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">31</span>            }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">32</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">33</span>            // 4. If credit on hold, set taketheirshoes.
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">34</span>            var accountOnHold = (bool)parentAccount[&#34;creditonhold&#34;];
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">35</span>            if (accountOnHold)
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">36</span>            {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">37</span>                contact[&#34;taketheirshoes&#34;] = true;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">38</span>            }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">39</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">40</span>        }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">41</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">42</span>        /// &lt;summary&gt;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">43</span>        /// Returns the parent account entity for the contact.
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">44</span>        /// &lt;/summary&gt;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">45</span>        /// &lt;param name=&#34;contact&#34;&gt;&lt;/param&gt;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">46</span>        /// &lt;returns&gt;&lt;/returns&gt;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">47</span>        protected virtual Entity GetAccountEntity(Entity contact)
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">48</span>        {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">49</span>            // Get the p[arent account id.
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">50</span>            var parentAccountId = (EntityReference)contact[&#34;parentaccountid&#34;];
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">51</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">52</span>            // Get an instance of the IOrganisationService.
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">53</span>            var orgServiceFactory = (IOrganizationServiceFactory)_ServiceProvider.GetService(typeof(IOrganizationServiceFactory));
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">54</span>            var executionContext = (IPluginExecutionContext)_ServiceProvider.GetService(typeof(IPluginExecutionContext));
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">55</span>            var orgService = orgServiceFactory.CreateOrganizationService(executionContext.UserId);
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">56</span>            
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">57</span>            // Get the account entity, with only the column / attribute that we need.
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">58</span>            var parentAccountEntity = orgService.Retrieve(&#34;account&#34;, parentAccountId.Id, new ColumnSet(&#34;creditonhold&#34;));
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">59</span>            return parentAccountEntity;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">60</span>        }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">61</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">62</span>        /// &lt;summary&gt;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">63</span>        /// Returns the current &#34;Target&#34; entity that the plugin is executing against.
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">64</span>        /// &lt;/summary&gt;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">65</span>        /// &lt;returns&gt;&lt;/returns&gt;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">66</span>        protected virtual Entity GetTargetEntity()
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">67</span>        {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">68</span>            var context = (IPluginExecutionContext)_ServiceProvider.GetService(typeof(IPluginExecutionContext));
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">69</span>            if (context.InputParameters.Contains(&#34;Target&#34;) &amp;&amp; context.InputParameters[&#34;Target&#34;] is Entity)
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">70</span>            {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">71</span>                var contactEntity = (Entity)context.InputParameters[&#34;Target&#34;];
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">72</span>                return contactEntity;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">73</span>            }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">74</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">75</span>            return null;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">76</span>        }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">77</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">78</span>        /// &lt;summary&gt;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">79</span>        /// Returns whether the plugin is currently enrolled within a database transaction.
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">80</span>        /// &lt;/summary&gt;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">81</span>        /// &lt;returns&gt;&lt;/returns&gt;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">82</span>        protected virtual bool IsInTransaction()
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">83</span>        {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">84</span>            var context = (IPluginExecutionContext)_ServiceProvider.GetService(typeof(IPluginExecutionContext));
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">85</span>            return context.IsInTransaction;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">86</span>        }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">87</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">88</span>    }</code></pre>
+</div>
+
+<h3 id="what-just-happened">What just happened?</h3>
+
+<p>I applied a technique called the <a href="http://taswar.zeytinsoft.com/2009/03/08/extract-and-override-refactoring-technique/">Extract and Override</a> technique, to remove the concrete references to all of those CRM runtime only services from within the Execute method, and instead they are now referenced within virtual methods which can be overriden at unit test time.</p>
+
+<p>For example rather than having the following code directly within the execute method:</p>
+
+<p><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span>  var executionContext = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">2</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">3</span>            // 1. We must run only within a transaction
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">4</span>            if (!executionContext.IsInTransaction)
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">5</span>            {</code></pre>
+</div></p>
+
+<p>It has been replaced by a call to virtual method:</p>
+
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">1</span>  	        if (IsInTransaction())
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">2</span>            {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">3</span>            
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">4</span>            }</code></pre>
+</div>
+
+<p>Because the interactions with the various CRM runtime Services now occur within Virtual methods, we no longer need to mock them up at unit test time. Say goodbye to having to mockup <code>IPluginExecutionContext</code>, <code>IServiceProvider</code> or <em>any</em> of the Crm runtime services. All we need to do now is just override the various virtual methods that our Execute() method calls, and return appropriate values at test time.</p>
+
+<h3 id="ok-so-now-will-you-show-me-a-unit-test">Ok so - Now will you show me a Unit Test??</h3>
+
+<p>Certainly Sir / Madame. Now that I can write one within a few minutes as opposed to a few hours, your wish is my command:-</p>
+
+<p>For the purpose of our unit tests all we do, is create a class that derives from our original plugin class, but overrides the various virtual methods to provide different values at test time.</p>
+
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span> public class UnitTestableReclaimCreditPlugin : ReclaimCreditPlugin2
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>    {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>        public UnitTestableReclaimCreditPlugin()
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>        {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>            AccountIsOnHold = false;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>            IsRunningInTransaction = false;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>            ContactEntity = new Entity(&#34;contact&#34;);
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>        }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">11</span>        protected override Entity GetTargetEntity()
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">12</span>        {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">13</span>            ContactEntity[&#34;parentaccountid&#34;] = new EntityReference(&#34;account&#34;, Guid.NewGuid());
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">14</span>            return ContactEntity;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">15</span>        }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">16</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">17</span>        protected override Entity GetAccountEntity(Entity contact)
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">18</span>        {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">19</span>            var accountEntity = new Entity(&#34;account&#34;);
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">20</span>            accountEntity[&#34;creditonhold&#34;] = AccountIsOnHold;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">21</span>            return accountEntity;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">22</span>        }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">23</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">24</span>        protected override bool IsInTransaction()
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">25</span>        {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">26</span>            return IsRunningInTransaction;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">27</span>        }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">28</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">29</span>        public bool AccountIsOnHold { get; set; }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">30</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">31</span>        public bool IsRunningInTransaction { get; set; }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">32</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">33</span>        public Entity ContactEntity { get; set; }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">34</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">35</span>    }</code></pre>
+</div>
+
+<h3 id="and-here-are-the-unit-tests">And here are the Unit Tests</h3>
+
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 1</span>    [TestFixture]
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 2</span>    public class ReclaimCreditPluginUnitTests
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 3</span>    {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 4</span>        public ReclaimCreditPluginUnitTests()
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 5</span>        {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 6</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 7</span>        }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 8</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;"> 9</span>        [ExpectedException(typeof(InvalidPluginExecutionException),
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">10</span>            ExpectedMessage = &#34;The plugin detected that it was not running within a database transaction&#34;,
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">11</span>            MatchType = MessageMatch.Contains)]
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">12</span>        public void Should_Only_Run_Within_Transaction()
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">13</span>        {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">14</span>            // arrange
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">15</span>            var sut = new UnitTestableReclaimCreditPlugin();
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">16</span>            sut.IsRunningInTransaction = false;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">17</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">18</span>            // act 
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">19</span>            sut.Execute();
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">20</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">21</span>        }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">22</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">23</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">24</span>        public void Should_Take_Shoes_When_Credit_On_Hold()
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">25</span>        {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">26</span>            // arrange
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">27</span>            var sut = new UnitTestableReclaimCreditPlugin();
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">28</span>            sut.IsRunningInTransaction = true;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">29</span>            sut.AccountIsOnHold = true;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">30</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">31</span>            // act 
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">32</span>            sut.Execute();
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">33</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">34</span>            //assert
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">35</span>            Assert.That(sut.ContactEntity[&#34;taketheirshoes&#34;], Is.EqualTo(true));
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">36</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">37</span>        }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">38</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">39</span>        public void Should_Not_Take_Shoes_When_Credit_Not_On_Hold()
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">40</span>        {
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">41</span>            // arrange
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">42</span>            var sut = new UnitTestableReclaimCreditPlugin();
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">43</span>            sut.IsRunningInTransaction = true;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">44</span>            sut.AccountIsOnHold = false;
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">45</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">46</span>            // act 
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">47</span>            sut.Execute();
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">48</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">49</span>            //assert
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">50</span>            Assert.That(sut.ContactEntity[&#34;taketheirshoes&#34;], Is.Not.EqualTo(true));
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">51</span>
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">52</span>        }
+<span style="color:#727272;margin-right:0.4em;padding:00.4em00.4em;">53</span>    }</code></pre>
+</div>
+
+<h3 id="wrapping-up">Wrapping Up</h3>
+
+<p>I hope I have demonstrated a simple plugin, with a simple set of unit tests. More importantly, I hope I have demonstrated that although it may be technically possible to write a unit test for an exising plugin,  by mocking up every CRM runtime service and interaction that the plugin makes,just because such a thing is possible, doesn&rsquo;t mean you should just do it. First the work has to be justified. To justify just what is necessary, examine the requirements, examine the plugin code, and be absolutely clear on what it is you want to cover in your unit tests. With that in mind, refactor the plugin code to eliminate fluff (extraneoues concrete references to dependencies that are surplus to the requirements that you want to test). Use techniques like the <code>Extract and Override</code> technique to allow you to substitute these dependencies easily at test time. When you do this, you may be surprised at how much simpler it becomes to write unit tests. I would aslo reccommend reading a book on unit testing, I found <a href="http://artofunittesting.com/">The Art of Unit Testing</a> very educational on this topic.</p>
+	</article>
+</main>
+
+ <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Unit%20Testing%20Dynamics%20CRM%20Plugins&url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2014%2f12%2f14%2funit-testing-dynamics-crm-plugins%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+
+        
+            <a class="icon-google-plus" href="https://plus.google.com/share?url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2014%2f12%2f14%2funit-testing-dynamics-crm-plugins%2f"
+              onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+              <i class="fa fa-google-plus"></i>
+                <span class="hidden">Google+</span>
+            </a>
+        
+        
+            <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&title=Unit%20Testing%20Dynamics%20CRM%20Plugins&url=http%3a%2f%2fdarrelltunnell.net%2fblog%2f2014%2f12%2f14%2funit-testing-dynamics-crm-plugins%2f&summary="
+               onclick="window.open(this.href, 'linkedin-share', 'width=554,height=481');return false;">
+               <i class="fa fa-linkedin"></i>
+               <span class="hidden">LinkedIn</span>
+            </a>
+        
+    </div>
+
+<div id="bottom-nav" class="text-center center-block">
+	<a href=" http://darrelltunnell.net/" class="btn btn-default"><i class="fa fa-home"></i> Home</a>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "darrelltunnellsblog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+    </div>
+  
+ 
+  
+  <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'code-here', 'auto');
+    ga('send', 'pageview');
+    window.baseURL = "http:\/\/darrelltunnell.net\/";
+  </script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+  
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/highlight.min.js"></script>
+  
+  <script src="http://darrelltunnell.net//js/App.js"></script>
+  
+  <script type="text/javascript">   
+  $(document).ready(function () {
+	$( ".highlighttable" ).wrap("<div class='table-responsive'></div>");
+  $( "img" ).addClass("img-responsive");
+});
+</script>
+    
+</body>
+</html>

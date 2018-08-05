@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Darrell Tunnell</title>
+    <link>http://darrelltunnell.net/post/</link>
+    <description>Recent content in Posts on Darrell Tunnell</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Tue, 24 Jan 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://darrelltunnell.net/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>CSLA and ASP.NET Core</title>
+      <link>http://darrelltunnell.net/blog/2017/01/24/csla-and-asp.net-core/</link>
+      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2017/01/24/csla-and-asp.net-core/</guid>
+      <description>&lt;p&gt;I am a fan of CSLA and I recently came accross a need to make a shiny CSLA business layer work nicely within the context of an ASP.NET Core application.
+This post is aimed at CSLA developers with a similar need.
+As of the &lt;a href=&#34;https://www.nuget.org/packages/CSLA-Core/4.6.500&#34;&gt;current release&lt;/a&gt;, there are a few things that you will need to take care of in order to get CSLA working smoothly, and I will cover those in this post.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ASPNET Core TagHelper&#39;s - A Better @addTagHelper type resolver</title>
+      <link>http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelper-s-a-better-addtaghelper-type-resolver/</link>
+      <pubDate>Mon, 25 Jul 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2016/07/25/aspnet-core-taghelper-s-a-better-addtaghelper-type-resolver/</guid>
+      <description>&lt;h3 id=&#34;what-s-this-about&#34;&gt;What&amp;rsquo;s this about?&lt;/h3&gt;
+
+&lt;p&gt;This is about TagHelper&amp;rsquo;s in ASP.NET Core, and how to get more flexible &lt;code&gt;@addTagHelper&lt;/code&gt; directives.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Dnn Extensions - Sources Packages?</title>
+      <link>http://darrelltunnell.net/blog/2016/03/19/dnn-extensions-sources-packages-what-are-they/</link>
+      <pubDate>Sat, 19 Mar 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2016/03/19/dnn-extensions-sources-packages-what-are-they/</guid>
+      <description>&lt;p&gt;I have been doing some work on DnnPackager recently, and I&amp;rsquo;ve come accross the concept of &amp;ldquo;Source&amp;rdquo; packages. I have to admit I am not entirely new to these, but I&amp;rsquo;ve never personally used them for my projects in the past.&lt;/p&gt;
+
+&lt;p&gt;Source packages are basically identical to the ordinary install zip&amp;rsquo;s for your dnn module / extension, i.e you &amp;ldquo;install&amp;rdquo; them into your Dnn site like any other install package, except that they also include &amp;ldquo;source code&amp;rdquo; files within them, like .cs, .vb files etc.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>DnnPackager - v2.0.6</title>
+      <link>http://darrelltunnell.net/blog/2016/03/19/dnnpackager-v2-0-6/</link>
+      <pubDate>Sat, 19 Mar 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2016/03/19/dnnpackager-v2-0-6/</guid>
+      <description>&lt;h3 id=&#34;dnnpackager-release-v2-0-6&#34;&gt;DnnPackager Release -v2.0.6&lt;/h3&gt;
+
+&lt;p&gt;A short post to announce that a new minor release of DnnPackager is out.&lt;/p&gt;
+
+&lt;p&gt;You can find the release notes here explaining what&amp;rsquo;s new: &lt;a href=&#34;https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2&#34;&gt;https://github.com/dazinator/DnnPackager/releases/tag/2.0.6%2B2&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;For an introduction to DnnPackager in general &lt;a href=&#34;http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/&#34;&gt;see here&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Special thanks to &lt;a href=&#34;https://github.com/nvisionative&#34;&gt;@nvisionative&lt;/a&gt; for requesting this feature.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</title>
+      <link>http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/</link>
+      <pubDate>Sun, 24 Jan 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;This post is part two of a series. For part one see &lt;a href=&#34;http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/&#34;&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;part-2-replacing-bower-with-jspm&#34;&gt;Part 2 - Replacing Bower with JSPM&lt;/h3&gt;
+
+&lt;p&gt;In &lt;a href=&#34;http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc&#34;&gt;part 1 of this series&lt;/a&gt; we created a shiny new ASP.NET 5 project, and I introduced some fundamentals.&lt;/p&gt;
+
+&lt;p&gt;For reasons discussed in &lt;a href=&#34;http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc&#34;&gt;part 1&lt;/a&gt;, let&amp;rsquo;s now go ahead with our first task, which is to ditch Bower in favour of JSPM as our javascript package manager.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Imagining a DotNetNuke Project Type for Visual Studio</title>
+      <link>http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio/</link>
+      <pubDate>Sun, 17 Jan 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio/</guid>
+      <description>&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;When developing DotNetNuke extensions, we typically use one of the existing Visual Studio Project Type&amp;rsquo;s, for example - an ASP.NET Web Application project.&lt;/p&gt;
+
+&lt;p&gt;Even when using a Project Template such as Christoc&amp;rsquo;s, the project template is still based upon one of the standard Visual Studio project types - usually an ASP.NET Web Application project.&lt;/p&gt;
+
+&lt;p&gt;However these Project Types do not &amp;ldquo;gel&amp;rdquo; well with DotNetNuke development in a number of areas, the main ones being:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Running the project in VS (clicking play) - wants to run the extensions as a Web Application, but this makes no sense for a Dnn extension - which has to be hosted by the DotNetNuke website.&lt;/li&gt;
+&lt;li&gt;Deploying the extension - there is no support for that in the project system - you have to manually deploy your extensions to the Dnn instance.&lt;/li&gt;
+&lt;li&gt;Debugging the extension - you have to manually attach to process.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;So.. what if there was a new Project Type, one that was purpose built for DotNetNuke development? What would that look like?&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>DnnPackager Getting Started</title>
+      <link>http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/</link>
+      <pubDate>Tue, 01 Dec 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/</guid>
+      <description>&lt;h3 id=&#34;dnn-packager-super-smooth-module-development&#34;&gt;Dnn Packager - Super Smooth Module Development&lt;/h3&gt;
+
+&lt;p&gt;In this post, I am going to show you how to get up and running with DnnPackager for your DotNetNuke module / extension development.&lt;/p&gt;
+
+&lt;h3 id=&#34;tools-of-the-trade&#34;&gt;Tools of the Trade&lt;/h3&gt;
+
+&lt;p&gt;I am using VS2015 Community Edition, but this should work equally well with previous versions.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>automating-android-unit-test-apps-xamarin-like-a-pro</title>
+      <link>http://darrelltunnell.net/blog/2015/11/04/automating-android-unit-test-apps-xamarin-like-a-pro/</link>
+      <pubDate>Wed, 04 Nov 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2015/11/04/automating-android-unit-test-apps-xamarin-like-a-pro/</guid>
+      <description>&lt;h3 id=&#34;first-off&#34;&gt;First Off..&lt;/h3&gt;
+
+&lt;p&gt;This article is for those of you out there who use Xamarin to write Android applications and want to automate the process of running your tests on an Android device. I&amp;rsquo;ll show you how you can set this up with relative ease.&lt;/p&gt;
+
+&lt;p&gt;Here is the process we want:&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia</title>
+      <link>http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/</link>
+      <pubDate>Sun, 16 Aug 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;This post is part 1 of a series. Part 2 is &lt;a href=&#34;http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/&#34;&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;asp-a-sea-of-packages-net-5&#34;&gt;ASP (A Sea of Packages).NET 5&lt;/h3&gt;
+
+&lt;p&gt;When you create a new ASP.NET 5 project, you will see all sorts of new-ness. I am going to guide you, the uninitiated ASP.NET 5 web developer, through creating your first ASP.NET 5 MVC application, but we won&amp;rsquo;t stop there. In the next post of this series, we will then enhance the project with a number of features:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Bundling and Minification.&lt;/li&gt;
+&lt;li&gt;Auto browser refresh (as you make changes to files during development)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;In addition, I will touch upon important tooling that you need to be aware of:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;NPM&lt;/li&gt;
+&lt;li&gt;Bower and why we are going to replace it with Jspm&lt;/li&gt;
+&lt;li&gt;Gulp - and why is it useful&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;To be able to do all of this, we will be creating an ASP.NET MVC 5 project, and then we will be using &lt;a href=&#34;http://aurelia.io/&#34;&gt;Aurelia&lt;/a&gt; to run an Aurelia application on Home page (Index.cshtml)
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>DotNetNuke - Streamlining Module Development Workflow</title>
+      <link>http://darrelltunnell.net/blog/2015/06/13/automating-dotnetnuke-deployments-with-octopus-deploy/</link>
+      <pubDate>Sat, 13 Jun 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2015/06/13/automating-dotnetnuke-deployments-with-octopus-deploy/</guid>
+      <description>&lt;h3 id=&#34;module-debugging-two-approaches&#34;&gt;Module Debugging - Two Approaches&lt;/h3&gt;
+
+&lt;p&gt;When developing DotNetNuke modules people take many different approaches but they boil down to two alternatives in terms of workflow:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Placing / checking out your source code directly into the \DesktopModules folder of a DotNetNuke website, and having your module dll&amp;rsquo;s output to directly into the DotNetNuke website&amp;rsquo;s \bin folder.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Checking out and working on your code wherever you like, but having to deploy your module (content and assemblies) to a local DNN website when you are ready to run it.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Both approaches require that you &amp;ldquo;attach to process&amp;rdquo; from within Visual Studio in order to debug your module.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Automating DotNetNuke deployments with Octopus Deploy</title>
+      <link>http://darrelltunnell.net/blog/2015/04/29/automating-dotnetnuke-deployments-with-octopus-deploy/</link>
+      <pubDate>Wed, 29 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2015/04/29/automating-dotnetnuke-deployments-with-octopus-deploy/</guid>
+      <description>&lt;h3 id=&#34;automating-dotnetnuke-deployments-using-octopus-deploy&#34;&gt;Automating DotNetNuke Deployments using Octopus Deploy&lt;/h3&gt;
+
+&lt;p&gt;Because I am an awesome dude, i&amp;rsquo;ll share with you how I automate dotnetnuke delivery / deployments. This works. It takes some effort to get this set up though, but it will be well worth it in the end.&lt;/p&gt;
+
+&lt;p&gt;First i&amp;rsquo;ll explain the process for automating the deployment of the DotNetNuke website itself. Then I&amp;rsquo;ll explain how you can automate the deployment of modules / extensions on a continous basis.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>How far does the XRM SDK&#39;s ExecuteMultipleRequest get you?</title>
+      <link>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you/</link>
+      <pubDate>Thu, 26 Feb 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2015/02/26/how-far-does-the-xrm-sdk-s-executemultiplerequest-get-you/</guid>
+      <description>&lt;h3 id=&#34;executemultiplerequest-let-s-take-it-to-the-max&#34;&gt;ExecuteMultipleRequest - Let&amp;rsquo;s take it to the max&lt;/h3&gt;
+
+&lt;p&gt;In this post, I will explore what kinds of things can be achieved using the SDK&amp;rsquo;s ExecuteMultipleRequest, by starting of with a simple SQL command, and implementing a semantically equivalent ExecuteMultipleRequest, and then slowly introducing some additional complexity - so that, we can see some areas where the SDK starts to fall short!&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</title>
+      <link>http://darrelltunnell.net/blog/2015/01/18/asp-net-5-vnext-projects-why-your-nuget-package-may-fail-to-install/</link>
+      <pubDate>Sun, 18 Jan 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2015/01/18/asp-net-5-vnext-projects-why-your-nuget-package-may-fail-to-install/</guid>
+      <description>&lt;h3 id=&#34;don-t-assume-nuget-packages-that-you-have-authored-will-continue-to-work-with-asp-net-5-vnext-projects&#34;&gt;Don&amp;rsquo;t assume NuGet Packages that you have authored will continue to work with ASP.NET 5 (vNext) projects.&lt;/h3&gt;
+
+&lt;p&gt;Over the past year or so, I have authored &lt;a href=&#34;https://www.nuget.org/packages?q=darrell.tunnell&#34;&gt;a number of NuGet packages&lt;/a&gt; - because, well&amp;hellip; I am just an all around great guy.&lt;/p&gt;
+
+&lt;p&gt;Recently, &lt;a href=&#34;http://stackoverflow.com/questions/27762659/error-while-adding-nuget-package-to-asp-net-vnext-project#comment44383264_27762659&#34;&gt;I was contacted by someone&lt;/a&gt; who was trying to use one of my NuGet packages with an ASP.NET vNext project (Preview release). Not something I have tried before - and this is where things get a little interesting.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>CRM / Plugin Generated Values - and Reducing Roundtrips!</title>
+      <link>http://darrelltunnell.net/blog/2014/12/22/crm-plugin-generated-values-and-reducing-roundtrips/</link>
+      <pubDate>Mon, 22 Dec 2014 17:50:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2014/12/22/crm-plugin-generated-values-and-reducing-roundtrips/</guid>
+      <description>&lt;h3 id=&#34;setting-the-scene&#34;&gt;Setting the Scene&lt;/h3&gt;
+
+&lt;p&gt;Imagine we have an application that uses the CRM SDK. It needs to:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Create a new &lt;code&gt;account&lt;/code&gt; entity in crm.&lt;/li&gt;
+&lt;li&gt;Get some value that was just generated as a result of a synchronous plugin that fires on the create. For example, suppose there is a plugin that generates an account reference number.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;the-i-don-t-care-about-network-latency-method&#34;&gt;The &amp;ldquo;I don&amp;rsquo;t care about network latency method!&amp;rdquo;&lt;/h3&gt;
+
+&lt;p&gt;The &amp;lsquo;I don&amp;rsquo;t care about network latency&amp;rsquo; way of dealing with this is to just do 2 seperate Requests (roundtrips) with the CRM server.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Create the new &lt;code&gt;account&lt;/code&gt; which returns you the ID.&lt;/li&gt;
+&lt;li&gt;Retrieve the &lt;code&gt;account&lt;/code&gt; using that ID, along with the values that you need.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;This approach is sub optimal where network latency is a concern, as it incurs the penalty of making two roundtrips accross the network with the server, where 1 is possible.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s now have a look at the &amp;ldquo;I&amp;rsquo;m running on a 56k modem method&amp;rdquo; of doing the same thing!
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Unit Testing Dynamics CRM Plugins</title>
+      <link>http://darrelltunnell.net/blog/2014/12/14/unit-testing-crm-plugins/</link>
+      <pubDate>Sun, 14 Dec 2014 17:50:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2014/12/14/unit-testing-crm-plugins/</guid>
+      <description>&lt;h3 id=&#34;there-is-no-spoon-crm&#34;&gt;There is no &lt;del&gt;Spoon&lt;/del&gt; CRM&lt;/h3&gt;
+
+&lt;p&gt;The purpose of this post will be to look at the code for a fairly typical looking crm plugin, and examine how to implement a unit test with the least possible effort. Reduced Effort == Reduced Person Hours == Reduced Cost.&lt;/p&gt;
+
+&lt;p&gt;Remember, this is Unit Testing, not Integration testing - so at test time - there is no CRM!&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>A Proclamation</title>
+      <link>http://darrelltunnell.net/blog/2014/11/16/a-proclamation/</link>
+      <pubDate>Sun, 16 Nov 2014 16:20:59 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2014/11/16/a-proclamation/</guid>
+      <description>&lt;p&gt;On this day the 16th November 2014, let it be known that Darrell&amp;rsquo;s blog was rendered forth unto the internet.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

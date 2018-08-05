@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jspm on Darrell Tunnell</title>
+    <link>http://darrelltunnell.net/tags/jspm/</link>
+    <description>Recent content in Jspm on Darrell Tunnell</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Sun, 24 Jan 2016 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://darrelltunnell.net/tags/jspm/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</title>
+      <link>http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/</link>
+      <pubDate>Sun, 24 Jan 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;This post is part two of a series. For part one see &lt;a href=&#34;http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/&#34;&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;part-2-replacing-bower-with-jspm&#34;&gt;Part 2 - Replacing Bower with JSPM&lt;/h3&gt;
+
+&lt;p&gt;In &lt;a href=&#34;http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc&#34;&gt;part 1 of this series&lt;/a&gt; we created a shiny new ASP.NET 5 project, and I introduced some fundamentals.&lt;/p&gt;
+
+&lt;p&gt;For reasons discussed in &lt;a href=&#34;http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc&#34;&gt;part 1&lt;/a&gt;, let&amp;rsquo;s now go ahead with our first task, which is to ditch Bower in favour of JSPM as our javascript package manager.
+&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
