@@ -1,0 +1,62 @@
+#recipe Blog
+#n Wyam.Html
+#n Wyam.Highlight
+#n Wyam.Markdown
+#n Wyam.Razor
+
+// Customize your settings and add new ones here
+Settings[Keys.Host] = "darrelltunnell.net";
+Settings[BlogKeys.Title] = "Darrell's Blog";
+Settings[BlogKeys.Description] = "Welcome!";
+Settings[BlogKeys.PostsPath] = "posts";
+Settings[BlogKeys.IndexPageSize] = 5;
+Settings[BlogKeys.IndexFullPosts] = false;
+Settings[BlogKeys.ArchivePageSize] = 10;
+Settings[BlogKeys.ArchiveExcerpts] = true;
+Settings[BlogKeys.IncludeDateInPostPath] = true;
+Settings["TutorialsPath"] = "tutorials";
+
+//Settings[BlogKeys.ValidateRelativeLinks] = true;
+// Settings[BlogKeys.IgnoreFolders] = "tutorials";
+
+
+
+// Add any pipeline customizations here
+//Console.WriteLine(String.Join(",", Pipelines.Keys.ToArray()));
+Pipelines["BlogPosts"].Append(
+  Meta(Keys.RelativeFilePath, (doc, ctx) =>
+  {
+  
+    DateTime? publishedDate = doc.Get<DateTime?>(BlogKeys.Published, DateTime.Now);
+    //Console.WriteLine("publishedDate: " + publishedDate?.ToString() ?? "");
+    
+    string slug = doc.Get<string>("slug", ""); 
+    //Console.WriteLine("front matter slug: " + slug.ToString());
+
+    bool isPublished = doc.Bool("FrontMatterPublished");
+    //Console.WriteLine("front matter published: " + isPublished.ToString());
+    
+    string fileName;
+    if(string.IsNullOrEmpty(slug))
+    {
+       var fileNameWithoutDatePortion = doc.FilePath(Keys.SourceFileName).ChangeExtension("html").FullPath.Substring(11);
+       fileName = fileNameWithoutDatePortion;
+    }
+    else
+    {
+       fileName = new FilePath(slug).AppendExtension("html").FullPath; // doc.FilePath(Keys.SourceFileName). // slug;
+    }
+
+    var newPostsPath = ctx.DirectoryPath(BlogKeys.PostsPath).GetRelativePath((DirectoryPath)"../blog");
+    return $"{newPostsPath.FullPath}/{publishedDate:yyyy}/{publishedDate:MM}/{publishedDate:dd}/{fileName}";
+
+  })); 
+
+
+Pipelines.Add("Tutorials",
+  ReadFiles("tutorials/*.md"),
+  FrontMatter(Yaml()),
+  Markdown(),
+  Razor().IgnorePrefix(null).WithLayout("/_TutorialLayout.cshtml"),
+  WriteFiles(".html")
+);
