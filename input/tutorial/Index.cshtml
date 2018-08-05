@@ -12,7 +12,7 @@ ShowInNavbar: true
 
     var group = Context
         .Documents[Blog.Pages]       
-        .Where(x => x.FilePath(Keys.RelativeFilePath)?.FullPath?.StartsWith("tutorials") == (bool?)true)
+        .Where(x => x.FilePath(Keys.RelativeFilePath)?.FullPath?.StartsWith("tutorial") == (bool?)true)
         .Where(x=>!string.IsNullOrEmpty(x.String("tutorial", "")))
         .OrderBy(x=>x.Get<DateTime?>(BlogKeys.Published, DateTime.Now))
         .GroupBy(x=>x.String("tutorial"), x=> x);
@@ -38,7 +38,7 @@ ShowInNavbar: true
 
     List<Tuple<string, string>> pages = Context
         .Documents[Blog.Pages]       
-        .Where(x => x.FilePath(Keys.RelativeFilePath)?.FullPath?.StartsWith("tutorials") == (bool?)true)
+        .Where(x => x.FilePath(Keys.RelativeFilePath)?.FullPath?.StartsWith("tutorial") == (bool?)true)
         .Select(x => Tuple.Create(x.WithoutSettings.String(Keys.Title), Context.GetLink(x)))
         .Where(x => !string.IsNullOrEmpty(x.Item1))
         .OrderBy(x => x.Item1)

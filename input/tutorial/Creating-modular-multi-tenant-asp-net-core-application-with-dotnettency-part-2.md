@@ -1,5 +1,6 @@
 ---
 title: "Modular Multi-tenant ASP.NET Core Application with Dotnettency - Part 2"
+slug: "creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-2"
 date: 2017-08-07T06:20:44+01:00
 published: 2017-08-07T06:20:44+01:00
 tags: 

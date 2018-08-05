@@ -14,7 +14,7 @@ Settings[BlogKeys.IndexFullPosts] = false;
 Settings[BlogKeys.ArchivePageSize] = 10;
 Settings[BlogKeys.ArchiveExcerpts] = true;
 Settings[BlogKeys.IncludeDateInPostPath] = true;
-Settings["TutorialsPath"] = "tutorials";
+Settings["TutorialsPath"] = "tutorial";
 
 //Settings[BlogKeys.ValidateRelativeLinks] = true;
 // Settings[BlogKeys.IgnoreFolders] = "tutorials";
@@ -31,7 +31,7 @@ Pipelines["BlogPosts"].Append(
     //Console.WriteLine("publishedDate: " + publishedDate?.ToString() ?? "");
     
     string slug = doc.Get<string>("slug", ""); 
-    //Console.WriteLine("front matter slug: " + slug.ToString());
+    Console.WriteLine("front matter slug: " + slug.ToString());
 
     bool isPublished = doc.Bool("FrontMatterPublished");
     //Console.WriteLine("front matter published: " + isPublished.ToString());
@@ -54,9 +54,10 @@ Pipelines["BlogPosts"].Append(
 
 
 Pipelines.Add("Tutorials",
-  ReadFiles("tutorials/*.md"),
-  FrontMatter(Yaml()),
+  ReadFiles("tutorial/*.md"),
+  FrontMatter(Yaml()),    
   Markdown(),
-  Razor().IgnorePrefix(null).WithLayout("/_TutorialLayout.cshtml"),
+  Razor().IgnorePrefix(null).WithLayout("/_TutorialLayout.cshtml"),  
   WriteFiles(".html")
 );
+
