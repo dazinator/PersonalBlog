@@ -147,7 +147,7 @@ Published on 24 January 2016<br>    </div>
                                 <div id="content" class="col-md-12">
                                         
 
-<p><strong>This post is part two of a series. For part one see <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/">here</a></strong></p>
+<p><strong>This post is part two of a series. For part one see <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc">here</a></strong></p>
 <h3 id="part-2-replacing-bower-with-jspm">Part 2 - Replacing Bower with JSPM</h3>
 <p>In <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc">part 1 of this series</a> we created a shiny new ASP.NET 5 project, and I introduced some fundamentals.</p>
 <p>For reasons discussed in <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc">part 1</a>, let's now go ahead with our first task, which is to ditch Bower in favour of JSPM as our javascript package manager.</p>
@@ -289,6 +289,7 @@ import bootstrap from 'bootstrap';
 <p>Now go back to your <code>site.js</code> file, and add an import for the bootstrap.css. It should now look like this:</p>
 <pre><code class="language-js">import $ from 'jquery';
 import bootstrap from 'bootstrap';
+import 'bootstrap/css/bootstrap.css!';
 </code></pre>
 <p>Lastly, in <code>_Layout.cshtml</code>, comment out the link to the old - non existent, bootstrap.css file:</p>
 <pre><code class="language-xml">
@@ -346,7 +347,7 @@ import bootstrap from 'bootstrap';
 <p>And now - everything is working!</p>
 <p><img src="/img/jspmallworking.PNG" class="img-fluid" alt="jspmallworking.PNG" /></p>
 <h3 id="recap">Recap</h3>
-<p>In this blog post, we took an out of the box ASP.NET 5 MVC application that we created in <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/">part 1</a>, and replaced <code>Bower</code> with <code>JSPM</code>. We changed the way our application resolves it's javascript and css files, to use a <code>module loader</code> instead.</p>
+<p>In this blog post, we took an out of the box ASP.NET 5 MVC application that we created in <a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc">part 1</a>, and replaced <code>Bower</code> with <code>JSPM</code>. We changed the way our application resolves it's javascript and css files, to use a <code>module loader</code> instead.</p>
 <p>We also saw that using the module loader to load CSS currently results in a &quot;flash of unstyled content&quot; issue, and so if that's an issue for your application then it's probably best to stick to directly linking to your css files as before, for the time being. That's a decision for you to make!</p>
 <p>In the next blog post/s in this series, I will attempt to cover:</p>
 <ol>

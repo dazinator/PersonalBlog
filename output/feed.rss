@@ -5,8 +5,8 @@
 		<link>http://darrelltunnell.net/</link>
 		<description>Welcome!</description>
 		<copyright>2018</copyright>
-		<pubDate>Sun, 05 Aug 2018 21:30:18 GMT</pubDate>
-		<lastBuildDate>Sun, 05 Aug 2018 21:30:18 GMT</lastBuildDate>
+		<pubDate>Fri, 10 Aug 2018 00:03:44 GMT</pubDate>
+		<lastBuildDate>Fri, 10 Aug 2018 00:03:44 GMT</lastBuildDate>
 		<item>
 			<title>CSLA and ASP.NET Core</title>
 			<link>http://darrelltunnell.net/blog/2017/01/24/csla-and-asp.net-core</link>
@@ -535,13 +535,13 @@ solution/projectB/projectB.csproj
 		<item>
 			<title>ASP.NET 5 Projects - NuGet-NPM-Gulp-Bower-Jspm-Aurelia-Part2</title>
 			<link>http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2</link>
-			<description>&lt;p&gt;&lt;strong&gt;This post is part two of a series. For part one see &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/"&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+			<description>&lt;p&gt;&lt;strong&gt;This post is part two of a series. For part one see &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc"&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;In &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc"&gt;part 1 of this series&lt;/a&gt; we created a shiny new ASP.NET 5 project, and I introduced some fundamentals.&lt;/p&gt;
 &lt;p&gt;For reasons discussed in &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc"&gt;part 1&lt;/a&gt;, let's now go ahead with our first task, which is to ditch Bower in favour of JSPM as our javascript package manager.&lt;/p&gt;</description>
 			<guid>http://darrelltunnell.net/blog/2016/01/24/aurelia-and-asp-net-5-mvc-part2</guid>
 			<pubDate>Sun, 24 Jan 2016 17:50:00 GMT</pubDate>
-			<content:encoded>&lt;p&gt;&lt;strong&gt;This post is part two of a series. For part one see &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/"&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+			<content:encoded>&lt;p&gt;&lt;strong&gt;This post is part two of a series. For part one see &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc"&gt;here&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;h3 id="part-2-replacing-bower-with-jspm"&gt;Part 2 - Replacing Bower with JSPM&lt;/h3&gt;
 &lt;p&gt;In &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc"&gt;part 1 of this series&lt;/a&gt; we created a shiny new ASP.NET 5 project, and I introduced some fundamentals.&lt;/p&gt;
 &lt;p&gt;For reasons discussed in &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc"&gt;part 1&lt;/a&gt;, let's now go ahead with our first task, which is to ditch Bower in favour of JSPM as our javascript package manager.&lt;/p&gt;
@@ -683,6 +683,7 @@ import bootstrap from 'bootstrap';
 &lt;p&gt;Now go back to your &lt;code&gt;site.js&lt;/code&gt; file, and add an import for the bootstrap.css. It should now look like this:&lt;/p&gt;
 &lt;pre&gt;&lt;code class="language-js"&gt;import $ from 'jquery';
 import bootstrap from 'bootstrap';
+import 'bootstrap/css/bootstrap.css!';
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Lastly, in &lt;code&gt;_Layout.cshtml&lt;/code&gt;, comment out the link to the old - non existent, bootstrap.css file:&lt;/p&gt;
 &lt;pre&gt;&lt;code class="language-xml"&gt;
@@ -740,7 +741,7 @@ import bootstrap from 'bootstrap';
 &lt;p&gt;And now - everything is working!&lt;/p&gt;
 &lt;p&gt;&lt;img src="/img/jspmallworking.PNG" class="img-fluid" alt="jspmallworking.PNG" /&gt;&lt;/p&gt;
 &lt;h3 id="recap"&gt;Recap&lt;/h3&gt;
-&lt;p&gt;In this blog post, we took an out of the box ASP.NET 5 MVC application that we created in &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc/"&gt;part 1&lt;/a&gt;, and replaced &lt;code&gt;Bower&lt;/code&gt; with &lt;code&gt;JSPM&lt;/code&gt;. We changed the way our application resolves it's javascript and css files, to use a &lt;code&gt;module loader&lt;/code&gt; instead.&lt;/p&gt;
+&lt;p&gt;In this blog post, we took an out of the box ASP.NET 5 MVC application that we created in &lt;a href="http://darrelltunnell.net/blog/2015/08/16/aurelia-and-asp-net-5-mvc"&gt;part 1&lt;/a&gt;, and replaced &lt;code&gt;Bower&lt;/code&gt; with &lt;code&gt;JSPM&lt;/code&gt;. We changed the way our application resolves it's javascript and css files, to use a &lt;code&gt;module loader&lt;/code&gt; instead.&lt;/p&gt;
 &lt;p&gt;We also saw that using the module loader to load CSS currently results in a &amp;quot;flash of unstyled content&amp;quot; issue, and so if that's an issue for your application then it's probably best to stick to directly linking to your css files as before, for the time being. That's a decision for you to make!&lt;/p&gt;
 &lt;p&gt;In the next blog post/s in this series, I will attempt to cover:&lt;/p&gt;
 &lt;ol&gt;
