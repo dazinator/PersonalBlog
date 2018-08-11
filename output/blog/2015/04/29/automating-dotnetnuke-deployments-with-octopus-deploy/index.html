@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
 
-        <title>Darrell&#x27;s Blog - All Tags</title>
+        <title>Darrell&#x27;s Blog - Automating DotNetNuke deployments with Octopus Deploy</title>
         <meta name="description" content="Welcome!" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">        
 
@@ -28,9 +28,9 @@
         <meta name="msapplication-tooltip" content="Darrell&#x27;s Blog" />
         <meta name="msapplication-starturl" content="/" />
 
-        <meta property="og:title" content="Darrell&#x27;s Blog - All Tags" />
+        <meta property="og:title" content="Darrell&#x27;s Blog - Automating DotNetNuke deployments with Octopus Deploy" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="http://darrelltunnell.net/_Tags.cshtml" />
+        <meta property="og:url" content="http://darrelltunnell.net/blog/2015/04/29/automating-dotnetnuke-deployments-with-octopus-deploy" />
         <!-- TODO: More social graph meta tags -->
 
         <script src="/assets/js/jquery.min.js"></script>
@@ -124,9 +124,18 @@ button:hover, a:hover {
                         <div class="container">
                                 <div class="row">
                                         <div class="col-md-12">
-<div class="site-heading">
-    <h1>All Tags</h1>
-</div>                                            </div>
+
+    
+<div class="post-heading">
+    <h1>Automating DotNetNuke deployments with Octopus Deploy</h1>
+    <div class="meta">        
+Published on 29 April 2015<br>    </div>
+        <div class="tags">
+                    <a role="button" href="/tags/DotNetNuke" class="btn btn-default btn-xs">DotNetNuke</a>
+                    <a role="button" href="/tags/Octopus" class="btn btn-default btn-xs">Octopus</a>
+        </div>     
+</div>
+                                        </div>
                                 </div>
                         </div>
                 </header>
@@ -135,29 +144,84 @@ button:hover, a:hover {
                 <div class="container">
                         <div class="row">
                                 <div id="content" class="col-md-12">
-                                        <div class="container-sm-height">
-    <div class="row row-sm-height">		
-        <div class="col-sm-12 col-sm-height">            
-                <a role="button" href="/tags/DotNetNuke" class="btn btn-default btn-sm"> DotNetNuke (6)</a>
-                <a role="button" href="/tags/DnnPackager" class="btn btn-default btn-sm"> DnnPackager (5)</a>
-                <a role="button" href="/tags/ASPNET-CORE" class="btn btn-default btn-sm"> ASP.NET CORE (5)</a>
-                <a role="button" href="/tags/Dynamics-CRM" class="btn btn-default btn-sm"> Dynamics CRM (3)</a>
-                <a role="button" href="/tags/Aurelia" class="btn btn-default btn-sm"> Aurelia (2)</a>
-                <a role="button" href="/tags/Automate" class="btn btn-default btn-sm"> Automate (1)</a>
-                <a role="button" href="/tags/NuGet" class="btn btn-default btn-sm"> NuGet (1)</a>
-                <a role="button" href="/tags/JSPM" class="btn btn-default btn-sm"> JSPM (1)</a>
-                <a role="button" href="/tags/TeamCity" class="btn btn-default btn-sm"> TeamCity (1)</a>
-                <a role="button" href="/tags/Unit-Testing" class="btn btn-default btn-sm"> Unit Testing (1)</a>
-                <a role="button" href="/tags/Git" class="btn btn-default btn-sm"> Git (1)</a>
-                <a role="button" href="/tags/General" class="btn btn-default btn-sm"> General (1)</a>
-                <a role="button" href="/tags/CSLA" class="btn btn-default btn-sm"> CSLA (1)</a>
-                <a role="button" href="/tags/Android" class="btn btn-default btn-sm"> Android (1)</a>
-                <a role="button" href="/tags/Dnn-Project-System" class="btn btn-default btn-sm"> Dnn Project System (1)</a>
-                <a role="button" href="/tags/Octopus" class="btn btn-default btn-sm"> Octopus (1)</a>
-                <a role="button" href="/tags/Xamarin" class="btn btn-default btn-sm"> Xamarin (1)</a>
-        </div>
-    </div>
-</div>
+                                        
+
+<h3 id="automating-dotnetnuke-deployments-using-octopus-deploy">Automating DotNetNuke Deployments using Octopus Deploy</h3>
+<p>Because I am an awesome dude, i'll share with you how I automate dotnetnuke delivery / deployments. This works. It takes some effort to get this set up though, but it will be well worth it in the end.</p>
+<p>First i'll explain the process for automating the deployment of the DotNetNuke website itself. Then I'll explain how you can automate the deployment of modules / extensions on a continous basis.</p>
+<!--more-->
+<h3 id="preparation-work">Preparation work</h3>
+<ol>
+<li>Set up a brand new DotNetNuke website, and go through the install wizard until you are greeted with an empty default dotnetnuke website.</li>
+<li>Stop the website. Create a NuGet package containing the website folder.</li>
+<li>Put that on your internal NuGet feed.</li>
+<li>Go to the dotnetnuke database, and generate the create scripts (with data).</li>
+<li>Create a new console application that uses <a href="http://dbup.github.io/">dbup</a> to run the above sql scripts when it is executed (as described <a href="http://dbup.github.io/">here</a>). Remember to replace things like server name etc in the sql scripts with appropriate <span class="math">variablename</span>. Dbup can substitute <span class="math">variablename</span> in the sql scripts with their actual values (which you can pass through from Octopus) before it executes them.</li>
+<li>Add <a href="http://docs.octopusdeploy.com/display/OD/Using+OctoPack">OctoPack</a> to your Console Application so that it is packaged up into a NuGet package. Put this NuGet package on your internal NuGet feed.</li>
+</ol>
+<p>You should now be in this position:</p>
+<ol>
+<li>You have a NuGet package on your feed containing the DotNetNuke website content</li>
+<li>You have a NuGet package on your feed containing your wonderful console application (DbUp) which will run the database scripts.</li>
+</ol>
+<p>Next Step - to Octopus!</p>
+<ol>
+<li>Create a project in Octopus to deploy a &quot;DotNetNuke&quot; website. For the deployment process you will need the NuGet packages prepared previously. The deployment process should:</li>
+</ol>
+<ul>
+<li>Create a website in IIS using the website NuGet package.</li>
+<li>Create the database by executing the executable within the Database NuGet package.</li>
+</ul>
+<p>There are lot's of things to remember when deploying dotnetnuke. I won't go into detail but things like:</p>
+<ul>
+<li>Granting full permission to the app pool identity that the website runs under to the website folder.</li>
+<li>Updating the portalalias table with appropriate access url.</li>
+</ul>
+<p>... and other things. The Dnn install process has been covered elsewhere so I won't go into any further detail here.</p>
+<h3 id="congratulations-partly">Congratulations (partly)</h3>
+<p>You should now be in a postion where you can roll out a DotNetNuke website via Octopus.. BUT WHAT ABOUT THE MODULES I'M DEVELOPING!! - I hear you exclaim.</p>
+<h3 id="automating-module-deployments">Automating Module Deployments</h3>
+<ol>
+<li><p>When you build your module projects (via build server etc) you want them packaged as DotNetNuke install packages, inside a NuGet deployment package, which is then published to your NuGet feed. You can use <a href="https://github.com/dazinator/DnnPackager">DnnPackager</a> for this (which is something I created).</p>
+</li>
+<li><p>You'd need something that can copy a set of zip files to the &quot;Install/Module&quot; folder of a DotNetNuke website, and then monitor that folder, whilst calling the DotNetNuke url to install packages (<a href="http://www.dotnetnuke.com/install/install.aspx?mode=installresources">www.dotnetnuke.com/install/install.aspx?mode=installresources</a>). I wrote a quick console application to do this. It repeats calls to that URL all the time the number of zips in the install folder decrements (dotnetnuke deletes them after they are installed). If after x calls, there are the same number of zips left in the directory, it assumes they cannot be installed and reports a failure (return code).
+You should package this tool up into a NuGet package and, you guessed it, stick it on your internal feed.</p>
+</li>
+</ol>
+<p>3.Create a project in Octopus for &quot;Module&quot; deployment. You want the deployment process to:</p>
+<ul>
+<li>Dowload the NuGet package containing your module zips.</li>
+<li>Download the NuGet package containing your module deployment utility (that console app i spoke of)</li>
+<li>Invoke your deployment tool exe, passing in arguments for where the module zip files were placed, what the website url is, and potentially the path to the Install/Modules folder on disk (although my own tool interrogated IIS based on the website URL to find the website directory)</li>
+</ul>
+<h2 id="full-congratulations">Full Congratulations</h2>
+<p>You will now find that you can create a release of your module project in Octopus and deploy all your lates modules to any DotNetNuke website at the push of a button.</p>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'darrelltunnellsblog'; // required: replace example with your forum shortname
+    var disqus_identifier = 'index';
+    var disqus_title = 'Automating DotNetNuke deployments with Octopus Deploy';
+    var disqus_url = 'http://darrelltunnell.net/blog/2015/04/29/automating-dotnetnuke-deployments-with-octopus-deploy';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
                                 </div>
                         </div>
                 </div>

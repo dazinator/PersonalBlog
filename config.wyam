@@ -15,49 +15,68 @@ Settings[BlogKeys.ArchivePageSize] = 10;
 Settings[BlogKeys.ArchiveExcerpts] = true;
 Settings[BlogKeys.IncludeDateInPostPath] = true;
 Settings["TutorialsPath"] = "tutorial";
+Settings[BlogKeys.IgnoreFolders] = new string[] {"tutorial"};
+Settings[BlogKeys.ValidateRelativeLinks] =true;
 
-//Settings[BlogKeys.ValidateRelativeLinks] = true;
-// Settings[BlogKeys.IgnoreFolders] = "tutorials";
-
-
-
-// Add any pipeline customizations here
-//Console.WriteLine(String.Join(",", Pipelines.Keys.ToArray()));
 Pipelines["BlogPosts"].Append(
   Meta(Keys.RelativeFilePath, (doc, ctx) =>
   {
-  
-    DateTime? publishedDate = doc.Get<DateTime?>(BlogKeys.Published, DateTime.Now);
-    //Console.WriteLine("publishedDate: " + publishedDate?.ToString() ?? "");
-    
+    DateTime? publishedDate = doc.Get<DateTime?>(BlogKeys.Published, DateTime.Now);   
     string slug = doc.Get<string>("slug", ""); 
-    Console.WriteLine("front matter slug: " + slug.ToString());
+    bool isPublished = doc.Bool("FrontMatterPublished");   
 
-    bool isPublished = doc.Bool("FrontMatterPublished");
-    //Console.WriteLine("front matter published: " + isPublished.ToString());
-    
-    string fileName;
     if(string.IsNullOrEmpty(slug))
-    {
-       var fileNameWithoutDatePortion = doc.FilePath(Keys.SourceFileName).ChangeExtension("html").FullPath.Substring(11);
-       fileName = fileNameWithoutDatePortion;
-    }
-    else
-    {
-       fileName = new FilePath(slug).AppendExtension("html").FullPath; // doc.FilePath(Keys.SourceFileName). // slug;
-    }
-
+    {     
+       // use file name but remove the date portion.
+       slug = doc.Source.FileNameWithoutExtension.ToString().Substring(11);      
+    }  
+   
     var newPostsPath = ctx.DirectoryPath(BlogKeys.PostsPath).GetRelativePath((DirectoryPath)"../blog");
-    return $"{newPostsPath.FullPath}/{publishedDate:yyyy}/{publishedDate:MM}/{publishedDate:dd}/{fileName}";
+    return $"{newPostsPath.FullPath}/{publishedDate:yyyy}/{publishedDate:MM}/{publishedDate:dd}/{slug}/index.html";
 
   })); 
 
+// Includes the tutorials index.cshtml page into the blog recipe Pages pipeline so that it is included in the navmenu.
+((ContainerModule)Pipelines["Pages"][1]).Insert(1, ReadFiles("tutorial/**/*.cshtml"));
 
 Pipelines.Add("Tutorials",
-  ReadFiles("tutorial/*.md"),
-  FrontMatter(Yaml()),    
+  ReadFiles("tutorial/**/*.md"),
+  Meta("Tutorial", (doc, ctx) =>
+  {   
+     if(doc.Source.Extension == ".md")
+     {
+         return doc.Source.Directory.Name;  
+     }
+     return string.Empty;       
+  }),   
+  FrontMatter(Yaml()),  
   Markdown(),
-  Razor().IgnorePrefix(null).WithLayout("/_TutorialLayout.cshtml"),  
+  Razor().IgnorePrefix(null).WithLayout("/_TutorialLayout.cshtml"),   
+  Meta(Keys.RelativeFilePath, (doc, ctx) =>
+  {  
+    // tutorial .md source files are grouped in a subfolder but when we write them to the output DirectoryInfo
+    // we dont want to write them in a subfolder, we want them all under /tutorial/ folder.      
+    if(doc.Source.Extension != ".cshtml")
+    {
+      var docHtml = doc.Source.ChangeExtension("html");
+      var name = docHtml.FileNameWithoutExtension;
+      // var fileName = .FileName;
+      return $"./tutorial/{name}/index.html"; //newPath;
+      // return $"./tutorial/{fileName}"; //newPath;
+    }
+    else
+    {
+       return doc[Keys.RelativeFilePath];
+    }
+    
+  }),
   WriteFiles(".html")
 );
 
+
+Pipelines.Add("TutorialPages",
+  ReadFiles("tutorial/**/*.cshtml"), 
+  FrontMatter(Yaml()),    
+  Razor().IgnorePrefix(null).WithLayout("/_Layout.cshtml"),     
+  WriteFiles(".html")
+);

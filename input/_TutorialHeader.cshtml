@@ -1,11 +1,15 @@
 @{
-    var tutorialSeries = Model.String("Tutorial");
+    var tutorialSeries = Model.String("Tutorial");    
+}
+
+@if(!string.IsNullOrWhiteSpace(tutorialSeries))
+{
     var name = Model.String("Name");
     var part = Model.Get<int?>("Part");
     var Published = Model.Get<DateTime>(BlogKeys.Published);   
-    var Tags = Model.Get<string[]>(BlogKeys.Tags);
+   // var Tags = Model.Get<string[]>(BlogKeys.Tags);
     var repoUrl = Model.String("SourceCodeUrl");
-}
+
 
 <div class="post-heading">   
     <h1>Tutorial: @tutorialSeries</h1>
@@ -33,4 +37,13 @@ else
     </div>
    
 </div>
+
+}
+else
+{
+    <div class="post-heading">   
+    <h1>Tutorial: @Model.String("Name")</h1>   
+    </div>
+}
+
 

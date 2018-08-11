@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
 
-        <title>Darrell&#x27;s Blog - All Tags</title>
+        <title>Darrell&#x27;s Blog - DotNetNuke - Streamlining Module Development Workflow</title>
         <meta name="description" content="Welcome!" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">        
 
@@ -28,9 +28,9 @@
         <meta name="msapplication-tooltip" content="Darrell&#x27;s Blog" />
         <meta name="msapplication-starturl" content="/" />
 
-        <meta property="og:title" content="Darrell&#x27;s Blog - All Tags" />
+        <meta property="og:title" content="Darrell&#x27;s Blog - DotNetNuke - Streamlining Module Development Workflow" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="http://darrelltunnell.net/_Tags.cshtml" />
+        <meta property="og:url" content="http://darrelltunnell.net/blog/2015/06/13/dotnetnuke-streamlining-module-development" />
         <!-- TODO: More social graph meta tags -->
 
         <script src="/assets/js/jquery.min.js"></script>
@@ -124,9 +124,18 @@ button:hover, a:hover {
                         <div class="container">
                                 <div class="row">
                                         <div class="col-md-12">
-<div class="site-heading">
-    <h1>All Tags</h1>
-</div>                                            </div>
+
+    
+<div class="post-heading">
+    <h1>DotNetNuke - Streamlining Module Development Workflow</h1>
+    <div class="meta">        
+Published on 13 June 2015<br>    </div>
+        <div class="tags">
+                    <a role="button" href="/tags/DnnPackager" class="btn btn-default btn-xs">DnnPackager</a>
+                    <a role="button" href="/tags/DotNetNuke" class="btn btn-default btn-xs">DotNetNuke</a>
+        </div>     
+</div>
+                                        </div>
                                 </div>
                         </div>
                 </header>
@@ -135,29 +144,72 @@ button:hover, a:hover {
                 <div class="container">
                         <div class="row">
                                 <div id="content" class="col-md-12">
-                                        <div class="container-sm-height">
-    <div class="row row-sm-height">		
-        <div class="col-sm-12 col-sm-height">            
-                <a role="button" href="/tags/DotNetNuke" class="btn btn-default btn-sm"> DotNetNuke (6)</a>
-                <a role="button" href="/tags/DnnPackager" class="btn btn-default btn-sm"> DnnPackager (5)</a>
-                <a role="button" href="/tags/ASPNET-CORE" class="btn btn-default btn-sm"> ASP.NET CORE (5)</a>
-                <a role="button" href="/tags/Dynamics-CRM" class="btn btn-default btn-sm"> Dynamics CRM (3)</a>
-                <a role="button" href="/tags/Aurelia" class="btn btn-default btn-sm"> Aurelia (2)</a>
-                <a role="button" href="/tags/Automate" class="btn btn-default btn-sm"> Automate (1)</a>
-                <a role="button" href="/tags/NuGet" class="btn btn-default btn-sm"> NuGet (1)</a>
-                <a role="button" href="/tags/JSPM" class="btn btn-default btn-sm"> JSPM (1)</a>
-                <a role="button" href="/tags/TeamCity" class="btn btn-default btn-sm"> TeamCity (1)</a>
-                <a role="button" href="/tags/Unit-Testing" class="btn btn-default btn-sm"> Unit Testing (1)</a>
-                <a role="button" href="/tags/Git" class="btn btn-default btn-sm"> Git (1)</a>
-                <a role="button" href="/tags/General" class="btn btn-default btn-sm"> General (1)</a>
-                <a role="button" href="/tags/CSLA" class="btn btn-default btn-sm"> CSLA (1)</a>
-                <a role="button" href="/tags/Android" class="btn btn-default btn-sm"> Android (1)</a>
-                <a role="button" href="/tags/Dnn-Project-System" class="btn btn-default btn-sm"> Dnn Project System (1)</a>
-                <a role="button" href="/tags/Octopus" class="btn btn-default btn-sm"> Octopus (1)</a>
-                <a role="button" href="/tags/Xamarin" class="btn btn-default btn-sm"> Xamarin (1)</a>
-        </div>
-    </div>
-</div>
+                                        
+
+<h3 id="module-debugging-two-approaches">Module Debugging - Two Approaches</h3>
+<p>When developing DotNetNuke modules people take many different approaches but they boil down to two alternatives in terms of workflow:</p>
+<ol>
+<li><p>Placing / checking out your source code directly into the \DesktopModules folder of a DotNetNuke website, and having your module dll's output to directly into the DotNetNuke website's \bin folder.</p>
+</li>
+<li><p>Checking out and working on your code wherever you like, but having to deploy your module (content and assemblies) to a local DNN website when you are ready to run it.</p>
+</li>
+</ol>
+<p>Both approaches require that you &quot;attach to process&quot; from within Visual Studio in order to debug your module.</p>
+<!--more-->
+<h4 id="i-hate-approach-1">I hate approach #1</h4>
+<p>I have all sorts of issues with approach #1. Yes it’s technically possible, but it’s also nasty in my view (not very clean) - I have elaborated on that elsewhere so won’t do so again here in depth, aside to say that I believe #2 is the &quot;cleanest&quot; approach and that many forms of debugging use #2 as the approach, not #1. For example, xamarin devs, when they debug an android app, you will see that xamarin actually deploys their project to the device / emulator, and then attaches the debugger to the remote process that's running on the device / emulator. The result is that they click &quot;Play&quot; in VS, and a shortwhile later they are attached and stepping through their code.. It may not be obvious that a deployment took place - but it did. Lastly. i'll point out that #1 creates a coupling between how you structure your source code, and where it needs to be when it's actually deployed.</p>
+<h4 id="but-approach-2-is-lacking">But approach #2 is lacking</h4>
+<p>So deciding to take approach #2, having to manually copy / deploy your module content  to the DotNetNuke website each time you want to test your module, is just not an efficient use of your time!</p>
+<p>What's needed is some nice visual studio integration so that when you are ready to &quot;Run / Debug&quot; your module, you click one button and bam! chrome opens up, displaying your module, with the debugger attached so you can step through code.</p>
+<h4 id="can-anything-be-done">Can anything be done?</h4>
+<p>I have allready made strides to address the inefficiences of #2 so that it's now a lot more streamlined: <a href="https://github.com/dazinator/DnnPackager">https://github.com/dazinator/DnnPackager</a> - it's a NuGet package that you add to any VS project, and it will produce the Dnn module installation zip for you when you build the project. It then also extends the package manager console window in VS with an additional command you can run, that will deploy the module project to a local DNN website. So this is the workflow I currently use for module debugging:</p>
+<ol>
+<li>Make a change to the code</li>
+<li>Hit “up” arrow and then hit “enter” in package manager console (this runs the previous command which is the DnnPackager one I spoke of, that builds and deploys my module project to my local dnn website)</li>
+<li>Refresh my browser page, and attach Visual Studio (ctrl + alt + p) to the w3w process.</li>
+</ol>
+<p>This is a bit more streamlined! This makes approach #2 workable in my opinion.</p>
+<h4 id="room-for-improvements">Room for Improvements!</h4>
+<ol>
+<li>What if I don’t have a DNN website already installed - for example I am new to Dnn development and just want to get up and running as quickly as possible.</li>
+<li>What if I am curious to know if my module runs in DNN 6.5.1 and I only have DNN7 installed?</li>
+<li>What if this is the first time I am testing this particular module - I have to make sure I go to DotNetNuke website, Create a page and add my module to that page right?</li>
+</ol>
+<p>These things are all tedious. Most developers (new to DNN) expect to be able to click Debug and immediately be debugging their code - they don’t expect to have to jump through these additional hurdles / barriers.</p>
+<p>This is why DotNetNuke development can be a bit of a culture shock for many developers.</p>
+<h4 id="next-feature">Next Feature!</h4>
+<p>So the next feature I am thinking of adding to DnnPackager is one that addresses those concerns mentioned above. I’d be really greatful if anyone with such a curiousity wouldn't mind reading it and offering their feedback on this proposed awesome feature <a href="https://github.com/dazinator/DnnPackager/issues/14">https://github.com/dazinator/DnnPackager/issues/14</a> - just so I can get a feel for whether there is much demand for such a capability.</p>
+<h4 id="feedback">Feedback?</h4>
+<p>Do you disagree?
+Would this new feature <a href="https://github.com/dazinator/DnnPackager/issues/14">https://github.com/dazinator/DnnPackager/issues/14</a> help you?</p>
+<p>Darrell Tunnell
+<a href="http://darrelltunnell.net">http://darrelltunnell.net</a></p>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'darrelltunnellsblog'; // required: replace example with your forum shortname
+    var disqus_identifier = 'index';
+    var disqus_title = 'DotNetNuke - Streamlining Module Development Workflow';
+    var disqus_url = 'http://darrelltunnell.net/blog/2015/06/13/dotnetnuke-streamlining-module-development';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
                                 </div>
                         </div>
                 </div>

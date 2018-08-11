@@ -9,13 +9,25 @@ categories:
 ShowInNavbar: true
 ---
 @{
+  
+bool tutorialsAvailable = false;
+IEnumerable<Wyam.Common.Documents.IDocument> documentCollection = null;
+try
+{
+documentCollection = Context
+        .Documents["Tutorials"];
+}
+catch(Exception ex)
+{
+}
 
-    var group = Context
-        .Documents[Blog.Pages]       
-        .Where(x => x.FilePath(Keys.RelativeFilePath)?.FullPath?.StartsWith("tutorial") == (bool?)true)
-        .Where(x=>!string.IsNullOrEmpty(x.String("tutorial", "")))
+if(documentCollection != null)
+{
+
+  // .Where(x => x.FilePath(Keys.RelativeFilePath)?.FullPath?.StartsWith("tutorial") == (bool?)true)
+      var group = documentCollection.Where(x=>!string.IsNullOrEmpty(x.String("Tutorial", "")))
         .OrderBy(x=>x.Get<DateTime?>(BlogKeys.Published, DateTime.Now))
-        .GroupBy(x=>x.String("tutorial"), x=> x);
+        .GroupBy(x=>x.String("Tutorial"), x=> x);
 
       // Iterate over each IGrouping in the collection.
     
@@ -35,13 +47,10 @@ ShowInNavbar: true
           </ol>   
     }   
 
-
-    List<Tuple<string, string>> pages = Context
-        .Documents[Blog.Pages]       
-        .Where(x => x.FilePath(Keys.RelativeFilePath)?.FullPath?.StartsWith("tutorial") == (bool?)true)
-        .Select(x => Tuple.Create(x.WithoutSettings.String(Keys.Title), Context.GetLink(x)))
-        .Where(x => !string.IsNullOrEmpty(x.Item1))
-        .OrderBy(x => x.Item1)
-        .ToList();
+}
+   
+     
+    
+   
 
 }
