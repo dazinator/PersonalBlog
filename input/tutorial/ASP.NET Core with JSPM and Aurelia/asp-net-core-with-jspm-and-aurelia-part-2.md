@@ -74,7 +74,7 @@ The way to do this, is a little bit fiddely, as you have to drop to the command 
 
 ![commandlinejspminit.PNG](/img/commandlinejspminit.PNG)
 
-Note: If you install `JSPM` as a global npm package using `npm install jspm -g` then you can just use `jspm init` from the command line instead.
+Note: I recomment that you install `JSPM` as a global npm package using `npm install jspm -g` then it will be added to your PATH so that you can run `jspm` from the command line without having to run it from "node_modules/.bin/jspm".
 
 You will now be asked a series of questions. At the end of answering these questions, the relevent `config` will be produced within the project.
 
@@ -114,12 +114,12 @@ The transpiler will just allow us to write javascript using ES6 language feature
 
 Now that we have `JSPM` configured, it's time to install those packages that we previously had in our `wwwroot/lib` folder.
 
-Back in the `command prompt` run the following commands:
+Back in the `command prompt` run the following jspm commands:
 
 1. `jspm install jquery`
 2. `jspm install jquery-validation`
 3. `jspm install github:aspnet/jquery-validation-unobtrusive`
-2. `jspm install bootstrap`
+2. `jspm install bootstrap@3.3.7`
 
 Once that is done, those packages will now be installed under your `wwwroot\jspm_packages` folder:
 
