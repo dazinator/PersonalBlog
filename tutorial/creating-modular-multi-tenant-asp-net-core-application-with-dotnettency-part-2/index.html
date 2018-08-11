@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
 
-        <title>Darrell&#x27;s Blog - ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</title>
+        <title>Darrell&#x27;s Blog - Modular Multi-tenant ASP.NET Core Application with Dotnettency - Part 2</title>
         <meta name="description" content="Welcome!" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">        
 
@@ -28,9 +28,9 @@
         <meta name="msapplication-tooltip" content="Darrell&#x27;s Blog" />
         <meta name="msapplication-starturl" content="/" />
 
-        <meta property="og:title" content="Darrell&#x27;s Blog - ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly" />
+        <meta property="og:title" content="Darrell&#x27;s Blog - Modular Multi-tenant ASP.NET Core Application with Dotnettency - Part 2" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="http://darrelltunnell.net/blog/2015/01/18/asp-net-5-vnext-projects-why-your-nuget-package-may-fail-to-install" />
+        <meta property="og:url" content="http://darrelltunnell.net/tutorial/Building%20Modular%20Multi-tenant%20ASP.NET%20Core%20Applications%20with%20Dotnettency/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-2.md" />
         <!-- TODO: More social graph meta tags -->
 
         <script src="/assets/js/jquery.min.js"></script>
@@ -126,15 +126,21 @@ button:hover, a:hover {
                                         <div class="col-md-12">
 
     
-<div class="post-heading">
-    <h1>ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly</h1>
+<div class="post-heading">   
+    <h1>Tutorial: Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency</h1>
+    <h2 class="subheading">Part 2</h2>
+<p>
+   <span>This tutorial is part 2 </span> in <a href="/tutorial#Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency">this series.</a>
+  <em> The sample code to go with this post can <a href="https://github.com/dazinator/Dotnettency.Samples">be found here.</a></em>
+</p>
+        
     <div class="meta">        
-Published on 18 January 2015<br>    </div>
-        <div class="tags">
-                    <a role="button" href="/tags/ASPNET-CORE" class="btn btn-default btn-xs">ASP.NET CORE</a>
-                    <a role="button" href="/tags/NuGet" class="btn btn-default btn-xs">NuGet</a>
-        </div>     
+Published on 07 August 2017<br>    </div>
+   
 </div>
+
+
+
                                         </div>
                                 </div>
                         </div>
@@ -146,30 +152,149 @@ Published on 18 January 2015<br>    </div>
                                 <div id="content" class="col-md-12">
                                         
 
-<h3 id="dont-assume-nuget-packages-that-you-have-authored-will-continue-to-work-with-asp.net-5-vnext-projects">Don't assume NuGet Packages that you have authored will continue to work with ASP.NET 5 (vNext) projects.</h3>
-<p>Over the past year or so, I have authored <a href="https://www.nuget.org/packages?q=darrell.tunnell">a number of NuGet packages</a> - because, well... I am just an all around great guy.</p>
-<p>Recently, <a href="http://stackoverflow.com/questions/27762659/error-while-adding-nuget-package-to-asp-net-vnext-project#comment44383264_27762659">I was contacted by someone</a> who was trying to use one of my NuGet packages with an ASP.NET vNext project (Preview release). Not something I have tried before - and this is where things get a little interesting.</p>
-<!--more-->
-<h3 id="when-nuget-packages-are-installed-into-an-asp.net-vnext-project-powershell-scripts-included-in-the-package-are-not-run">When NuGet packages are installed into an ASP.NET vNext project - powershell scripts included in the package, are not run.</h3>
-<p>As most NuGet package authors will already know, it's a <a href="http://docs.nuget.org/docs/creating-packages/creating-and-publishing-a-package#Automatically_Running_PowerShell_Scripts_During_Package_Installation_and_Removal">standard feature of NuGet</a> that you can include powershell scripts within your NuGet package, that will then be executed when your package is installed (or uninstalled) into a visual studio project / solution.</p>
-<p>Many NuGet packages out there currently rely on this feature - else they will not work.</p>
-<p>Well, the issue with my NuGet package failing to install into an ASP.NET vNext project  was eventually posted on the asp.net forums, and <a href="http://forums.asp.net/members/davidfowl.aspx">David Fowler</a> (who's on the ASP.NET team) - kindly responded with some insight into the matter. He seems to suggest that <a href="http://forums.asp.net/t/2027698.aspx?Error+while+adding+NuGet+package+to+ASP+NET+vNext+project">ASP.NET v5 does not support running the packages powershell scripts when you install a NuGet package into an ASP.NET v5 project.</a></p>
-<p>I wanted to confirm that with him a second time - because <strong>that's a huge problem for some of my NuGet packages</strong>, but as you will see from that thread, I am still awaiting a secondary confirmation of this - although his first answer seems pretty clear cut.</p>
-<h3 id="surely-this-is-documented-somewhere-or-perhaps-asp.net-5-offers-an-alternative-mechanism-for-running-tasks-on-installation-uninstallation-of-a-nuget-package">Surely this is documented somewhere - or perhaps ASP.NET 5 offers an alternative mechanism for running tasks on installation / uninstallation of a NuGet package?</h3>
-<p>I have tried to look for more information. At the moment all I have to go on is David Fowlers response. Perhaps this is because there is still work in progress in this area, who knows. All I can suggest is that if your NuGet package currently requires custom tasks to be performed and you are using an <code>init</code>, <code>install</code> or <code>uninstall</code> ps1 script - then be prepared for the fact that it may not work with ASP.NET 5 projects - and also be prepared for the fact that there may not be any workaround either. I seriously hope this is false speculation on my part - but if this does turn out the be true after ASP.NET 5 is released, I'll be left with a slightly bitter taste in my mouth.</p>
-<h3 id="so-where-from-here">So where from here?</h3>
-<p>I am generally really excited about ASP.NET 5. I love what the team are doing. However I beleive that the ASP.NET team really should put some guidance out there to the NuGet community, so that NuGet package authors can gain an understanding of how their packages might have to change to work in the context of ASP.NET 5 projects.</p>
-<p>At a minimum, if ASP.NET 5 will indeed no longer support the running of these powershell scripts, then it should atleast warn you that the package contains such scripts and that they will not be executed - which means the package may not beahve as desired.</p>
-<p>My hope is that David Fowler or someone from the ASP.NET team will offer a clarification, insight, or workaround for this issue that makes it a non issue. Fingers crossed.</p>
+<p>In the <a href="/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-1/">previous part of the this tutorial</a> we saw how we could do some very basic <code>Tenant</code> resolution. We were identifying who the current <code>tenant</code> is based on values available in the <code>URL</code> such as port number etc. In this post, we will see how we can also use values not available in the <code>URL</code> such as a cookie value (or anything else), to identify the current tenant also.</p>
+<!--more--> 
+<h2>Tenant Identification</h2>
+<p>When a request is received, <code>dotnettency</code> creates an <code>identifier</code> that indicates the current tenant. By default, the <code>identifier</code> is based on the request <code>url</code>. However we can override this.</p>
+<p>First, derive from <code>HttpContextTenantDistinguisherFactory&lt;TTenant&gt;</code> and override <code>GetTenantDistinguisher</code>:</p>
+<pre><code class="language-csharp">
+    public class CookieTenantDistinguisherFactory : HttpContextTenantDistinguisherFactory&lt;Tenant&gt;
+    {
+        public CookieTenantDistinguisherFactory(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        {
+        }
+
+        protected override TenantDistinguisher GetTenantDistinguisher(HttpContext context)
+        {
+            // We will return the request uri by default to identify the tenant,
+            // unless a tenant cookie is available, in which case we will return a URI with a custom scheme.
+            var uri = context.Request.GetUri();
+
+            var cookie = context.Request.Cookies[&quot;tenant&quot;];
+            if (!string.IsNullOrWhiteSpace(cookie))
+            {
+                switch (cookie)
+                {
+                    case &quot;Moogle&quot;:
+                        return new TenantDistinguisher(new Uri(&quot;tenant://Moogle&quot;));
+
+                    case &quot;Gicrosoft&quot;:
+                        return new TenantDistinguisher(new Uri(&quot;tenant://Gicrosoft&quot;));
+                }
+            }
+
+            return uri;
+        }
+    }
+
+</code></pre>
+<p>Notice how, when a cookie is present, we return a <code>URI</code> with our own custom scheme - i.e <code>tenant://</code> and with a hostname that indicates the tenant specified by the cookie.</p>
+<p>Next, get <code>dotnettency</code> use our new implementation, in <code>startup.cs</code>:</p>
+<pre><code class="language-csharp">
+            services.AddMultiTenancy&lt;Tenant&gt;((multiTenancyOptions) =&gt;
+            {
+                multiTenancyOptions
+                    .DistinguishTenantsWith&lt;CookieTenantDistinguisherFactory&gt;()
+                    .InitialiseTenant&lt;TenantShellFactory&gt;();
+            });
+
+</code></pre>
+<p>Now lastly, we need to adjust our <code>TenantShellFactory</code> to handle our custom <code>URI</code>'s:</p>
+<pre><code class="language-csharp">
+    public class TenantShellFactory : ITenantShellFactory&lt;Tenant&gt;
+    {
+        public Task&lt;TenantShell&lt;Tenant&gt;&gt; Get(TenantDistinguisher distinguisher)
+        {
+            // If cookie was present, then scheme will be our own custom one.         
+            if (distinguisher.Uri.Scheme == &quot;tenant&quot;)
+            {
+                var tenant = distinguisher.Uri.Host.ToLowerInvariant();
+                switch (tenant)
+                {
+                    case &quot;moogle&quot;:
+                        return CreateMoogleTenant();
+                    case &quot;gicrosoft&quot;:
+                        return CreateGicrosoftTenant();
+                }
+
+            }
+
+            // Otherwise, just pick tenant based on port as before.
+            if (distinguisher.Uri.Port == 5000 || distinguisher.Uri.Port == 5001)
+            {
+                return CreateMoogleTenant();
+            }
+
+            if (distinguisher.Uri.Port == 5002)
+            {
+                return CreateGicrosoftTenant();
+            }
+
+
+            throw new NotImplementedException(&quot;Please make request on ports 5000 - 5003 to see various behaviour.&quot;);
+
+        }
+
+        private Task&lt;TenantShell&lt;Tenant&gt;&gt; CreateGicrosoftTenant()
+        {
+            Guid tenantId = Guid.Parse(&quot;b17fcd22-0db1-47c0-9fef-1aa1cb09605e&quot;);
+            var tenant = new Tenant(tenantId, &quot;Gicrosoft&quot;);
+            var result = new TenantShell&lt;Tenant&gt;(tenant);
+            return Task.FromResult(result);
+        }
+
+        private Task&lt;TenantShell&lt;Tenant&gt;&gt; CreateMoogleTenant()
+        {
+            Guid tenantId = Guid.Parse(&quot;049c8cc4-3660-41c7-92f0-85430452be22&quot;);
+            var tenant = new Tenant(tenantId, &quot;Moogle&quot;);
+            // Also adding any additional Uri's that should be mapped to this same tenant.
+            var result = new TenantShell&lt;Tenant&gt;(tenant, new Uri(&quot;http://localhost:5000&quot;),
+                                                         new Uri(&quot;http://localhost:5001&quot;));
+            return Task.FromResult(result);
+        }
+    }
+
+</code></pre>
+<h2>Seeing it in action</h2>
+<p>Now to see this in action, install your favourite cookie editing tool in your browser. I personally use <a href="https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg?">EditThisCookie</a></p>
+<p>Start the application running and browse on <a href="http://localhost:5000">localhost:5000</a> and you will see:</p>
+<p><img src="/img/dotnettencyhelloworldmoogle.PNG" alt="dotnettency-helloworld-moogle.PNG" /></p>
+<p>Now, add a cookie named &quot;tenant&quot; with a value &quot;Gicrosoft&quot;. Refresh the page:</p>
+<p><img src="/img/dotnettencycookiegicrosoft.PNG" alt="dotnettency-cookie-gicrosoft.PNG" /></p>
+<p>Hurray! It works! (If it doesn't, then you can compare against the <a href="https://github.com/dazinator/Dotnettency.Samples">sample code here</a>)</p>
+<h2>What's next?</h2>
+<p>Stay tuned for:</p>
+<ol>
+<li>Per Tenant Container / Services</li>
+<li>Per Tenant Middleware</li>
+<li>Per Tenant <code>IHostingEnvironment</code> (for sandboxing file access)</li>
+<li>Modules (Shared and Routed)</li>
+</ol>
+<p>Don't forget to leave a comment if you find this stuff useful!</p>
+<p><em>This is part of a series. <a href="/tags/dotnettency">You can find the other parts here</a></em></p>
+<p><em>You can find the sample code for this post <a href="https://github.com/dazinator/Dotnettency.Samples">here</a></em></p>
+
+
+
+
+<div class="post-footer">       
+<p>
+<span style="text-align: right"><a href="/tutorial#Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency">See Tutorial Series</a></span>
+
+  <em><a href="https://github.com/dazinator/Dotnettency.Samples">See Sample Code.</a></em>
+
+</p>        
+   
+</div>
 
 
 <div id="disqus_thread"></div>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname = 'darrelltunnellsblog'; // required: replace example with your forum shortname
-    var disqus_identifier = 'asp-net-5-vnext-projects-why-your-nuget-package-may-fail-to-install';
-    var disqus_title = 'ASP.NET 5 (vNext) Projects - Your NuGet Package May Fail to Install Correctly';
-    var disqus_url = 'http://darrelltunnell.net/blog/2015/01/18/asp-net-5-vnext-projects-why-your-nuget-package-may-fail-to-install';
+    var disqus_identifier = 'creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-2';
+    var disqus_title = 'Modular Multi-tenant ASP.NET Core Application with Dotnettency - Part 2';
+    var disqus_url = 'http://darrelltunnell.net/tutorial/Building%20Modular%20Multi-tenant%20ASP.NET%20Core%20Applications%20with%20Dotnettency/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-2.md';
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {

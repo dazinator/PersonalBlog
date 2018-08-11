@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
 
-        <title>Darrell&#x27;s Blog - Modular Multi-tenant ASP.NET Core Application with Dotnettency - Part 2</title>
+        <title>Darrell&#x27;s Blog - SSH access to bitbucket on Windows</title>
         <meta name="description" content="Welcome!" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">        
 
@@ -28,9 +28,9 @@
         <meta name="msapplication-tooltip" content="Darrell&#x27;s Blog" />
         <meta name="msapplication-starturl" content="/" />
 
-        <meta property="og:title" content="Darrell&#x27;s Blog - Modular Multi-tenant ASP.NET Core Application with Dotnettency - Part 2" />
+        <meta property="og:title" content="Darrell&#x27;s Blog - SSH access to bitbucket on Windows" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-2.md" />
+        <meta property="og:url" content="http://darrelltunnell.net/blog/2015/08/29/ssh-on-windows" />
         <!-- TODO: More social graph meta tags -->
 
         <script src="/assets/js/jquery.min.js"></script>
@@ -126,20 +126,14 @@ button:hover, a:hover {
                                         <div class="col-md-12">
 
     
-<div class="post-heading">   
-    <h1>Tutorial: Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency</h1>
-    <h2 class="subheading">Part 2</h2>
-<p>
-   <span>This tutorial is part 2 </span> in <a href="/tutorial#Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency">this series.</a>
-  <em> The sample code to go with this post can <a href="https://github.com/dazinator/Dotnettency.Samples">be found here.</a></em>
-</p>
-        
+<div class="post-heading">
+    <h1>SSH access to bitbucket on Windows</h1>
     <div class="meta">        
-Published on 07 August 2017<br>    </div>
-   
+Published on 29 August 2015<br>    </div>
+        <div class="tags">
+                    <a role="button" href="/tags/Git" class="btn btn-default btn-xs">Git</a>
+        </div>     
 </div>
-
-
                                         </div>
                                 </div>
                         </div>
@@ -151,149 +145,17 @@ Published on 07 August 2017<br>    </div>
                                 <div id="content" class="col-md-12">
                                         
 
-<p>In the <a href="/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-1/">previous part of the this tutorial</a> we saw how we could do some very basic <code>Tenant</code> resolution. We were identifying who the current <code>tenant</code> is based on values available in the <code>URL</code> such as port number etc. In this post, we will see how we can also use values not available in the <code>URL</code> such as a cookie value (or anything else), to identify the current tenant also.</p>
-<!--more--> 
-<h2>Tenant Identification</h2>
-<p>When a request is received, <code>dotnettency</code> creates an <code>identifier</code> that indicates the current tenant. By default, the <code>identifier</code> is based on the request <code>url</code>. However we can override this.</p>
-<p>First, derive from <code>HttpContextTenantDistinguisherFactory&lt;TTenant&gt;</code> and override <code>GetTenantDistinguisher</code>:</p>
-<pre><code class="language-csharp">
-    public class CookieTenantDistinguisherFactory : HttpContextTenantDistinguisherFactory&lt;Tenant&gt;
-    {
-        public CookieTenantDistinguisherFactory(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
-        {
-        }
-
-        protected override TenantDistinguisher GetTenantDistinguisher(HttpContext context)
-        {
-            // We will return the request uri by default to identify the tenant,
-            // unless a tenant cookie is available, in which case we will return a URI with a custom scheme.
-            var uri = context.Request.GetUri();
-
-            var cookie = context.Request.Cookies[&quot;tenant&quot;];
-            if (!string.IsNullOrWhiteSpace(cookie))
-            {
-                switch (cookie)
-                {
-                    case &quot;Moogle&quot;:
-                        return new TenantDistinguisher(new Uri(&quot;tenant://Moogle&quot;));
-
-                    case &quot;Gicrosoft&quot;:
-                        return new TenantDistinguisher(new Uri(&quot;tenant://Gicrosoft&quot;));
-                }
-            }
-
-            return uri;
-        }
-    }
-
-</code></pre>
-<p>Notice how, when a cookie is present, we return a <code>URI</code> with our own custom scheme - i.e <code>tenant://</code> and with a hostname that indicates the tenant specified by the cookie.</p>
-<p>Next, get <code>dotnettency</code> use our new implementation, in <code>startup.cs</code>:</p>
-<pre><code class="language-csharp">
-            services.AddMultiTenancy&lt;Tenant&gt;((multiTenancyOptions) =&gt;
-            {
-                multiTenancyOptions
-                    .DistinguishTenantsWith&lt;CookieTenantDistinguisherFactory&gt;()
-                    .InitialiseTenant&lt;TenantShellFactory&gt;();
-            });
-
-</code></pre>
-<p>Now lastly, we need to adjust our <code>TenantShellFactory</code> to handle our custom <code>URI</code>'s:</p>
-<pre><code class="language-csharp">
-    public class TenantShellFactory : ITenantShellFactory&lt;Tenant&gt;
-    {
-        public Task&lt;TenantShell&lt;Tenant&gt;&gt; Get(TenantDistinguisher distinguisher)
-        {
-            // If cookie was present, then scheme will be our own custom one.         
-            if (distinguisher.Uri.Scheme == &quot;tenant&quot;)
-            {
-                var tenant = distinguisher.Uri.Host.ToLowerInvariant();
-                switch (tenant)
-                {
-                    case &quot;moogle&quot;:
-                        return CreateMoogleTenant();
-                    case &quot;gicrosoft&quot;:
-                        return CreateGicrosoftTenant();
-                }
-
-            }
-
-            // Otherwise, just pick tenant based on port as before.
-            if (distinguisher.Uri.Port == 5000 || distinguisher.Uri.Port == 5001)
-            {
-                return CreateMoogleTenant();
-            }
-
-            if (distinguisher.Uri.Port == 5002)
-            {
-                return CreateGicrosoftTenant();
-            }
-
-
-            throw new NotImplementedException(&quot;Please make request on ports 5000 - 5003 to see various behaviour.&quot;);
-
-        }
-
-        private Task&lt;TenantShell&lt;Tenant&gt;&gt; CreateGicrosoftTenant()
-        {
-            Guid tenantId = Guid.Parse(&quot;b17fcd22-0db1-47c0-9fef-1aa1cb09605e&quot;);
-            var tenant = new Tenant(tenantId, &quot;Gicrosoft&quot;);
-            var result = new TenantShell&lt;Tenant&gt;(tenant);
-            return Task.FromResult(result);
-        }
-
-        private Task&lt;TenantShell&lt;Tenant&gt;&gt; CreateMoogleTenant()
-        {
-            Guid tenantId = Guid.Parse(&quot;049c8cc4-3660-41c7-92f0-85430452be22&quot;);
-            var tenant = new Tenant(tenantId, &quot;Moogle&quot;);
-            // Also adding any additional Uri's that should be mapped to this same tenant.
-            var result = new TenantShell&lt;Tenant&gt;(tenant, new Uri(&quot;http://localhost:5000&quot;),
-                                                         new Uri(&quot;http://localhost:5001&quot;));
-            return Task.FromResult(result);
-        }
-    }
-
-</code></pre>
-<h2>Seeing it in action</h2>
-<p>Now to see this in action, install your favourite cookie editing tool in your browser. I personally use <a href="https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg?">EditThisCookie</a></p>
-<p>Start the application running and browse on <a href="http://localhost:5000">localhost:5000</a> and you will see:</p>
-<p><img src="/img/dotnettencyhelloworldmoogle.PNG" alt="dotnettency-helloworld-moogle.PNG" /></p>
-<p>Now, add a cookie named &quot;tenant&quot; with a value &quot;Gicrosoft&quot;. Refresh the page:</p>
-<p><img src="/img/dotnettencycookiegicrosoft.PNG" alt="dotnettency-cookie-gicrosoft.PNG" /></p>
-<p>Hurray! It works! (If it doesn't, then you can compare against the <a href="https://github.com/dazinator/Dotnettency.Samples">sample code here</a>)</p>
-<h2>What's next?</h2>
-<p>Stay tuned for:</p>
-<ol>
-<li>Per Tenant Container / Services</li>
-<li>Per Tenant Middleware</li>
-<li>Per Tenant <code>IHostingEnvironment</code> (for sandboxing file access)</li>
-<li>Modules (Shared and Routed)</li>
-</ol>
-<p>Don't forget to leave a comment if you find this stuff useful!</p>
-<p><em>This is part of a series. <a href="/tags/dotnettency">You can find the other parts here</a></em></p>
-<p><em>You can find the sample code for this post <a href="https://github.com/dazinator/Dotnettency.Samples">here</a></em></p>
-
-
-
-
-<div class="post-footer">       
-<p>
-<span style="text-align: right"><a href="/tutorial#Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency">See Tutorial Series</a></span>
-
-  <em><a href="https://github.com/dazinator/Dotnettency.Samples">See Sample Code.</a></em>
-
-</p>        
-   
-</div>
+<h3 id="getting-ssh-set-up-on-windows">Getting SSH set up on Windows</h3>
+<p>Follow this: <a href="http://blog.muhammada.li/setting-up-ssh-access-to-bitbucket-on-windows#comment-53292">http://blog.muhammada.li/setting-up-ssh-access-to-bitbucket-on-windows#comment-53292</a></p>
 
 
 <div id="disqus_thread"></div>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname = 'darrelltunnellsblog'; // required: replace example with your forum shortname
-    var disqus_identifier = 'creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-2';
-    var disqus_title = 'Modular Multi-tenant ASP.NET Core Application with Dotnettency - Part 2';
-    var disqus_url = 'http://darrelltunnell.net/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-2.md';
+    var disqus_identifier = 'index';
+    var disqus_title = 'SSH access to bitbucket on Windows';
+    var disqus_url = 'http://darrelltunnell.net/blog/2015/08/29/ssh-on-windows';
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {

@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
 
-        <title>Darrell&#x27;s Blog - Imagining a DotNetNuke Project Type for Visual Studio</title>
+        <title>Darrell&#x27;s Blog - Modular, Multi-tenant, ASP.NET Core Applications with Dotnettency - Part 3</title>
         <meta name="description" content="Welcome!" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">        
 
@@ -28,9 +28,9 @@
         <meta name="msapplication-tooltip" content="Darrell&#x27;s Blog" />
         <meta name="msapplication-starturl" content="/" />
 
-        <meta property="og:title" content="Darrell&#x27;s Blog - Imagining a DotNetNuke Project Type for Visual Studio" />
+        <meta property="og:title" content="Darrell&#x27;s Blog - Modular, Multi-tenant, ASP.NET Core Applications with Dotnettency - Part 3" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio" />
+        <meta property="og:url" content="http://darrelltunnell.net/tutorial/Building%20Modular%20Multi-tenant%20ASP.NET%20Core%20Applications%20with%20Dotnettency/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-3.md" />
         <!-- TODO: More social graph meta tags -->
 
         <script src="/assets/js/jquery.min.js"></script>
@@ -126,16 +126,21 @@ button:hover, a:hover {
                                         <div class="col-md-12">
 
     
-<div class="post-heading">
-    <h1>Imagining a DotNetNuke Project Type for Visual Studio</h1>
+<div class="post-heading">   
+    <h1>Tutorial: Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency</h1>
+    <h2 class="subheading">Part 3</h2>
+<p>
+   <span>This tutorial is part 3 </span> in <a href="/tutorial#Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency">this series.</a>
+  <em> The sample code to go with this post can <a href="https://github.com/dazinator/Dotnettency.Samples">be found here.</a></em>
+</p>
+        
     <div class="meta">        
-Published on 17 January 2016<br>    </div>
-        <div class="tags">
-                    <a role="button" href="/tags/Dnn-Project-System" class="btn btn-default btn-xs">Dnn Project System</a>
-                    <a role="button" href="/tags/DnnPackager" class="btn btn-default btn-xs">DnnPackager</a>
-                    <a role="button" href="/tags/DotNetNuke" class="btn btn-default btn-xs">DotNetNuke</a>
-        </div>     
+Published on 24 August 2017<br>    </div>
+   
 </div>
+
+
+
                                         </div>
                                 </div>
                         </div>
@@ -147,65 +152,147 @@ Published on 17 January 2016<br>    </div>
                                 <div id="content" class="col-md-12">
                                         
 
-<h3 id="introduction">Introduction</h3>
-<p>When developing DotNetNuke extensions, we typically use one of the existing Visual Studio Project Type's, for example - an ASP.NET Web Application project.</p>
-<p>Even when using a Project Template such as Christoc's, the project template is still based upon one of the standard Visual Studio project types - usually an ASP.NET Web Application project.</p>
-<p>However these Project Types do not &quot;gel&quot; well with DotNetNuke development in a number of areas, the main ones being:</p>
+<p>In this part of the tutorial, we will cover <code>Per Tenant DI Containers</code> in ASP.NET Core.</p>
+<!--more--> 
+<h2>Per Tenant Containers - An Unfriendly Greeting</h2>
+<p>Dotnettency allows you to configure <code>Per Tenant</code> DI Containers. The easiest way to understand this is to see it in action. Before proceeding you should ideally be familiar with basic tenant resolution <a href="/tutorials#creating-modular-multi-tenant-asp-net-core-application-with-dotnettency">from the previous tutorials</a></p>
+<p>In <code>startup.cs</code></p>
+<pre><code class="language-csharp">
+        public IServiceProvider ConfigureServices(IServiceCollection services)
+        {
+            return services.AddMultiTenancy&lt;Tenant&gt;((multiTenancyOptions) =&gt;
+            {
+                multiTenancyOptions
+                    .InitialiseTenant&lt;TenantShellFactory&gt;()
+                    .ConfigureTenantContainers((containerBuilder) =&gt;
+                    {
+                        containerBuilder.WithStructureMap((tenant, tenantServices) =&gt;
+                        {
+                            if (tenant.Name == &quot;Moogle&quot;)
+                            {
+                                tenantServices.AddSingleton&lt;GreetingService&gt;(new GreetingService(true));
+                            }
+                            else
+                            {
+                                tenantServices.AddSingleton&lt;GreetingService&gt;(new GreetingService(false));
+                            }
+                        });
+                    });
+            });
+
+</code></pre>
+<p>We are registering the <code>GreetingService</code> differently for the <code>Moogle</code> tenant than the other tenants.</p>
+<p>The <code>GreetingService</code> looks like this:</p>
+<pre><code class="language-csharp">
+    public class GreetingService
+    {
+        private readonly bool _isVisitorWelcome;
+
+        public GreetingService(bool isVisitorWelcome)
+        {
+            _isVisitorWelcome = isVisitorWelcome;
+        }
+
+        public string Greet()
+        {
+            if (_isVisitorWelcome)
+            {
+                return &quot;WILL YOU GO AWAY ALREADY!!&quot;;
+            }
+            else
+            {
+                return &quot;Pleased to meet you.&quot;;
+            }
+        }
+
+    }
+
+</code></pre>
+<p>Next, we need to include the <code>dotnettency middleware</code> by adding a call to <code>options.UsePerTenantContainers();</code> and also we will resolve the <code>GreetingService</code> and write it's message in the response:</p>
+<pre><code class="language-csharp">
+         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddConsole();
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseMultitenancy&lt;Tenant&gt;((options) =&gt;
+            {
+                options.UsePerTenantContainers();
+            });
+
+            app.Run(async (context) =&gt;
+            {
+                var greetingService = context.RequestServices.GetRequiredService&lt;GreetingService&gt;();
+                await context.Response.WriteAsync(greetingService.Greet());
+            });
+
+        }
+
+</code></pre>
+<p>Now browse to the site for each Tenant. See the previous tutorial if you would like to recap on that. Let's see the greeting for the <code>Moogle</code> tenant:</p>
+<p><img src="/img/dotnettencygreetingmoogle.PNG" alt="dotnettencygreetingmoogle.PNG" /></p>
+<p>Quite unfriendly.</p>
+<p>How about other tenants:</p>
+<p><img src="/img/dotnettencygreetinggicrosoft.PNG" alt="dotnettencygreetinggicrosoft.PNG" /></p>
+<p>Well, they are still valued.</p>
+<p>If you are having any issues, you can look at the full <a href="https://github.com/dazinator/Dotnettency.Samples">sample code here</a>)</p>
+<h2>How does it work?</h2>
+<p>ASP.NET Core applications allow you to configure the main application container on startup, in <code>ConfigureServices()</code>:</p>
+<pre><code class="language-csharp">        public void ConfigureServices(IServiceCollection services)
+        {
+             services.AddTransient&lt;FooService&gt;();
+        }
+
+</code></pre>
+<p>When a request arrives, there is some middleware that sits at the entry point of the pipeline, which creates a nested / scoped version of the container for the request, which is stored in <code>HttpContext.RequestServices</code>. This nested / scoped version of the application container is disposed of at the end of the request.</p>
+<p>Dotnettency <code>Tenant Containers</code> allow you to go a step further. It will create a &quot;child&quot; container for each tenant. It restores the current tenants container into <code>HttpContext.RequestServices</code> during the request. The tenant container, is intiialised when the first request for the tenant is received. You can register services into the tenant's container, just like you can for the main application container. As the tenant container is a child container of the main application container, it means when a service is unable to be resolved from the tenant's container, it will bubble up to the main application container for resolution. This enables some useful scenarios:</p>
 <ol>
-<li>Running the project in VS (clicking play) - wants to run the extensions as a Web Application, but this makes no sense for a Dnn extension - which has to be hosted by the DotNetNuke website.</li>
-<li>Deploying the extension - there is no support for that in the project system - you have to manually deploy your extensions to the Dnn instance.</li>
-<li>Debugging the extension - you have to manually attach to process.</li>
+<li>You can register default services in your main application container, and then override them on a per tenant basis as needed.</li>
+<li>You can register a service only for particular tenants, so the service cannot be resolved for other tenants at all.</li>
+<li>You can register a service for each tenant, but with options tailored for that tenant.</li>
 </ol>
-<p>So.. what if there was a new Project Type, one that was purpose built for DotNetNuke development? What would that look like?</p>
-<!--more-->
-<h3 id="introducing-the-dotnetnuke-project-type">Introducing the &quot;DotNetNuke&quot; Project Type</h3>
-<p>I am currently developing a new VS Project Type explicitly for DotNetNuke development. The rest of this blog post will describe my vision for how this will work.</p>
-<h4 id="installing-the-project-type">Installing the Project Type</h4>
-<p>You would start by installing the VSIX package from the VS gallery. This will install the DotNetNuke project type, and make this project type available to you when you create new projects in VS.</p>
-<h4 id="create-a-new-project">Create a New Project</h4>
-<p>You can now create a new &quot;DotNetNuke&quot; project using Visual Studio.</p>
-<p><img src="/img/new%20dnn%20project.PNG" class="img-fluid" alt="new dnn project.PNG" /></p>
-<p>This creates your new project. It also imports the &quot;DnnPackager&quot; NuGet package automatically - <a href="http://darrelltunnell.net/blog/2015/12/01/dnnpackager-getting-started/">something I have blogged about seperately.</a></p>
-<p><img src="/img/adding%20DnnPackager.PNG" class="img-fluid" alt="adding DnnPackager.PNG" /></p>
-<p>Your new project, has it's own &quot;.dnnproj&quot; file. This is a new project type and that's why it has its own file extension &quot;.dnnproj&quot;.</p>
-<p><img src="/img/SolutionExplorer1.PNG" class="img-fluid" alt="SolutionExplorer1.PNG" /></p>
-<h4 id="adding-content">Adding Content</h4>
-<p>You can now add items to your project. If you &quot;Add new item&quot; - you will be able select from a number of standard DotNetNuke item templates. For example a &quot;Module View&quot;.</p>
-<p><img src="/img/AddModuleView.png" class="img-fluid" alt="AddModuleView.png" /></p>
-<p>Initially, I will just show Dnn 7 compatible item templates, but eventually I'd also like to add a seperate group for Dnn 8 item templates, which would include item templates for the new MVC and SPA stuff.</p>
-<p>When you add the new item, not only do the source code files get added to your project, but any required dependencies also get brought in by the magical power of NuGet:</p>
-<p><img src="/img/AddingDotNetNukeCoreNuget.PNG" class="img-fluid" alt="AddingDotNetNukeCoreNuget.PNG" /></p>
-<p>So for example, adding a Module View for Dnn 7, will automatically bring in the DotNetNuke.Core NuGet package for Dnn7 as depicted above.</p>
-<p>In other words, you don't need to worry about adding any Dnn assembly references for the most part, as they will be bought in for you as you add items to your project. Ofcourse, you are still free to add references to other dependencies you might have as normal.</p>
-<h4 id="running-and-debugging">Running and Debugging</h4>
-<p>When you want to run and debug your extension, for those of you that have read my previous blog about DnnPackager, you may recall that this could be accomplished via a command that you could enter in the Package Manager Console window and DnnPackager would handle the deployment and attaching the debugger.</p>
-<p>Well that approach was only ever necessary because there was not any first class support within VS itself. Something I am going to rectify with the DotNetNuke project type.</p>
-<p>In VS, I am going to extend the debugging toolbar (where the &quot;play&quot; button is)</p>
-<p><img src="/img/debug%20toolbar.PNG" class="img-fluid" alt="debug toolbar.PNG" /></p>
-<p>You can see in the screenshot there is an empty dropdown at present, but this will list your DotNetNuke websites that you have on your local IIS. The first one in that list will be selected by default.</p>
-<p>You may also notice there a new Debugger selected in that screenshot called &quot;Local Dnn Website&quot;. That's my own custom debugger that's available only for this project type.</p>
-<p>All you need to do is click &quot;Play&quot; and it will:</p>
+<p>Some examples are:</p>
 <ol>
-<li>Build your project to output the deployment zip.</li>
-<li>Deploy your install zip to the Dnn website selected in the dropdown.</li>
-<li>Attach the debugger to Dnn website's worker process that is selected in the dropwdown.</li>
-<li>Launch a new browser window, navigated to that dnn websites home page.</li>
+<li>You may want all tenants by default to use third party authentication services like Google, Microsoft etc but allow tenants to enable / disable them on an individual basis.</li>
+<li>You may want one tenant to have Cookie Authentication and not any others.</li>
+<li>You may want each tenant to have an <code>SmtpService</code> that is configured with an smtp server address for the that tenant.</li>
 </ol>
-<p>Therefore, to use a different Dnn website as the host for running and debugging your module, you would just select that website in the drop down instead, before you click the &quot;play&quot; button.</p>
-<p>This is going to wayyyy better than previous workflows for Dnn development.</p>
-<h3 id="what-now">What Now?</h3>
-<p>Well.. I am pretty far into the development of this at the moment, which is why I have been able to include some screenshots. However it is a steep learning curve, and I am continuosly hitting hurdles with <a href="https://github.com/Microsoft/VSProjectSystem">Microsoft's new Project System (CPS)</a>. This is my first attempt at developing a VS project type and I don't have any in roads with microsoft or any support. So all of this means, I am &quot;hoping&quot; I can pull this off, and the signs are promising, but I'm not through the woods yet. The (very) dark, mystical woods, of VS project type development.</p>
-<p>Still, I'd love to hear what others think of this - even though I appreciate it's very premature. Would you use such a system? Any ideas for improvements? I'll release a new blog post when things are looking a bit more finalised, and perhaps again when I have something for beta release.</p>
-<p>Lastly, if there are any guru's out there who have expertise with <a href="https://github.com/Microsoft/VSProjectSystem">CPS</a> - I can always use a hand ;)</p>
+<h2>Interesting implications</h2>
+<p>You can use this to add and configure entire frameworks differently per tenant. For example, if you want a multi-tenant MVC application, you could <code>AddMvc()</code> into each Tenant's container so that you can configure MVC on a per tenant basis. If you do decide to take this approach, you will also need to add any middleware that the framework provides (i.e <code>UseMvc</code>), into the <code>Per Tenant Middleware Pipeline</code> rather than the main application <code>Middleware Pipeline</code>. We will discuss the <code>Per Tenant Middleware Pipeline</code> in the next tutorial.</p>
+<h2>What's next?</h2>
+<p>Stay tuned for:</p>
+<ol start="2">
+<li>Per Tenant <code>Middleware Pipeline</code></li>
+<li>Per Tenant <code>IHostingEnvironment</code> (for sandboxing file access)</li>
+<li>Modules (Shared and Routed)</li>
+</ol>
+
+
+
+
+<div class="post-footer">       
+<p>
+<span style="text-align: right"><a href="/tutorial#Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency">See Tutorial Series</a></span>
+
+  <em><a href="https://github.com/dazinator/Dotnettency.Samples">See Sample Code.</a></em>
+
+</p>        
+   
+</div>
 
 
 <div id="disqus_thread"></div>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname = 'darrelltunnellsblog'; // required: replace example with your forum shortname
-    var disqus_identifier = 'imagining-a-dotnetnuke-project-type-for-visual-studio';
-    var disqus_title = 'Imagining a DotNetNuke Project Type for Visual Studio';
-    var disqus_url = 'http://darrelltunnell.net/blog/2016/01/17/imagining-a-dotnetnuke-project-type-for-visual-studio';
+    var disqus_identifier = 'creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-3';
+    var disqus_title = 'Modular, Multi-tenant, ASP.NET Core Applications with Dotnettency - Part 3';
+    var disqus_url = 'http://darrelltunnell.net/tutorial/Building%20Modular%20Multi-tenant%20ASP.NET%20Core%20Applications%20with%20Dotnettency/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-3.md';
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
