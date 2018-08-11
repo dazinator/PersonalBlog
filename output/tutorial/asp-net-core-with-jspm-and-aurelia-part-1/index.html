@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
 
-        <title>Darrell&#x27;s Blog - Tutorials</title>
+        <title>Darrell&#x27;s Blog - ASP.NET Core with JSPM and Aurelia</title>
         <meta name="description" content="Welcome!" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">        
 
@@ -28,9 +28,9 @@
         <meta name="msapplication-tooltip" content="Darrell&#x27;s Blog" />
         <meta name="msapplication-starturl" content="/" />
 
-        <meta property="og:title" content="Darrell&#x27;s Blog - Tutorials" />
+        <meta property="og:title" content="Darrell&#x27;s Blog - ASP.NET Core with JSPM and Aurelia" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="http://darrelltunnell.net/tutorial" />
+        <meta property="og:url" content="http://darrelltunnell.net/tutorial/ASP.NET%20Core%20with%20JSPM%20and%20Aurelia/asp-net-core-with-jspm-and-aurelia-part-1.md" />
         <!-- TODO: More social graph meta tags -->
 
         <script src="/assets/js/jquery.min.js"></script>
@@ -124,9 +124,23 @@ button:hover, a:hover {
                         <div class="container">
                                 <div class="row">
                                         <div class="col-md-12">
-<div class="site-heading">
-    <h1>Tutorials</h1>
-</div>                                            </div>
+
+    
+<div class="post-heading">   
+    <h1>Tutorial: ASP.NET Core with JSPM and Aurelia</h1>
+    <h2 class="subheading">Part 1 - Create New Project</h2>
+<p>
+   <span>You can find the <a href="/tutorial#ASP.NET Core with JSPM and Aurelia">rest of the tutorial series here</a></span>
+</p>
+        
+    <div class="meta">        
+Published on 11 August 2018<br>    </div>
+   
+</div>
+
+
+
+                                        </div>
                                 </div>
                         </div>
                 </header>
@@ -135,26 +149,72 @@ button:hover, a:hover {
                 <div class="container">
                         <div class="row">
                                 <div id="content" class="col-md-12">
-                                                <a name="ASP.NET Core with JSPM and Aurelia"></a>
-        <h2>ASP.NET Core with JSPM and Aurelia</h2>     
-       <ol>     
-       
-             <li><a href="/tutorial/asp-net-core-with-jspm-and-aurelia-part-1">Part 1 - Create New Project</a></li>
-             <li><a href="/tutorial/asp-net-core-with-jspm-and-aurelia-part-2">Part 2 - NPM and JSPM</a></li>
+                                        
 
-          </ol>   
-        <a name="Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency"></a>
-        <h2>Building Modular Multi-tenant ASP.NET Core Applications with Dotnettency</h2>     
-       <ol>     
-       
-             <li><a href="/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency">Introduction</a></li>
-             <li><a href="/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-1">Part 1</a></li>
-             <li><a href="/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-2">Part 2</a></li>
-             <li><a href="/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-3">Part 3</a></li>
-             <li><a href="/tutorial/creating-modular-multi-tenant-asp-net-core-application-with-dotnettency-part-4">Part 4</a></li>
+<h3>ASP (A Sea of Packages).NET Core</h3>
+<p>When you create a new ASP.NET Core project, it can be hard to orientate yourself. You may even be familiar with ASP.NET Core web development but perhaps you are looking for insights or inspiration to improve your productivity.
+I am going to guide you, the number one ASP.NET Core web developer of the future, through creating an ASP.NET Core MVC application, and then configuring a productive workflow.</p>
+<ol>
+<li>Bringing web dependencies under control with NPM and JSPM</li>
+<li>Bundling and Minification.</li>
+<li>Auto browser refresh (as you make changes to files during development)</li>
+</ol>
+<p>To be able to do all of this, we will be creating a new ASP.NET Core MVC project, and then we will be using <a href="http://aurelia.io/">Aurelia</a> to run an Aurelia application on Home page (Index.cshtml)</p>
+<!--more-->
+<h3>New Project</h3>
+<p>The first step on our quest is simply to create a new ASP.NET Core application. I am sure you know the drill:</p>
+<ol>
+<li>In <code>Visual Studio</code>, File --&gt; New Project.</li>
+<li>Under &quot;Web&quot; select &quot;ASP.NET Core Web Application&quot;.</li>
+</ol>
+<p>You will see a Project Creation Dialog:</p>
+<p><img src="/img/VSNewAspNetCoreMvsProject.PNG" alt="new aspnet project.PNG" /></p>
+<p>Make sure to select:</p>
+<ol>
+<li>&quot;Web Application (Model-View-Controller).</li>
+<li>&quot;Individual User Accounts&quot; for the authentication.</li>
+</ol>
+<p>You should now have a shiny new project, which is great.</p>
+<p>Now that we have got a new shiny project created, keep your eyes peeled for the next parts of the tutorial series where things will get a lot more interesting.</p>
+<p>If there is anything else you would specificaly like me to cover in this series, drop me a comment below!</p>
 
-          </ol>   
 
+
+
+<div class="post-footer">       
+<p>
+<span style="text-align: right"><a href="/tutorial#ASP.NET Core with JSPM and Aurelia">See Tutorial Series</a></span>
+
+
+</p>        
+   
+</div>
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'darrelltunnellsblog'; // required: replace example with your forum shortname
+    var disqus_identifier = 'asp-net-core-with-jspm-and-aurelia-part-1';
+    var disqus_title = 'ASP.NET Core with JSPM and Aurelia';
+    var disqus_url = 'http://darrelltunnell.net/tutorial/ASP.NET%20Core%20with%20JSPM%20and%20Aurelia/asp-net-core-with-jspm-and-aurelia-part-1.md';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
                                 </div>
                         </div>
                 </div>

@@ -38,7 +38,7 @@ if(documentCollection != null)
        
        <ol>     
        
-        @foreach (IDocument doc in tutorialGroup)
+        @foreach (IDocument doc in tutorialGroup.OrderBy(x=>x.Get<int?>("Part", 0)))
         {            
              <li><a href="@Context.GetLink(doc)">@doc.WithoutSettings.String("Name")</a></li>
             
