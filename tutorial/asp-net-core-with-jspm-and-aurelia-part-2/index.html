@@ -194,7 +194,7 @@ The way to do this, is a little bit fiddely, as you have to drop to the command 
 <li>Type <code>&quot;node_modules/.bin/jspm&quot; init</code> and hit enter.</li>
 </ol>
 <p><img src="/img/commandlinejspminit.PNG" alt="commandlinejspminit.PNG" /></p>
-<p>Note: If you install <code>JSPM</code> as a global npm package using <code>npm install jspm -g</code> then you can just use <code>jspm init</code> from the command line instead.</p>
+<p>Note: I recomment that you install <code>JSPM</code> as a global npm package using <code>npm install jspm -g</code> then it will be added to your PATH so that you can run <code>jspm</code> from the command line without having to run it from &quot;node_modules/.bin/jspm&quot;.</p>
 <p>You will now be asked a series of questions. At the end of answering these questions, the relevent <code>config</code> will be produced within the project.</p>
 <p>Here are the answers. Some of them you can just hit enter without typing anything, and the default value will be used.</p>
 <p><img src="/img/jspminit.PNG" alt="jspminit.PNG" /></p>
@@ -228,12 +228,12 @@ For the purposes of this blog, I am accepting the default of &quot;Babel&quot;.<
 <p>The transpiler will just allow us to write javascript using ES6 language features, and this will be transpiled to run in browsers that don't support ES6 yet.</p>
 <h3>Installing JSPM Packages</h3>
 <p>Now that we have <code>JSPM</code> configured, it's time to install those packages that we previously had in our <code>wwwroot/lib</code> folder.</p>
-<p>Back in the <code>command prompt</code> run the following commands:</p>
+<p>Back in the <code>command prompt</code> run the following jspm commands:</p>
 <ol>
 <li><code>jspm install jquery</code></li>
 <li><code>jspm install jquery-validation</code></li>
 <li><code>jspm install github:aspnet/jquery-validation-unobtrusive</code></li>
-<li><code>jspm install bootstrap</code></li>
+<li><code>jspm install bootstrap&#64;3.3.7</code></li>
 </ol>
 <p>Once that is done, those packages will now be installed under your <code>wwwroot\jspm_packages</code> folder:</p>
 <p><img src="/img/jspmpackages.PNG" alt="jspmpackages.PNG" /></p>
